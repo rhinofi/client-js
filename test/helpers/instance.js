@@ -14,12 +14,10 @@ module.exports = async () => {
   
   const web3 = new Web3(provider)
 
-  const accounts = await web3.eth.getAccounts()
-
   let config = {}
 
   // It's possible to overwrite the API address with the testnet address
   // for example like this:
-  config.api = 'https://test.ethfinex.com/trustless/v1'
+  config.api = 'https://staging-api.deversifi.com/v1/'
   return EFX(web3, config)
 }

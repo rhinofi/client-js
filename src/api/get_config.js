@@ -1,7 +1,7 @@
 const { post } = require('request-promise')
 
 module.exports = async (efx) => {
-  const url = efx.config.api + '/r/get/conf'
+  const url = efx.config.api + 'trading/r/get/conf'
 
   const exchangeConf = await post(url, { json: {} })
 

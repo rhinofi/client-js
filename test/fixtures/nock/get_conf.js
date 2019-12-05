@@ -25,6 +25,7 @@ module.exports = () => {
             "minOrderSize":40
          },
       },
+     "StarkEXAddress": "0xBd25cD867C304F079E696CBE44D958f3d3B683ba",
      "ethfinexAddress":"0x61b9898c9b60a159fc91ae8026563cd226b7a0c1", // gets fee paid in
      "exchangeAddress":"0xdcdb42c9a256690bd153a7b409751adfc8dd5851", // actual exchange contract address
       "exchangeSymbols":[
@@ -35,7 +36,7 @@ module.exports = () => {
    }
   }
 
-  nock('https://test.ethfinex.com:443', {"encodedQueryParams":true})
-    .post('/trustless/v1/r/get/conf', {})
+  nock('https://staging-api.deversifi.com/')
+    .post('/v1/trading/r/get/conf', {})
     .reply(200, apiResponse)
 }

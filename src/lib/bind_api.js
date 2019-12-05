@@ -28,6 +28,7 @@ module.exports = () => {
   efx.contract = {
     approve: compose(require('../api/contract/approve')),
     isApproved: compose(require('../api/contract/is_approved')),
+    deposit: compose(require('../api/contract/deposit')),
     depositLock: compose(require('../api/contract/deposit_lock')),
     lock: compose(require('../api/contract/lock')),
     locked: compose(require('../api/contract/locked')),
@@ -35,8 +36,9 @@ module.exports = () => {
     createOrder: compose(require('../api/contract/create_order')),
     createOrderV2: compose(require('../api/contract/create_order')),
     abi: {
-      locker: require('../api/contract/abi/locker.abi.js'),
-      token: require('../api/contract/abi/token.abi.js')
+      locker: require('../api/contract/abi/locker.abi'),
+      token: require('../api/contract/abi/token.abi'),
+      StarkEx: require('../api/contract/abi/StarkEx.abi')
     }
   }
 
@@ -70,7 +72,7 @@ module.exports = () => {
 
   // efx main functions under stark folder
   efx.deposit = compose(require('../api/stark/deposit'));
-  efx.submitOrder = compose(require('../api/stark/submit_order'));
+  efx.placeOrder = compose(require('../api/stark/place_order'));
 
   return efx
 }

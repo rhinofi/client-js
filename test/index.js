@@ -43,6 +43,8 @@ describe('~ efx-api-node', async () => {
 
   })
 
+  
+
   // TODO: deploy contracts to local granache or testnet in order to test
   // some contract methods
   describe('Deploy contracts to test:rpc', () => {
@@ -67,6 +69,7 @@ describe('~ efx-api-node', async () => {
   describe('HTTP API', () => {
     try {
       require('./http-api')
+
     } catch(e){
 
       console.log("e ->", e)

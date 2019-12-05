@@ -19,6 +19,43 @@ before(async () => {
 
 const ecRecover = require('./helpers/ecRecover')
 
+
+it('efx.deposit....', async () => {
+
+  const orderId = 1
+  const apiResponse = {foo: 'bar'}
+
+  nock('https://test.ethfinex.com')
+    .post('/trading/stark/deposit', async (body) => {
+      assert.equal(body.orderId, orderId)
+      assert.equal(body.protocol, '0x')
+
+      assert.ok(body.signature)
+
+      let toSign = utils.sha3(orderId.toString(16))
+      toSign = utils.bufferToHex(toSign).slice(2)
+
+      const recovered = ecRecover(toSign, body.signature)
+
+      // TODO: fix ecRecover algo for orderId signature
+      //assert.equal(efx.get('account').toLowerCase(), recovered.toLowerCase())
+      return true
+    })
+    .reply(200, apiResponse)
+
+  const result = await efx.deposit(
+    'NEC',//token
+    100,//amount
+  )
+
+  console.log("got result =>", result)
+
+
+})
+
+
+return
+
 it('efx.cancelOrder(orderId) // handle INVALID ERROR order', async () => {
   const orderId = 1
   const apiResponse = [

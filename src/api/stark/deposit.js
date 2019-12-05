@@ -1,13 +1,12 @@
 const {post} = require('request-promise');
-const parse = require('../lib/parse/response/deposit_amount.js');
-const sw = require("starkware_crypt0");
+const sw = require('starkware_crypto');
 
-module.exports = async (efx, tokenId, amount) => {
+module.exports = async (efx, token, amount) => {
   const userAddress = efx.get('account');
   const startKey = '0x234';
 
   // Basic validation
-  if (!tokenId) {
+  if (!token) {
     throw new Error('tokenId is required')
   }
 
@@ -18,12 +17,15 @@ module.exports = async (efx, tokenId, amount) => {
   // Create quantized amount
   amount = 100
 
+  //get token id for config
+  tokenId=12345;
+
   // tempVault will be available to the client via config
   const tempVaultId = 1 // default DeversiFi vault id
   const vaultId = 2 // users vault id for the tokens that have been deposited
 
   // Deposit to contract
-  const depositStatus = await efx.contract.deposit(vaultId, amount, userAddress);
+  const depositStatus = await efx.contract.deposit(tempVaultId, amount, userAddress);
   await depositStatus.then(receipt => {
     // create stark message and signature using stark crypto library
     // replace get_order_msg with deposit and transfer message when its available
@@ -32,7 +34,7 @@ module.exports = async (efx, tokenId, amount) => {
       amount, // amount (uint63 decimal str)
       order_id, // order_id (uint31)
       sender_vault_id, // temp vault id or sender_vault_id (uint31)
-      token, // token (hex str with 0x prefix < prime)
+      tokenId, // token (hex str with 0x prefix < prime)
       receiver_vault_id, // user vault or receiver_vault_id (uint31)
       receiver_public_key, // receiver_public_key (hex str with 0x prefix < prime)
       expiration_timestamp // expiration_timestamp (uint22)
@@ -50,7 +52,7 @@ module.exports = async (efx, tokenId, amount) => {
   const url = efx.config.api + '/stark/deposit';
   const data = {
     userAddress,
-    startKey,
+    starkKey,
     tempVaultId,
     vaultId,
     tokenId,
@@ -59,5 +61,5 @@ module.exports = async (efx, tokenId, amount) => {
     starkSignature
   };
 
-  return parse(post(url, {json: data}))
+  return post(url, {json: data})
 }
