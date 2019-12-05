@@ -46,7 +46,7 @@ module.exports = async (efx, tokenId, amount) => {
       throw new Error('deposit not happened. something went wrong')
   })
 
-  // Send required params to efx-pub-api
+  // Call dvf pub api
   const url = efx.config.api + '/stark/deposit';
   const data = {
     userAddress,
