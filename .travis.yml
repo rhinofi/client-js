@@ -1,0 +1,19 @@
+language: node_js
+node_js:
+  - "8"
+
+sudo: false
+
+install:
+  - npm install
+  - npm install -g ganache-cli
+
+before_script:
+  - ganache-cli > ganache-cli.log &
+  - sleep 5
+
+script:
+  - npm run test
+
+cache:
+  yarn: true

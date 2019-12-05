@@ -1,0 +1,65 @@
+{
+  "name": "efx-api-node",
+  "version": "2.0.3",
+  "main": "src/efx.js",
+  "contributors": [
+    "Henrique Matias <hems.inlet@gmail.com>",
+    "Will Harborne <will.harborne@gmail.com>"
+  ],
+  "standard": {
+    "ignore": [
+      "/examples",
+      "/dist"
+    ]
+  },
+  "scripts": {
+    "lint": "standard",
+    "lint:fix": "standard --fix",
+    "test": "env-cmd mocha ./test/index.js --timeout 1200000000",
+    "test:watch": "env-cmd mocha ./test/index.js --watch ./ --timeout 1200000000",
+    "test:web": "mochify ./test/index.js --timeout 1200000000",
+    "test:web:watch": "mochify ./test/index.js --watch --timeout 1200000000",
+    "build": "npm run build:web:browserify; npm run build:web:minify; npm run build:web:hash",
+    "build:web:browserify": "del ./dist/*.js; browserify ./src/efx.js --standalone EFX -o ./dist/efx.js",
+    "build:web:minify": "node-minify --compressor uglify-es --input './dist/efx.js' --output './dist/efx.min.js'",
+    "build:web:hash": "hash-filename ./dist/efx*.js;del ./dist/{efx.js,efx.min.js}",
+    "build:web:run": "browserify --debug ./src/efx.js --standalone EFX | browser-run --port 2222"
+  },
+  "keywords": [
+    "bitfinex",
+    "ethfinex",
+    "ethereum"
+  ],
+  "homepage": "https://github.com/ethfinex/efx-api-node",
+  "license": "MIT",
+  "dependencies": {
+    "@0x/order-utils": "^7.0.2",
+    "@0x/subproviders": "^4.0.4",
+    "aware": "^0.3.1",
+    "bignumber.js": "^7.2.1",
+    "bluebird": "^3.5.1",
+    "ethereumjs-util": "^5.2.0",
+    "lodash": "^4.17.10",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2",
+    "web3": "1.0.0-beta.33"
+  },
+  "devDependencies": {
+    "del": "^3.0.0",
+    "truffle-hdwallet-provider": "^1.0.17",
+    "browser-run": "^5.0.0",
+    "browserify": "^16.2.2",
+    "chai": "^4.1.2",
+    "del-cli": "^1.1.0",
+    "env-cmd": "^10.0.1",
+    "ganache-cli": "^6.1.4",
+    "hash-filename": "^1.0.4",
+    "keccak": "^1.4.0",
+    "mocha": "^5.1.1",
+    "mochify": "^5.8.0",
+    "nock": "^9.4.1",
+    "node-minify": "^3.2.0",
+    "solc": "^0.4.24",
+    "standard": "^11.0.1"
+  }
+}
