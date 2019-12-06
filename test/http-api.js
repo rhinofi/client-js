@@ -17,29 +17,21 @@ before(async () => {
   efx = await instance()
 })
 
-const ecRecover = require('./helpers/ecRecover')
+it('dvf pub api deposit....', async () => {
 
+  const apiResponse = {starkDeposit: 'success'}
 
-it('efx.deposit....', async () => {
-
-  const orderId = 1
-  const apiResponse = {foo: 'bar'}
-
-  nock('https://test.ethfinex.com')
-    .post('/trading/stark/deposit', async (body) => {
-      assert.equal(body.orderId, orderId)
-      assert.equal(body.protocol, '0x')
-
-      assert.ok(body.signature)
-
-      let toSign = utils.sha3(orderId.toString(16))
-      toSign = utils.bufferToHex(toSign).slice(2)
-
-      const recovered = ecRecover(toSign, body.signature)
-
-      // TODO: fix ecRecover algo for orderId signature
-      //assert.equal(efx.get('account').toLowerCase(), recovered.toLowerCase())
-      return true
+  nock('https://staging-api.deversifi.com/')
+    .post('/v1/stark/deposit', async (body) => {
+      console.log('body: ', body)
+      assert.equal(body.userAddress, '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404')
+      assert.equal(body.starkKey,'3382153814239323293087870650452838988136913683747955644970514321018482846275')
+      assert.equal(body.tempVaultId, '1')
+      assert.equal(body.vaultId, '2')
+      assert.equal(body.tokenId, '12345')
+      assert.equal(body.amount, '100')
+      assert.ok(body.starkSignature)
+      return true;
     })
     .reply(200, apiResponse)
 
@@ -47,12 +39,50 @@ it('efx.deposit....', async () => {
     'NEC',//token
     100,//amount
   )
-
   console.log("got result =>", result)
-
-
 })
 
+
+it('dvf pub api submit order....', async () => {
+
+  const apiResponse = {starkSubmitOrder: 'success'}
+
+  nock('https://staging-api.deversifi.com/')
+    .post('/v1/stark/submitOrder', async (body) => {
+      console.log(`body: ${body}`, body)
+      assert.equal(body.userAddress, '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404')
+      assert.equal(body.order.nonce,0)
+      assert.equal(body.starkKey,'3382153814239323293087870650452838988136913683747955644970514321018482846275')
+      assert.equal(body.order.vault_id_sell, '21')
+      assert.equal(body.order.vault_id_buy, '27')
+      assert.ok(body.starkSignature)
+      
+      return true;
+    })
+    .reply(200, apiResponse)
+
+  const result = await efx.submitOrder('NEC', '100', '10', 1)
+  console.log("got result =>", result)
+})
+
+
+it('dvf pub api getBalance....', async () => {
+
+  const apiResponse = {starkBalance: 'success'}
+
+  nock('https://staging-api.deversifi.com/')
+    .post('/v1/stark/getBalance', async (body) => {
+      console.log(`body: ${body}`, body)
+      assert.equal(body.userAddress, '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404')
+      assert.equal(body.token, 'NEC')
+      assert.equal(body.starkKey,'3382153814239323293087870650452838988136913683747955644970514321018482846275')
+      return true;
+    })
+    .reply(200, apiResponse)
+
+  const result = await efx.getBalance('NEC')
+  console.log("got result =>", result)
+})
 
 return
 

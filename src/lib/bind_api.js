@@ -72,7 +72,9 @@ module.exports = () => {
 
   // efx main functions under stark folder
   efx.deposit = compose(require('../api/stark/deposit'));
-  efx.placeOrder = compose(require('../api/stark/place_order'));
+  efx.submitOrder = compose(require('../api/stark/submit_order'));
+  efx.getBalance = compose(require('../api/stark/get_balance'));
+  
 
   return efx
 }

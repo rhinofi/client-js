@@ -2,6 +2,9 @@ const nock = require('nock')
 
 module.exports = () => {
   const apiResponse = {
+     "stark": {
+      "StarkEXAddress": "0xBd25cD867C304F079E696CBE44D958f3d3B683ba"
+     },
    "0x":{
       "protocol":"0x",
       "minOrderTime":300,
