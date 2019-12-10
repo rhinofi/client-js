@@ -60,9 +60,9 @@ module.exports = () => {
   // efx main functions
   efx.getConfig = compose(require('../api/get_config'))
   efx.getFeeRate = compose(require('../api/get_fee_rate'))
-  efx.cancelOrder = compose(require('../api/cancel_order'))
-  efx.getOrder = compose(require('../api/get_order'))
-  efx.getOrders = compose(require('../api/get_orders'))
+  // efx.cancelOrder = compose(require('../api/cancel_order'))
+  // efx.getOrder = compose(require('../api/get_order'))
+  // efx.getOrders = compose(require('../api/get_orders'))
   efx.getOrdersHist = compose(require('../api/get_orders_hist'))
   efx.releaseTokens = compose(require('../api/release_tokens'))
   // efx.submitOrder = compose(require('../api/submit_order'))
@@ -72,9 +72,11 @@ module.exports = () => {
 
   // efx main functions under stark folder
   efx.deposit = compose(require('../api/stark/deposit'));
-  efx.submitOrder = compose(require('../api/stark/submit_order'));
   efx.getBalance = compose(require('../api/stark/get_balance'));
-  
+  efx.getOrder = compose(require('../api/stark/get_order'));
+  efx.getOrders = compose(require('../api/stark/get_orders'));
+  efx.submitOrder = compose(require('../api/stark/submit_order'));
+  efx.cancelOrder = compose(require('../api/stark/cancel_order'));
 
   return efx
 }

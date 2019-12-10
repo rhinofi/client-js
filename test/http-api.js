@@ -17,7 +17,9 @@ before(async () => {
   efx = await instance()
 })
 
-it('dvf pub api deposit....', async () => {
+describe('StarkEX deposit suite....', () => {
+  // 1st test_case
+  it('dvf pub api deposit....(1)', async () => {
 
   const apiResponse = {starkDeposit: 'success'}
 
@@ -41,7 +43,31 @@ it('dvf pub api deposit....', async () => {
   )
   console.log("got result =>", result)
 })
-
+  // 2nd test_case
+  it('dvf pub api deposit....(2)', async() => {
+    // variables
+    const token = 'NEC',
+          amount = 20;
+    // linking url with nock
+    nock('https://staging-api.deversifi.com/')
+      .post('/v1/stark/deposit', (body) => {
+        console.log('body: ', body)
+        assert.equal(body.userAddress, '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404')
+        assert.equal(body.starkKey,'3382153814239323293087870650452838988136913683747955644970514321018482846275')
+        assert.equal(body.tempVaultId, '1')
+        assert.equal(body.vaultId, '2')
+        assert.equal(body.tokenId, '12345')
+        assert.equal(body.amount, '20')
+        assert.ok(body.starkSignature)
+        return true;
+    })
+    .reply(200, (url, requestBody) => {
+      console.log('url: ', url, ' \nrequestBody: ', requestBody);
+      console.log('successfully deposited!!!');
+    })
+    const result = await efx.deposit(token, amount);
+  })
+})
 
 it('dvf pub api submit order....', async () => {
 
@@ -56,7 +82,7 @@ it('dvf pub api submit order....', async () => {
       assert.equal(body.order.vault_id_sell, '21')
       assert.equal(body.order.vault_id_buy, '27')
       assert.ok(body.starkSignature)
-      
+
       return true;
     })
     .reply(200, apiResponse)
@@ -64,7 +90,6 @@ it('dvf pub api submit order....', async () => {
   const result = await efx.submitOrder('NEC', '100', '10', 1)
   console.log("got result =>", result)
 })
-
 
 it('dvf pub api getBalance....', async () => {
 
@@ -84,6 +109,57 @@ it('dvf pub api getBalance....', async () => {
   console.log("got result =>", result)
 })
 
+it('dvf pub api cancelOrder....', async () => {
+  const orderId = 1
+  const signedOrder = await efx.sign.cancelOrder(orderId)
+  const apiResponse = [1234]
+
+  nock('https://staging-api.deversifi.com/')
+    .post('/v1/stark/cancelOrder', async (body) => {
+      console.log('body: ', body);
+      assert.equal(body.orderId, orderId)
+      return true;
+    })
+    .reply(200, apiResponse)
+
+  const response = await efx.cancelOrder(orderId)
+  console.log("response: ", response);
+  assert.deepEqual(response, apiResponse)
+})
+
+it('dvf pub api getOrder....', async () => {
+  const orderId = 1
+  const apiResponse = [[1234]]
+
+  nock('https://staging-api.deversifi.com/')
+    .post('/v1/stark/getOrders', async (body) => {
+      assert.equal(body.id, orderId)
+      assert.equal(body.protocol, '0x')
+      assert.ok(body.nonce)
+      assert.ok(body.signature)
+      return true
+    })
+    .reply(200, apiResponse);
+  const response = await efx.getOrder(orderId);
+  console.log('getOrder response: ', response);
+  assert.deepEqual(response, apiResponse)
+})
+
+it('dvf pub api getOrders....', async () => {
+  const apiResponse = [[1234], [1235]]
+
+  nock('https://staging-api.deversifi.com/')
+    .post('/v1/stark/getOrders', async (body) => {
+      assert.equal(body.protocol, '0x')
+      assert.ok(body.nonce)
+      assert.ok(body.signature)
+      return true
+    })
+    .reply(200, apiResponse);
+  const response = await efx.getOrders();
+  console.log('getOrder response: ', response);
+  assert.deepEqual(response, apiResponse)
+})
 return
 
 it('efx.cancelOrder(orderId) // handle INVALID ERROR order', async () => {
@@ -328,7 +404,7 @@ it("efx.releaseTokens('USD')", async () => {
 it('efx.submitOrder(ETHUSD, 1, 100)', async () => {
 
   mockFeeRate()
-  
+
   nock('https://test.ethfinex.com')
     .post('/trustless/v1/w/on', async (body) => {
       assert.equal(body.type, 'EXCHANGE LIMIT')
@@ -409,15 +485,15 @@ it('efx.feeRate(ETHUSD, 0.1, 10000) gets feeBps for correct threshold', async ()
 
   // TODO: move tests with mocks to individual files, probably inside of
   // test/http/ folder
-  const httpResponse = { 
+  const httpResponse = {
     address: '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404',
     timestamp: 1568959208939,
-    fees: { 
+    fees: {
       small: { threshold: 0, feeBps: 25 },
       medium: { threshold: 500, feeBps: 21 },
-      large: { threshold: 2000, feeBps: 20 } 
+      large: { threshold: 2000, feeBps: 20 }
     },
-    signature: '0x52f18b47494e465aa4ed0f0f123fae4d40d3ac0862b61862e6cc8e5a119dbfe1061a4ee381092a10350185071f4829dbfd6c5f2e26df76dee0593cbe3cbd87321b' 
+    signature: '0x52f18b47494e465aa4ed0f0f123fae4d40d3ac0862b61862e6cc8e5a119dbfe1061a4ee381092a10350185071f4829dbfd6c5f2e26df76dee0593cbe3cbd87321b'
   }
 
   nock('https://api.deversifi.com')
@@ -436,15 +512,15 @@ it('efx.feeRate(ETHUSD, 0.1, 10000) gets feeBps for correct threshold', async ()
 
 it('efx.feeRate(MKRETH, -5, 2.5) gets feeBps for correct threshold', async () => {
 
-  const httpResponse = { 
+  const httpResponse = {
     address: '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404',
     timestamp: 1568959208939,
-    fees: { 
+    fees: {
       small: { threshold: 0, feeBps: 25 },
       medium: { threshold: 500, feeBps: 21 },
-      large: { threshold: 2000, feeBps: 20 } 
+      large: { threshold: 2000, feeBps: 20 }
     },
-    signature: '0x52f18b47494e465aa4ed0f0f123fae4d40d3ac0862b61862e6cc8e5a119dbfe1061a4ee381092a10350185071f4829dbfd6c5f2e26df76dee0593cbe3cbd87321b' 
+    signature: '0x52f18b47494e465aa4ed0f0f123fae4d40d3ac0862b61862e6cc8e5a119dbfe1061a4ee381092a10350185071f4829dbfd6c5f2e26df76dee0593cbe3cbd87321b'
   }
 
   nock('https://api.deversifi.com')
@@ -461,5 +537,5 @@ it('efx.feeRate(MKRETH, -5, 2.5) gets feeBps for correct threshold', async () =>
   assert.equal(response.feeRate.feeBps, 20)
   assert.deepEqual(response.feeRates.fees, httpResponse.fees)
 
-  
+
 })
