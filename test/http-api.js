@@ -87,7 +87,19 @@ it('dvf pub api submit order....', async () => {
     })
     .reply(200, apiResponse)
 
-  const result = await efx.submitOrder('NEC', '100', '10', 1)
+  const result = await efx.submitOrder(
+    
+	  'ETHUSD',//symbom
+    '100',//amount
+	  '12',//price
+	  'gid',
+	  'cid',
+	  '',//signedOrder
+	  1,//validFor
+	  '',//partner_id
+	  '',//fee_rate
+	  '',//dynamicFeeRate
+    )
   console.log("got result =>", result)
 })
 
