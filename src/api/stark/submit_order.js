@@ -25,12 +25,8 @@ module.exports = async (
 		}
 		fee_rate = dynamicFeeRate.feeRate.feeBps / 10000;
 	}
-	var order='';
 	//create order object
-	if (!signedOrder) {
-		order = efx.contract.createOrder(symbol, amount, price, validFor, fee_rate);
-		signedOrder = await efx.sign.order(order);
-	}
+	var order = efx.contract.createOrder(symbol, amount, price, validFor, fee_rate);
 
 	const meta = signedOrder;
 	const type = 'EXCHANGE LIMIT';
@@ -81,14 +77,14 @@ module.exports = async (
 	try {
 		//Create stark message for order
 		starkMessage = sw.get_limit_order_msg(
-			order.vault_id_sell, // vault_sell (uint31)
-			order.vault_id_buy, // vault_buy (uint31)
-			order.amount_sell, // amount_sell (uint63 decimal str)
-			order.amount_buy, // amount_buy (uint63 decimal str)
-			order.token_sell, // token_sell (hex str with 0x prefix < prime)
-			order.token_buy, // token_buy (hex str with 0x prefix < prime)
-			order.nonce, // nonce (uint31)
-			order.expiration_timestamp // expiration_timestamp (uint22)
+			starkOrder.vault_id_sell, // vault_sell (uint31)
+			starkOrder.vault_id_buy, // vault_buy (uint31)
+			starkOrder.amount_sell, // amount_sell (uint63 decimal str)
+			starkOrder.amount_buy, // amount_buy (uint63 decimal str)
+			starkOrder.token_sell, // token_sell (hex str with 0x prefix < prime)
+			starkOrder.token_buy, // token_buy (hex str with 0x prefix < prime)
+			starkOrder.nonce, // nonce (uint31)
+			starkOrder.expiration_timestamp // expiration_timestamp (uint22)
 		);
 
 		starkSignature = sw.sign(starkKeyPair, starkMessage);
@@ -96,12 +92,12 @@ module.exports = async (
 	} catch (e) {
 		console.log(e);
 	}
-	data.meta ={
-		starkOrder,
-		starkMessage,
-		userAddress,
-		starkKey,
-		starkSignature,
+	data.meta = {
+		starkOrder: starkOrder,
+		starkMessage: starkMessage,
+		userAddress: order.senderAddress,
+		starkKey: starkKey,
+		starkSignature: starkSignature,
 	};
 
 	const url = efx.config.api + '/stark/submitOrder';
