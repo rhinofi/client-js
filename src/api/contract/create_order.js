@@ -1,16 +1,8 @@
-const {assetDataUtils, generatePseudoRandomSalt} = require('@0x/order-utils')
+const {generatePseudoRandomSalt} = require('@0x/order-utils')
 const BigNumber = require('bignumber.js');
+const sw = require('starkware_crypto');
 
-module.exports = (efx, symbol, amount, price, validFor, fee_rate = 0.0025) => {
-  const { web3, config } = efx
-
-  if(fee_rate < 0 || fee_rate > 0.05 || isNaN(fee_rate)){
-    // use 0.0025 for 0.25% fee
-    // use 0.01   for 1% fee
-    // use 0.05   for 5% fee
-    throw('fee_rate should be between 0 and 0.05')
-  }
-
+module.exports = (efx, symbol, amount, price, validFor, fee_rate = 0.0025, vault_id_buy, vault_id_sell) => {
   // symbols are always 3 letters
   const baseSymbol = symbol.substr(0, symbol.length - 3)
   const quoteSymbol = symbol.substr(-3)
@@ -65,32 +57,36 @@ module.exports = (efx, symbol, amount, price, validFor, fee_rate = 0.0025) => {
   expiration = Math.round((new Date()).getTime() / 1000)
   expiration += validFor || config.defaultExpiry
 
-  // create order object
-  const order = {
-    makerAddress: efx.get('account').toLowerCase(),
-    takerAddress: '0x0000000000000000000000000000000000000000',
-
-    feeRecipientAddress: efx.config['0x'].ethfinexAddress.toLowerCase(),
-    senderAddress: efx.config['0x'].ethfinexAddress.toLowerCase(),
-
-    makerAssetAmount: sellAmount,
-
-    takerAssetAmount: buyAmount,
-
-    makerFee: new BigNumber(0),
-
-    takerFee: new BigNumber(0),
-
-    expirationTimeSeconds: new BigNumber(expiration),
-
-    salt: generatePseudoRandomSalt(),
-
-    makerAssetData: assetDataUtils.encodeERC20AssetData(sellCurrency.wrapperAddress.toLowerCase()),
-
-    takerAssetData: assetDataUtils.encodeERC20AssetData(buyCurrency.wrapperAddress.toLowerCase()),
-
-    exchangeAddress: efx.config['0x'].exchangeAddress.toLowerCase()
+  var starkOrder = {
+		vault_id_sell: vault_id_sell,
+		vault_id_buy: vault_id_buy,
+		amount_sell: amount_sell,
+		amount_buy: amount_buy,
+		token_sell: sellCurrency.tokenId,
+		token_buy: buyCurrency.tokenId,
+		nonce: generatePseudoRandomSalt(),
+		expiration_timestamp: new BigNumber(expiration)
+  };
+  
+	let starkMessage = ''
+	try {
+		//Create stark message for order
+		starkMessage = sw.get_limit_order_msg(
+			vault_id_sell, // vault_sell (uint31)
+			vault_id_buy, // vault_buy (uint31)
+			amount_sell, // amount_sell (uint63 decimal str)
+			amount_buy, // amount_buy (uint63 decimal str)
+			sellCurrency.tokenId, // token_sell (hex str with 0x prefix < prime)
+			buyCurrency.tokenId, // token_buy (hex str with 0x prefix < prime)
+			starkOrder.nonce, // nonce (uint31)
+			starkOrder.expiration_timestamp // expiration_timestamp (uint22)
+    );
+    }
+    catch(e)  {
+      throw('unable to create stark order message')
+    }
+  return {
+    starkOrder: starkOrder,
+    starkMessage: starkMessage
   }
-
-  return order
 }

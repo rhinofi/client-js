@@ -12,20 +12,23 @@ module.exports = () => {
          "ETH":{
             "decimals":18,
             "wrapperAddress":"0xaa7427d8f17d87a28f5e1ba3adbb270badbe1011",
-            "minOrderSize":0.1
+            "minOrderSize":0.1,
+            "tokenId":"0x1"
          },
          "USD":{
             "decimals":6,
             "wrapperAddress":"0x1a9b2d827f26b7d7c18fec4c1b27c1e8deeba26e",
             "tokenAddress":"0xdac17f958d2ee523a2206206994597c13d831ec7",
             "minOrderSize":25,
-            "settleSpread":-0.026
+            "settleSpread":-0.026,
+            "tokenId":"0x2"
          },
          "ZRX":{
             "decimals":18,
             "wrapperAddress":"0xcf67d7a481ceeca0a77f658991a00366fed558f7",
             "tokenAddress":"0xe41d2489571d322189246dafa5ebde1f4699f498",
-            "minOrderSize":40
+            "minOrderSize":40,
+            "tokenId":"0x3"
          },
       },
      "StarkEXAddress": "0xBd25cD867C304F079E696CBE44D958f3d3B683ba",

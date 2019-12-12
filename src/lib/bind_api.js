@@ -24,6 +24,10 @@ module.exports = () => {
     unlock: compose(require('../api/account/unlock'))
   }
 
+  efx.stark = {
+    createOrder: compose(require('../api/contract/create_order')),
+    signOrder: compose(require('../api/contract/sign_order'))
+  }
   // efx.contract functions
   efx.contract = {
     approve: compose(require('../api/contract/approve')),
@@ -33,7 +37,7 @@ module.exports = () => {
     lock: compose(require('../api/contract/lock')),
     locked: compose(require('../api/contract/locked')),
     unlock: compose(require('../api/contract/unlock')),
-    createOrder: compose(require('../api/contract/create_order')),
+ 
     createOrderV2: compose(require('../api/contract/create_order')),
     abi: {
       locker: require('../api/contract/abi/locker.abi'),
