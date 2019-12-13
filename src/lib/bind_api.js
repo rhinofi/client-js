@@ -26,18 +26,18 @@ module.exports = () => {
 
   efx.stark = {
     createOrder: compose(require('../api/contract/create_order')),
-    signOrder: compose(require('../api/contract/sign_order'))
+    sign: compose(require('../api/contract/sign_order')),
+    // efx not required
+    getKeyPairs: require('../api/contract/get_key_pairs'),
+    getTransferMsg: require('../api/contract/get_transfer_message')
   }
   // efx.contract functions
   efx.contract = {
     approve: compose(require('../api/contract/approve')),
     isApproved: compose(require('../api/contract/is_approved')),
     deposit: compose(require('../api/contract/deposit')),
-    depositLock: compose(require('../api/contract/deposit_lock')),
     lock: compose(require('../api/contract/lock')),
     locked: compose(require('../api/contract/locked')),
-    unlock: compose(require('../api/contract/unlock')),
-
     createOrderV2: compose(require('../api/contract/create_order')),
     abi: {
       locker: require('../api/contract/abi/locker.abi'),
