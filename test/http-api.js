@@ -91,20 +91,20 @@ describe('StarkEX deposit suite....', () => {
       .reply(200, apiResponse)
 
     const result = await efx.submitOrder(
-      'ZRXUSD', // symbol
-      100, // amount
-      10, // price
-      1, // gid
-      1, // cid
-      '0x1', // signedOrder
-      300, // validFor
-      3, // partnerId
-      400.023, // feeRate
-      200, // dynamicFeeRate
+      'ETHUSD', // symbol
+      '0.1', // amount
+      1000, // price
+      '', // gid
+      '', // cid
+      '0', // signedOrder
+      '0', // validFor
+      '', // partnerId
+      '', // feeRate
+      '', // dynamicFeeRate
       227, // vaultIdBuy
       221 // vaultIdSell
     )
-
+    
     console.log('got result =>', result)
   })
 
@@ -178,74 +178,6 @@ describe('StarkEX deposit suite....', () => {
     const response = await efx.getOrders()
     console.log('getOrder response: ', response)
     assert.deepEqual(response, apiResponse)
-  })
-
-  it('dvf pub api submit buy order....', async () => {
-    const apiResponse = { starkSubmitOrder: 'success' }
-
-    nock('https://staging-api.deversifi.com/')
-      .post('/v1/stark/submitOrder', async body => {
-        console.log(`body: ${body}`, body)
-        assert.equal(body.userAddress, '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404')
-        assert.equal(body.order.nonce, 0)
-        assert.equal(
-          body.meta.starkKey,
-          '3382153814239323293087870650452838988136913683747955644970514321018482846275'
-        )
-        assert.ok(body.meta.starkSignature)
-        return true
-      })
-      .reply(200, apiResponse)
-
-    const result = await efx.submitBuyOrder(
-      'ZRXUSD', // symbol
-      100, // amount
-      10, // price
-      1, // gid
-      1, // cid
-      '0x1', // signedOrder
-      300, // validFor
-      3, // partnerId
-      400.023, // feeRate
-      200, // dynamicFeeRate
-      227, // vaultIdBuy
-      221 // vaultIdSell
-    )
-
-    console.log('got result =>', result)
-  })
-
-  it('dvf pub api submit sell order....', async () => {
-    const apiResponse = { starkSubmitOrder: 'success' }
-    nock('https://staging-api.deversifi.com/')
-      .post('/v1/stark/submitOrder', async body => {
-        console.log(`body: ${body}`, body)
-        assert.equal(body.meta.userAddress, '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404')
-        assert.equal(
-          body.meta.starkKey,
-          '3382153814239323293087870650452838988136913683747955644970514321018482846275'
-        )
-        assert.ok(body.meta.starkSignature)
-        return true
-      })
-      .reply(200, apiResponse)
-
-    const result = await efx.submitSellOrder(
-      'ZRXUSD', // symbol
-      100, // amount
-      10, // price
-      1, // gid
-      1, // cid
-      '0x1', // signedOrder
-      300, // validFor
-      3, // partnerId
-      400.023, // feeRate
-      200, // dynamicFeeRate
-      227, // vaultIdBuy
-      221 // vaultIdSell
-    )
-
-    console.log('got result =>', result)
   })
 
   it('dvf pub api getOrdersHist....', async () => {
@@ -341,31 +273,5 @@ describe('StarkEX deposit suite....', () => {
     assert.deepEqual(response, httpResponse)
   })
   return
-  it('dvf pub api feeRate....', async () => {
-    const httpResponse = {
-      address: '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404',
-      timestamp: 1568959208939,
-      fees: {
-        small: { threshold: 0, feeBps: 25 },
-        medium: { threshold: 500, feeBps: 21 },
-        large: { threshold: 2000, feeBps: 20 }
-      },
-      signature:
-				'0x52f18b47494e465aa4ed0f0f123fae4d40d3ac0862b61862e6cc8e5a119dbfe1061a4ee381092a10350185071f4829dbfd6c5f2e26df76dee0593cbe3cbd87321b'
-    }
-
-    nock('https://staging-api.deversifi.com/')
-      .get('/v1/stark/feeRate/' + '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404')
-      .reply(200, httpResponse)
-
-    const symbol = 'MKRETH'
-    const amount = -5
-    const price = 2.5
-
-    const response = await efx.getFeeRate(symbol, amount, price)
-    console.log('Response: ', response)
-    assert.equal(response.feeRate.threshold, 500)
-    assert.equal(response.feeRate.feeBps, 21)
-    assert.deepEqual(response.feeRates.fees, httpResponse.fees)
-  })
+  
 })
