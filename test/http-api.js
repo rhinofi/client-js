@@ -104,7 +104,7 @@ describe('StarkEX deposit suite....', () => {
       227, // vaultIdBuy
       221 // vaultIdSell
     )
-    
+
     console.log('got result =>', result)
   })
 
@@ -272,6 +272,4 @@ describe('StarkEX deposit suite....', () => {
     console.log('getOrderHist response: ', httpResponse)
     assert.deepEqual(response, httpResponse)
   })
-  return
-  
 })
