@@ -5,7 +5,7 @@ const getCandle = require('./getCandle')
  */
 const stableCoins = require('./stableCoins')
 
-module.exports = async (token, timeframe, timestamp ) => {
+module.exports = async (token, timeframe, timestamp) => {
   if (stableCoins[token]) {
     return stableCoins[token]
   }

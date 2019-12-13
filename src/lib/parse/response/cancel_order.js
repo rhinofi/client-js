@@ -6,10 +6,9 @@ module.exports = async (request) => {
 
     return response
   } catch (error) {
-
     // if it's not a HTTP response error,
     // throw the error
-    if(!error.response) {
+    if (!error.response) {
       throw error
     }
 

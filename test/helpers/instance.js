@@ -1,7 +1,7 @@
 /**
  * Creats a client instance for testing
  **/
-const HDWalletProvider = require("truffle-hdwallet-provider");
+const HDWalletProvider = require('truffle-hdwallet-provider')
 const Web3 = require('web3')
 
 const EFX = require('../../src/efx')
@@ -9,9 +9,9 @@ const EFX = require('../../src/efx')
 module.exports = async () => {
   const infuraURL = process.env.INFURA_URL
   const privateKey = process.env.PRIVATE_KEY
-  
+
   const provider = new HDWalletProvider(privateKey, infuraURL)
-  
+
   const web3 = new Web3(provider)
 
   let config = {}

@@ -1,4 +1,4 @@
-const BigNumber = require('bignumber.js');
+const BigNumber = require('bignumber.js')
 /**
  * Call unlock method on wrapper contract
  */
@@ -17,15 +17,15 @@ module.exports = async (efx, token, amount, nonce, signature) => {
   let args = [value]
 
   // no need to call releaseTokens
-  if( Date.now() / 1000 > depositLock ) {
+  if (Date.now() / 1000 > depositLock) {
     args = args.concat([0, '0x0000000000000000000000000000000000000000000000000000000000000000', '0x0000000000000000000000000000000000000000000000000000000000000000', 0])
   }
 
   // we need to call releaseTokens to fetch a signed permission to unlock
-  if( Date.now() / 1000 < depositLock ) {
+  if (Date.now() / 1000 < depositLock) {
     const response = await efx.releaseTokens(token, nonce, signature)
 
-    if(response.error) return response
+    if (response.error) return response
 
     const sig = response.releaseSignature
 

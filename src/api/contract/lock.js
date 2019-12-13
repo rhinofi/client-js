@@ -1,4 +1,4 @@
-const BigNumber = require('bignumber.js');
+const BigNumber = require('bignumber.js')
 /**
  * Execute 'deposit' method on locker address
  *
@@ -36,14 +36,14 @@ module.exports = async (efx, token, amount, duration) => {
       action,
       args
     )
-  } catch(e){
-    if(!efx.contract.isApproved(token)){
+  } catch (e) {
+    if (!efx.contract.isApproved(token)) {
       return {
         error: 'ERR_CORE_ETHFX_NEEDS_APPROVAL',
         reason: reasons.ERR_CORE_ETHFX_NEEDS_APPROVAL.trim()
       }
     } else {
-      throw(e)
+      throw (e)
     }
   }
 }

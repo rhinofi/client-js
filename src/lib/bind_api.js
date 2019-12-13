@@ -12,7 +12,7 @@ module.exports = () => {
 
   // returns a function that will call api functions prepending efx
   // as first argument
-  const compose = (funk) => {
+  const compose = funk => {
     return _.partial(funk, efx)
   }
 
@@ -37,7 +37,7 @@ module.exports = () => {
     lock: compose(require('../api/contract/lock')),
     locked: compose(require('../api/contract/locked')),
     unlock: compose(require('../api/contract/unlock')),
- 
+
     createOrderV2: compose(require('../api/contract/create_order')),
     abi: {
       locker: require('../api/contract/abi/locker.abi'),
@@ -62,25 +62,18 @@ module.exports = () => {
   efx.sign.request = compose(require('../api/sign/request'))
 
   // efx main functions
-  efx.getConfig = compose(require('../api/get_config'))
+  efx.getConfig = compose(require('../api/get_user_config'))
+  efx.cancelOrder = compose(require('../api/cancel_order'))
+  efx.deposit = compose(require('../api/deposit'))
+  efx.getBalance = compose(require('../api/get_balance'))
   efx.getFeeRate = compose(require('../api/get_fee_rate'))
-  // efx.cancelOrder = compose(require('../api/cancel_order'))
-  // efx.getOrder = compose(require('../api/get_order'))
-  // efx.getOrders = compose(require('../api/get_orders'))
+  efx.getOrder = compose(require('../api/get_order'))
   efx.getOrdersHist = compose(require('../api/get_orders_hist'))
-  efx.releaseTokens = compose(require('../api/release_tokens'))
-  // efx.submitOrder = compose(require('../api/submit_order'))
-  efx.submitOrderV2 = compose(require('../api/submit_order'))
+  efx.getOrders = compose(require('../api/get_orders'))
   efx.submitBuyOrder = compose(require('../api/submit_buy_order'))
+  efx.submitOrder = compose(require('../api/submit_order'))
   efx.submitSellOrder = compose(require('../api/submit_sell_order'))
-
-  // efx main functions under stark folder
-  efx.deposit = compose(require('../api/stark/deposit'));
-  efx.getBalance = compose(require('../api/stark/get_balance'));
-  efx.getOrder = compose(require('../api/stark/get_order'));
-  efx.getOrders = compose(require('../api/stark/get_orders'));
-  efx.submitOrder = compose(require('../api/stark/submit_order'));
-  efx.cancelOrder = compose(require('../api/stark/cancel_order'));
+  // efx.releaseTokens = compose(require('../api/release_tokens'))
 
   return efx
 }

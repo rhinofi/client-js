@@ -17,14 +17,13 @@ describe('~ efx-api-node', async () => {
   nock.cleanAll()
 
   it('efx = await EFX(web3) // create an instance without throwing', async () => {
-
-    //nock.recorder.rec()
+    // nock.recorder.rec()
 
     mockGetConf()
 
     const efx = await instance()
 
-    //nock.restore()
+    // nock.restore()
 
     assert.ok(efx.config['0x'])
     assert.ok(efx.config['0x'].exchangeAddress)
@@ -39,11 +38,8 @@ describe('~ efx-api-node', async () => {
 
     assert.ok(efx.config['0x'].tokenRegistry.USD)
     assert.ok(efx.config['0x'].tokenRegistry.USD.wrapperAddress)
-    //assert.ok(result['0x'].tokenRegistry.USDwrapperAddress)
-
+    // assert.ok(result['0x'].tokenRegistry.USDwrapperAddress)
   })
-
-  
 
   // TODO: deploy contracts to local granache or testnet in order to test
   // some contract methods
@@ -63,19 +59,17 @@ describe('~ efx-api-node', async () => {
     // comment the line below if you want to skip blockchain tests
     // you need a ropsten node with some ETH / ZRX in order to test
     // those. FIXME: need contracts deployed during test
-    //require('./blockchain-api')
+    // require('./blockchain-api')
   })
 
   describe('HTTP API', () => {
     try {
       require('./http-api')
-
-    } catch(e){
-
-      console.log("e ->", e)
+    } catch (e) {
+      console.log('e ->', e)
     }
   })
-  
+
   return
 
   describe('ETH calls', () => {

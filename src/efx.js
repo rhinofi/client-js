@@ -23,8 +23,8 @@ module.exports = async (web3, userConfig = {}) => {
   // ethfinex exchange config
   const exchangeConf = await efx.getConfig()
 
-  //user config has priority
-  efx.config = Object.assign({}, defaultConfig, exchangeConf, userConfig )
+  // user config has priority
+  efx.config = Object.assign({}, defaultConfig, exchangeConf, userConfig)
 
   // working towards being as compatible as possible
   efx.isBrowser = typeof window !== 'undefined'

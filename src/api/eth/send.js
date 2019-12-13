@@ -1,5 +1,5 @@
 module.exports = async (efx, abi, address, action, args, value = 0) => {
-  if (efx.config.send){
+  if (efx.config.send) {
     return efx.config.send(efx, abi, address, action, args, value)
   }
 
@@ -20,7 +20,7 @@ module.exports = async (efx, abi, address, action, args, value = 0) => {
     gas: estimatedGas
   }
 
-  if(efx.get('gasPrice')){
+  if (efx.get('gasPrice')) {
     options.gasPrice = efx.get('gasPrice')
   }
 

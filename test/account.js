@@ -32,7 +32,7 @@ it('await efx.account.balance() // return ETH balance', async () => {
 
   assert.notOk(isNaN(response))
 
-  console.log( 'eth balance ->', efx.web3.utils.fromWei(response) )
+  console.log('eth balance ->', efx.web3.utils.fromWei(response))
 })
 
 it("await efx.account.tokenBalance('USD') // return USD balance", async () => {
