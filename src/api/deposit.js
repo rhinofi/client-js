@@ -1,5 +1,4 @@
 const { post } = require('request-promise')
-const sw = require('starkware_crypto')
 
 module.exports = async (efx, token, amount) => {
   const userAddress = efx.get('account')
@@ -20,7 +19,8 @@ module.exports = async (efx, token, amount) => {
   var private_key =
     '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
   const { starkKeyPair, starkKey } = efx.stark.getKeyPairs(private_key)
-  let starkMessage = '', starkSignature = ''
+  var starkMessage = '',
+    starkSignature = ''
   try {
     // const depositStatus = await efx.contract.deposit(tempVaultId, amount, userAddress);
     // console.log(`deposit contract call result: ${depositStatus}`, depositStatus)
@@ -35,7 +35,8 @@ module.exports = async (efx, token, amount) => {
       '2', // receiver_vault_id
       '0x1', // receiver_public_key
       '9' // expiration_timestamp
-    )
+    ).starkMessage
+
     starkSignature = efx.stark.sign(starkKeyPair, starkMessage)
     console.log(`stark sign is: ${starkSignature}`)
   } catch (e) {

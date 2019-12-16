@@ -10,8 +10,8 @@ module.exports = (efx, symbol, amount, price, validFor, fee_rate = 0.0025, vault
   const buySymbol = amount > 0 ? baseSymbol : quoteSymbol
   const sellSymbol = amount > 0 ? quoteSymbol : baseSymbol
 
-  const sellCurrency = efx.config['0x'].tokenRegistry[sellSymbol]
-  const buyCurrency = efx.config['0x'].tokenRegistry[buySymbol]
+  const sellCurrency = efx.config.tokenRegistry[sellSymbol]
+  const buyCurrency = efx.config.tokenRegistry[buySymbol]
 
   let buyAmount, sellAmount
 
@@ -64,8 +64,8 @@ module.exports = (efx, symbol, amount, price, validFor, fee_rate = 0.0025, vault
       .integerValue()
       .abs()
       .toString(),
-    token_sell: sellCurrency.tokenId,
-    token_buy: buyCurrency.tokenId,
+    token_sell: sellCurrency.starkTokenId,
+    token_buy: buyCurrency.starkTokenId,
     nonce: 0, // generatePseudoRandomSalt(),
     expiration_timestamp: 438953
   }
@@ -77,8 +77,8 @@ module.exports = (efx, symbol, amount, price, validFor, fee_rate = 0.0025, vault
       vault_id_buy, // vault_buy (uint31)
       starkOrder.amount_sell, // amount_sell (uint63 decimal str)
       starkOrder.amount_buy, // amount_buy (uint63 decimal str)
-      sellCurrency.tokenId, // token_sell (hex str with 0x prefix < prime)np
-      buyCurrency.tokenId, // token_buy (hex str with 0x prefix < prime)
+      starkOrder.token_sell, // token_sell (hex str with 0x prefix < prime)np
+      starkOrder.token_buy, // token_buy (hex str with 0x prefix < prime)
       starkOrder.nonce, // nonce (uint31)
       starkOrder.expiration_timestamp // expiration_timestamp (uint22)
     )

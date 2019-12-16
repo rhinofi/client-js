@@ -1,3 +1,3 @@
-module.exports = (efx, symbol, nonce) => {
-  return efx.getOrders(symbol, id = 'all', nonce)
+module.exports = (efx, symbol, nonce, signature) => {
+  return efx.getOrders(symbol, id='hist', nonce, signature)
 }

@@ -12,19 +12,20 @@ module.exports = async (
   validFor,
   partner_id,
   fee_rate,
-  dynamicFeeRate,
-  vault_id_buy,
-  vault_id_sell
+  dynamicFeeRate
 ) => {
   if (!(symbol && amount && price)) {
     throw new Error('order, symbol, amount and price are required')
   }
 
   const userAddress = efx.get('account')
+  const vault_id_buy = efx.config.tokenRegistry['ZRX'].starkVaultId
+  const vault_id_sell = efx.config.tokenRegistry['ETH'].starkVaultId
 
   // TODO:
   // User Specific Parameters to be retrieved via getUserConfig
-  var private_key = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+  var private_key =
+    '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
   var key_pair = sw.ec.keyFromPrivate(private_key, 'hex')
   var public_key = sw.ec.keyFromPublic(key_pair.getPublic(true, 'hex'), 'hex')
   const starkKey = public_key.pub.getX().toString()
@@ -39,8 +40,8 @@ module.exports = async (
     vault_id_buy,
     vault_id_sell
   )
-  const starkSignature = efx.stark.signOrder(starkKeyPair, starkMessage)
 
+  const starkSignature = efx.stark.sign(starkKeyPair, starkMessage)
   const type = 'EXCHANGE LIMIT'
   const protocol = 'stark'
   symbol = 't' + symbol

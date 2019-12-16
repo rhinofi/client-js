@@ -1,6 +1,4 @@
 const { post } = require('request-promise')
-const parse = require('../lib/parse/response/submit_order')
-const sw = require('starkware_crypto')
 
 module.exports = async (efx, token) => {
   if (!token) {

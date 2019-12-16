@@ -5,7 +5,7 @@ const BigNumber = require('bignumber.js')
  * duration - duration the tokens will be locked, in hours
  */
 module.exports = async (efx, token, amount, duration) => {
-  const currency = efx.config['0x'].tokenRegistry[token]
+  const currency = efx.config.tokenRegistry[token]
 
   // value we sending to the lockerContract
   const value = (new BigNumber(10)).pow(currency.decimals).times(amount).integerValue(BigNumber.ROUND_FLOOR).toString()

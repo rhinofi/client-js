@@ -1,3 +1,3 @@
-module.exports = (efx, orderId) => {
-  return efx.getOrders(null, orderId)
+module.exports = (efx, orderId, nonce, signature) => {
+  return efx.getOrders(null, orderId, nonce, signature)
 }

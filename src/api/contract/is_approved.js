@@ -3,7 +3,7 @@
  */
 module.exports = (efx, token) => {
   // REVIEW: shall we throw if token is ETH or USDT ?
-  const currency = efx.config['0x'].tokenRegistry[token]
+  const currency = efx.config.tokenRegistry[token]
 
   const args = [
     efx.get('account'), // address _owner

@@ -1,15 +1,15 @@
 const { post } = require('request-promise')
-const sw = require('starkware_crypto')
+const parse = require('../lib/parse/response/orders')
 
-module.exports = async (efx, symbol, id, nonce) => {
+module.exports = async (efx, symbol, id, nonce, signature) => {
   var url = efx.config.api + '/stark/getOrders'
-  if (id === 'all') {
+  if (id === 'hist') {
     if (symbol) {
       url += '/t' + symbol + '/hist'
     } else {
       url += '/hist'
     }
-    // incase 'id' needs to be changed.
+    // if it is from orderHistory, make id to null
     id = null
   } else {
     if (symbol) {
@@ -18,23 +18,9 @@ module.exports = async (efx, symbol, id, nonce) => {
   }
   if (!nonce) {
     nonce = Date.now() / 1000 + 30 + ''
+    signature = await efx.sign(nonce.toString(16))
   }
   const protocol = '0x'
-
-  // User Specific Parameters
-  var private_key =
-    '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
-  const { starkKeyPair } = efx.stark.getKeyPairs(private_key)
-  const { starkMessage } = efx.stark.getTransferMsg(
-    60,
-    '1',
-    '1',
-    '0x3',
-    '2',
-    '0x1',
-    '9'
-  )
-  const signature = await efx.stark.sign(starkKeyPair, starkMessage)
 
   const data = {
     id,
@@ -42,5 +28,5 @@ module.exports = async (efx, symbol, id, nonce) => {
     signature,
     protocol
   }
-  return post(url, { json: data })
+  return parse(post(url, { json: data }))
 }

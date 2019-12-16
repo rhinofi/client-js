@@ -2,7 +2,7 @@
  * Returns the amount you have locked for given token
  */
 module.exports = (efx, token) => {
-  const currency = efx.config['0x'].tokenRegistry[token]
+  const currency = efx.config.tokenRegistry[token]
   const action = 'balanceOf'
   const args = [ efx.get('account') ]
 

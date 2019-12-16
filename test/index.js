@@ -25,19 +25,13 @@ describe('~ efx-api-node', async () => {
 
     // nock.restore()
 
-    assert.ok(efx.config['0x'])
-    assert.ok(efx.config['0x'].exchangeAddress)
-    assert.ok(efx.config['0x'].ethfinexAddress)
-    assert.ok(efx.config['0x'].exchangeSymbols)
-    assert.ok(efx.config['0x'].tokenRegistry)
+    assert.ok(efx.config.tokenRegistry)
 
-    assert.ok(efx.config['0x'].tokenRegistry.ETH)
-    assert.equal(efx.config['0x'].tokenRegistry.ETH.decimals, 18)
+    assert.ok(efx.config.tokenRegistry.ETH)
+    assert.ok(efx.config.tokenRegistry.ETH.decimals, 18)
 
-    assert.ok(efx.config['0x'].tokenRegistry.ETH.wrapperAddress)
-
-    assert.ok(efx.config['0x'].tokenRegistry.USD)
-    assert.ok(efx.config['0x'].tokenRegistry.USD.wrapperAddress)
+    assert.ok(efx.config.tokenRegistry.USD)
+    assert.ok(efx.config.tokenRegistry.USD.tokenAddress)
     // assert.ok(result['0x'].tokenRegistry.USDwrapperAddress)
   })
 

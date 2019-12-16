@@ -1,5 +1,4 @@
 module.exports = {
-
   // test environment 'https://test.ethfinex.com/trustless/v1',
   api: 'https://api.ethfinex.com/trustless/v1',
 
@@ -12,6 +11,6 @@ module.exports = {
 
   // default account to select in case no account is provided by the userConfig
   // parameter
-  account: 0
-
+  account: 0,
+  protocol: 'stark'
 }

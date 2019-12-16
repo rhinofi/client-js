@@ -4,7 +4,7 @@ const reasons = require('../../lib/error/reasons')
  *
  */
 module.exports = async (efx, token) => {
-  const currency = efx.config['0x'].tokenRegistry[token]
+  const currency = efx.config.tokenRegistry[token]
 
   // REVIEW: 2 ** 256 -1 should be the max value for "uint"
   const amount = ((2 ** 256) - 1).toString(16)

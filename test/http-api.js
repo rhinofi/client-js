@@ -3,12 +3,11 @@
 const { assert } = require('chai')
 const nock = require('nock')
 const mockGetConf = require('./fixtures/nock/get_conf')
-const mockFeeRate = require('./fixtures/nock/feeRate')
 const instance = require('./helpers/instance')
-const utils = require('ethereumjs-util')
 
 // TODO: use arrayToOrder to convert response from HTTP API
 // const orderToArray = require('lib-js-util-schema')
+const ecRecover = require('./helpers/ecRecover')
 
 let efx
 
@@ -63,7 +62,7 @@ describe('StarkEX deposit suite....', () => {
         assert.equal(body.vaultId, '2')
         assert.equal(body.tokenId, '12345')
         assert.equal(body.amount, '20')
-        assert.ok(body.starkSignature)
+        // assert.ok(body.starkSignature)
         return true
       })
       .reply(200, (url, requestBody) => {
@@ -100,9 +99,7 @@ describe('StarkEX deposit suite....', () => {
       '0', // validFor
       '', // partnerId
       '', // feeRate
-      '', // dynamicFeeRate
-      227, // vaultIdBuy
-      221 // vaultIdSell
+      '' // dynamicFeeRate
     )
 
     console.log('got result =>', result)
@@ -156,6 +153,11 @@ describe('StarkEX deposit suite....', () => {
         assert.equal(body.protocol, '0x')
         assert.ok(body.nonce)
         assert.ok(body.signature)
+
+        let toSign = body.nonce.toString(16)
+        const recovered = ecRecover(toSign, body.signature)
+        assert.equal(efx.get('account').toLowerCase(), recovered.toLowerCase())
+
         return true
       })
       .reply(200, apiResponse)
@@ -172,6 +174,11 @@ describe('StarkEX deposit suite....', () => {
         assert.equal(body.protocol, '0x')
         assert.ok(body.nonce)
         assert.ok(body.signature)
+
+        let toSign = body.nonce.toString(16)
+        const recovered = ecRecover(toSign, body.signature)
+        assert.equal(efx.get('account').toLowerCase(), recovered.toLowerCase())
+
         return true
       })
       .reply(200, apiResponse)
@@ -258,17 +265,20 @@ describe('StarkEX deposit suite....', () => {
       }
     ]
 
+    const nonce = ((Date.now() / 1000) + 60 * 60 * 24) + ''
+    const signature = await efx.sign(nonce.toString(16))
+
     nock('https://staging-api.deversifi.com/')
       .post('/v1/stark/getOrders/hist', body => {
         console.log('body: ', body)
         assert.equal(body.protocol, '0x')
         assert.ok(body.nonce)
-        assert.ok(body.signature)
+        assert.ok(body.signature, signature)
         return true
       })
       .reply(200, httpResponse)
 
-    const response = await efx.getOrdersHist(null, (nonce = 0))
+    const response = await efx.getOrdersHist(null, nonce, signature)
     console.log('getOrderHist response: ', httpResponse)
     assert.deepEqual(response, httpResponse)
   })

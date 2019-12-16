@@ -12,9 +12,7 @@ module.exports = (
   validFor,
   partner_id,
   fee_rate,
-  dynamicFeeRate,
-  vault_id_buy,
-  vault_id_sell
+  dynamicFeeRate
 ) => {
   // force amount to be positive ( buy order )
   amount = Math.abs(amount)
@@ -28,8 +26,6 @@ module.exports = (
     validFor,
     partner_id,
     fee_rate,
-    dynamicFeeRate,
-    vault_id_buy,
-    vault_id_sell
+    dynamicFeeRate
   )
 }
