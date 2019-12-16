@@ -1,5 +1,3 @@
-const utils = require('ethereumjs-util')
-
 module.exports = (efx, orderId) => {
   // orderId = utils.sha3(orderId.toString(16))
 
