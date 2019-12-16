@@ -7,7 +7,7 @@ module.exports = (efx, token) => {
 
   const args = [
     efx.get('account'), // address _owner
-    currency.wrapperAddress // address _spender
+    efx.config.DVF.exchangeAddress // address _spender
   ]
 
   const action = 'allowance'

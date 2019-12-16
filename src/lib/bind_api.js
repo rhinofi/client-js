@@ -21,7 +21,6 @@ module.exports = () => {
     balance: compose(require('../api/account/balance')),
     tokenBalance: compose(require('../api/account/token_balance')),
     select: compose(require('../api/account/select')),
-    unlock: compose(require('../api/account/unlock'))
   }
 
   efx.stark = {
@@ -36,11 +35,8 @@ module.exports = () => {
     approve: compose(require('../api/contract/approve')),
     isApproved: compose(require('../api/contract/is_approved')),
     deposit: compose(require('../api/contract/deposit')),
-    lock: compose(require('../api/contract/lock')),
-    locked: compose(require('../api/contract/locked')),
     createOrderV2: compose(require('../api/contract/create_order')),
     abi: {
-      locker: require('../api/contract/abi/locker.abi'),
       token: require('../api/contract/abi/token.abi'),
       StarkEx: require('../api/contract/abi/StarkEx.abi')
     }

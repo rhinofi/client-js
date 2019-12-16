@@ -1,17 +1,44 @@
-const fs = require('fs')
-const path = require('path')
-const {get} = require('request-promise')
+const BigNumber = require('bignumber.js')
 
-module.exports = (efx, vaultId, amount, userAddress) => {
+module.exports = (efx, vaultId, token, amount, userAddress) => {
   console.log('efx ->', efx.config)
 
-  // get StarkEx contract address from config
-  const dexAddress = '0xBd25cD867C304F079E696CBE44D958f3d3B683ba'
-  const args = [
-    '117817125247250073004144863651748497821726634586140800650875',
-    vaultId,
-    amount
-  ]
+  const value = (new BigNumber(10)).pow(currency.decimals).times(amount).integerValue(BigNumber.ROUND_FLOOR).toString()
 
-  return efx.eth.call(efx.contract.abi.StarkEx, dexAddress, 'deposit', args)
+  // TODO: function should have input for token currency, and then select first arg from config
+  const args = [
+    efx.config.tokenRegistry[token].starkTokenId,
+    vaultId,
+    value,
+  ]
+  const action = 'deposit'
+
+  // In order to lock ETH we simply send ETH to the lockerAddress
+  if (token === 'ETH') {
+    return efx.eth.send(
+      efx.contract.abi.StarkEx,
+      efx.config.DVF.exchangeAddress,
+      action,
+      args,
+      value // send ETH to the contract
+    )
+  }
+
+  try {
+    return efx.eth.send(
+      efx.contract.abi.StarkEx,
+      efx.config.DVF.exchangeAddress,
+      action,
+      args
+    )
+  } catch (e) {
+    if (!efx.contract.isApproved(token)) {
+      return {
+        error: 'ERR_CORE_ETHFX_NEEDS_APPROVAL',
+        reason: reasons.ERR_CORE_ETHFX_NEEDS_APPROVAL.trim()
+      }
+    } else {
+      throw (e)
+    }
+  }
 }
