@@ -164,14 +164,14 @@ describe('StarkEX deposit suite....', () => {
     nock('https://staging-api.deversifi.com/')
       .post('/v1/getBalance', async body => {
         console.log(`body: ${body}`, body)
-        assert.equal(body.token, 'NEC')
+        assert.equal(body.token, 'ETH')
         assert.ok(body.signature)
         return true
       })
       .reply(200, apiResponse)
 
-    const result = await efx.getBalance('NEC')
-    console.log('got result =>', result)
+    const result = await efx.getBalance('ETH')
+    console.log('got result for balance =>', result)
   })
 
   it('dvf pub api cancelOrder....', async () => {
