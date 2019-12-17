@@ -1,6 +1,6 @@
 const { post } = require('request-promise')
 
-module.exports = async (efx, token, amount) => {
+module.exports = async (efx, token, amount, starkKey, starkKeyPair) => {
   const userAddress = efx.get('account')
 
   // Basic validation
@@ -8,17 +8,16 @@ module.exports = async (efx, token, amount) => {
     throw new Error('tokenId and amount required')
   }
 
+  if (!efx.config.tokenRegistry[token]) {
+    throw new Error('Required token details not found')
+  }
   // TODO:
   // Parameters to be available at client side
   // Generic Parameters
   const tempVaultId = 1
-  const tokenId = 12345
-  const vaultId = 2
+  const tokenId = efx.config.tokenRegistry[token].starkTokenId
+  const vaultId = efx.config.tokenRegistry[token].starkVaultId
 
-  // User Specific Parameters
-  var private_key =
-    '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
-  const { starkKeyPair, starkKey } = efx.stark.getKeyPairs(private_key)
   var starkMessage = '',
     starkSignature = ''
   try {
@@ -46,7 +45,7 @@ module.exports = async (efx, token, amount) => {
   }
 
   // Call dvf pub api
-  const url = efx.config.api + '/stark/deposit'
+  const url = efx.config.api + '/w/deposit'
   const data = {
     userAddress,
     starkKey,

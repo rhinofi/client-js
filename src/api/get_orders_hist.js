@@ -1,3 +1,4 @@
 module.exports = (efx, symbol, nonce, signature) => {
-  return efx.getOrders(symbol, id='hist', nonce, signature)
+  let id = 'hist'
+  return efx.getOrders(symbol, id, nonce, signature)
 }

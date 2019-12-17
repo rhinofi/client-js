@@ -4,7 +4,7 @@ const _ = require('lodash')
 const calculateVolume = require('../lib/bfx/calculateVolume')
 
 // TODO: move address to either /r/get/conf or to ENV variables
-const DEVERSIFI_API = 'https://api.deversifi.com/api/v1/stark/feeRate/'
+const DEVERSIFI_API = 'https://api.deversifi.com/api/v1/feeRate/'
 
 /**
  *
@@ -19,10 +19,10 @@ module.exports = async (efx, symbol, amount, price) => {
 
   const url = DEVERSIFI_API + account
 
-  let feeRates = await get(url, { json: true})
+  let feeRates = await get(url, { json: true })
 
   // filter all fees with threshold below volume
-  let feeRate = _.filter(feeRates.fees, (item) => item.threshold <= volume)
+  let feeRate = _.filter(feeRates.fees, item => item.threshold <= volume)
 
   // pick the cheapest one
   feeRate = _.sortBy(feeRate, 'feeBps')[0]

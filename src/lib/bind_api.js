@@ -20,14 +20,13 @@ module.exports = () => {
   efx.account = {
     balance: compose(require('../api/account/balance')),
     tokenBalance: compose(require('../api/account/token_balance')),
-    select: compose(require('../api/account/select')),
+    select: compose(require('../api/account/select'))
   }
 
   efx.stark = {
     createOrder: compose(require('../api/contract/create_order')),
     sign: compose(require('../api/contract/sign_order')),
     // efx not required
-    getKeyPairs: require('../api/contract/get_key_pairs'),
     getTransferMsg: require('../api/contract/get_transfer_message')
   }
   // efx.contract functions
@@ -58,7 +57,8 @@ module.exports = () => {
   efx.sign.request = compose(require('../api/sign/request'))
 
   // efx main functions
-  efx.getConfig = compose(require('../api/get_user_config'))
+  efx.getConfig = compose(require('../api/get_config'))
+  efx.getUserConfig = compose(require('../api/get_user_config'))
   efx.cancelOrder = compose(require('../api/cancel_order'))
   efx.deposit = compose(require('../api/deposit'))
   efx.getBalance = compose(require('../api/get_balance'))
