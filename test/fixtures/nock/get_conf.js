@@ -71,6 +71,6 @@ module.exports = () => {
   }
 
   nock('https://staging-api.deversifi.com/')
-    .post('/v1/stark/getUserConfig', {})
+    .post('/v1/getConf', {})
     .reply(200, apiResponse)
 }

@@ -1,6 +1,3 @@
-const { post } = require('request-promise')
-
-// module.exports = (efx, symbol, amount, price, gid, cid, signedOrder, validFor, partner_id, fee_rate) => {
 module.exports = (
   efx,
   symbol,
@@ -12,7 +9,9 @@ module.exports = (
   validFor,
   partner_id,
   fee_rate,
-  dynamicFeeRate
+  dynamicFeeRate,
+  starkKey,
+  starkKeyPair
 ) => {
   // force amount to be positive ( buy order )
   amount = Math.abs(amount)
@@ -26,6 +25,8 @@ module.exports = (
     validFor,
     partner_id,
     fee_rate,
-    dynamicFeeRate
+    dynamicFeeRate,
+    starkKey,
+    starkKeyPair
   )
 }

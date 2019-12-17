@@ -4,6 +4,7 @@ const instance = require('./helpers/instance')
 const { assert } = require('chai')
 const nock = require('nock')
 const mockGetConf = require('./fixtures/nock/get_conf')
+const mockGetUserConf = require('./fixtures/nock/get_user_conf')
 
 // TODO: use nockBack and record fixtures to disk.
 // leaving this code here as reference
@@ -20,6 +21,7 @@ describe('~ efx-api-node', async () => {
     // nock.recorder.rec()
 
     mockGetConf()
+    mockGetUserConf()
 
     const efx = await instance()
 

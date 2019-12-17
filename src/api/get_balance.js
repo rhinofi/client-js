@@ -12,7 +12,7 @@ module.exports = async (efx, token) => {
     signature,
     token
   }
-  console.log('data is ', data)
+  //console.log('data is ', data)
   const url = efx.config.api + '/getBalance'
   //const url= 'http://localhost:7777/v1/trading/r/getBalance'
   console.log(`about to call dvf pub api for getBalance`)

@@ -1,11 +1,16 @@
 const { post } = require('request-promise')
+const parse = require('../lib/parse/response/orders')
 
 module.exports = async efx => {
-  const url = efx.config.api + '/stark/getUserConfig'
+  const url = efx.config.api + '/getUserConf'
+  const nonce = Date.now() / 1000 + 30 + ''
+  const signature = await efx.sign(nonce.toString(16))
 
-  const exchangeConf = await post(url, { json: {} })
+  const data = {
+    nonce,
+    signature
+  }
 
-  efx.config = Object.assign({}, efx.config, exchangeConf)
-
+  const exchangeConf = await parse(post(url, { json: data }))
   return exchangeConf
 }

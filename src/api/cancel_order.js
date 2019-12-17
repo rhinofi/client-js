@@ -1,7 +1,7 @@
 const { post } = require('request-promise')
 
 module.exports = async (efx, orderId) => {
-  const url = efx.config.api + '/stark/cancelOrder'
+  const url = efx.config.api + '/cancelOrder'
   let data = {
     orderId: parseInt(orderId)
   }

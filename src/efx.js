@@ -15,7 +15,6 @@ module.exports = async (web3, userConfig = {}) => {
 
   // adds key-value storage and event emitting capabilities
   aware(efx)
-
   // merge user config with default config
   // needed for the efx.getConfig method
   efx.config = Object.assign({}, defaultConfig, userConfig)
@@ -57,6 +56,10 @@ module.exports = async (web3, userConfig = {}) => {
   if (!efx.get('account')) {
     console.warn('Please specify a valid account or account index')
   }
+
+  // Add userConfig to config
+  const exchangeUserConf = await efx.getUserConfig()
+  efx.config = Object.assign(efx.config, exchangeUserConf)
 
   return efx
 }

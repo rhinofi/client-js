@@ -9,7 +9,9 @@ module.exports = (
   validFor,
   partner_id,
   fee_rate,
-  dynamicFeeRate
+  dynamicFeeRate,
+  starkKey,
+  starkKeyPair
 ) => {
   // force amount to be negative ( sell order )
   amount = Math.abs(amount)
@@ -23,6 +25,8 @@ module.exports = (
     validFor,
     partner_id,
     fee_rate,
-    dynamicFeeRate
+    dynamicFeeRate,
+    starkKey,
+    starkKeyPair
   )
 }

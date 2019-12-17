@@ -11,6 +11,5 @@ module.exports = {
 
   // default account to select in case no account is provided by the userConfig
   // parameter
-  account: 0,
-  protocol: '0x'
+  account: 0
 }
