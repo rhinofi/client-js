@@ -45,7 +45,7 @@ module.exports = async (efx, token, amount, starkKey, starkKeyPair) => {
   }
 
   // Call dvf pub api
-  const url = efx.config.api + '/deposit'
+  const url = efx.config.api + '/w/deposit'
   const data = {
     userAddress,
     starkKey,

@@ -63,7 +63,7 @@ module.exports = async (
     starkSignature: starkSignature
   }
 
-  const url = efx.config.api + '/submitOrder'
+  const url = efx.config.api + '/w/submitOrder'
   console.log(`about to call dvf pub api`)
   return post(url, { json: data })
 }

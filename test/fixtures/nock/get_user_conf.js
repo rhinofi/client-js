@@ -32,7 +32,7 @@ module.exports = () => {
   }
 
   nock('https://staging-api.deversifi.com/')
-    .post('/v1/getUserConf', body => {
+    .post('/v1/trading/r/getUserConf', body => {
       return true
     })
     .reply(200, apiResponse)

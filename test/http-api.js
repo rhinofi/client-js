@@ -40,7 +40,7 @@ describe('StarkEX deposit suite....', () => {
     const starkKeyPair = key_pair
 
     nock('https://staging-api.deversifi.com/')
-      .post('/v1/deposit', async body => {
+      .post('/v1/trading/w/deposit', async body => {
         console.log('body: ', body)
         assert.equal(
           body.userAddress,
@@ -88,7 +88,7 @@ describe('StarkEX deposit suite....', () => {
 
     // linking url with nock
     nock('https://staging-api.deversifi.com/')
-      .post('/v1/deposit', body => {
+      .post('/v1/trading/w/deposit', body => {
         console.log('body: ', body)
 
         assert.equal(
@@ -125,7 +125,7 @@ describe('StarkEX deposit suite....', () => {
     const starkKeyPair = key_pair
 
     nock('https://staging-api.deversifi.com/')
-      .post('/v1/submitOrder', async body => {
+      .post('/v1/trading/w/submitOrder', async body => {
         console.log(`body: ${body}`, body)
         assert.equal(
           body.meta.userAddress,
@@ -162,7 +162,7 @@ describe('StarkEX deposit suite....', () => {
     const apiResponse = { starkBalance: 'success' }
 
     nock('https://staging-api.deversifi.com/')
-      .post('/v1/getBalance', async body => {
+      .post('/v1/trading/r/getBalance', async body => {
         console.log(`body: ${body}`, body)
         assert.equal(body.token, 'ETH')
         assert.ok(body.signature)
@@ -180,7 +180,7 @@ describe('StarkEX deposit suite....', () => {
     const apiResponse = [1234]
 
     nock('https://staging-api.deversifi.com/')
-      .post('/v1/cancelOrder', async body => {
+      .post('/v1/trading/w/cancelOrder', async body => {
         console.log('body: ', body)
         assert.equal(body.orderId, orderId)
         return true
@@ -199,7 +199,7 @@ describe('StarkEX deposit suite....', () => {
     const signature = await efx.sign(nonce.toString(16))
 
     nock('https://staging-api.deversifi.com/')
-      .post('/v1/getOrders', async body => {
+      .post('/v1/trading/r/getOrders', async body => {
         assert.equal(body.id, orderId)
         assert.equal(body.protocol, '0x')
         assert.ok(body.nonce)
@@ -221,7 +221,7 @@ describe('StarkEX deposit suite....', () => {
     const apiResponse = [[1234], [1235]]
 
     nock('https://staging-api.deversifi.com/')
-      .post('/v1/getOrders', async body => {
+      .post('/v1/trading/r/getOrders', async body => {
         assert.equal(body.protocol, '0x')
         assert.ok(body.nonce)
         assert.ok(body.signature)
@@ -320,7 +320,7 @@ describe('StarkEX deposit suite....', () => {
     const signature = await efx.sign(nonce.toString(16))
 
     nock('https://staging-api.deversifi.com/')
-      .post('/v1/getOrders/hist', body => {
+      .post('/v1/trading/r/getOrders/hist', body => {
         console.log('body: ', body)
         assert.equal(body.protocol, '0x')
         assert.ok(body.nonce)
@@ -369,7 +369,7 @@ describe('StarkEX deposit suite....', () => {
     const signature = await efx.sign(nonce.toString(16))
 
     nock('https://staging-api.deversifi.com/')
-      .post('/v1/getUserConf', body => {
+      .post('/v1/trading/r/getUserConf', body => {
         console.log('body: ', body)
         assert.ok(body.nonce)
         assert.ok(body.signature, signature)

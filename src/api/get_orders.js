@@ -2,7 +2,7 @@ const { post } = require('request-promise')
 const parse = require('../lib/parse/response/orders')
 
 module.exports = async (efx, symbol, id, nonce, signature) => {
-  var url = efx.config.api + '/getOrders'
+  var url = efx.config.api + '/r/getOrders'
   if (id === 'hist') {
     if (symbol) {
       url += '/t' + symbol + '/hist'

@@ -71,6 +71,6 @@ module.exports = () => {
   }
 
   nock('https://staging-api.deversifi.com/')
-    .post('/v1/getConf', {})
+    .post('/v1/trading/r/getConf', {})
     .reply(200, apiResponse)
 }
