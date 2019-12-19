@@ -1,5 +1,4 @@
 /* eslint-env mocha */
-
 const { assert } = require('chai')
 const nock = require('nock')
 const mockGetConf = require('./fixtures/nock/get_conf')
@@ -21,29 +20,20 @@ before(async () => {
   efx = await instance()
 })
 
-describe('StarkEX deposit suite....', () => {
+describe('/deposit', () => {
   // 1st test_case
-  it('dvf pub api deposit....(1)', async () => {
-    const apiResponse = { starkDeposit: 'success' }
-    const Key =
-      '3382153814239323293087870650452838988136913683747955644970514321018482846275'
-
-    // User Specific Parameters to be retrieved via getUserConfig
-    var private_key =
+  it('Deposit token to user\'s vault', async () => {
+    const apiResponse = { deposit: 'success' }
+    var pvtKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
-    var key_pair = sw.ec.keyFromPrivate(private_key, 'hex')
-    var public_key = sw.ec.keyFromPublic(
-      key_pair.getPublic(true, 'hex'),
-      'hex'
-    )
-    const starkKey = public_key.pub.getX().toString()
-    const starkKeyPair = key_pair
+
+    var starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
+    var publicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
+    var starkKey = publicKey.pub.getX().toString()
 
     nock('https://staging-api.deversifi.com/')
       .post('/v1/trading/w/deposit', async body => {
-        console.log('body: ', body)
         assert.equal(
-          body.userAddress,
           '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404'
         )
         assert.equal(
@@ -92,7 +82,7 @@ describe('StarkEX deposit suite....', () => {
         console.log('body: ', body)
 
         assert.equal(
-          body.userAddress,
+          body.ownerAddress,
           '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404'
         )
         assert.equal(body.starkKey, starkKey)
@@ -128,7 +118,7 @@ describe('StarkEX deposit suite....', () => {
       .post('/v1/trading/w/submitOrder', async body => {
         console.log(`body: ${body}`, body)
         assert.equal(
-          body.meta.userAddress,
+          body.meta.ownerAddress,
           '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404'
         )
         assert.equal(

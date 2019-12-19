@@ -22,7 +22,7 @@ module.exports = async (
     throw new Error(`starkKey or starkKeyPair missing`)
   }
 
-  const userAddress = efx.get('account')
+  const ownerAddress = efx.get('account')
   const vaultIdBuy = efx.config.tokenRegistry['ZRX'].starkVaultId
   const vaultIdSell = efx.config.tokenRegistry['ETH'].starkVaultId
 
@@ -58,7 +58,7 @@ module.exports = async (
   data.meta = {
     starkOrder: starkOrder,
     starkMessage: starkMessage,
-    userAddress: userAddress,
+    ownerAddress: ownerAddress,
     starkKey: starkKey,
     starkSignature: starkSignature
   }

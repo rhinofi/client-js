@@ -1,6 +1,6 @@
 const BigNumber = require('bignumber.js')
 
-module.exports = (efx, vaultId, token, amount, userAddress) => {
+module.exports = (efx, vaultId, token, amount, ownerAddress) => {
   console.log('efx ->', efx.config)
 
   const value = (new BigNumber(10)).pow(currency.decimals).times(amount).integerValue(BigNumber.ROUND_FLOOR).toString()

@@ -1,7 +1,7 @@
 const { post } = require('request-promise')
 
 module.exports = async (efx, token, amount, starkKey, starkKeyPair) => {
-  const userAddress = efx.get('account')
+  const ownerAddress = efx.get('account')
 
   // Basic validation
   if (!token || !amount) {
@@ -21,7 +21,7 @@ module.exports = async (efx, token, amount, starkKey, starkKeyPair) => {
   var starkMessage = '',
     starkSignature = ''
   try {
-    // const depositStatus = await efx.contract.deposit(tempVaultId, amount, userAddress);
+    // const depositStatus = await efx.contract.deposit(tempVaultId, amount, ownerAddress);
     // console.log(`deposit contract call result: ${depositStatus}`, depositStatus)
 
     // create stark message and signature using stark crypto library
@@ -47,7 +47,7 @@ module.exports = async (efx, token, amount, starkKey, starkKeyPair) => {
   // Call dvf pub api
   const url = efx.config.api + '/w/deposit'
   const data = {
-    userAddress,
+    ownerAddress,
     starkKey,
     tempVaultId,
     vaultId,
