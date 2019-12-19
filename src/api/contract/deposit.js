@@ -9,7 +9,7 @@ module.exports = (efx, vaultId, token, amount, ownerAddress) => {
   const args = [
     efx.config.tokenRegistry[token].starkTokenId,
     vaultId,
-    value,
+    value
   ]
   const action = 'deposit'
 

@@ -5,18 +5,18 @@ module.exports = async (efx, token, amount, starkKeyPair) => {
   const ownerAddress = efx.get('account')
 
   // Basic validation
-  if (!amount || amount<0) {
-    return {error: "INVALID_AMOUNT"}
+  if (!amount || amount < 0) {
+    return {error: 'INVALID_AMOUNT'}
   }
-  
+
   if (!token) {
-    return {error: "MISSING_TOKEN"}
+    return {error: 'MISSING_TOKEN'}
   }
 
   if (!efx.config.tokenRegistry[token]) {
-    return {error: "INVALID_TOKEN"}
+    return {error: 'INVALID_TOKEN'}
   }
-  
+
   const tempVaultId = 1
   const tokenId = efx.config.tokenRegistry[token].starkTokenId
   const vaultId = efx.config.tokenRegistry[token].starkVaultId
@@ -36,13 +36,12 @@ module.exports = async (efx, token, amount, starkKeyPair) => {
       '0x4e4543', // token
       '2', // receiver_vault_id
       '0x1', // receiver_public_key
-      (Math.floor(Date.now()/(1000*3600))+efx.config.defaultExpiry) // expiration_timestamp
+      (Math.floor(Date.now() / (1000 * 3600)) + efx.config.defaultExpiry) // expiration_timestamp
     ).starkMessage
 
     starkSignature = efx.stark.sign(starkKeyPair, starkMessage)
-    var publicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex');
+    var publicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
     console.log('public key in deposit ', publicKey)
-
   } catch (e) {
     console.log(`error: ${e}`)
     // Error handling, user corrections
