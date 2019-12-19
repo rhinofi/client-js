@@ -4,12 +4,16 @@ module.exports = async (efx, token, amount, starkKey, starkKeyPair) => {
   const ownerAddress = efx.get('account')
 
   // Basic validation
-  if (!token || !amount) {
-    throw new Error('tokenId and amount required')
+  if (!amount || amount<0) {
+    return {error: "INVALID_AMOUNT"}
+  }
+  
+  if (!token) {
+    return {error: "MISSING_TOKEN"}
   }
 
   if (!efx.config.tokenRegistry[token]) {
-    throw new Error('Required token details not found')
+    return {error: "INVALID_TOKEN"}
   }
   // TODO:
   // Parameters to be available at client side
