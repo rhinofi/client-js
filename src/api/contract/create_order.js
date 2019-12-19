@@ -67,7 +67,7 @@ module.exports = (efx, symbol, amount, price, validFor, fee_rate = 0.0025, vault
     token_sell: sellCurrency.starkTokenId,
     token_buy: buyCurrency.starkTokenId,
     nonce: 0, // generatePseudoRandomSalt(),
-    expiration_timestamp: Math.floor(Date.now()/(1000*60*60))
+    expiration_timestamp: Math.floor(Date.now()/(1000*3600))
   }
   console.log('stark order: ', starkOrder)
   let starkMessage = ''
