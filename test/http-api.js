@@ -1,12 +1,12 @@
 /* eslint-env mocha */
-const { assert } = require('chai');
-const nock = require('nock');
-const mockGetConf = require('./fixtures/nock/get_conf');
-const mockGetUserConf = require('./fixtures/nock/get_user_conf');
-const mockFeeRate = require('./fixtures/nock/feeRate');
-const instance = require('./helpers/instance');
-const utils = require('ethereumjs-util');
-const sw = require('starkware_crypto');
+const { assert } = require('chai')
+const nock = require('nock')
+const mockGetConf = require('./fixtures/nock/get_conf')
+const mockGetUserConf = require('./fixtures/nock/get_user_conf')
+const mockFeeRate = require('./fixtures/nock/feeRate')
+const instance = require('./helpers/instance')
+const utils = require('ethereumjs-util')
+const sw = require('starkware_crypto')
 
 // TODO: use arrayToOrder to convert response from HTTP API
 // const orderToArray = require('lib-js-util-schema')
@@ -24,99 +24,82 @@ describe('/deposit', () => {
 	// 1st test_case
 	it("Deposit token to user's vault", async () => {
 		const apiResponse = { deposit: 'success' };
-		const pvtKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc';
 
+		const pvtKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc';
 		const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex');
-		const publicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex');
-		const starkKey = publicKey.pub.getX().toString();
 		const amount = 100;
 		const token = 'ZRX';
 
 		nock('https://staging-api.deversifi.com/')
 			.post('/v1/trading/w/deposit', async body => {
 				assert.equal(body.ownerAddress, '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404');
-				assert.equal(body.starkKey, starkKey);
-				assert.equal(body.tempVaultId, '1');
-				assert.equal(body.vaultId, efx.config.tokenRegistry[token].starkVaultId);
-				assert.equal(body.tokenId, efx.config.tokenRegistry[token].starkTokenId);
+				console.log('public key in test case ', body.publicKey)
+				assert.ok(body.publicKey);
+				assert.equal(body.token, token);
 				assert.equal(body.amount, amount);
-				assert.ok(body.starkMessage);
 				assert.ok(body.starkSignature);
 				return true;
 			})
 			.reply(200, apiResponse);
 
-    const result = await efx.deposit(token, amount, starkKey, starkKeyPair);
-    console.log('new res ', result)
-  });
-  
-	// 2nd test_case
-	it("Deposit token checks for invalid amount", async () => {
-		const apiResponse = { deposit: 'success' };
-		const pvtKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc';
+		const result = await efx.deposit(token, amount, starkKeyPair);
+		console.log('new res ', result);
+	});
 
+	// 2nd test_case checks for 0, negative or empty amount
+	it('Deposit token checks for invalid amount', async () => {
+		const pvtKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc';
 		const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex');
-		const publicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex');
-    const starkKey = publicKey.pub.getX().toString();
-    //checks for 0, negative or empty amount
 		const amount = 0;
 		const token = 'ZRX';
 
 		nock('https://staging-api.deversifi.com/')
 			.post('/v1/trading/w/deposit', async body => {
-        assert.equal(body.error,"INVALID_AMOUNT")
+				assert.equal(body.error, 'INVALID_AMOUNT');
 				return true;
 			})
 			.reply(200, apiResponse);
 
-    const result = await efx.deposit(token, amount, starkKey, starkKeyPair);
-    console.log('new res ', result)
-  });
-  
-  // 3rd test_case
-	it("Deposit token checks for missing token", async () => {
-		const apiResponse = { deposit: 'success' }
-		const pvtKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
-
-		const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
-		const publicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
-		const starkKey = publicKey.pub.getX().toString()
-		const amount = 57
-		const token = ''
-
-		nock('https://staging-api.deversifi.com/')
-			.post('/v1/trading/w/deposit', async body => {
-        assert.equal(body.error,"MISSING_TOKEN")
-				return true
-			})
-			.reply(200, apiResponse);
-
-    const result = await efx.deposit(token, amount, starkKey, starkKeyPair);
-    console.log('new res ', result)
-  });
-  
-  // 4th test_case
-	it("Deposit token checks for invalid token", async () => {
-		const apiResponse = { deposit: 'success' }
-		const pvtKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
-
-		const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
-		const publicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
-		const starkKey = publicKey.pub.getX().toString()
-		const amount = 57
-		const token = 'XYZ'
-
-		nock('https://staging-api.deversifi.com/')
-			.post('/v1/trading/w/deposit', async body => {
-        assert.equal(body.error,"INVALID_TOKEN")
-				return true
-			})
-			.reply(200, apiResponse);
-
-    const result = await efx.deposit(token, amount, starkKey, starkKeyPair);
-    console.log('new res ', result)
+		const result = await efx.deposit(token, amount, starkKeyPair);
+		console.log('new res ', result);
 	});
-})
+
+	// 3rd test_case
+	it('Deposit token checks for missing token', async () => {
+		const pvtKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+		const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
+		const amount = 57;
+		const token = '';
+
+		nock('https://staging-api.deversifi.com/')
+			.post('/v1/trading/w/deposit', async body => {
+				assert.equal(body.error, 'MISSING_TOKEN');
+				return true;
+			})
+			.reply(200, apiResponse);
+
+		const result = await efx.deposit(token, amount, starkKeyPair);
+		console.log('new res ', result)
+	});
+
+	// 4th test_case
+	it('Deposit token checks for invalid token', async () => {
+		const pvtKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc';
+		const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
+		const amount = 57;
+		const token = 'XYZ';
+
+		nock('https://staging-api.deversifi.com/')
+			.post('/v1/trading/w/deposit', async body => {
+				assert.equal(body.error, 'INVALID_TOKEN');
+				return true;
+			})
+			.reply(200, apiResponse);
+
+		const result = await efx.deposit(token, amount, starkKeyPair);
+		console.log('new res ', result);
+	});
+});
 
 describe('/submitOrder', () => {
 	it('dvf pub api submit order....', async () => {

@@ -1,4 +1,5 @@
 const { post } = require('request-promise')
+const sw = require('starkware_crypto')
 
 module.exports = async (efx, token, amount, starkKeyPair) => {
   const ownerAddress = efx.get('account')
@@ -40,6 +41,7 @@ module.exports = async (efx, token, amount, starkKeyPair) => {
 
     starkSignature = efx.stark.sign(starkKeyPair, starkMessage)
     var publicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex');
+    console.log('public key in deposit ', publicKey)
 
   } catch (e) {
     console.log(`error: ${e}`)
