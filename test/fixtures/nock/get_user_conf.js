@@ -19,14 +19,14 @@ module.exports = () => {
         minOrderSize: 25,
         settleSpread: -0.026,
         starkTokenId: '0x2',
-        starkVaultId: '0xa2'
+        starkVaultId: '0xb2'
       },
       ZRX: {
         decimals: 16,
         tokenAddress: '0xe41d2489571d322189246dafa5ebde1f4699f498',
         minOrderSize: 40,
         starkTokenId: '0x3',
-        starkVaultId: '0xv1'
+        starkVaultId: '0xc3'
       }
     }
   }
