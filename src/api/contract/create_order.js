@@ -50,7 +50,7 @@ module.exports = (efx, symbol, amount, price, validFor, fee_rate = 0.0025, vault
   }
 
   let expiration
-  expiration = Math.round(new Date().getTime() / 1000)
+  expiration = Math.round(new Date().getTime() / (1000*3600))
   expiration += validFor || efx.config.defaultExpiry
 
   var starkOrder = {
@@ -67,7 +67,7 @@ module.exports = (efx, symbol, amount, price, validFor, fee_rate = 0.0025, vault
     token_sell: sellCurrency.starkTokenId,
     token_buy: buyCurrency.starkTokenId,
     nonce: 0, // generatePseudoRandomSalt(),
-    expiration_timestamp: 438953
+    expiration_timestamp: expiration
   }
   console.log('stark order: ', starkOrder)
   let starkMessage = ''

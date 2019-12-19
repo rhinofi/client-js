@@ -33,7 +33,7 @@ module.exports = async (efx, token, amount, starkKey, starkKeyPair) => {
       '0x4e4543', // token
       '2', // receiver_vault_id
       '0x1', // receiver_public_key
-      '9' // expiration_timestamp
+      (Math.floor(Date.now()/(1000*3600))+efx.config.defaultExpiry) // expiration_timestamp
     ).starkMessage
 
     starkSignature = efx.stark.sign(starkKeyPair, starkMessage)
