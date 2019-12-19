@@ -51,7 +51,7 @@ module.exports = (efx, symbol, amount, price, validFor, fee_rate = 0.0025, vault
 
   let expiration
   expiration = Math.round(new Date().getTime() / (1000*3600))
-  expiration += validFor || (efx.config.defaultExpiry/(3600))
+  expiration += validFor || efx.config.defaultExpiry
 
   var starkOrder = {
     vault_id_sell: vault_id_sell,
