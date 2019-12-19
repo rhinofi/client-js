@@ -3,7 +3,7 @@ module.exports = {
   api: 'https://api.ethfinex.com/trustless/v1',
 
   // default expiration time for orders in hours, used by create_order.js
-  defaultExpiry: 7720,
+  defaultExpiry: 720,
 
   // in case no provider is provided we will try connecting to the this default
   // address
