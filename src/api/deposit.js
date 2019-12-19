@@ -57,6 +57,5 @@ module.exports = async (efx, token, amount, starkKey, starkKeyPair) => {
     starkSignature
   }
 
-  console.log(`about to call dvf pub api`)
   return post(url, { json: data })
 }
