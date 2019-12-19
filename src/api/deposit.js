@@ -1,6 +1,6 @@
 const { post } = require('request-promise')
 
-module.exports = async (efx, token, amount, starkKey, starkKeyPair) => {
+module.exports = async (efx, token, amount, starkKeyPair) => {
   const ownerAddress = efx.get('account')
 
   // Basic validation
@@ -15,9 +15,7 @@ module.exports = async (efx, token, amount, starkKey, starkKeyPair) => {
   if (!efx.config.tokenRegistry[token]) {
     return {error: "INVALID_TOKEN"}
   }
-  // TODO:
-  // Parameters to be available at client side
-  // Generic Parameters
+  
   const tempVaultId = 1
   const tokenId = efx.config.tokenRegistry[token].starkTokenId
   const vaultId = efx.config.tokenRegistry[token].starkVaultId
@@ -41,7 +39,8 @@ module.exports = async (efx, token, amount, starkKey, starkKeyPair) => {
     ).starkMessage
 
     starkSignature = efx.stark.sign(starkKeyPair, starkMessage)
-    console.log(`stark sign is: ${starkSignature}`)
+    var publicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex');
+
   } catch (e) {
     console.log(`error: ${e}`)
     // Error handling, user corrections
@@ -52,12 +51,9 @@ module.exports = async (efx, token, amount, starkKey, starkKeyPair) => {
   const url = efx.config.api + '/w/deposit'
   const data = {
     ownerAddress,
-    starkKey,
-    tempVaultId,
-    vaultId,
-    tokenId,
+    publicKey,
+    token,
     amount,
-    starkMessage,
     starkSignature
   }
 

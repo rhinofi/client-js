@@ -48,7 +48,8 @@ describe('/deposit', () => {
 
     const result = await efx.deposit(token, amount, starkKey, starkKeyPair);
     console.log('new res ', result)
-	});
+  });
+  
 	// 2nd test_case
 	it("Deposit token checks for invalid amount", async () => {
 		const apiResponse = { deposit: 'success' };
@@ -94,8 +95,8 @@ describe('/deposit', () => {
     console.log('new res ', result)
   });
   
-  // 3rd test_case
-	it("Deposit token checks for missing token", async () => {
+  // 4th test_case
+	it("Deposit token checks for invalid token", async () => {
 		const apiResponse = { deposit: 'success' }
 		const pvtKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
 
@@ -115,7 +116,9 @@ describe('/deposit', () => {
     const result = await efx.deposit(token, amount, starkKey, starkKeyPair);
     console.log('new res ', result)
 	});
+})
 
+describe('/submitOrder', () => {
 	it('dvf pub api submit order....', async () => {
 		const apiResponse = { starkSubmitOrder: 'success' };
 
