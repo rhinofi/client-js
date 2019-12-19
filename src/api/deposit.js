@@ -1,19 +1,22 @@
 const { post } = require('request-promise')
+const sw = require('starkware_crypto')
 
-module.exports = async (efx, token, amount, starkKey, starkKeyPair) => {
-  const userAddress = efx.get('account')
+module.exports = async (efx, token, amount, starkKeyPair) => {
+  const ownerAddress = efx.get('account')
 
   // Basic validation
-  if (!token || !amount) {
-    throw new Error('tokenId and amount required')
+  if (!amount || amount < 0) {
+    return {error: 'INVALID_AMOUNT'}
+  }
+
+  if (!token) {
+    return {error: 'MISSING_TOKEN'}
   }
 
   if (!efx.config.tokenRegistry[token]) {
-    throw new Error('Required token details not found')
+    return {error: 'INVALID_TOKEN'}
   }
-  // TODO:
-  // Parameters to be available at client side
-  // Generic Parameters
+
   const tempVaultId = 1
   const tokenId = efx.config.tokenRegistry[token].starkTokenId
   const vaultId = efx.config.tokenRegistry[token].starkVaultId
@@ -21,7 +24,7 @@ module.exports = async (efx, token, amount, starkKey, starkKeyPair) => {
   var starkMessage = '',
     starkSignature = ''
   try {
-    // const depositStatus = await efx.contract.deposit(tempVaultId, amount, userAddress);
+    // const depositStatus = await efx.contract.deposit(tempVaultId, amount, ownerAddress);
     // console.log(`deposit contract call result: ${depositStatus}`, depositStatus)
 
     // create stark message and signature using stark crypto library
@@ -33,11 +36,12 @@ module.exports = async (efx, token, amount, starkKey, starkKeyPair) => {
       '0x4e4543', // token
       '2', // receiver_vault_id
       '0x1', // receiver_public_key
-      (Math.floor(Date.now()/(1000*3600))+efx.config.defaultExpiry) // expiration_timestamp
+      (Math.floor(Date.now() / (1000 * 3600)) + efx.config.defaultExpiry) // expiration_timestamp
     ).starkMessage
 
     starkSignature = efx.stark.sign(starkKeyPair, starkMessage)
-    console.log(`stark sign is: ${starkSignature}`)
+    var publicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
+    console.log('public key in deposit ', publicKey)
   } catch (e) {
     console.log(`error: ${e}`)
     // Error handling, user corrections
@@ -47,16 +51,12 @@ module.exports = async (efx, token, amount, starkKey, starkKeyPair) => {
   // Call dvf pub api
   const url = efx.config.api + '/w/deposit'
   const data = {
-    userAddress,
-    starkKey,
-    tempVaultId,
-    vaultId,
-    tokenId,
+    ownerAddress,
+    publicKey,
+    token,
     amount,
-    starkMessage,
     starkSignature
   }
 
-  console.log(`about to call dvf pub api`)
   return post(url, { json: data })
 }
