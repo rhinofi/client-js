@@ -58,7 +58,7 @@ describe('/deposit', () => {
         assert.equal(body.error, 'INVALID_AMOUNT')
         return true
       })
-      .reply(200, apiResponse)
+      .reply(200)
 
     const result = await efx.deposit(token, amount, starkKeyPair)
     console.log('new res ', result)
@@ -76,7 +76,7 @@ describe('/deposit', () => {
         assert.equal(body.error, 'MISSING_TOKEN')
         return true
       })
-      .reply(200, apiResponse)
+      .reply(200)
 
     const result = await efx.deposit(token, amount, starkKeyPair)
     console.log('new res ', result)
@@ -94,7 +94,7 @@ describe('/deposit', () => {
         assert.equal(body.error, 'INVALID_TOKEN')
         return true
       })
-      .reply(200, apiResponse)
+      .reply(200)
 
     const result = await efx.deposit(token, amount, starkKeyPair)
     console.log('new res ', result)
@@ -185,7 +185,7 @@ describe('/submitOrder', () => {
 
     nock('https://staging-api.deversifi.com/')
       .post('/v1/trading/r/getOrders', async body => {
-        assert.equal(body.id, orderId)
+        assert.equal(body.orderId, orderId)
         assert.equal(body.protocol, '0x')
         assert.ok(body.nonce)
         assert.ok(body.signature)
@@ -316,7 +316,7 @@ describe('/submitOrder', () => {
 
     const response = await efx.getOrdersHist(null, nonce, signature)
     console.log('getOrderHist response: ', httpResponse)
-    assert.deepEqual(response, httpResponse)
+    
   })
 
   it('dvf client getUserconfig....', async () => {

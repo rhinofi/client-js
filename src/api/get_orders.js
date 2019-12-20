@@ -1,10 +1,7 @@
 const { post } = require('request-promise')
 const parse = require('../lib/parse/response/orders')
-const validateAssertions = require('../lib/validators/validateAssertions')
 
 module.exports = async (efx, symbol, orderId, nonce, signature) => {
-  const assertionError = validateAssertions({efx, orderId})
-  if (assertionError) return assertionError
 
   var url = efx.config.api + '/r/getOrders'
   if (orderId === 'hist') {
