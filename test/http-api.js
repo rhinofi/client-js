@@ -219,7 +219,7 @@ describe('/submitOrder', () => {
       })
       .reply(200, apiResponse)
     const response = await efx.getOrders()
-    console.log('getOrder response: ', response)
+    console.log('getOrders response: ', response)
     assert.deepEqual(response, apiResponse)
   })
 

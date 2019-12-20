@@ -1,16 +1,20 @@
 const { post } = require('request-promise')
 const parse = require('../lib/parse/response/orders')
+const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (efx, symbol, id, nonce, signature) => {
+module.exports = async (efx, symbol, orderId, nonce, signature) => {
+  const assertionError = validateAssertions({efx, orderId})
+  if (assertionError) return assertionError
+
   var url = efx.config.api + '/r/getOrders'
-  if (id === 'hist') {
+  if (orderId === 'hist') {
     if (symbol) {
       url += '/t' + symbol + '/hist'
     } else {
       url += '/hist'
     }
-    // if it is from orderHistory, make id to null
-    id = null
+    // if it is from orderHistory, make orderId to null
+    orderId = null
   } else {
     if (symbol) {
       url += '/t' + symbol
@@ -23,7 +27,7 @@ module.exports = async (efx, symbol, id, nonce, signature) => {
   const protocol = '0x'
 
   const data = {
-    id,
+    orderId,
     nonce,
     signature,
     protocol
