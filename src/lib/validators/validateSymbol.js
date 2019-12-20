@@ -1,7 +1,6 @@
 const errorReasons = require('../error/reasons')
 
 module.exports = (symbol)=>{
-    console.log('inside symbol', symbol)
     if(!symbol)    {
         return {
             error: "ERR_INVALID_SYMBOL",
