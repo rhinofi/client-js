@@ -316,7 +316,6 @@ describe('/submitOrder', () => {
 
     const response = await efx.getOrdersHist(null, nonce, signature)
     console.log('getOrderHist response: ', httpResponse)
-    
   })
 
   it('dvf client getUserconfig....', async () => {
