@@ -122,5 +122,11 @@ module.exports = {
   `,
   ERR_TRADING_ETHFX_TRUSTLESS_API_NECTAR_INVALID: `
     During Beta phase you are required to hold NEC in your personal wallet to trade.
+  `,
+  ERR_EMPTY: `
+    Missing value
+  `,
+  ERR_INVALID: `
+    Invalid value
   `
 }
