@@ -1,7 +1,6 @@
 const errorReasons = require('../error/reasons')
 
 module.exports = (efx, token) => {
-  console.log('inside token', token)
   if (!token) {
     return {
       error: 'ERR_TOKEN_MISSING',

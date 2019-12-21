@@ -305,7 +305,7 @@ describe('/submitOrder', () => {
     const signature = await efx.sign(nonce.toString(16))
 
     nock('https://staging-api.deversifi.com/')
-      .post('/v1/trading/r/getOrders/tETHUSD/hist', body => {
+      .post('/v1/trading/r/getOrders/hist', body => {
         console.log('body: ', body)
         assert.equal(body.protocol, '0x')
         assert.ok(body.nonce)
@@ -314,8 +314,8 @@ describe('/submitOrder', () => {
       })
       .reply(200, httpResponse)
 
-    const response = await efx.getOrdersHist('ETHUSD', nonce, null)
-    console.log('getOrderHist response: 99 ', response)
+    const response = await efx.getOrdersHist('', nonce, signature)
+    console.log('getOrderHist response: 111', response)
   })
 
   it('dvf client getUserconfig....', async () => {
