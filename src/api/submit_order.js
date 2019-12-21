@@ -1,4 +1,5 @@
 const { post } = require('request-promise')
+const validAssertions = require('../lib/validators/validateAssertions')
 
 module.exports = async (
   efx,
@@ -15,12 +16,8 @@ module.exports = async (
   starkKey,
   starkKeyPair
 ) => {
-  if (!(symbol && amount && price)) {
-    throw new Error('order, symbol, amount and price are required')
-  }
-  if (!(starkKey && starkKeyPair)) {
-    throw new Error(`starkKey or starkKeyPair missing`)
-  }
+  let assertionError = await validAssertions({efx, amount, symbol, price, starkKey, starkKeyPair})
+  if (assertionError) return assertionError
 
   const ownerAddress = efx.get('account')
   const vaultIdBuy = efx.config.tokenRegistry['ZRX'].starkVaultId
