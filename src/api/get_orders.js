@@ -20,7 +20,7 @@ module.exports = async (efx, symbol, orderId, nonce, signature) => {
     nonce = Date.now() / 1000 + 30 + ''
     signature = await efx.sign(nonce.toString(16))
   }
-  const protocol = '0x'
+  const protocol = 'stark'
 
   const data = {
     orderId,

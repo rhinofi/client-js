@@ -32,9 +32,7 @@ describe('/deposit', () => {
 
     nock('https://staging-api.deversifi.com/')
       .post('/v1/trading/w/deposit', async body => {
-        assert.equal(body.ownerAddress, '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404')
-        console.log('public key in test case ', body.publicKey)
-        assert.ok(body.publicKey)
+        assert.ok(body.starkPublicKey)
         assert.equal(body.token, token)
         assert.equal(body.amount, amount)
         assert.ok(body.starkSignature)
@@ -43,7 +41,7 @@ describe('/deposit', () => {
       .reply(200, apiResponse)
 
     const result = await efx.deposit(token, amount, starkKeyPair)
-    console.log('new res ', result)
+    //console.log('new res ', result)
   })
 
   // 2nd test_case checks for 0, negative or empty amount
@@ -115,7 +113,6 @@ describe('/submitOrder', () => {
 
     nock('https://staging-api.deversifi.com/')
       .post('/v1/trading/w/submitOrder', async body => {
-        console.log(`body: ${body}`, body)
         assert.equal(body.meta.ownerAddress, '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404')
         assert.equal(
           body.meta.starkKey,
@@ -367,7 +364,6 @@ describe('/others', () => {
 
     nock('https://staging-api.deversifi.com/')
       .post('/v1/trading/r/getBalance', async body => {
-        console.log(`body: ${body}`, body)
         assert.equal(body.token, 'ETH')
         assert.ok(body.signature)
         return true
@@ -385,14 +381,12 @@ describe('/others', () => {
 
     nock('https://staging-api.deversifi.com/')
       .post('/v1/trading/w/cancelOrder', async body => {
-        console.log('body: ', body)
         assert.equal(body.orderId, orderId)
         return true
       })
       .reply(200, apiResponse)
 
     const response = await efx.cancelOrder(orderId)
-    console.log('response: ', response)
     assert.deepEqual(response, apiResponse)
   })
 
@@ -405,7 +399,7 @@ describe('/others', () => {
     nock('https://staging-api.deversifi.com/')
       .post('/v1/trading/r/getOrders', async body => {
         assert.equal(body.orderId, orderId)
-        assert.equal(body.protocol, '0x')
+        assert.equal(body.protocol, 'stark')
         assert.ok(body.nonce)
         assert.ok(body.signature)
 
@@ -426,7 +420,7 @@ describe('/others', () => {
 
     nock('https://staging-api.deversifi.com/')
       .post('/v1/trading/r/getOrders', async body => {
-        assert.equal(body.protocol, '0x')
+        assert.equal(body.protocol, 'stark')
         assert.ok(body.nonce)
         assert.ok(body.signature)
 
@@ -525,15 +519,15 @@ describe('/others', () => {
 
     nock('https://staging-api.deversifi.com/')
       .post('/v1/trading/r/getOrders/hist', body => {
-        assert.equal(body.protocol, '0x')
+        assert.equal(body.protocol, 'stark')
         assert.ok(body.nonce)
-        // assert.ok(body.signature, signature)
+        assert.ok(body.signature)
         return true
       })
       .reply(200, httpResponse)
 
     const response = await efx.getOrdersHist('', nonce, signature)
-    console.log('getOrderHist response: 111', response)
+    //console.log('getOrderHist response: ', response)
   })
 
   it('dvf client getUserconfig....', async () => {
@@ -573,13 +567,13 @@ describe('/others', () => {
     nock('https://staging-api.deversifi.com/')
       .post('/v1/trading/r/getUserConf', body => {
         assert.ok(body.nonce)
-        assert.ok(body.signature, signature)
+        assert.ok(body.signature)
         return true
       })
       .reply(200, apiResponse)
 
     const response = await efx.getUserConfig()
-    console.log('getUserconfig response: ', apiResponse)
+    //console.log('getUserconfig response: ', apiResponse)
     assert.deepEqual(response, apiResponse)
   })
 })

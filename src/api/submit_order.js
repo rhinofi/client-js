@@ -61,6 +61,5 @@ module.exports = async (
   }
 
   const url = efx.config.api + '/w/submitOrder'
-  console.log(`about to call dvf pub api`)
   return post(url, { json: data })
 }
