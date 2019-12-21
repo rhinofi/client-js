@@ -1,5 +1,7 @@
 module.exports = {
-
+  ERR_INVALID_ORDER_ID: `
+  No order id provided or the order id provided is not valid
+  `,
   ERR_MAKERTOKEN_ADDRESS_INVALID: `
     The 'maker' token address provided in the signed-order did not
     match the pair specified by the API call.
@@ -120,5 +122,11 @@ module.exports = {
   `,
   ERR_TRADING_ETHFX_TRUSTLESS_API_NECTAR_INVALID: `
     During Beta phase you are required to hold NEC in your personal wallet to trade.
+  `,
+  ERR_EMPTY: `
+    Missing value
+  `,
+  ERR_INVALID: `
+    Invalid value
   `
 }

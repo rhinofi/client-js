@@ -13,6 +13,9 @@ module.exports = (efx, symbol, amount, price, validFor, fee_rate = 0.0025, vault
   const sellCurrency = efx.config.tokenRegistry[sellSymbol]
   const buyCurrency = efx.config.tokenRegistry[buySymbol]
 
+  if (!(sellCurrency && buyCurrency)) {
+    throw new Error(`Symbol does not match`)
+  }
   let buyAmount, sellAmount
 
   if (amount > 0) {
@@ -50,9 +53,9 @@ module.exports = (efx, symbol, amount, price, validFor, fee_rate = 0.0025, vault
   }
 
   let expiration
-  expiration = Math.round(new Date().getTime() / (1000 * 3600))
-  expiration += validFor || efx.config.defaultExpiry
-
+  expiration = Math.floor(Date.now() / (1000 * 3600) )
+  expiration += parseInt(validFor || efx.config.defaultExpiry)
+  
   var starkOrder = {
     vault_id_sell: vault_id_sell,
     vault_id_buy: vault_id_buy,
@@ -69,7 +72,7 @@ module.exports = (efx, symbol, amount, price, validFor, fee_rate = 0.0025, vault
     nonce: 0, // generatePseudoRandomSalt(),
     expiration_timestamp: expiration
   }
-  console.log('stark order: ', starkOrder)
+  //console.log('stark order: ', starkOrder)
   let starkMessage = ''
   try {
     starkMessage = sw.get_limit_order_msg(
