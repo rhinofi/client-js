@@ -55,7 +55,7 @@ module.exports = (efx, symbol, amount, price, validFor, fee_rate = 0.0025, vault
   let expiration
   expiration = Math.round(new Date().getTime() / (1000 * 3600))
   expiration += validFor || efx.config.defaultExpiry
-
+  expiration = 438953//TODO test expiration time to work with stark library
   var starkOrder = {
     vault_id_sell: vault_id_sell,
     vault_id_buy: vault_id_buy,
@@ -83,7 +83,7 @@ module.exports = (efx, symbol, amount, price, validFor, fee_rate = 0.0025, vault
       starkOrder.token_sell, // token_sell (hex str with 0x prefix < prime)np
       starkOrder.token_buy, // token_buy (hex str with 0x prefix < prime)
       starkOrder.nonce, // nonce (uint31)
-      '438953'//starkOrder.expiration_timestamp // expiration_timestamp (uint22)
+      starkOrder.expiration_timestamp // expiration_timestamp (uint22)
     )
     // Create stark message for order
   } catch (e) {
