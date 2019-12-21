@@ -309,7 +309,7 @@ describe('/submitOrder', () => {
         console.log('body: ', body)
         assert.equal(body.protocol, '0x')
         assert.ok(body.nonce)
-        //assert.ok(body.signature, signature)
+        // assert.ok(body.signature, signature)
         return true
       })
       .reply(200, httpResponse)
