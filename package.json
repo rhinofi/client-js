@@ -44,7 +44,7 @@
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
     "web3": "^1.2.4",
-    "starkware_crypto": "file:starkware_crypto-0.1.3.tgz"
+    "starkware_crypto": "file:starkware_crypto-0.1.4.tgz"
   },
   "devDependencies": {
     "del": "^3.0.0",
