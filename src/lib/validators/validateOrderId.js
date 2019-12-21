@@ -1,6 +1,6 @@
 const errorReasons = require('../error/reasons')
 
-module.exports = (orderId) => {
+module.exports = async (orderId) => {
   if (!orderId) {
     return {
       error: 'ERR_INVALID_ORDER_ID',

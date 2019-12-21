@@ -1,6 +1,7 @@
 const errorReasons = require('../error/reasons')
 
 module.exports = (efx, token) => {
+  console.log('inside token', token)
   if (!token) {
     return {
       error: 'ERR_TOKEN_MISSING',
@@ -9,8 +10,8 @@ module.exports = (efx, token) => {
   }
   if (!efx.config.tokenRegistry[token]) {
     return {
-      error: 'ERR_INVLAID_TOKEN',
-      reason: errorReasons.ERR_INVLAID_TOKEN || 'ERR_INVLAID_TOKEN'
+      error: 'ERR_INVALID_TOKEN',
+      reason: errorReasons.ERR_INVLAID_TOKEN || 'ERR_INVALID_TOKEN'
     }
   }
 }

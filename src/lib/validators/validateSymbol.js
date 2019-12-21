@@ -1,6 +1,6 @@
 const errorReasons = require('../error/reasons')
 
-module.exports = (symbol) => {
+module.exports = (efx, symbol) => {
   if (!symbol) {
     return {
       error: 'ERR_INVALID_SYMBOL',
