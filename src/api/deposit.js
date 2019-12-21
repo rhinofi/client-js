@@ -1,4 +1,5 @@
 const { post } = require('request-promise')
+const sw = require('starkware_crypto')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
 module.exports = async (efx, token, amount, starkKeyPair) => {
@@ -27,7 +28,7 @@ module.exports = async (efx, token, amount, starkKeyPair) => {
     ).starkMessage
 
     starkSignature = efx.stark.sign(starkKeyPair, starkMessage)
-    starkPublicKey = starkware_crypto.ec.keyFromPublic(key_pair.getPublic(true, 'hex'), 'hex')
+    starkPublicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
   } catch (e) {
     console.log(`error: ${e}`)
     // Error handling, user corrections
