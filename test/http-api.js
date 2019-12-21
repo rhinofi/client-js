@@ -102,7 +102,8 @@ describe('/deposit', () => {
 })
 
 describe('/submitOrder', () => {
-  it('dvf pub api submit order....', async () => {
+  // 1st test_case
+  it('(1)Submit order to DVF Pub API....', async () => {
     const apiResponse = { starkSubmitOrder: 'success' }
 
     // User Specific Parameters
@@ -142,7 +143,225 @@ describe('/submitOrder', () => {
 
     console.log('got result =>', result)
   })
+  // 2nd test_case
+  it('(2)Checks for missing symbol....', async () => {
+    // User Specific Parameters
+    var private_key =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    var key_pair = sw.ec.keyFromPrivate(private_key, 'hex')
+    var public_key = sw.ec.keyFromPublic(
+      key_pair.getPublic(true, 'hex'),
+      'hex'
+    )
+    const starkKey = public_key.pub.getX().toString()
+    const starkKeyPair = key_pair
 
+    nock('https://staging-api.deversifi.com/')
+      .post('/v1/trading/w/submitOrder', async body => {
+        assert.equal(body.error, 'ERR_MISSING_SYMBOL')
+        return true
+      })
+      .reply(200)
+
+    const result = await efx.submitOrder(
+      '', // symbol
+      '0.1', // amount
+      1000, // price
+      '', // gid
+      '', // cid
+      '0', // signedOrder
+      '0', // validFor
+      '', // partnerId
+      '', // feeRate
+      '', // dynamicFeeRate
+      starkKey,
+      starkKeyPair
+    )
+    console.log('got result :', result)
+  })
+  // 3rd test_case
+  it('(3)Checks for invalid symbol....', async () => {
+    var private_key =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    var key_pair = sw.ec.keyFromPrivate(private_key, 'hex')
+    var public_key = sw.ec.keyFromPublic(
+      key_pair.getPublic(true, 'hex'),
+      'hex'
+    )
+    const starkKey = public_key.pub.getX().toString()
+    const starkKeyPair = key_pair
+
+    nock('https://staging-api.deversifi.com/')
+      .post('/v1/trading/w/submitOrder', async body => {
+        assert.equal(body.error, 'ERR_INVALID_SYMBOL')
+        return true
+      })
+      .reply(200)
+
+    const result = await efx.submitOrder(
+      'ETHS', // symbol
+      '0.1', // amount
+      1000, // price
+      '', // gid
+      '', // cid
+      '0', // signedOrder
+      '0', // validFor
+      '', // partnerId
+      '', // feeRate
+      '', // dynamicFeeRate
+      starkKey,
+      starkKeyPair
+    )
+
+    console.log('got result =>', result)
+  })
+  // 4th test_case
+  it('(4)Checks for 0/invalid amount....', async () => {
+    var private_key =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    var key_pair = sw.ec.keyFromPrivate(private_key, 'hex')
+    var public_key = sw.ec.keyFromPublic(
+      key_pair.getPublic(true, 'hex'),
+      'hex'
+    )
+    const starkKey = public_key.pub.getX().toString()
+    const starkKeyPair = key_pair
+
+    nock('https://staging-api.deversifi.com/')
+      .post('/v1/trading/w/submitOrder', async body => {
+        assert.equal(body.error, 'ERR_INVALID_AMOUNT')
+        return true
+      })
+      .reply(200)
+
+    const result = await efx.submitOrder(
+      'ETHUSD', // symbol
+      '-0.1', // amount
+      1000, // price
+      '', // gid
+      '', // cid
+      '0', // signedOrder
+      '0', // validFor
+      '', // partnerId
+      '', // feeRate
+      '', // dynamicFeeRate
+      starkKey,
+      starkKeyPair
+    )
+
+    console.log('got result =>', result)
+  })
+  // 5th test_case
+  it('(5)Checks for price....', async () => {
+    var private_key =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    var key_pair = sw.ec.keyFromPrivate(private_key, 'hex')
+    var public_key = sw.ec.keyFromPublic(
+      key_pair.getPublic(true, 'hex'),
+      'hex'
+    )
+    const starkKey = public_key.pub.getX().toString()
+    const starkKeyPair = key_pair
+
+    nock('https://staging-api.deversifi.com/')
+      .post('/v1/trading/w/submitOrder', async body => {
+        assert.equal(body.error, 'ERR_PRICE_MISSING')
+        return true
+      })
+      .reply(200)
+
+    const result = await efx.submitOrder(
+      'ETHUSD', // symbol
+      '0.1', // amount
+      '', // price
+      '', // gid
+      '', // cid
+      '0', // signedOrder
+      '0', // validFor
+      '', // partnerId
+      '', // feeRate
+      '', // dynamicFeeRate
+      starkKey,
+      starkKeyPair
+    )
+
+    console.log('got result =>', result)
+  })
+  // 6th test_case
+  it('(6)Checks for starkKey....', async () => {
+    var private_key =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    var key_pair = sw.ec.keyFromPrivate(private_key, 'hex')
+    var public_key = sw.ec.keyFromPublic(
+      key_pair.getPublic(true, 'hex'),
+      'hex'
+    )
+    const starkKey = public_key.pub.getX().toString()
+    const starkKeyPair = key_pair
+
+    nock('https://staging-api.deversifi.com/')
+      .post('/v1/trading/w/submitOrder', async body => {
+        assert.equal(body.error, 'ERR_STARK_KEY_MISSING')
+        return true
+      })
+      .reply(200)
+
+    const result = await efx.submitOrder(
+      'ETHUSD', // symbol
+      '0.1', // amount
+      1000, // price
+      '', // gid
+      '', // cid
+      '0', // signedOrder
+      '0', // validFor
+      '', // partnerId
+      '', // feeRate
+      '', // dynamicFeeRate
+      '',
+      starkKeyPair
+    )
+
+    console.log('got result =>', result)
+  })
+  // 7th test_case
+  it('(7)Checks for starkKeyPair....', async () => {
+    var private_key =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    var key_pair = sw.ec.keyFromPrivate(private_key, 'hex')
+    var public_key = sw.ec.keyFromPublic(
+      key_pair.getPublic(true, 'hex'),
+      'hex'
+    )
+    const starkKey = public_key.pub.getX().toString()
+    const starkKeyPair = key_pair
+
+    nock('https://staging-api.deversifi.com/')
+      .post('/v1/trading/w/submitOrder', async body => {
+        assert.equal(body.error, 'ERR_STARK_KEY_PAIR_MISSING')
+        return true
+      })
+      .reply(200)
+
+    const result = await efx.submitOrder(
+      'ETHUSD', // symbol
+      '0.1', // amount
+      1000, // price
+      '', // gid
+      '', // cid
+      '0', // signedOrder
+      '0', // validFor
+      '', // partnerId
+      '', // feeRate
+      '', // dynamicFeeRate
+      starkKey,
+      ''
+    )
+
+    console.log('got result =>', result)
+  })
+})
+
+describe('/others', () => {
   it('dvf pub api getBalance....', async () => {
     const apiResponse = { starkBalance: 'success' }
 
@@ -199,11 +418,11 @@ describe('/submitOrder', () => {
       .reply(200, apiResponse)
     const response = await efx.getOrder(orderId, nonce, signature)
     console.log('getOrder response: ', response)
-    assert.deepEqual(response, apiResponse)
+    // assert.deepEqual(response, apiResponse)
   })
 
   it('dvf pub api getOrders....', async () => {
-    const apiResponse = [[1234], [1235]]
+    const apiResponse = [[1234]]
 
     nock('https://staging-api.deversifi.com/')
       .post('/v1/trading/r/getOrders', async body => {
@@ -218,7 +437,7 @@ describe('/submitOrder', () => {
         return true
       })
       .reply(200, apiResponse)
-    const response = await efx.getOrders()
+    const response = await efx.getOrders(null, 1)
     console.log('getOrders response: ', response)
     assert.deepEqual(response, apiResponse)
   })
@@ -306,7 +525,6 @@ describe('/submitOrder', () => {
 
     nock('https://staging-api.deversifi.com/')
       .post('/v1/trading/r/getOrders/hist', body => {
-        console.log('body: ', body)
         assert.equal(body.protocol, '0x')
         assert.ok(body.nonce)
         // assert.ok(body.signature, signature)
@@ -354,7 +572,6 @@ describe('/submitOrder', () => {
 
     nock('https://staging-api.deversifi.com/')
       .post('/v1/trading/r/getUserConf', body => {
-        console.log('body: ', body)
         assert.ok(body.nonce)
         assert.ok(body.signature, signature)
         return true

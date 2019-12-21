@@ -13,6 +13,9 @@ module.exports = (efx, symbol, amount, price, validFor, fee_rate = 0.0025, vault
   const sellCurrency = efx.config.tokenRegistry[sellSymbol]
   const buyCurrency = efx.config.tokenRegistry[buySymbol]
 
+  if (!(sellCurrency && buyCurrency)) {
+    throw new Error(`Symbol doesnot match`)
+  }
   let buyAmount, sellAmount
 
   if (amount > 0) {
@@ -80,7 +83,7 @@ module.exports = (efx, symbol, amount, price, validFor, fee_rate = 0.0025, vault
       starkOrder.token_sell, // token_sell (hex str with 0x prefix < prime)np
       starkOrder.token_buy, // token_buy (hex str with 0x prefix < prime)
       starkOrder.nonce, // nonce (uint31)
-      starkOrder.expiration_timestamp // expiration_timestamp (uint22)
+      '438953'//starkOrder.expiration_timestamp // expiration_timestamp (uint22)
     )
     // Create stark message for order
   } catch (e) {
