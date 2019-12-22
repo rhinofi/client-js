@@ -1,6 +1,7 @@
 const sw = require('starkware_crypto')
 
 module.exports = (...args) => {
+  console.log(args)
   const message = sw.get_transfer_msg(
     args[0], // amount (uint63 decimal str)
     args[1], // nonce (uint31)

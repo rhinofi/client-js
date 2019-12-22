@@ -27,21 +27,27 @@ describe('/deposit', () => {
 
     const pvtKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
+    const fullPublicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
+    const starkPublicKey = {
+      x: fullPublicKey.pub.getX().toString('hex'),
+      y: fullPublicKey.pub.getY().toString('hex')
+    }
     const amount = 100
     const token = 'ZRX'
-
     nock('https://staging-api.deversifi.com/')
       .post('/v1/trading/w/deposit', async body => {
-        assert.ok(body.starkPublicKey)
+        // console.log('deposit ', body)
+        assert.deepEqual(body.starkPublicKey, starkPublicKey)
         assert.equal(body.token, token)
         assert.equal(body.amount, amount)
         assert.ok(body.starkSignature)
+        assert.ok(body.expireTime)
         return true
       })
       .reply(200, apiResponse)
 
     const result = await efx.deposit(token, amount, starkKeyPair)
-    //console.log('new res ', result)
+    console.log('new res ', result)
   })
 
   // 2nd test_case checks for 0, negative or empty amount
@@ -527,7 +533,7 @@ describe('/others', () => {
       .reply(200, httpResponse)
 
     const response = await efx.getOrdersHist('', nonce, signature)
-    //console.log('getOrderHist response: ', response)
+    // console.log('getOrderHist response: ', response)
   })
 
   it('dvf client getUserconfig....', async () => {
@@ -573,7 +579,7 @@ describe('/others', () => {
       .reply(200, apiResponse)
 
     const response = await efx.getUserConfig()
-    //console.log('getUserconfig response: ', apiResponse)
+    // console.log('getUserconfig response: ', apiResponse)
     assert.deepEqual(response, apiResponse)
   })
 })
