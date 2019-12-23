@@ -1,9 +1,9 @@
 const { post } = require('request-promise')
+const validateAssertions = require('../lib/validators/validateAssertions')
 
 module.exports = async (efx, token) => {
-  if (!token) {
-    throw new Error('token is missing')
-  }
+  const assertionError = validateAssertions({efx, token})
+  if (assertionError) return assertionError
 
   const nonce = Date.now() / 1000 + 30 + ''
   const signature = await efx.sign(nonce.toString(16))

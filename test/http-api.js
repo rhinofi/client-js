@@ -27,21 +27,27 @@ describe('/deposit', () => {
 
     const pvtKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
+    const fullPublicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
+    const starkPublicKey = {
+      x: fullPublicKey.pub.getX().toString('hex'),
+      y: fullPublicKey.pub.getY().toString('hex')
+    }
     const amount = 100
     const token = 'ZRX'
-
     nock('https://staging-api.deversifi.com/')
       .post('/v1/trading/w/deposit', async body => {
-        assert.ok(body.starkPublicKey)
+        // console.log('deposit ', body)
+        assert.deepEqual(body.starkPublicKey, starkPublicKey)
         assert.equal(body.token, token)
         assert.equal(body.amount, amount)
         assert.ok(body.starkSignature)
+        assert.ok(body.expireTime)
         return true
       })
       .reply(200, apiResponse)
 
     const result = await efx.deposit(token, amount, starkKeyPair)
-    //console.log('new res ', result)
+    console.log('new res ', result)
   })
 
   // 2nd test_case checks for 0, negative or empty amount
@@ -359,7 +365,7 @@ describe('/submitOrder', () => {
 })
 
 describe('/others', () => {
-  it('dvf pub api getBalance....', async () => {
+  it('(1) GetBalance to dvf pub api....', async () => {
     const apiResponse = { starkBalance: 'success' }
 
     nock('https://staging-api.deversifi.com/')
@@ -374,10 +380,37 @@ describe('/others', () => {
     console.log('got result for balance =>', result)
   })
 
-  it('dvf pub api cancelOrder....', async () => {
-    const orderId = 1
-    const signedOrder = await efx.sign.cancelOrder(orderId)
-    const apiResponse = [1234]
+  it('(2) GetBalance checks for missing token....', async () => {
+    const apiResponse = { starkBalance: 'success' }
+
+    nock('https://staging-api.deversifi.com/')
+      .post('/v1/trading/r/getBalance', async body => {
+        assert.equal(body.error, 'ERR_MISSING_TOKEN')
+        return true
+      })
+      .reply(200, apiResponse)
+
+    const result = await efx.getBalance(null)
+    console.log('got result for balance =>', result)
+  })
+
+  it('(3) GetBalance checks for invalid token....', async () => {
+    const apiResponse = { starkBalance: 'success' }
+
+    nock('https://staging-api.deversifi.com/')
+      .post('/v1/trading/r/getBalance', async body => {
+        assert.equal(body.error, 'ERR_INVALID_TOKEN')
+        return true
+      })
+      .reply(200, apiResponse)
+
+    const result = await efx.getBalance('ETHUSD')
+    console.log('got result for balance =>', result)
+  })
+
+  it('(1) CancelOrder....', async () => {
+    const orderId = '1'
+    const apiResponse = { cancelOrder: 'success' }
 
     nock('https://staging-api.deversifi.com/')
       .post('/v1/trading/w/cancelOrder', async body => {
@@ -385,9 +418,8 @@ describe('/others', () => {
         return true
       })
       .reply(200, apiResponse)
-
     const response = await efx.cancelOrder(orderId)
-    assert.deepEqual(response, apiResponse)
+    // assert.deepEqual(response, apiResponse)
   })
 
   it('dvf pub api getOrder....', async () => {
@@ -527,7 +559,7 @@ describe('/others', () => {
       .reply(200, httpResponse)
 
     const response = await efx.getOrdersHist('', nonce, signature)
-    //console.log('getOrderHist response: ', response)
+    // console.log('getOrderHist response: ', response)
   })
 
   it('dvf client getUserconfig....', async () => {
@@ -573,7 +605,7 @@ describe('/others', () => {
       .reply(200, apiResponse)
 
     const response = await efx.getUserConfig()
-    //console.log('getUserconfig response: ', apiResponse)
+    // console.log('getUserconfig response: ', apiResponse)
     assert.deepEqual(response, apiResponse)
   })
 })
