@@ -429,9 +429,7 @@ describe('/others', () => {
     const signature = await efx.sign(nonce.toString(16))
 
     nock('https://staging-api.deversifi.com/')
-      .post('/v1/trading/r/getOrders', async body => {
-        assert.equal(body.orderId, orderId)
-        assert.equal(body.protocol, 'stark')
+      .post('/v1/trading/r/openOrders', async body => {
         assert.ok(body.nonce)
         assert.ok(body.signature)
 
@@ -451,8 +449,7 @@ describe('/others', () => {
     const apiResponse = [[1234]]
 
     nock('https://staging-api.deversifi.com/')
-      .post('/v1/trading/r/getOrders', async body => {
-        assert.equal(body.protocol, 'stark')
+      .post('/v1/trading/r/openOrders', async body => {
         assert.ok(body.nonce)
         assert.ok(body.signature)
 
@@ -550,10 +547,10 @@ describe('/others', () => {
     const signature = await efx.sign(nonce.toString(16))
 
     nock('https://staging-api.deversifi.com/')
-      .post('/v1/trading/r/getOrders/hist', body => {
-        assert.equal(body.protocol, 'stark')
+      .post('/v1/trading/r/orderHistory', body => {
         assert.ok(body.nonce)
         assert.ok(body.signature)
+        assert.ok(body.symbol)
         return true
       })
       .reply(200, httpResponse)
