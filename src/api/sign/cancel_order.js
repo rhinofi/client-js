@@ -1,14 +1,7 @@
-const { post } = require('request-promise')
-const validateAssertions = require('../lib/validators/validateAssertions')
+module.exports = (efx, orderId) => {
+  // orderId = utils.sha3(orderId.toString(16))
 
-module.exports = async (efx, orderId) => {
-  const assertionError = await validateAssertions({efx, orderId})
-  if (assertionError) return assertionError
+  // const toSign = utils.bufferToHex(orderId).slice(2)
 
-  const url = efx.config.api + '/w/cancelOrder'
-  let data = {
-    orderId: orderId
-  }
-
-  return post(url, { json: data })
+  return efx.sign(orderId.toString(16))
 }
