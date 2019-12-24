@@ -384,7 +384,6 @@ describe('/getOrder', () => {
   })
 
   it('GetOrder checks for orderId....', async () => {
-
     nock('https://staging-api.deversifi.com/')
       .post('/v1/trading/r/getOrder', async body => {
         assert.equal(body.error, 'ERR_INVALID_ORDER_ID')
@@ -394,7 +393,6 @@ describe('/getOrder', () => {
     const response = await efx.getOrder('', '', '')
     console.log('got result =>', response)
   })
-
 })
 
 describe('/orderHistory', () => {
@@ -541,7 +539,6 @@ describe('/openOrders', () => {
     const response = await efx.getOrders(null, nonce, signature)
     console.log('got result =>', response)
   })
-
 })
 
 describe('/others', () => {
