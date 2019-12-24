@@ -107,7 +107,7 @@ describe('/deposit', () => {
 
 describe('/submitOrder', () => {
   // 1st test_case
-  it('(1)Submit order to DVF Pub API....', async () => {
+  it('Submit order to DVF Pub API....', async () => {
     const apiResponse = { starkSubmitOrder: 'success' }
 
     // User Specific Parameters
@@ -147,7 +147,7 @@ describe('/submitOrder', () => {
     console.log('got result =>', result)
   })
   // 2nd test_case
-  it('(2)Checks for missing symbol....', async () => {
+  it('Checks for missing symbol....', async () => {
     // User Specific Parameters
     var private_key =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
@@ -183,7 +183,7 @@ describe('/submitOrder', () => {
     console.log('got result :', result)
   })
   // 3rd test_case
-  it('(3)Checks for invalid symbol....', async () => {
+  it('Checks for invalid symbol....', async () => {
     var private_key =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     var key_pair = sw.ec.keyFromPrivate(private_key, 'hex')
@@ -219,7 +219,7 @@ describe('/submitOrder', () => {
     console.log('got result =>', result)
   })
   // 4th test_case
-  it('(4)Checks for 0/invalid amount....', async () => {
+  it('Checks for 0/invalid amount....', async () => {
     var private_key =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     var key_pair = sw.ec.keyFromPrivate(private_key, 'hex')
@@ -255,7 +255,7 @@ describe('/submitOrder', () => {
     console.log('got result =>', result)
   })
   // 5th test_case
-  it('(5)Checks for price....', async () => {
+  it('Checks for price....', async () => {
     var private_key =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     var key_pair = sw.ec.keyFromPrivate(private_key, 'hex')
@@ -291,7 +291,7 @@ describe('/submitOrder', () => {
     console.log('got result =>', result)
   })
   // 6th test_case
-  it('(6)Checks for starkKey....', async () => {
+  it('Checks for starkKey....', async () => {
     var private_key =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     var key_pair = sw.ec.keyFromPrivate(private_key, 'hex')
@@ -327,7 +327,7 @@ describe('/submitOrder', () => {
     console.log('got result =>', result)
   })
   // 7th test_case
-  it('(7)Checks for starkKeyPair....', async () => {
+  it('Checks for starkKeyPair....', async () => {
     var private_key =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     var key_pair = sw.ec.keyFromPrivate(private_key, 'hex')
@@ -365,7 +365,7 @@ describe('/submitOrder', () => {
 })
 
 describe('/getOrder', () => {
-  it('(1) GetOrder request to DVF pub api....', async () => {
+  it('GetOrder request to DVF pub api....', async () => {
     const orderId = 1
     const apiResponse = [[1234]]
     const nonce = Date.now() / 1000 + 30 + ''
@@ -380,10 +380,10 @@ describe('/getOrder', () => {
       })
       .reply(200, apiResponse)
     const response = await efx.getOrder(orderId, nonce, signature)
-    console.log('(1) GetOrder response : ', response)
+    console.log('got result =>', response)
   })
 
-  it('(2) GetOrder checks for orderId....', async () => {
+  it('GetOrder checks for orderId....', async () => {
 
     nock('https://staging-api.deversifi.com/')
       .post('/v1/trading/r/getOrder', async body => {
@@ -392,13 +392,13 @@ describe('/getOrder', () => {
       })
       .reply(200)
     const response = await efx.getOrder('', '', '')
-    console.log('(2) GetOrder : ', response)
+    console.log('got result =>', response)
   })
 
 })
 
 describe('/orderHistory', () => {
-  it('(1) OrderHistory request to DVF pub api....', async () => {
+  it('OrderHistory request to DVF pub api....', async () => {
     const httpResponse = [
       {
         _id: '5b56333fd952c07b351c5940',
@@ -489,10 +489,10 @@ describe('/orderHistory', () => {
       .reply(200, httpResponse)
 
     const response = await efx.getOrdersHist('ETHUSD', nonce, signature)
-    console.log('(1) OrderHistory response: ', response)
+    console.log('got result =>', response)
   })
 
-  it('(2) OrderHistory checks for symbol....', async () => {
+  it('OrderHistory checks for symbol....', async () => {
     const nonce = Date.now() / 1000 + 60 * 60 * 24 + ''
     const signature = await efx.sign(nonce.toString(16))
 
@@ -503,12 +503,12 @@ describe('/orderHistory', () => {
       })
       .reply(200)
     const response = await efx.getOrdersHist(null, nonce, signature)
-    console.log('(2) OrderHistory : ', response)
+    console.log('got result =>', response)
   })
 })
 
 describe('/openOrders', () => {
-  it('(1) openOrders request to DVF Pub Api....', async () => {
+  it('openOrders posts to DVF Pub Api....', async () => {
     const apiResponse = [[1234]]
 
     const nonce = Date.now() / 1000 + 60 * 60 * 24 + ''
@@ -524,11 +524,11 @@ describe('/openOrders', () => {
       .reply(200, apiResponse)
 
     const response = await efx.getOrders('ETHUSD', nonce, signature)
-    console.log('(1) GetOrders response: ', response)
+    console.log('got result =>', response)
     assert.deepEqual(response, apiResponse)
   })
 
-  it('(2) OpenOrders checks for symbol....', async () => {
+  it('OpenOrders checks for symbol....', async () => {
     const nonce = Date.now() / 1000 + 60 * 60 * 24 + ''
     const signature = await efx.sign(nonce.toString(16))
 
@@ -539,13 +539,13 @@ describe('/openOrders', () => {
       })
       .reply(200)
     const response = await efx.getOrders(null, nonce, signature)
-    console.log('(2) OpenOrders : ', response)
+    console.log('got result =>', response)
   })
 
 })
 
 describe('/others', () => {
-  it('(1) GetBalance to dvf pub api....', async () => {
+  it('GetBalance to dvf pub api....', async () => {
     const apiResponse = { starkBalance: 'success' }
 
     nock('https://staging-api.deversifi.com/')
@@ -560,7 +560,7 @@ describe('/others', () => {
     console.log('got result for balance =>', result)
   })
 
-  it('(2) GetBalance checks for missing token....', async () => {
+  it('GetBalance checks for missing token....', async () => {
     const apiResponse = { starkBalance: 'success' }
 
     nock('https://staging-api.deversifi.com/')
@@ -571,10 +571,10 @@ describe('/others', () => {
       .reply(200, apiResponse)
 
     const result = await efx.getBalance(null)
-    console.log('got result for balance =>', result)
+    console.log('got result =>', result)
   })
 
-  it('(3) GetBalance checks for invalid token....', async () => {
+  it('GetBalance checks for invalid token....', async () => {
     const apiResponse = { starkBalance: 'success' }
 
     nock('https://staging-api.deversifi.com/')
@@ -585,10 +585,10 @@ describe('/others', () => {
       .reply(200, apiResponse)
 
     const result = await efx.getBalance('ETHUSD')
-    console.log('got result for balance =>', result)
+    console.log('got result =>', result)
   })
 
-  it('(1) CancelOrder....', async () => {
+  it('Posts Cancel Order....', async () => {
     const orderId = '1'
     const apiResponse = { cancelOrder: 'success' }
 
@@ -599,7 +599,7 @@ describe('/others', () => {
       })
       .reply(200, apiResponse)
     const response = await efx.cancelOrder(orderId)
-    console.log('(1) CancelOrder : ', response)
+    console.log('got result =>', response)
     // assert.deepEqual(response, apiResponse)
   })
 
@@ -646,7 +646,7 @@ describe('/others', () => {
       .reply(200, apiResponse)
 
     const response = await efx.getUserConfig()
-    // console.log('getUserconfig response: ', apiResponse)
+    console.log('got result =>', response)
     assert.deepEqual(response, apiResponse)
   })
 })
