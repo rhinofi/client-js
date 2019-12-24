@@ -4,7 +4,7 @@ module.exports = (efx, symbol) => {
   if (!symbol) {
     return {
       error: 'ERR_INVALID_SYMBOL',
-      reason: errorReasons.ERR_INVALID_SYMBOL || 'ERR_INVALID_SYMBOL'
+      reason: errorReasons.ERR_INVALID_SYMBOL
     }
   }
   if (symbol) {
@@ -13,7 +13,7 @@ module.exports = (efx, symbol) => {
     if (!efx.config.tokenRegistry[from] || !efx.config.tokenRegistry[to]) {
       return {
         error: 'ERR_INVALID_SYMBOL',
-        reason: errorReasons.ERR_INVALID_SYMBOL || 'ERR_INVALID_SYMBOL'
+        reason: errorReasons.ERR_INVALID_SYMBOL
       }
     }
   }

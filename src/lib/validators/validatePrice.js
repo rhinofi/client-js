@@ -4,7 +4,7 @@ module.exports = (price) => {
   if (!price) {
     return {
       error: 'ERR_PRICE_MISSING',
-      reason: errorReasons.ERR_PRICE_MISSING || 'ERR_PRICE_MISSING'
+      reason: errorReasons.ERR_PRICE_MISSING
     }
   }
 }
