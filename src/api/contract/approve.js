@@ -10,19 +10,19 @@ module.exports = async (efx, token) => {
   const amount = ((2 ** 256) - 1).toString(16)
 
   const args = [
-    efx.config.DVF.exchangeAddress, // address _spender
+    currency.wrapperAddress, // address _spender
     amount // uint amount
   ]
 
   // TODO: review error format
-  if (token == 'USD' && (await efx.contract.isApproved(token) != 0)) {
+  if (token === 'USD' && (await efx.contract.isApproved(token) !== 0)) {
     return {
       error: 'ERR_TRADING_ETHFX_CANT_APPROVE_USDT_TWICE',
       reason: reasons.ERR_TRADING_ETHFX_CANT_APPROVE_USDT_TWICE.trim()
     }
   }
 
-  if (token == 'ETH') {
+  if (token === 'ETH') {
     return {
       error: 'ERR_TRADING_ETHFX_APPROVE_ETH_NOT_REQUIRED',
       reason: reasons.ERR_TRADING_ETHFX_APPROVE_ETH_NOT_REQUIRED.trim()

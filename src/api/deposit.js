@@ -3,7 +3,7 @@ const sw = require('starkware_crypto')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
 module.exports = async (efx, token, amount, starkKeyPair) => {
-  const assertionError = validateAssertions({efx, amount, token})
+  const assertionError = await validateAssertions({efx, amount, token})
   if (assertionError) return assertionError
 
   const tempVaultId = 1

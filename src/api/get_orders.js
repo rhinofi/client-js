@@ -1,12 +1,12 @@
 const { post } = require('request-promise')
+const validateAssertions = require('../lib/validators/validateAssertions')
 const parse = require('../lib/parse/response/orders')
 
-module.exports = async (efx, symbol, orderId, nonce, signature) => {
+module.exports = async (efx, symbol, nonce, signature) => {
   var url = efx.config.api + '/r/openOrders'
-  
-  if (orderId === 'hist') {
-      url = efx.config.api + '/r/orderHistory'
-  }
+
+  const assertionError = await validateAssertions({efx, symbol})
+  if (assertionError) return assertionError
 
   if (!nonce) {
     nonce = Date.now() / 1000 + 30 + ''

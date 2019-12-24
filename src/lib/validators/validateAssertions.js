@@ -1,22 +1,22 @@
-validateOrderId = require('./validateOrderId')
-validateSymbol = require('./validateSymbol')
-validateToken = require('./validateToken')
-validateNonce = require('./validateNonce')
-validateSignature = require('./validateSignature')
-validateAmount = require('./validateAmount')
-validatePrice = require('./validatePrice')
-validateStarkKey = require('./validateStarkKey')
-validateStarkKeyPair = require('./validateStarkKeyPair')
+var validateOrderId = require('./validateOrderId'),
+  validateSymbol = require('./validateSymbol'),
+  validateToken = require('./validateToken'),
+  validateNonce = require('./validateNonce'),
+  validateSignature = require('./validateSignature'),
+  validateAmount = require('./validateAmount'),
+  validatePrice = require('./validatePrice'),
+  validateStarkKey = require('./validateStarkKey'),
+  validateStarkKeyPair = require('./validateStarkKeyPair')
 
-module.exports = parameters => {
+module.exports = async parameters => {
   var keys = Object.keys(parameters)
   for (let key of keys) {
-    if ((result = assertionErrors(key, parameters[key], parameters.efx))) { return result }
+    if ((result = await assertionErrors(key, parameters[key], parameters.efx))) { return result }
   }
   return false
 }
 
-assertionErrors = (param, value, efx) => {
+let assertionErrors = (param, value, efx) => {
   const validators = {
     orderId: validateOrderId(value),
     symbol: validateSymbol(efx, value),

@@ -364,108 +364,41 @@ describe('/submitOrder', () => {
   })
 })
 
-describe('/others', () => {
-  it('(1) GetBalance to dvf pub api....', async () => {
-    const apiResponse = { starkBalance: 'success' }
-
-    nock('https://staging-api.deversifi.com/')
-      .post('/v1/trading/r/getBalance', async body => {
-        assert.equal(body.token, 'ETH')
-        assert.ok(body.signature)
-        return true
-      })
-      .reply(200, apiResponse)
-
-    const result = await efx.getBalance('ETH')
-    console.log('got result for balance =>', result)
-  })
-
-  it('(2) GetBalance checks for missing token....', async () => {
-    const apiResponse = { starkBalance: 'success' }
-
-    nock('https://staging-api.deversifi.com/')
-      .post('/v1/trading/r/getBalance', async body => {
-        assert.equal(body.error, 'ERR_MISSING_TOKEN')
-        return true
-      })
-      .reply(200, apiResponse)
-
-    const result = await efx.getBalance(null)
-    console.log('got result for balance =>', result)
-  })
-
-  it('(3) GetBalance checks for invalid token....', async () => {
-    const apiResponse = { starkBalance: 'success' }
-
-    nock('https://staging-api.deversifi.com/')
-      .post('/v1/trading/r/getBalance', async body => {
-        assert.equal(body.error, 'ERR_INVALID_TOKEN')
-        return true
-      })
-      .reply(200, apiResponse)
-
-    const result = await efx.getBalance('ETHUSD')
-    console.log('got result for balance =>', result)
-  })
-
-  it('(1) CancelOrder....', async () => {
-    const orderId = '1'
-    const apiResponse = { cancelOrder: 'success' }
-
-    nock('https://staging-api.deversifi.com/')
-      .post('/v1/trading/w/cancelOrder', async body => {
-        assert.equal(body.orderId, orderId)
-        return true
-      })
-      .reply(200, apiResponse)
-    const response = await efx.cancelOrder(orderId)
-    // assert.deepEqual(response, apiResponse)
-  })
-
-  it('dvf pub api getOrder....', async () => {
+describe('/getOrder', () => {
+  it('(1) GetOrder request to DVF pub api....', async () => {
     const orderId = 1
     const apiResponse = [[1234]]
-    const nonce = Date.now() / 1000 + 60 * 60 * 24 + ''
+    const nonce = Date.now() / 1000 + 30 + ''
     const signature = await efx.sign(nonce.toString(16))
 
     nock('https://staging-api.deversifi.com/')
-      .post('/v1/trading/r/openOrders', async body => {
-        assert.ok(body.nonce)
-        assert.ok(body.signature)
-
-        let toSign = body.nonce.toString(16)
-        const recovered = ecRecover(toSign, body.signature)
-        assert.equal(efx.get('account').toLowerCase(), recovered.toLowerCase())
-
+      .post('/v1/trading/r/getOrder', async body => {
+        assert.equal(body.orderId, orderId)
+        assert.equal(body.nonce, nonce)
+        assert.equal(body.signature, signature)
         return true
       })
       .reply(200, apiResponse)
     const response = await efx.getOrder(orderId, nonce, signature)
-    console.log('getOrder response: ', response)
-    // assert.deepEqual(response, apiResponse)
+    console.log('(1) GetOrder response : ', response)
   })
 
-  it('dvf pub api getOrders....', async () => {
-    const apiResponse = [[1234]]
+  it('(2) GetOrder checks for orderId....', async () => {
 
     nock('https://staging-api.deversifi.com/')
-      .post('/v1/trading/r/openOrders', async body => {
-        assert.ok(body.nonce)
-        assert.ok(body.signature)
-
-        let toSign = body.nonce.toString(16)
-        const recovered = ecRecover(toSign, body.signature)
-        assert.equal(efx.get('account').toLowerCase(), recovered.toLowerCase())
-
+      .post('/v1/trading/r/getOrder', async body => {
+        assert.equal(body.error, 'ERR_INVALID_ORDER_ID')
         return true
       })
-      .reply(200, apiResponse)
-    const response = await efx.getOrders(null, 1)
-    console.log('getOrders response: ', response)
-    assert.deepEqual(response, apiResponse)
+      .reply(200)
+    const response = await efx.getOrder('', '', '')
+    console.log('(2) GetOrder : ', response)
   })
 
-  it('dvf pub api getOrdersHist....', async () => {
+})
+
+describe('/orderHistory', () => {
+  it('(1) OrderHistory request to DVF pub api....', async () => {
     const httpResponse = [
       {
         _id: '5b56333fd952c07b351c5940',
@@ -543,7 +476,7 @@ describe('/others', () => {
       }
     ]
 
-    const nonce = Date.now() // 1000 + 60 * 60 * 24 + ''
+    const nonce = Date.now() / 1000 + ''
     const signature = await efx.sign(nonce.toString(16))
 
     nock('https://staging-api.deversifi.com/')
@@ -555,8 +488,119 @@ describe('/others', () => {
       })
       .reply(200, httpResponse)
 
-    const response = await efx.getOrdersHist('', nonce, signature)
-    // console.log('getOrderHist response: ', response)
+    const response = await efx.getOrdersHist('ETHUSD', nonce, signature)
+    console.log('(1) OrderHistory response: ', response)
+  })
+
+  it('(2) OrderHistory checks for symbol....', async () => {
+    const nonce = Date.now() / 1000 + 60 * 60 * 24 + ''
+    const signature = await efx.sign(nonce.toString(16))
+
+    nock('https://staging-api.deversifi.com/')
+      .post('/v1/trading/r/orderHistory', async body => {
+        assert.equal(body.error, 'ERR_INVALID_SYMBOL')
+        return true
+      })
+      .reply(200)
+    const response = await efx.getOrdersHist(null, nonce, signature)
+    console.log('(2) OrderHistory : ', response)
+  })
+})
+
+describe('/openOrders', () => {
+  it('(1) openOrders request to DVF Pub Api....', async () => {
+    const apiResponse = [[1234]]
+
+    const nonce = Date.now() / 1000 + 60 * 60 * 24 + ''
+    const signature = await efx.sign(nonce.toString(16))
+
+    nock('https://staging-api.deversifi.com/')
+      .post('/v1/trading/r/openOrders', body => {
+        assert.ok(body.nonce)
+        assert.ok(body.signature)
+        assert.ok(body.symbol)
+        return true
+      })
+      .reply(200, apiResponse)
+
+    const response = await efx.getOrders('ETHUSD', nonce, signature)
+    console.log('(1) GetOrders response: ', response)
+    assert.deepEqual(response, apiResponse)
+  })
+
+  it('(2) OpenOrders checks for symbol....', async () => {
+    const nonce = Date.now() / 1000 + 60 * 60 * 24 + ''
+    const signature = await efx.sign(nonce.toString(16))
+
+    nock('https://staging-api.deversifi.com/')
+      .post('/v1/trading/r/openOrders', async body => {
+        assert.equal(body.error, 'ERR_INVALID_SYMBOL')
+        return true
+      })
+      .reply(200)
+    const response = await efx.getOrders(null, nonce, signature)
+    console.log('(2) OpenOrders : ', response)
+  })
+
+})
+
+describe('/others', () => {
+  it('(1) GetBalance to dvf pub api....', async () => {
+    const apiResponse = { starkBalance: 'success' }
+
+    nock('https://staging-api.deversifi.com/')
+      .post('/v1/trading/r/getBalance', async body => {
+        assert.equal(body.token, 'ETH')
+        assert.ok(body.signature)
+        return true
+      })
+      .reply(200, apiResponse)
+
+    const result = await efx.getBalance('ETH')
+    console.log('got result for balance =>', result)
+  })
+
+  it('(2) GetBalance checks for missing token....', async () => {
+    const apiResponse = { starkBalance: 'success' }
+
+    nock('https://staging-api.deversifi.com/')
+      .post('/v1/trading/r/getBalance', async body => {
+        assert.equal(body.error, 'ERR_MISSING_TOKEN')
+        return true
+      })
+      .reply(200, apiResponse)
+
+    const result = await efx.getBalance(null)
+    console.log('got result for balance =>', result)
+  })
+
+  it('(3) GetBalance checks for invalid token....', async () => {
+    const apiResponse = { starkBalance: 'success' }
+
+    nock('https://staging-api.deversifi.com/')
+      .post('/v1/trading/r/getBalance', async body => {
+        assert.equal(body.error, 'ERR_INVALID_TOKEN')
+        return true
+      })
+      .reply(200, apiResponse)
+
+    const result = await efx.getBalance('ETHUSD')
+    console.log('got result for balance =>', result)
+  })
+
+  it('(1) CancelOrder....', async () => {
+    const orderId = '1'
+    const apiResponse = { cancelOrder: 'success' }
+
+    nock('https://staging-api.deversifi.com/')
+      .post('/v1/trading/w/cancelOrder', async body => {
+        assert.equal(body.orderId, orderId)
+        return true
+      })
+      .reply(200, apiResponse)
+    const response = await efx.cancelOrder(orderId)
+    console.log('(1) CancelOrder : ', response)
+    // assert.deepEqual(response, apiResponse)
   })
 
   it('dvf client getUserconfig....', async () => {
