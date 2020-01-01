@@ -1,6 +1,6 @@
 module.exports = {
   ERR_INVALID_ORDER_ID: `
-  No order id provided or the order id provided is not valid
+    No order id provided or the order id provided is not valid
   `,
   ERR_MAKERTOKEN_ADDRESS_INVALID: `
     The 'maker' token address provided in the signed-order did not
@@ -128,5 +128,38 @@ module.exports = {
   `,
   ERR_INVALID: `
     Invalid value
+  `,
+  ERR_AMOUNT_MISSING: `
+    No Amount provided or the amount value is not valid
+  `,
+  ERR_INVALID_AMOUNT: `
+    Amount value is not valid
+  `,
+  ERR_INVALID_NONCE: `
+    No Nonce provided or Nonce is not valid
+  `,
+  ERR_NONCE_OLD: `
+    Nonce is too old
+  `,
+  ERR_PRICE_MISSING: `
+    No price provided or the price provided is not valid
+  `,
+  ERR_SIGNATURE_MISSING: `
+    Signature not provided
+  `,
+  ERR_STARK_KEY_MISSING: `
+    Stark key not provided
+  `,
+  ERR_STARK_KEY_PAIR_MISSING: `
+    Stark key pair not provided
+  `,
+  ERR_INVALID_SYMBOL: `
+    Symbol not provided
+  `,
+  ERR_INVALID_TOKEN: `
+    The token specified is currently not tradable
+  `,
+  ERR_TOKEN_MISSING: `
+  Token not provided or token provided is not valid
   `
 }

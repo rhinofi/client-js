@@ -2,7 +2,7 @@ const { post } = require('request-promise')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
 module.exports = async (efx, token) => {
-  const assertionError = validateAssertions({efx, token})
+  const assertionError = await validateAssertions({efx, token})
   if (assertionError) return assertionError
 
   const nonce = Date.now() / 1000 + 30 + ''

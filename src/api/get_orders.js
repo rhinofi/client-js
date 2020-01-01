@@ -1,32 +1,23 @@
 const { post } = require('request-promise')
+const validateAssertions = require('../lib/validators/validateAssertions')
 const parse = require('../lib/parse/response/orders')
 
-module.exports = async (efx, symbol, orderId, nonce, signature) => {
-  var url = efx.config.api + '/r/getOrders'
-  if (orderId === 'hist') {
-    if (symbol) {
-      url += '/t' + symbol + '/hist'
-    } else {
-      url += '/hist'
-    }
-    // if it is from orderHistory, make orderId to null
-    orderId = null
-  } else {
-    if (symbol) {
-      url += '/t' + symbol
-    }
-  }
+module.exports = async (efx, symbol, nonce, signature) => {
+  var url = efx.config.api + '/r/openOrders'
+
+  const assertionError = await validateAssertions({efx, symbol})
+  if (assertionError) return assertionError
+
   if (!nonce) {
     nonce = Date.now() / 1000 + 30 + ''
     signature = await efx.sign(nonce.toString(16))
   }
-  const protocol = 'stark'
 
   const data = {
-    orderId,
     nonce,
     signature,
-    protocol
+    symbol
   }
+
   return parse(post(url, { json: data }))
 }
