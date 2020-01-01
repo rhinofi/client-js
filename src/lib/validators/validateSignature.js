@@ -1,6 +1,6 @@
 const errorReasons = require('../error/reasons')
 
-module.exports = (signature) => {
+module.exports = (dvf, signature) => {
   if (!signature) {
     return {
       error: 'ERR_SIGNATURE_MISSING',

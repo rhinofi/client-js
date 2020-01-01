@@ -2,7 +2,7 @@ const { post } = require('request-promise')
 const validAssertions = require('../lib/validators/validateAssertions')
 
 module.exports = async (
-  efx,
+  dvf,
   symbol,
   amount,
   price,
@@ -10,34 +10,28 @@ module.exports = async (
   cid,
   signedOrder,
   validFor,
-  partner_id,
-  fee_rate,
+  partnerId,
+  feeRate,
   dynamicFeeRate,
   starkKey,
   starkKeyPair
 ) => {
-  let assertionError = await validAssertions({efx, amount, symbol, price, starkKey, starkKeyPair})
+  const assertionError = await validAssertions({dvf, amount, symbol, price, starkKey, starkKeyPair})
   if (assertionError) return assertionError
 
-  const ownerAddress = efx.get('account')
-  const vaultIdBuy = efx.config.tokenRegistry['ZRX'].starkVaultId
-  const vaultIdSell = efx.config.tokenRegistry['ETH'].starkVaultId
+  const ethAddress = dvf.get('account')
 
-  // TODO:
-  const { starkOrder, starkMessage } = efx.stark.createOrder(
+  const { starkOrder, starkMessage } = dvf.stark.createOrder(
     symbol,
     amount,
     price,
     validFor,
-    fee_rate,
-    vaultIdBuy,
-    vaultIdSell
+    feeRate
   )
 
-  const starkSignature = efx.stark.sign(starkKeyPair, starkMessage)
+  const starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
   const type = 'EXCHANGE LIMIT'
   const protocol = 'stark'
-  symbol = 't' + symbol
   const data = {
     gid,
     cid,
@@ -47,19 +41,19 @@ module.exports = async (
     price,
     meta: {},
     protocol,
-    partner_id,
-    fee_rate,
+    partnerId,
+    feeRate,
     dynamicFeeRate
   }
 
   data.meta = {
     starkOrder: starkOrder,
     starkMessage: starkMessage,
-    ownerAddress: ownerAddress,
+    ethAddress: ethAddress,
     starkKey: starkKey,
     starkSignature: starkSignature
   }
 
-  const url = efx.config.api + '/w/submitOrder'
+  const url = dvf.config.api + '/w/submitOrder'
   return post(url, { json: data })
 }

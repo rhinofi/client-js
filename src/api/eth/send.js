@@ -1,27 +1,27 @@
-module.exports = async (efx, abi, address, action, args, value = 0) => {
-  if (efx.config.send) {
-    return efx.config.send(efx, abi, address, action, args, value)
+module.exports = async (dvf, abi, address, action, args, value = 0) => {
+  if (dvf.config.send) {
+    return dvf.config.send(dvf, abi, address, action, args, value)
   }
 
-  const { web3 } = efx
+  const { web3 } = dvf
 
   const contract = new web3.eth.Contract(abi, address)
 
   const method = contract.methods[action](...args)
 
   const estimatedGas = await method.estimateGas({
-    from: efx.get('account'),
+    from: dvf.get('account'),
     value: value
   })
 
   let options = {
-    from: efx.get('account'),
+    from: dvf.get('account'),
     value: value,
     gas: estimatedGas
   }
 
-  if (efx.get('gasPrice')) {
-    options.gasPrice = efx.get('gasPrice')
+  if (dvf.get('gasPrice')) {
+    options.gasPrice = dvf.get('gasPrice')
   }
 
   return method.send(options)

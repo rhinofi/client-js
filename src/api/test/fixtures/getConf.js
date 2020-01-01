@@ -10,30 +10,25 @@ module.exports = () => {
       ETH: {
         decimals: 18,
         minOrderSize: 0.1,
-        starkTokenId: '0x1',
-        starkVaultId: '0xa1'
+        starkTokenId: '0x1'
       },
-      USD: {
+      USDT: {
         decimals: 6,
         tokenAddress: '0xdac17f958d2ee523a2206206994597c13d831ec7',
         minOrderSize: 25,
         settleSpread: -0.026,
-        starkTokenId: '0x2',
-        starkVaultId: '0xb2'
+        starkTokenId: '0x2'
       },
       ZRX: {
         decimals: 18,
         tokenAddress: '0xe41d2489571d322189246dafa5ebde1f4699f498',
         minOrderSize: 40,
-        starkTokenId: '0x3',
-        starkVaultId: '0xc3'
+        starkTokenId: '0x3'
       }
     }
   }
 
-  nock('https://staging-api.deversifi.com/')
-    .post('/v1/trading/r/getUserConf', body => {
-      return true
-    })
+  nock('https://app.stg.deversifi.com/')
+    .post('/v1/trading/r/getConf', {})
     .reply(200, apiResponse)
 }
