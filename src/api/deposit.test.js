@@ -33,15 +33,13 @@ describe('deposits', () => {
     const token = 'ZRX'
 
     nock('https://app.stg.deversifi.com/')
-      .post('/v1/trading/w/deposit',
-        body => {
-          body.expireTime &&
-          body.starkSignature &&
-          body.amount == amount &&
-          body.token == token &&
-          body.starkPublicKey == starkPublicKey &&
-          body.recoveryParam
-        })
+      .post('/v1/trading/w/deposit', body => {
+        return _.isMatch(body, {
+          amount: amount,
+          token: token,
+          starkPublicKey: starkPublicKey
+        }) && body.expireTime && body.starkSignature
+      })
       .reply(200, apiResponse)
 
     const result = await dvf.deposit(token, amount, starkKeyPair)
@@ -50,63 +48,61 @@ describe('deposits', () => {
     done()
   })
 
-})
-/*
-describe('/deposit', () => {
+  it('Gives error for deposit with value of 0', async done => {
 
-
-  // 2nd test_case checks for 0, negative or empty amount
-  it('Deposit token checks for invalid amount', async () => {
     const pvtKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
+    const fullPublicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
+    const starkPublicKey = {
+      x: fullPublicKey.pub.getX().toString('hex'),
+      y: fullPublicKey.pub.getY().toString('hex')
+    }
+
     const amount = 0
     const token = 'ZRX'
 
-    nock('https://staging-api.deversifi.com/')
-      .post('/v1/trading/w/deposit', async body => {
-        assert.equal(body.error, 'INVALID_AMOUNT')
-        return true
-      })
-      .reply(200)
+    const result = await dvf.deposit(token, amount, starkKeyPair)
+    expect(result.error).toEqual('ERR_AMOUNT_MISSING')
 
-    const result = await efx.deposit(token, amount, starkKeyPair)
-    console.log('new res ', result)
+    done()
   })
 
-  // 3rd test_case
-  it('Deposit token checks for missing token', async () => {
+  it('Gives error if token is missing', async done => {
+
     const pvtKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
+    const fullPublicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
+    const starkPublicKey = {
+      x: fullPublicKey.pub.getX().toString('hex'),
+      y: fullPublicKey.pub.getY().toString('hex')
+    }
+
     const amount = 57
     const token = ''
 
-    nock('https://staging-api.deversifi.com/')
-      .post('/v1/trading/w/deposit', async body => {
-        assert.equal(body.error, 'MISSING_TOKEN')
-        return true
-      })
-      .reply(200)
+    const result = await dvf.deposit(token, amount, starkKeyPair)
+    expect(result.error).toEqual('ERR_TOKEN_MISSING')
 
-    const result = await efx.deposit(token, amount, starkKeyPair)
-    console.log('new res ', result)
+    done()
   })
 
-  // 4th test_case
-  it('Deposit token checks for invalid token', async () => {
+  it('Gives error if token is not supported', async done => {
+
     const pvtKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
+    const fullPublicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
+    const starkPublicKey = {
+      x: fullPublicKey.pub.getX().toString('hex'),
+      y: fullPublicKey.pub.getY().toString('hex')
+    }
+
     const amount = 57
     const token = 'XYZ'
 
-    nock('https://staging-api.deversifi.com/')
-      .post('/v1/trading/w/deposit', async body => {
-        assert.equal(body.error, 'INVALID_TOKEN')
-        return true
-      })
-      .reply(200)
+    const result = await dvf.deposit(token, amount, starkKeyPair)
+    expect(result.error).toEqual('ERR_INVALID_TOKEN')
 
-    const result = await efx.deposit(token, amount, starkKeyPair)
-    console.log('new res ', result)
+    done()
   })
+
 })
-*/

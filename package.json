@@ -21,9 +21,9 @@
     "build:web:minify": "node-minify --compressor uglify-es --input './dist/efx.js' --output './dist/efx.min.js'",
     "build:web:hash": "hash-filename ./dist/efx*.js;del ./dist/{efx.js,efx.min.js}",
     "build:web:run": "browserify --debug ./src/efx.js --standalone EFX | browser-run --port 2222",
-    "test": "env-cmd -f ./env/test jest --testTimeout 20000",
+    "test": "env-cmd -f ./env/test jest --testTimeout 200000",
     "test:watch": "env-cmd -f ./env/test jest --watch --coverage",
-    "test:coverage": "env-cmd -f ./env/test jest --testTimeout 20000 --coverage"
+    "test:coverage": "env-cmd -f ./env/test jest --testTimeout 2000000 --coverage"
   },
   "jest": {
     "coverageReporters": [
