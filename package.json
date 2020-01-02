@@ -1,10 +1,11 @@
 {
-  "name": "efx-api-node",
-  "version": "2.0.3",
+  "name": "dvf-client-js",
+  "version": "0.0.5",
   "main": "src/efx.js",
   "contributors": [
     "Henrique Matias <hems.inlet@gmail.com>",
-    "Will Harborne <will.harborne@gmail.com>"
+    "Will Harborne <will@deversifi.com>",
+    "Meer Ali <meer.ali@deversifi.com>"
   ],
   "standard": {
     "ignore": [
@@ -15,26 +16,29 @@
   "scripts": {
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "test": "env-cmd mocha ./test/index.js --timeout 1200000000",
-    "test:watch": "env-cmd mocha ./test/index.js --watch ./ --timeout 1200000000",
-    "test:web": "mochify ./test/index.js --timeout 1200000000",
-    "test:web:watch": "mochify ./test/index.js --watch --timeout 1200000000",
     "build": "npm run build:web:browserify; npm run build:web:minify; npm run build:web:hash",
     "build:web:browserify": "del ./dist/*.js; browserify ./src/efx.js --standalone EFX -o ./dist/efx.js",
     "build:web:minify": "node-minify --compressor uglify-es --input './dist/efx.js' --output './dist/efx.min.js'",
     "build:web:hash": "hash-filename ./dist/efx*.js;del ./dist/{efx.js,efx.min.js}",
-    "build:web:run": "browserify --debug ./src/efx.js --standalone EFX | browser-run --port 2222"
+    "build:web:run": "browserify --debug ./src/efx.js --standalone EFX | browser-run --port 2222",
+    "test": "env-cmd -f ./env/test jest --testTimeout 200000",
+    "test:watch": "env-cmd -f ./env/test jest --watch --coverage",
+    "test:coverage": "env-cmd -f ./env/test jest --testTimeout 2000000 --coverage"
+  },
+  "jest": {
+    "coverageReporters": [
+      "html"
+    ],
+    "coverageDirectory": ".coverage"
   },
   "keywords": [
-    "bitfinex",
-    "ethfinex",
-    "ethereum"
+    "deversifi",
+    "ethereum",
+    "trading"
   ],
-  "homepage": "https://github.com/ethfinex/efx-api-node",
+  "homepage": "https://github.com/ethfinex/dvf-client-js",
   "license": "MIT",
   "dependencies": {
-    "@0x/order-utils": "^7.0.2",
-    "@0x/subproviders": "^4.0.4",
     "aware": "^0.3.1",
     "bignumber.js": "^7.2.1",
     "bluebird": "^3.5.1",
@@ -43,24 +47,23 @@
     "lodash": "^4.17.10",
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
-    "web3": "^1.2.4",
-    "starkware_crypto": "file:starkware_crypto-0.1.4.tgz"
+    "starkware_crypto": "file:starkware_crypto-0.1.4.tgz",
+    "web3": "^1.2.4"
   },
   "devDependencies": {
-    "del": "^3.0.0",
-    "truffle-hdwallet-provider": "^1.0.17",
     "browser-run": "^5.0.0",
     "browserify": "^16.2.2",
-    "chai": "^4.1.2",
+    "del": "^3.0.0",
     "del-cli": "^1.1.0",
     "ganache-cli": "^6.1.4",
     "hash-filename": "^1.0.4",
+    "jest": "^24.9.0",
     "keccak": "^1.4.0",
-    "mocha": "^5.1.1",
-    "mochify": "^5.8.0",
     "nock": "^9.4.1",
     "node-minify": "^3.2.0",
     "solc": "^0.4.24",
-    "standard": "^11.0.1"
+    "standard": "^11.0.1",
+    "supertest": "^4.0.2",
+    "truffle-hdwallet-provider": "^1.0.17"
   }
 }

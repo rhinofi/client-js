@@ -1,6 +1,6 @@
 const errorReasons = require('../error/reasons')
 
-module.exports = price => {
+module.exports = (dvf, price) => {
   if (!price) {
     return {
       error: 'ERR_PRICE_MISSING',

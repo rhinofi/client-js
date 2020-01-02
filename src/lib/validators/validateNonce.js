@@ -1,6 +1,6 @@
 const errorReasons = require('../error/reasons')
 
-module.exports = nonce => {
+module.exports = (dvf, nonce) => {
   if (typeof nonce === 'string') nonce = +nonce
 
   if (!nonce || isNaN(nonce)) {

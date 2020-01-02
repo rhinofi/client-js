@@ -5,11 +5,11 @@
  * https://web3js.readthedocs.io/en/1.0/web3-eth.html#sign
  */
 
-module.exports = (efx, toSign) => {
+module.exports = (dvf, toSign) => {
   // metamask will take care of the 3rd parameter, "password"
-  if (efx.web3.currentProvider.isMetaMask) {
-    return efx.web3.eth.personal.sign(toSign, efx.get('account'))
+  if (dvf.web3.currentProvider.isMetaMask) {
+    return dvf.web3.eth.personal.sign(toSign, dvf.get('account'))
   } else {
-    return efx.web3.eth.sign(toSign, efx.get('account'))
+    return dvf.web3.eth.sign(toSign, dvf.get('account'))
   }
 }

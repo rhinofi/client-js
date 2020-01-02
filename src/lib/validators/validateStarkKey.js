@@ -1,6 +1,6 @@
 const errorReasons = require('../error/reasons')
 
-module.exports = (starkKey) => {
+module.exports = (dvf, starkKey) => {
   if (!starkKey) {
     return {
       error: 'ERR_STARK_KEY_MISSING',

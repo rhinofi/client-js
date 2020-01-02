@@ -1,4 +1,4 @@
-module.exports = (efx, contents) => {
+module.exports = (dvf, contents) => {
   return {
     // headers: new window.Headers(),
     // mode: 'cors',

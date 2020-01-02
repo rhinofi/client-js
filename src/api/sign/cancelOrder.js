@@ -1,7 +1,7 @@
-module.exports = (efx, orderId) => {
+module.exports = (dvf, orderId) => {
   // orderId = utils.sha3(orderId.toString(16))
 
   // const toSign = utils.bufferToHex(orderId).slice(2)
 
-  return efx.sign(orderId.toString(16))
+  return dvf.sign(orderId.toString(16))
 }
