@@ -10,7 +10,6 @@ const _ = require('lodash')
 let dvf
 
 describe('deposits', () => {
-
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()
@@ -18,12 +17,15 @@ describe('deposits', () => {
   })
 
   it('Deposits token to users vault', async done => {
-
     const apiResponse = { deposit: 'success' }
 
-    const pvtKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    const pvtKey =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
-    const fullPublicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
+    const fullPublicKey = sw.ec.keyFromPublic(
+      starkKeyPair.getPublic(true, 'hex'),
+      'hex'
+    )
     const starkPublicKey = {
       x: fullPublicKey.pub.getX().toString('hex'),
       y: fullPublicKey.pub.getY().toString('hex')
@@ -34,11 +36,13 @@ describe('deposits', () => {
 
     nock('https://app.stg.deversifi.com/')
       .post('/v1/trading/w/deposit', body => {
-        return _.isMatch(body, {
-          amount: amount,
-          token: token,
-          starkPublicKey: starkPublicKey
-        }) && body.expireTime && body.starkSignature
+        return (
+          _.isMatch(body, {
+            amount: amount,
+            token: token,
+            starkPublicKey: starkPublicKey
+          }) && body.starkSignature
+        )
       })
       .reply(200, apiResponse)
 
@@ -49,10 +53,13 @@ describe('deposits', () => {
   })
 
   it('Gives error for deposit with value of 0', async done => {
-
-    const pvtKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    const pvtKey =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
-    const fullPublicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
+    const fullPublicKey = sw.ec.keyFromPublic(
+      starkKeyPair.getPublic(true, 'hex'),
+      'hex'
+    )
     const starkPublicKey = {
       x: fullPublicKey.pub.getX().toString('hex'),
       y: fullPublicKey.pub.getY().toString('hex')
@@ -68,10 +75,13 @@ describe('deposits', () => {
   })
 
   it('Gives error if token is missing', async done => {
-
-    const pvtKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    const pvtKey =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
-    const fullPublicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
+    const fullPublicKey = sw.ec.keyFromPublic(
+      starkKeyPair.getPublic(true, 'hex'),
+      'hex'
+    )
     const starkPublicKey = {
       x: fullPublicKey.pub.getX().toString('hex'),
       y: fullPublicKey.pub.getY().toString('hex')
@@ -87,10 +97,13 @@ describe('deposits', () => {
   })
 
   it('Gives error if token is not supported', async done => {
-
-    const pvtKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    const pvtKey =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
-    const fullPublicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
+    const fullPublicKey = sw.ec.keyFromPublic(
+      starkKeyPair.getPublic(true, 'hex'),
+      'hex'
+    )
     const starkPublicKey = {
       x: fullPublicKey.pub.getX().toString('hex'),
       y: fullPublicKey.pub.getY().toString('hex')
@@ -104,5 +117,4 @@ describe('deposits', () => {
 
     done()
   })
-
 })

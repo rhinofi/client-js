@@ -21,7 +21,7 @@ module.exports = async (dvf, token, amount, starkKeyPair) => {
     starkSignature = '',
     expireTime = (Math.floor(Date.now() / (1000 * 3600)) + dvf.config.defaultExpiry)
   try {
-    // const depositStatus = await dvf.contract.deposit(tempVaultId, amount, userAddress);
+    // const depositStatus = await dvf.contract.deposit(tempVaultId, token, amount, userAddress);
     // console.log(`deposit contract call result: ${depositStatus}`, depositStatus)
 
     starkMessage = dvf.stark.getTransferMsg(
@@ -46,8 +46,7 @@ module.exports = async (dvf, token, amount, starkKeyPair) => {
     starkPublicKey,
     token,
     amount,
-    starkSignature,
-    expireTime
+    starkSignature
   }
 
   return post(url, { json: data })
