@@ -16,7 +16,14 @@ module.exports = async (
   starkKey,
   starkKeyPair
 ) => {
-  const assertionError = await validAssertions({dvf, amount, symbol, price, starkKey, starkKeyPair})
+  const assertionError = await validAssertions({
+    dvf,
+    amount,
+    symbol,
+    price,
+    starkKey,
+    starkKeyPair
+  })
   if (assertionError) return assertionError
 
   const ethAddress = dvf.get('account')
