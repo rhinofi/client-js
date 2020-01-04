@@ -65,6 +65,7 @@ module.exports = () => {
   dvf.getOrder = compose(require('../api/getOrder'))
   dvf.getOrdersHist = compose(require('../api/getOrdersHist'))
   dvf.getOrders = compose(require('../api/getOrders'))
+  dvf.register = compose(require('../api/register'))
   dvf.submitBuyOrder = compose(require('../api/submitBuyOrder'))
   dvf.submitOrder = compose(require('../api/submitOrder'))
   dvf.submitSellOrder = compose(require('../api/submitSellOrder'))

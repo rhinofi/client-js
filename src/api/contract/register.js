@@ -1,7 +1,6 @@
-const BigNumber = require('bignumber.js')
-
 module.exports = async (dvf, starkKey, ethAddress) => {
-  const { web3 } = dvf
+  //const { web3 } = dvf
+  console.log({ dvf })
   const starkInstance = new web3.eth.Contract(
     dvf.contract.abi.StarkEx,
     dvf.config.DVF.starkExContractAddress

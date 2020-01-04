@@ -1,12 +1,12 @@
 const { post } = require('request-promise')
-const sw = require('starkware_crypto')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
 module.exports = async (dvf, starkKey, ethAddress) => {
   //TODO Add validation for starkKey and ethAddress in validateAssertions
   const assertionError = await validateAssertions({ dvf, starkKey, ethAddress })
   if (assertionError) return assertionError
-  const onchainRegister = await dvf.contract.register(starkKey, ethAddress)
+  const onchainRegister = await dvf.stark.register(starkKey, ethAddress)
+  console.log({ onchainRegister })
   if (onchainRegister && onchainRegister.error) {
     return onchainRegister
   }
