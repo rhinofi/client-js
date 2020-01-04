@@ -1,4 +1,10 @@
 module.exports = {
+  ERR_PRIVATEKEY_CREATION: `
+    There was am error in creating a private key
+  `,
+  ERR_KEYPAIR_CREATION: `
+    There was an error in creating a public private key pair
+  `,
   ERR_INVALID_ORDER_ID: `
     No order id provided or the order id provided is not valid
   `,
