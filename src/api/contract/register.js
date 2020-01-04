@@ -1,6 +1,7 @@
+const reasons = require('../../lib/error/reasons')
+
 module.exports = async (dvf, starkKey, ethAddress) => {
-  //const { web3 } = dvf
-  console.log({ dvf })
+  const { web3 } = dvf
   const starkInstance = new web3.eth.Contract(
     dvf.contract.abi.StarkEx,
     dvf.config.DVF.starkExContractAddress
@@ -15,9 +16,10 @@ module.exports = async (dvf, starkKey, ethAddress) => {
   let onchainResult = ''
   try {
     onchainResult = await starkInstance.methods
-      .register(starkKey)
+      .register(`0x${starkKey}`)
       .send(sendArguments)
   } catch (e) {
+    console.log('error is: ', e)
     return {
       error: 'ERR_STARK_REGISTRATION',
       reason: reasons.ERR_STARK_REGISTRATION.trim()

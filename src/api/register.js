@@ -13,7 +13,8 @@ module.exports = async (dvf, starkKey, ethAddress) => {
   const url = dvf.config.api + '/w/register'
   const data = {
     starkKey,
-    ethAddress
+    nonce,
+    signature
   }
 
   return post(url, { json: data })

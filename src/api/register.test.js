@@ -19,8 +19,7 @@ describe('registers', () => {
   it('Registers user with Stark Ex', async done => {
     const apiResponse = { register: 'success' }
 
-    const pvtKey =
-      '0x2111111111111111111111111111111111111111111111111111111111111111'
+    const pvtKey = '0x1234567890'
     const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
     const fullPublicKey = sw.ec.keyFromPublic(
       starkKeyPair.getPublic(true, 'hex'),
@@ -28,7 +27,7 @@ describe('registers', () => {
     )
 
     const starkKey = fullPublicKey.pub.getX().toString('hex')
-    const ethAddress = '0x341E46a49F15785373edE443Df0220DEa6a41Bbc'
+    const ethAddress = '0xE0F9C119c8C4bA91aAa94CCc5AaE34D3A13601ff'
     nonce = 'nonce'
     signature =
       '0x321ac89402c444ccf83952795ab10d561bc3749020c10a7ab5f77f24287fd713032d7bf1097bfa589b077050a3a9bbb68b0fce610f5ef79cfb7b7bd0d04825ce00'
@@ -37,14 +36,14 @@ describe('registers', () => {
     nock('https://app.stg.deversifi.com/')
       .post('/v1/trading/w/register', body => {
         return _.isMatch(body, {
-          starkKey: starkKey,
-          nonce: nonce,
-          signature: signature
+          starkKey: starkKey
+          // nonce: nonce,
+          // signature: signature
         })
       })
       .reply(200, apiResponse)
 
-    const result = await dvf.register(starkKey, nonce, signature)
+    const result = await dvf.register(starkKey, ethAddress)
     expect(result).toEqual(apiResponse)
 
     done()
