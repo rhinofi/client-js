@@ -26,8 +26,9 @@ module.exports = () => {
   dvf.stark = {
     createOrder: compose(require('../api/contract/createOrder')),
     sign: compose(require('../api/contract/signOrder')),
-    // dvf not required
-    getTransferMsg: require('../api/contract/getTransferMessage')
+    getTransferMsg: require('../api/contract/getTransferMessage'),
+    createPrivateKey: require('./dvf/createPrivateKey'),
+    createStarkKeyPair: require('./dvf/createStarkKeyPair')
   }
   // dvf.contract functions
   dvf.contract = {
