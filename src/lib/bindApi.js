@@ -28,7 +28,8 @@ module.exports = () => {
     sign: compose(require('../api/contract/signOrder')),
     getTransferMsg: require('../api/contract/getTransferMessage'),
     createPrivateKey: require('./dvf/createPrivateKey'),
-    createStarkKeyPair: require('./dvf/createStarkKeyPair')
+    createStarkKeyPair: require('./dvf/createStarkKeyPair'),
+    register: require('../api/contract/register')
   }
   // dvf.contract functions
   dvf.contract = {
