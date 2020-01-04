@@ -1,8 +1,8 @@
 const BigNumber = require('bignumber.js')
 
-module.exports = (dvf, vaultId, token, amount, ownerAddress) => {
+module.exports = async (dvf, vaultId, token, amount, ownerAddress) => {
   console.log('dvf ->', dvf.config)
-
+  const currency = dvf.config.tokenRegistry[token]
   const value = new BigNumber(10)
     .pow(currency.decimals)
     .times(amount)
@@ -11,13 +11,19 @@ module.exports = (dvf, vaultId, token, amount, ownerAddress) => {
 
   // TODO: function should have input for token currency, and then select first arg from config
   const args = [dvf.config.tokenRegistry[token].starkTokenId, vaultId, value]
-  const action = 'deposit'
+  // const args = [
+  //   '986656634131469643708160402086258353846976969539812447063945772630742802174',
+  //   1,
+  //   100
+  // ]
 
+  console.log({ args })
+  const action = 'deposit'
   // In order to lock ETH we simply send ETH to the lockerAddress
   if (token === 'ETH') {
     return dvf.eth.send(
       dvf.contract.abi.StarkEx,
-      dvf.config.DVF.exchangeAddress,
+      dvf.config.DVF.starkExContractAddress,
       action,
       args,
       value // send ETH to the contract
