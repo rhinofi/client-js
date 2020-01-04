@@ -10,15 +10,10 @@ module.exports = async (dvf, vaultId, token, amount, ownerAddress) => {
     .toString()
 
   // TODO: function should have input for token currency, and then select first arg from config
-  const args = [dvf.config.tokenRegistry[token].starkTokenId, vaultId, value]
-  // const args = [
-  //   '986656634131469643708160402086258353846976969539812447063945772630742802174',
-  //   1,
-  //   100
-  // ]
+  const args = [dvf.config.tokenRegistry[token].starkTokenId, vaultId, amount]
 
-  console.log({ args })
   const action = 'deposit'
+  console.log({ args })
   // In order to lock ETH we simply send ETH to the lockerAddress
   if (token === 'ETH') {
     return dvf.eth.send(

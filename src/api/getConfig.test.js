@@ -7,7 +7,6 @@ const mockGetUserConf = require('./test/fixtures/getUserConf')
 let dvf
 
 describe('getConfig', () => {
-
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()
@@ -15,7 +14,6 @@ describe('getConfig', () => {
   })
 
   it('Returns the config recieved from the API', async done => {
-
     const apiResponse = {
       DVF: {
         exchangeSymbols: ['tETHUSD', 'tZRXUSD', 'tZRXETH'],
@@ -39,7 +37,7 @@ describe('getConfig', () => {
           tokenAddress: '0xe41d2489571d322189246dafa5ebde1f4699f498',
           minOrderSize: 40,
           starkTokenId:
-            '986656634131469643708160402086258353846976969539812447063945772630742802174'
+            '0x22e6d888f32dea3c6e8ba64609a314eebbe1eb704e9e9febe368b0bacb21efe'
         }
       }
     }
@@ -53,5 +51,4 @@ describe('getConfig', () => {
 
     done()
   })
-
 })
