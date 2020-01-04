@@ -1,1030 +1,783 @@
 module.exports = [
   {
-    'constant': false,
-    'inputs': [
+    inputs: [
       {
-        'name': 'tokenId',
-        'type': 'uint256'
+        internalType: 'contract IFactRegistry',
+        name: 'escapeVerifier',
+        type: 'address'
       },
       {
-        'name': 'vaultId',
-        'type': 'uint256'
+        internalType: 'uint256',
+        name: 'initialSequenceNumber',
+        type: 'uint256'
+      },
+      { internalType: 'uint256', name: 'initialVaultRoot', type: 'uint256' },
+      { internalType: 'uint256', name: 'initialOrderRoot', type: 'uint256' },
+      {
+        internalType: 'uint256',
+        name: 'initialVaultTreeHeight',
+        type: 'uint256'
       },
       {
-        'name': 'quantizedAmount',
-        'type': 'uint256'
+        internalType: 'uint256',
+        name: 'initialOrderTreeHeight',
+        type: 'uint256'
       }
     ],
-    'name': 'deposit',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'constructor'
   },
   {
-    'constant': false,
-    'inputs': [
+    anonymous: false,
+    inputs: [
       {
-        'name': 'newAdmin',
-        'type': 'address'
-      }
-    ],
-    'name': 'registerTokenAdmin',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
-  },
-  {
-    'constant': false,
-    'inputs': [],
-    'name': 'acceptGovernance',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
-  },
-  {
-    'constant': false,
-    'inputs': [
-      {
-        'name': 'vaultId',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'fullWithdrawalRequest',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
-  },
-  {
-    'constant': true,
-    'inputs': [
-      {
-        'name': 'starkKey',
-        'type': 'uint256'
+        indexed: false,
+        internalType: 'uint256',
+        name: 'starkKey',
+        type: 'uint256'
       },
       {
-        'name': 'vaultId',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'getFullWithdrawalRequest',
-    'outputs': [
-      {
-        'name': 'res',
-        'type': 'uint256'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
-  },
-  {
-    'constant': false,
-    'inputs': [
-      {
-        'name': 'verifier',
-        'type': 'address'
-      }
-    ],
-    'name': 'unregisterVerifier',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
-  },
-  {
-    'constant': false,
-    'inputs': [
-      {
-        'name': 'tokenId',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'withdraw',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
-  },
-  {
-    'constant': true,
-    'inputs': [
-      {
-        'name': 'verifierAddress',
-        'type': 'address'
-      }
-    ],
-    'name': 'isVerifier',
-    'outputs': [
-      {
-        'name': 'addressIsVerifier',
-        'type': 'bool'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
-  },
-  {
-    'constant': false,
-    'inputs': [
-      {
-        'name': 'starkKey',
-        'type': 'uint256'
+        indexed: false,
+        internalType: 'uint256',
+        name: 'vaultId',
+        type: 'uint256'
       },
       {
-        'name': 'vaultId',
-        'type': 'uint256'
+        indexed: false,
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256'
       },
       {
-        'name': 'tokenId',
-        'type': 'uint256'
-      },
-      {
-        'name': 'quantizedAmount',
-        'type': 'uint256'
+        indexed: false,
+        internalType: 'uint256',
+        name: 'quantizedAmount',
+        type: 'uint256'
       }
     ],
-    'name': 'acceptDeposit',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
+    name: 'LogDeposit',
+    type: 'event'
   },
   {
-    'constant': true,
-    'inputs': [],
-    'name': 'getSequenceNumber',
-    'outputs': [
+    anonymous: false,
+    inputs: [
       {
-        'name': 'seq',
-        'type': 'uint256'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
-  },
-  {
-    'constant': false,
-    'inputs': [
-      {
-        'name': 'tokenId',
-        'type': 'uint256'
+        indexed: false,
+        internalType: 'uint256',
+        name: 'starkKey',
+        type: 'uint256'
       },
       {
-        'name': 'vaultId',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'depositReclaim',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
-  },
-  {
-    'constant': true,
-    'inputs': [],
-    'name': 'getRegisteredVerifiers',
-    'outputs': [
-      {
-        'name': '_verifers',
-        'type': 'address[]'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
-  },
-  {
-    'constant': true,
-    'inputs': [],
-    'name': 'getVaultsRoot',
-    'outputs': [
-      {
-        'name': 'root',
-        'type': 'uint256'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
-  },
-  {
-    'constant': true,
-    'inputs': [],
-    'name': 'DEPOSIT_CANCEL_DELAY',
-    'outputs': [
-      {
-        'name': '',
-        'type': 'uint256'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
-  },
-  {
-    'constant': false,
-    'inputs': [
-      {
-        'name': 'newOperator',
-        'type': 'address'
-      }
-    ],
-    'name': 'addNewOperator',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
-  },
-  {
-    'constant': false,
-    'inputs': [
-      {
-        'name': 'verifier',
-        'type': 'address'
-      }
-    ],
-    'name': 'unregisterVerifierIntent',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
-  },
-  {
-    'constant': true,
-    'inputs': [
-      {
-        'name': 'tokenId',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'getAssetString',
-    'outputs': [
-      {
-        'name': 'assetString',
-        'type': 'bytes'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
-  },
-  {
-    'constant': true,
-    'inputs': [],
-    'name': 'getAssetProxyAddress',
-    'outputs': [
-      {
-        'name': 'assetProxyAddress',
-        'type': 'address'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
-  },
-  {
-    'constant': false,
-    'inputs': [
-      {
-        'name': 'vaultId',
-        'type': 'uint256'
+        indexed: false,
+        internalType: 'uint256',
+        name: 'vaultId',
+        type: 'uint256'
       },
       {
-        'name': 'starkKey',
-        'type': 'uint256'
-      },
-      {
-        'name': 'tokenId',
-        'type': 'uint256'
-      },
-      {
-        'name': 'quantizedAmount',
-        'type': 'uint256'
+        indexed: false,
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256'
       }
     ],
-    'name': 'escape',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
+    name: 'LogDepositCancel',
+    type: 'event'
   },
   {
-    'constant': false,
-    'inputs': [
+    anonymous: false,
+    inputs: [
       {
-        'name': 'oldAdmin',
-        'type': 'address'
+        indexed: false,
+        internalType: 'uint256',
+        name: 'starkKey',
+        type: 'uint256'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'vaultId',
+        type: 'uint256'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256'
       }
     ],
-    'name': 'unregisterTokenAdmin',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
+    name: 'LogDepositCancelReclaimed',
+    type: 'event'
+  },
+  { anonymous: false, inputs: [], name: 'LogFrozen', type: 'event' },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'starkKey',
+        type: 'uint256'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'vaultId',
+        type: 'uint256'
+      }
+    ],
+    name: 'LogFullWithdrawalRequest',
+    type: 'event'
   },
   {
-    'constant': true,
-    'inputs': [
+    anonymous: false,
+    inputs: [
       {
-        'name': 'starkKey',
-        'type': 'uint256'
-      },
-      {
-        'name': 'tokenId',
-        'type': 'uint256'
-      },
-      {
-        'name': 'vaultId',
-        'type': 'uint256'
+        indexed: false,
+        internalType: 'address',
+        name: 'acceptedGovernor',
+        type: 'address'
       }
     ],
-    'name': 'getDepositBalance',
-    'outputs': [
-      {
-        'name': 'balance',
-        'type': 'uint256'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    name: 'LogNewGovernorAccepted',
+    type: 'event'
   },
   {
-    'constant': false,
-    'inputs': [],
-    'name': 'acceptNewOperator',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'nominatedGovernor',
+        type: 'address'
+      }
+    ],
+    name: 'LogNominatedGovernor',
+    type: 'event'
   },
   {
-    'constant': true,
-    'inputs': [],
-    'name': 'FULL_WITHDRAWAL_FREEZE_DELAY',
-    'outputs': [
-      {
-        'name': '',
-        'type': 'uint256'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    anonymous: false,
+    inputs: [],
+    name: 'LogNominationCancelled',
+    type: 'event'
   },
   {
-    'constant': true,
-    'inputs': [],
-    'name': 'VERIFIER_REMOVAL_DELAY',
-    'outputs': [
+    anonymous: false,
+    inputs: [
       {
-        'name': '',
-        'type': 'uint256'
+        indexed: false,
+        internalType: 'address',
+        name: 'removedGovernor',
+        type: 'address'
       }
     ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    name: 'LogRemovedGovernor',
+    type: 'event'
   },
   {
-    'constant': true,
-    'inputs': [
+    anonymous: false,
+    inputs: [
       {
-        'name': 'starkKey',
-        'type': 'uint256'
+        indexed: false,
+        internalType: 'uint256',
+        name: 'sequenceNumber',
+        type: 'uint256'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'vaultRoot',
+        type: 'uint256'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'orderRoot',
+        type: 'uint256'
       }
     ],
-    'name': 'getEtherKey',
-    'outputs': [
-      {
-        'name': 'etherKey',
-        'type': 'address'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    name: 'LogRootUpdate',
+    type: 'event'
   },
   {
-    'constant': false,
-    'inputs': [
+    anonymous: false,
+    inputs: [
       {
-        'name': 'vaultId',
-        'type': 'uint256'
+        indexed: false,
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256'
+      },
+      {
+        indexed: false,
+        internalType: 'bytes',
+        name: 'assetData',
+        type: 'bytes'
       }
     ],
-    'name': 'freezeRequest',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
+    name: 'LogTokenRegisted',
+    type: 'event'
+  },
+  { anonymous: false, inputs: [], name: 'LogUnFrozen', type: 'event' },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'etherKey',
+        type: 'address'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'starkKey',
+        type: 'uint256'
+      }
+    ],
+    name: 'LogUserRegistered',
+    type: 'event'
   },
   {
-    'constant': true,
-    'inputs': [
+    anonymous: false,
+    inputs: [
       {
-        'name': 'etherKey',
-        'type': 'address'
+        indexed: false,
+        internalType: 'uint256',
+        name: 'starkKey',
+        type: 'uint256'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'quantizedAmount',
+        type: 'uint256'
       }
     ],
-    'name': 'getStarkKey',
-    'outputs': [
-      {
-        'name': 'starkKey',
-        'type': 'uint256'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    name: 'LogWithdrawal',
+    type: 'event'
   },
   {
-    'constant': false,
-    'inputs': [
-      {
-        'name': 'verifier',
-        'type': 'address'
-      }
-    ],
-    'name': 'registerVerifier',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
+    constant: true,
+    inputs: [],
+    name: 'DEPOSIT_CANCEL_DELAY',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'constant': false,
-    'inputs': [
-      {
-        'name': 'tokenId',
-        'type': 'uint256'
-      },
-      {
-        'name': 'vaultId',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'depositCancel',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
+    constant: true,
+    inputs: [],
+    name: 'FREEZE_GRACE_PERIOD',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'constant': true,
-    'inputs': [
-      {
-        'name': 'assetString',
-        'type': 'bytes'
-      }
-    ],
-    'name': 'getTokenId',
-    'outputs': [
-      {
-        'name': 'tokenId',
-        'type': 'uint256'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    constant: true,
+    inputs: [],
+    name: 'MAIN_GOVERNANCE_INFO_TAG',
+    outputs: [{ internalType: 'string', name: '', type: 'string' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'constant': true,
-    'inputs': [],
-    'name': 'getVaultsTreeHeight',
-    'outputs': [
-      {
-        'name': 'height',
-        'type': 'uint256'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    constant: true,
+    inputs: [],
+    name: 'MAX_VERIFIER_COUNT',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'constant': false,
-    'inputs': [
-      {
-        'name': 'newGovernor',
-        'type': 'address'
-      }
-    ],
-    'name': 'transferGovernance',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
+    constant: true,
+    inputs: [],
+    name: 'UNFREEZE_DELAY',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'constant': false,
-    'inputs': [
-      {
-        'name': 'starkKey',
-        'type': 'uint256'
-      },
-      {
-        'name': 'yCoordinate',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'register',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
+    constant: true,
+    inputs: [],
+    name: 'VERIFIER_REMOVAL_DELAY',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'constant': false,
-    'inputs': [
-      {
-        'name': 'tokenId',
-        'type': 'uint256'
-      },
-      {
-        'name': 'assetString',
-        'type': 'bytes'
-      },
-      {
-        'name': 'quantum',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'registerToken',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
+    constant: true,
+    inputs: [],
+    name: 'VERSION',
+    outputs: [{ internalType: 'string', name: '', type: 'string' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'constant': true,
-    'inputs': [
-      {
-        'name': 'tokenId',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'getQuantum',
-    'outputs': [
-      {
-        'name': 'quantum',
-        'type': 'uint256'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    constant: false,
+    inputs: [{ internalType: 'address', name: 'newOperator', type: 'address' }],
+    name: 'addNewOperator',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    'constant': true,
-    'inputs': [],
-    'name': 'getTradesRoot',
-    'outputs': [
-      {
-        'name': 'root',
-        'type': 'uint256'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    constant: false,
+    inputs: [{ internalType: 'address', name: 'verifier', type: 'address' }],
+    name: 'announceAvailabilityVerifierRemovalIntent',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    'constant': false,
-    'inputs': [
-      {
-        'name': 'oldVaultRoot',
-        'type': 'uint256'
-      },
-      {
-        'name': 'newVaultRoot',
-        'type': 'uint256'
-      },
-      {
-        'name': 'oldTradeRoot',
-        'type': 'uint256'
-      },
-      {
-        'name': 'newTradeRoot',
-        'type': 'uint256'
-      },
-      {
-        'name': 'vaultsTreeHeightSent',
-        'type': 'uint256'
-      },
-      {
-        'name': 'tradesTreeHeightSent',
-        'type': 'uint256'
-      },
-      {
-        'name': 'availabilityProof',
-        'type': 'bytes'
-      }
-    ],
-    'name': 'stateUpdate',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
+    constant: false,
+    inputs: [{ internalType: 'address', name: 'verifier', type: 'address' }],
+    name: 'announceVerifierRemovalIntent',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    'constant': false,
-    'inputs': [
-      {
-        'name': 'starkKey',
-        'type': 'uint256'
-      },
-      {
-        'name': 'vaultId',
-        'type': 'uint256'
-      }
+    constant: false,
+    inputs: [
+      { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+      { internalType: 'uint256', name: 'vaultId', type: 'uint256' },
+      { internalType: 'uint256', name: 'quantizedAmount', type: 'uint256' }
     ],
-    'name': 'clearFullWithdrawalRequest',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
+    name: 'deposit',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    'constant': true,
-    'inputs': [],
-    'name': 'MAX_VERIFIER_COUNT',
-    'outputs': [
-      {
-        'name': '',
-        'type': 'uint256'
-      }
+    constant: false,
+    inputs: [
+      { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+      { internalType: 'uint256', name: 'vaultId', type: 'uint256' }
     ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    name: 'deposit',
+    outputs: [],
+    payable: true,
+    stateMutability: 'payable',
+    type: 'function'
   },
   {
-    'constant': false,
-    'inputs': [
-      {
-        'name': 'publicInput',
-        'type': 'uint256[]'
-      },
-      {
-        'name': 'applicationData',
-        'type': 'uint256[]'
-      },
-      {
-        'name': 'availabilityProof',
-        'type': 'bytes'
-      }
+    constant: false,
+    inputs: [
+      { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+      { internalType: 'uint256', name: 'vaultId', type: 'uint256' }
     ],
-    'name': 'updateState',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
+    name: 'depositCancel',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    'constant': true,
-    'inputs': [
-      {
-        'name': 'starkKey',
-        'type': 'uint256'
-      },
-      {
-        'name': 'tokenId',
-        'type': 'uint256'
-      }
+    constant: false,
+    inputs: [
+      { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+      { internalType: 'uint256', name: 'vaultId', type: 'uint256' }
     ],
-    'name': 'getWithdrawalBalance',
-    'outputs': [
-      {
-        'name': 'balance',
-        'type': 'uint256'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    name: 'depositReclaim',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    'constant': true,
-    'inputs': [],
-    'name': 'VERSION',
-    'outputs': [
-      {
-        'name': '',
-        'type': 'string'
-      }
+    constant: false,
+    inputs: [
+      { internalType: 'uint256', name: 'vaultId', type: 'uint256' },
+      { internalType: 'uint256', name: 'starkKey', type: 'uint256' },
+      { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+      { internalType: 'uint256', name: 'quantizedAmount', type: 'uint256' }
     ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    name: 'escape',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    'constant': false,
-    'inputs': [
-      {
-        'name': 'starkKey',
-        'type': 'uint256'
-      },
-      {
-        'name': 'tokenId',
-        'type': 'uint256'
-      },
-      {
-        'name': 'quantizedAmount',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'acceptWithdrawal',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
+    constant: false,
+    inputs: [{ internalType: 'uint256', name: 'vaultId', type: 'uint256' }],
+    name: 'freezeRequest',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    'inputs': [
-      {
-        'name': 'assetProxy',
-        'type': 'address'
-      },
-      {
-        'name': 'availabilityVerifier',
-        'type': 'address'
-      },
-      {
-        'name': 'escapeVerifier',
-        'type': 'address'
-      },
-      {
-        'name': 'initialSequenceNumber',
-        'type': 'uint256'
-      },
-      {
-        'name': 'initialVaultRoot',
-        'type': 'uint256'
-      },
-      {
-        'name': 'initialTradeRoot',
-        'type': 'uint256'
-      },
-      {
-        'name': 'initialVaultsTreeHeight',
-        'type': 'uint256'
-      },
-      {
-        'name': 'initialTradesTreeHeight',
-        'type': 'uint256'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'constructor'
+    constant: false,
+    inputs: [{ internalType: 'uint256', name: 'vaultId', type: 'uint256' }],
+    name: 'fullWithdrawalRequest',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
-    'anonymous': false,
-    'inputs': [
-      {
-        'indexed': false,
-        'name': 'starkKey',
-        'type': 'uint256'
-      },
-      {
-        'indexed': false,
-        'name': 'vaultId',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'LogFullWithdrawalRequest',
-    'type': 'event'
+    constant: true,
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
+    name: 'getAssetData',
+    outputs: [{ internalType: 'bytes', name: 'assetData', type: 'bytes' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'anonymous': false,
-    'inputs': [
-      {
-        'indexed': false,
-        'name': 'starkKey',
-        'type': 'uint256'
-      },
-      {
-        'indexed': false,
-        'name': 'tokenId',
-        'type': 'uint256'
-      },
-      {
-        'indexed': false,
-        'name': 'quantizedAmount',
-        'type': 'uint256'
-      }
+    constant: true,
+    inputs: [
+      { internalType: 'uint256', name: 'starkKey', type: 'uint256' },
+      { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+      { internalType: 'uint256', name: 'vaultId', type: 'uint256' }
     ],
-    'name': 'LogWithdrawal',
-    'type': 'event'
+    name: 'getDepositBalance',
+    outputs: [{ internalType: 'uint256', name: 'balance', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'anonymous': false,
-    'inputs': [
-      {
-        'indexed': false,
-        'name': 'starkKey',
-        'type': 'uint256'
-      },
-      {
-        'indexed': false,
-        'name': 'vaultId',
-        'type': 'uint256'
-      },
-      {
-        'indexed': false,
-        'name': 'tokenId',
-        'type': 'uint256'
-      },
-      {
-        'indexed': false,
-        'name': 'quantizedAmount',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'LogDeposit',
-    'type': 'event'
+    constant: true,
+    inputs: [{ internalType: 'uint256', name: 'starkKey', type: 'uint256' }],
+    name: 'getEtherKey',
+    outputs: [{ internalType: 'address', name: 'etherKey', type: 'address' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'anonymous': false,
-    'inputs': [
-      {
-        'indexed': false,
-        'name': 'starkKey',
-        'type': 'uint256'
-      },
-      {
-        'indexed': false,
-        'name': 'vaultId',
-        'type': 'uint256'
-      },
-      {
-        'indexed': false,
-        'name': 'tokenId',
-        'type': 'uint256'
-      }
+    constant: true,
+    inputs: [
+      { internalType: 'uint256', name: 'starkKey', type: 'uint256' },
+      { internalType: 'uint256', name: 'vaultId', type: 'uint256' }
     ],
-    'name': 'LogDepositCancel',
-    'type': 'event'
+    name: 'getFullWithdrawalRequest',
+    outputs: [{ internalType: 'uint256', name: 'res', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'anonymous': false,
-    'inputs': [
-      {
-        'indexed': false,
-        'name': 'starkKey',
-        'type': 'uint256'
-      },
-      {
-        'indexed': false,
-        'name': 'vaultId',
-        'type': 'uint256'
-      },
-      {
-        'indexed': false,
-        'name': 'tokenId',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'LogDepositCancelReclaimed',
-    'type': 'event'
+    constant: true,
+    inputs: [],
+    name: 'getOrderRoot',
+    outputs: [{ internalType: 'uint256', name: 'root', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'anonymous': false,
-    'inputs': [
-      {
-        'indexed': false,
-        'name': 'sequenceNumber',
-        'type': 'uint256'
-      },
-      {
-        'indexed': false,
-        'name': 'vaultRoot',
-        'type': 'uint256'
-      },
-      {
-        'indexed': false,
-        'name': 'tradeRoot',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'LogStateUpdate',
-    'type': 'event'
+    constant: true,
+    inputs: [],
+    name: 'getOrderTreeHeight',
+    outputs: [{ internalType: 'uint256', name: 'height', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'anonymous': false,
-    'inputs': [
-      {
-        'indexed': false,
-        'name': 'etherKey',
-        'type': 'address'
-      },
-      {
-        'indexed': false,
-        'name': 'starkKey',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'LogUserRegistered',
-    'type': 'event'
+    constant: true,
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
+    name: 'getQuantum',
+    outputs: [{ internalType: 'uint256', name: 'quantum', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'anonymous': false,
-    'inputs': [
-      {
-        'indexed': false,
-        'name': 'tokenId',
-        'type': 'uint256'
-      },
-      {
-        'indexed': false,
-        'name': 'assetString',
-        'type': 'bytes'
-      }
+    constant: true,
+    inputs: [],
+    name: 'getRegisteredAvailabilityVerifiers',
+    outputs: [
+      { internalType: 'address[]', name: '_verifers', type: 'address[]' }
     ],
-    'name': 'LogTokenRegisted',
-    'type': 'event'
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'anonymous': false,
-    'inputs': [],
-    'name': 'LogFrozen',
-    'type': 'event'
+    constant: true,
+    inputs: [],
+    name: 'getRegisteredVerifiers',
+    outputs: [
+      { internalType: 'address[]', name: '_verifers', type: 'address[]' }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'anonymous': false,
-    'inputs': [
-      {
-        'indexed': false,
-        'name': 'currentOperator',
-        'type': 'address'
-      },
-      {
-        'indexed': false,
-        'name': 'candidateOperator',
-        'type': 'address'
-      }
-    ],
-    'name': 'LogOperatorTransfer',
-    'type': 'event'
+    constant: true,
+    inputs: [],
+    name: 'getSequenceNumber',
+    outputs: [{ internalType: 'uint256', name: 'seq', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'anonymous': false,
-    'inputs': [
-      {
-        'indexed': false,
-        'name': 'previousOperator',
-        'type': 'address'
-      },
-      {
-        'indexed': false,
-        'name': 'currentOperator',
-        'type': 'address'
-      }
-    ],
-    'name': 'LogOperatorChanged',
-    'type': 'event'
+    constant: true,
+    inputs: [{ internalType: 'address', name: 'etherKey', type: 'address' }],
+    name: 'getStarkKey',
+    outputs: [{ internalType: 'uint256', name: 'starkKey', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'anonymous': false,
-    'inputs': [
-      {
-        'indexed': false,
-        'name': 'currentGovernor',
-        'type': 'address'
-      },
-      {
-        'indexed': false,
-        'name': 'candidateGovernor',
-        'type': 'address'
-      }
-    ],
-    'name': 'LogGovernorTransfer',
-    'type': 'event'
+    constant: true,
+    inputs: [],
+    name: 'getVaultRoot',
+    outputs: [{ internalType: 'uint256', name: 'root', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    'anonymous': false,
-    'inputs': [
-      {
-        'indexed': false,
-        'name': 'previousGovernor',
-        'type': 'address'
-      },
-      {
-        'indexed': false,
-        'name': 'currentGovernor',
-        'type': 'address'
-      }
+    constant: true,
+    inputs: [],
+    name: 'getVaultTreeHeight',
+    outputs: [{ internalType: 'uint256', name: 'height', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [
+      { internalType: 'uint256', name: 'starkKey', type: 'uint256' },
+      { internalType: 'uint256', name: 'tokenId', type: 'uint256' }
     ],
-    'name': 'LogGovernorChanged',
-    'type': 'event'
+    name: 'getWithdrawalBalance',
+    outputs: [{ internalType: 'uint256', name: 'balance', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [{ internalType: 'bytes', name: 'data', type: 'bytes' }],
+    name: 'initialize',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [
+      { internalType: 'address', name: 'verifierAddress', type: 'address' }
+    ],
+    name: 'isAvailabilityVerifier',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'isFrozen',
+    outputs: [{ internalType: 'bool', name: 'frozen', type: 'bool' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [
+      { internalType: 'address', name: 'verifierAddress', type: 'address' }
+    ],
+    name: 'isVerifier',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [],
+    name: 'mainAcceptGovernance',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [],
+    name: 'mainCancelNomination',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [
+      { internalType: 'address', name: 'testGovernor', type: 'address' }
+    ],
+    name: 'mainIsGovernor',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [{ internalType: 'address', name: 'newGovernor', type: 'address' }],
+    name: 'mainNominateNewGovernor',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      { internalType: 'address', name: 'governorForRemoval', type: 'address' }
+    ],
+    name: 'mainRemoveGovernor',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [{ internalType: 'uint256', name: 'starkKey', type: 'uint256' }],
+    name: 'register',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [{ internalType: 'address', name: 'verifier', type: 'address' }],
+    name: 'registerAvailabilityVerifier',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      { internalType: 'uint256', name: 'tokenId', type: 'uint256' },
+      { internalType: 'bytes', name: 'assetData', type: 'bytes' },
+      { internalType: 'uint256', name: 'quantum', type: 'uint256' }
+    ],
+    name: 'registerToken',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [{ internalType: 'address', name: 'newAdmin', type: 'address' }],
+    name: 'registerTokenAdmin',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [{ internalType: 'address', name: 'verifier', type: 'address' }],
+    name: 'registerVerifier',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [{ internalType: 'address', name: 'verifier', type: 'address' }],
+    name: 'removeAvailabilityVerifier',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      { internalType: 'address', name: 'removedOperator', type: 'address' }
+    ],
+    name: 'removeOperator',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [{ internalType: 'address', name: 'verifier', type: 'address' }],
+    name: 'removeVerifier',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [],
+    name: 'unFreeze',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [{ internalType: 'address', name: 'oldAdmin', type: 'address' }],
+    name: 'unregisterTokenAdmin',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [
+      { internalType: 'uint256[]', name: 'publicInput', type: 'uint256[]' },
+      { internalType: 'uint256[]', name: 'applicationData', type: 'uint256[]' }
+    ],
+    name: 'updateState',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
+    name: 'withdraw',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function'
   }
 ]
