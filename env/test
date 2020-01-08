@@ -1,7 +1,9 @@
 # replace with your own infura key, this key isn't guaranteed to work forever
 # using private node url for stark ex blockchain
-INFURA_URL=http://3.130.41.130:8545
-# Ethereum private key
+// Eth Node to connect
+NODE_URL=http://3.130.41.130:8545
+
+# Ethereum private key#prefixed with 0x
 PRIVATE_KEY=0x2111111111111111111111111111111111111111111111111111111111111111
 
 

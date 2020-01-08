@@ -19,8 +19,7 @@ describe('deposits', () => {
   it('Deposits token to users vault', async done => {
     const apiResponse = { deposit: 'success' }
 
-    const pvtKey =
-      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    const pvtKey = '100'
     const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
     const fullPublicKey = sw.ec.keyFromPublic(
       starkKeyPair.getPublic(true, 'hex'),
@@ -31,7 +30,7 @@ describe('deposits', () => {
       y: fullPublicKey.pub.getY().toString('hex')
     }
 
-    const amount = 100
+    const amount = 1
     const token = 'ZRX'
 
     nock('https://app.stg.deversifi.com/')

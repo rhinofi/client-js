@@ -26,7 +26,7 @@ module.exports = async (dvf, token, amount, starkKeyPair) => {
       Math.floor(Date.now() / (1000 * 3600)) + dvf.config.defaultExpiry
   try {
     const depositStatus = await dvf.contract.deposit(tempVaultId, token, amount)
-    console.log(`deposit contract call result: ${depositStatus}`, depositStatus)
+    console.log('deposit contract call result: ', depositStatus)
 
     starkMessage = dvf.stark.getTransferMsg(
       amount,
@@ -39,7 +39,7 @@ module.exports = async (dvf, token, amount, starkKeyPair) => {
     ).starkMessage
 
     starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
-    // console.log({starkMessage, starkSignature})
+    console.log({ starkMessage, starkSignature })
   } catch (e) {
     console.log(`error: ${e}`)
     // Error handling, user corrections

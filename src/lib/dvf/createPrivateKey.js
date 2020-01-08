@@ -1,9 +1,10 @@
 const errorReasons = require('../error/reasons')
 const crypto = require('crypto')
-
+// TODO: Add check to ensure private key generated
+//       is less than penderson EC_ORDER
 module.exports = () => {
   try {
-    crypto.randomBytes(128, (err, buf) => {
+    crypto.randomBytes(31, (err, buf) => {
       if (err) {
         return {
           error: 'ERR_PRIVATEKEY_CREATION',

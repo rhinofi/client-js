@@ -1,4 +1,5 @@
 const reasons = require('../../lib/error/reasons')
+const BN = require('bignumber.js')
 
 module.exports = async (dvf, starkKey, ethAddress) => {
   const { web3 } = dvf
@@ -19,20 +20,27 @@ module.exports = async (dvf, starkKey, ethAddress) => {
       .register(`0x${starkKey}`)
       .send(sendArguments)
   } catch (e) {
-    console.log('error is: ', e)
+    console.log('contract/stark/register error is: ', e)
     return {
       error: 'ERR_STARK_REGISTRATION',
       reason: reasons.ERR_STARK_REGISTRATION.trim()
     }
   }
 
-  if (onchainResult && onchainResult.status === true)
+  if (onchainResult || onchainResult.status === true)
     try {
       const fromStark = await starkInstance.methods
         .getStarkKey(ethAddress)
         .call()
-      console.log('key from stark ', fromStark)
-      if (fromStark && fromStark === starkKey) {
+
+      const fromStarkHex = new BN(fromStark).toString(16)
+
+      console.log(
+        'key retrieved registered with stark: ',
+        fromStark,
+        fromStarkHex
+      )
+      if (fromStarkHex === starkKey) {
         return true
       } else
         return {
@@ -40,6 +48,7 @@ module.exports = async (dvf, starkKey, ethAddress) => {
           reason: reasons.ERR_STARK_REGISTRATION_MISMATCH.trim()
         }
     } catch (e) {
+      console.log('contract/stark/getStarkKey error is: ', e)
       return {
         error: 'ERR_STARK_REGISTRATION_CONFIRMATION',
         reason: reasons.ERR_STARK_REGISTRATION_CONFIRMATION.trim()

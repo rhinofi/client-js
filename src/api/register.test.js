@@ -19,7 +19,8 @@ describe('registers', () => {
   it('Registers user with Stark Ex', async done => {
     const apiResponse = { register: 'success' }
 
-    const pvtKey = '0x1234567890'
+    const pvtKey =
+      '100'
     const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
     const fullPublicKey = sw.ec.keyFromPublic(
       starkKeyPair.getPublic(true, 'hex'),
@@ -27,19 +28,18 @@ describe('registers', () => {
     )
 
     const starkKey = fullPublicKey.pub.getX().toString('hex')
-    const ethAddress = '0xE0F9C119c8C4bA91aAa94CCc5AaE34D3A13601ff'
-    nonce = 'nonce'
-    signature =
-      '0x321ac89402c444ccf83952795ab10d561bc3749020c10a7ab5f77f24287fd713032d7bf1097bfa589b077050a3a9bbb68b0fce610f5ef79cfb7b7bd0d04825ce00'
-
+    const ethAddress = '0x6B7a66e2e2Eb0F02939b8651b2147c9eF1C079F5'
     console.log({ starkKey, ethAddress })
+    console.log('about to call register from test ', { starkKey, ethAddress })
     nock('https://app.stg.deversifi.com/')
       .post('/v1/trading/w/register', body => {
-        return _.isMatch(body, {
-          starkKey: starkKey
-          // nonce: nonce,
-          // signature: signature
-        })
+        return (
+          _.isMatch(body, {
+            starkKey: starkKey
+          }) &&
+          body.signature &&
+          body.nonce
+        )
       })
       .reply(200, apiResponse)
 
@@ -48,7 +48,6 @@ describe('registers', () => {
 
     done()
   })
-
   // it('Gives error for deposit with value of 0', async done => {
   //   const pvtKey =
   //     '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
