@@ -19,7 +19,11 @@ describe('getUserConfig', () => {
     const apiResponse = {
       DVF: {
         exchangeSymbols: ['tETHUSD', 'tZRXUSD', 'tZRXETH'],
-        exchangeAddress: '0xBd25cD867C304F079E696CBE44D958f3d3B683ba'
+        exchangeAddress: '0x1',
+        starkExContractAddress: '0xF3731d0cdC9834f6F32104580bD226EF1bc1A9F9',
+        tempStarkVaultId: 1,
+        depositExpiry: 720,
+        depositNonce: 1
       },
       tokenRegistry: {
         ETH: {
@@ -37,7 +41,7 @@ describe('getUserConfig', () => {
           starkVaultId: '0xa2'
         },
         ZRX: {
-          decimals: 18,
+          decimals: 16,
           tokenAddress: '0xe41d2489571d322189246dafa5ebde1f4699f498',
           minOrderSize: 40,
           starkTokenId: '0x3',

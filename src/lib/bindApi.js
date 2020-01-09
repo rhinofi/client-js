@@ -26,8 +26,10 @@ module.exports = () => {
   dvf.stark = {
     createOrder: compose(require('../api/contract/createOrder')),
     sign: compose(require('../api/contract/signOrder')),
-    // dvf not required
-    getTransferMsg: require('../api/contract/getTransferMessage')
+    getTransferMsg: require('../api/contract/getTransferMessage'),
+    createPrivateKey: require('./dvf/createPrivateKey'),
+    createStarkKeyPair: require('./dvf/createStarkKeyPair'),
+    register: require('../api/contract/register')
   }
   // dvf.contract functions
   dvf.contract = {
@@ -63,6 +65,7 @@ module.exports = () => {
   dvf.getOrder = compose(require('../api/getOrder'))
   dvf.getOrdersHist = compose(require('../api/getOrdersHist'))
   dvf.getOrders = compose(require('../api/getOrders'))
+  dvf.register = compose(require('../api/register'))
   dvf.submitBuyOrder = compose(require('../api/submitBuyOrder'))
   dvf.submitOrder = compose(require('../api/submitOrder'))
   dvf.submitSellOrder = compose(require('../api/submitSellOrder'))

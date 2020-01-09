@@ -4,16 +4,16 @@
 const HDWalletProvider = require('truffle-hdwallet-provider')
 const Web3 = require('web3')
 
-const EFX = require('../../src/efx')
+const EFX = require('../../src/dvf')
 
 module.exports = async () => {
-  const infuraURL = process.env.INFURA_URL
+  const nodeURL = process.env.NODE_URL
   const privateKey = process.env.PRIVATE_KEY
 
-  const provider = new HDWalletProvider(privateKey, infuraURL)
+  const provider = new HDWalletProvider(privateKey, nodeURL)
 
   const web3 = new Web3(provider)
-
+  
   let config = {}
 
   // It's possible to overwrite the API address with the testnet address

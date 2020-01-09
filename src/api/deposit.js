@@ -3,7 +3,7 @@ const sw = require('starkware_crypto')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
 module.exports = async (dvf, token, amount, starkKeyPair) => {
-  const assertionError = await validateAssertions({dvf, amount, token})
+  const assertionError = await validateAssertions({ dvf, amount, token })
   if (assertionError) return assertionError
 
   const tempVaultId = 1
@@ -11,7 +11,10 @@ module.exports = async (dvf, token, amount, starkKeyPair) => {
   const tokenId = dvf.config.tokenRegistry[token].starkTokenId
   const vaultId = dvf.config.tokenRegistry[token].starkVaultId
 
-  const fullPublicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
+  const fullPublicKey = sw.ec.keyFromPublic(
+    starkKeyPair.getPublic(true, 'hex'),
+    'hex'
+  )
   const starkPublicKey = {
     x: fullPublicKey.pub.getX().toString('hex'),
     y: fullPublicKey.pub.getY().toString('hex')
@@ -19,10 +22,11 @@ module.exports = async (dvf, token, amount, starkKeyPair) => {
 
   var starkMessage = '',
     starkSignature = '',
-    expireTime = (Math.floor(Date.now() / (1000 * 3600)) + dvf.config.defaultExpiry)
+    expireTime =
+      Math.floor(Date.now() / (1000 * 3600)) + dvf.config.defaultExpiry
   try {
-    // const depositStatus = await dvf.contract.deposit(tempVaultId, token, amount, userAddress);
-    // console.log(`deposit contract call result: ${depositStatus}`, depositStatus)
+    const depositStatus = await dvf.contract.deposit(tempVaultId, token, amount)
+    console.log('deposit contract call result: ', depositStatus)
 
     starkMessage = dvf.stark.getTransferMsg(
       amount,
@@ -31,11 +35,11 @@ module.exports = async (dvf, token, amount, starkKeyPair) => {
       tokenId, // token
       vaultId, // receiver_vault_id
       `0x${starkPublicKey.x}`, // receiver_public_key
-      expireTime// expiration_timestamp
+      expireTime // expiration_timestamp
     ).starkMessage
 
     starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
-    // console.log({starkMessage, starkSignature})
+    console.log({ starkMessage, starkSignature })
   } catch (e) {
     console.log(`error: ${e}`)
     // Error handling, user corrections

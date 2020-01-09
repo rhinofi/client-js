@@ -1,4 +1,13 @@
 # replace with your own infura key, this key isn't guaranteed to work forever
-INFURA_URL=https://mainnet.infura.io/v3/af1d9fbeceb44e76be1bb93738f00d19
+# using private node url for stark ex blockchain
+// Eth Node to connect
+NODE_URL=http://3.130.41.130:8545
+
+# Ethereum private key#prefixed with 0x
+PRIVATE_KEY=0x2111111111111111111111111111111111111111111111111111111111111111
+
+
+# previous values:
+# INFURA_URL=https://mainnet.infura.io/v3/af1d9fbeceb44e76be1bb93738f00d19
 # generated using https://vanity-eth.tk
-PRIVATE_KEY=0x49e4d1e2aa7d026188251392dd2d335c176d846d8a894a8092c835f3b345e2ad
+# PRIVATE_KEY=0x49e4d1e2aa7d026188251392dd2d335c176d846d8a894a8092c835f3b345e2ad

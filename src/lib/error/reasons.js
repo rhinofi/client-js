@@ -1,4 +1,25 @@
 module.exports = {
+  ERR_ETH_ADDRESS_MISSING: `
+    NO Ethereum Account address provided
+  `,
+  ERR_INVALID_ETH_ADDRESS: `
+    The Ethreum account address provided is not valid
+  `,
+  ERR_STARK_REGISTRATION_MISMATCH: `
+    The registered stark key does not match the provided stark key
+  `,
+  ERR_STARK_REGISTRATION_CONFIRMATION: `
+    There was an error in confirming if stark registration was successful
+  `,
+  ERR_STARK_REGISTRATION: `
+    There was an error while registering with Stark onchain
+  `,
+  ERR_PRIVATEKEY_CREATION: `
+    There was an error in creating a private key
+  `,
+  ERR_KEYPAIR_CREATION: `
+    There was an error in creating a public private key pair
+  `,
   ERR_INVALID_ORDER_ID: `
     No order id provided or the order id provided is not valid
   `,

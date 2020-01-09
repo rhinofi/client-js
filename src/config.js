@@ -1,6 +1,6 @@
 module.exports = {
-  // test environment 'https://test.ethfinex.com/trustless/v1',
-  api: 'https://api.deversifi.com/v1/trading',
+  // api: 'https://api.deversifi.com/v1/trading',
+  api: 'https://app.stg.deversifi.com/v1/trading',
 
   // default expiration time for orders in hours, used by create_order.js
   defaultExpiry: 720,
