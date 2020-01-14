@@ -1,5 +1,5 @@
 module.exports = (
-  efx,
+  dvf,
   symbol,
   amount,
   price,
@@ -15,7 +15,7 @@ module.exports = (
 ) => {
   // force amount to be negative ( sell order )
   amount = Math.abs(amount)
-  return efx.submitOrder(
+  return dvf.submitOrder(
     symbol,
     amount,
     price,

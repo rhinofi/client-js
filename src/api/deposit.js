@@ -41,7 +41,7 @@ module.exports = async (dvf, token, amount, starkKeyPair) => {
     starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
     console.log({ starkMessage, starkSignature })
   } catch (e) {
-    console.log(`error: ${e}`)
+    console.log(`error: ${e.message}`)
     // Error handling, user corrections
   }
 

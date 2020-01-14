@@ -7,14 +7,14 @@ const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 let dvf
 
-describe('getOrder', () => {
+describe('openOrders', () => {
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()
     dvf = await instance()
   })
 
-  it('Fetching orders from the API', async done => {
+  it('Fetches orders from public API', async done => {
     const apiResponse = { id: '408231' }
 
     nock('https://app.stg.deversifi.com/')

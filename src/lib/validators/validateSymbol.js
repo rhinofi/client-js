@@ -8,7 +8,6 @@ module.exports = (dvf, symbol) => {
     }
   }
   if (symbol) {
-
     const from = symbol.toString().split(':')[0]
     const to = symbol.toString().split(':')[1]
     if (!dvf.config.tokenRegistry[from] || !dvf.config.tokenRegistry[to]) {

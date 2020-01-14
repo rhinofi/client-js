@@ -8,7 +8,6 @@ const mockGetUserConf = require('./test/fixtures/getUserConf')
 let dvf
 
 describe('getBalance', () => {
-
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()
@@ -16,14 +15,15 @@ describe('getBalance', () => {
   })
 
   it('Returns the config recieved from the API', async done => {
-
     const apiResponse = { starkBalance: 'success' }
 
     nock('https://app.stg.deversifi.com/')
       .post('/v1/trading/r/getBalance', body => {
-        return _.isMatch(body, {
-          token: 'ETH',
-        }) && body.signature
+        return (
+          _.isMatch(body, {
+            token: 'ETH'
+          }) && body.signature
+        )
       })
       .reply(200, apiResponse)
 
@@ -34,7 +34,6 @@ describe('getBalance', () => {
   })
 
   it('GetBalance checks for missing token', async done => {
-
     const balance = await dvf.getBalance(null)
     expect(balance.error).toEqual('ERR_TOKEN_MISSING')
 
@@ -42,11 +41,9 @@ describe('getBalance', () => {
   })
 
   it('GetBalance checks for missing token', async done => {
-
     const balance = await dvf.getBalance('ETHUSD')
     expect(balance.error).toEqual('ERR_INVALID_TOKEN')
 
     done()
   })
-
 })
