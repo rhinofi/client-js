@@ -23,11 +23,12 @@ module.exports = async (dvf, starkKey, ethAddress) => {
     console.log('contract/stark/register error is: ', e)
     return {
       error: 'ERR_STARK_REGISTRATION',
-      reason: reasons.ERR_STARK_REGISTRATION.trim()
+      reason: reasons.ERR_STARK_REGISTRATION.trim(),
+      originalError: e.message
     }
   }
 
-  if (onchainResult || onchainResult.status === true)
+  if (onchainResult || onchainResult.status === true) {
     try {
       const fromStark = await starkInstance.methods
         .getStarkKey(ethAddress)
@@ -42,16 +43,20 @@ module.exports = async (dvf, starkKey, ethAddress) => {
       )
       if (fromStarkHex === starkKey) {
         return true
-      } else
+      } else {
         return {
           error: 'ERR_STARK_REGISTRATION_MISMATCH',
-          reason: reasons.ERR_STARK_REGISTRATION_MISMATCH.trim()
+          reason: reasons.ERR_STARK_REGISTRATION_MISMATCH.trim(),
+          originalError: e.message
         }
+      }
     } catch (e) {
       console.log('contract/stark/getStarkKey error is: ', e)
       return {
         error: 'ERR_STARK_REGISTRATION_CONFIRMATION',
-        reason: reasons.ERR_STARK_REGISTRATION_CONFIRMATION.trim()
+        reason: reasons.ERR_STARK_REGISTRATION_CONFIRMATION.trim(),
+        originalError: e.message
       }
     }
+  }
 }
