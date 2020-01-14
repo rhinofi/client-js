@@ -1,15 +1,15 @@
 const { post } = require('request-promise')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (efx, orderId, nonce, signature) => {
-  var url = efx.config.api + '/r/getOrder'
+module.exports = async (dvf, orderId, nonce, signature) => {
+  var url = dvf.config.api + '/r/getOrder'
 
-  const assertionError = await validateAssertions({efx, orderId})
+  const assertionError = await validateAssertions({ dvf, orderId })
   if (assertionError) return assertionError
 
   if (!nonce) {
     nonce = Date.now() / 1000 + 30 + ''
-    signature = await efx.sign(nonce.toString(16))
+    signature = await dvf.sign(nonce.toString(16))
   }
 
   const data = {

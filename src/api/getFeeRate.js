@@ -10,12 +10,12 @@ const DEVERSIFI_API = 'https://api.deversifi.com/api/v1/feeRate/'
  *
  * Calculate feeRate based on deversifi feeRate rules
  */
-module.exports = async (efx, symbol, amount, price) => {
+module.exports = async (dvf, symbol, amount, price) => {
   const volume = await calculateVolume(symbol, amount, price)
 
   // fetch freeRate from the api
 
-  const account = efx.get('account')
+  const account = dvf.get('account')
 
   const url = DEVERSIFI_API + account
 
