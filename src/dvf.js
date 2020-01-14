@@ -1,4 +1,4 @@
-const bind = require('./lib/bindApi')
+const bind = require('./lib/dvf/bindApi')
 const defaultConfig = require('./config')
 const Web3 = require('web3')
 const aware = require('aware')
