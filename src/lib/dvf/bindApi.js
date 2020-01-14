@@ -16,7 +16,7 @@ module.exports = () => {
     // prepending the dvf itself as first argument
     const partial = _.partial(funk, dvf)
 
-    return () => {
+    return async () => {
       try {
         // forward arguments received by the returned function
         return await partial.apply(null, arguments)
