@@ -1,6 +1,6 @@
 const sw = require('starkware_crypto')
 const createPrivateKey = require('./createPrivateKey')
-const errorReasons = require('../error/reasons')
+const errorReasons = require('../../lib/error/reasons')
 
 module.exports = privateKey => {
   if (!privateKey) {

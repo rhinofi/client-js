@@ -5,7 +5,8 @@ module.exports = async (dvf, starkKey, ethAddress) => {
   console.log(dvf.config.DVF.starkExContractAddress, starkKey, ethAddress)
   const assertionError = await validateAssertions({ dvf, starkKey, ethAddress })
   if (assertionError) return assertionError
-  const onchainRegister = await dvf.stark.register(dvf, starkKey, ethAddress)
+
+  const onchainRegister = true //await dvf.stark.register(dvf, starkKey, ethAddress)
   console.log({ onchainRegister })
   if (onchainRegister && onchainRegister.error) {
     return onchainRegister
