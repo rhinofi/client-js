@@ -1,10 +1,10 @@
 const { post } = require('request-promise')
 const parse = require('../lib/parse/response/orders')
 
-module.exports = async efx => {
-  const url = efx.config.api + '/r/getUserConf'
+module.exports = async dvf => {
+  const url = dvf.config.api + '/r/getUserConf'
   const nonce = Date.now()
-  const signature = await efx.sign(nonce.toString(16))
+  const signature = await dvf.sign(nonce.toString(16))
 
   const data = {
     nonce,

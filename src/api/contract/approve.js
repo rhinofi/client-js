@@ -6,8 +6,7 @@ const reasons = require('../../lib/error/reasons')
 module.exports = async (efx, token) => {
   const currency = efx.config.tokenRegistry[token]
 
-  // REVIEW: 2 ** 256 -1 should be the max value for "uint"
-  const amount = ((2 ** 256) - 1).toString(16)
+  const amount = (2 ** 256 - 1).toString(16)
 
   const args = [
     currency.wrapperAddress, // address _spender
@@ -15,17 +14,19 @@ module.exports = async (efx, token) => {
   ]
 
   // TODO: review error format
-  if (token === 'USD' && (await efx.contract.isApproved(token) !== 0)) {
+  if (token === 'USD' && (await efx.contract.isApproved(token)) !== 0) {
     return {
       error: 'ERR_TRADING_ETHFX_CANT_APPROVE_USDT_TWICE',
-      reason: reasons.ERR_TRADING_ETHFX_CANT_APPROVE_USDT_TWICE.trim()
+      reason: reasons.ERR_TRADING_ETHFX_CANT_APPROVE_USDT_TWICE.trim(),
+      originalError: e.message
     }
   }
 
   if (token === 'ETH') {
     return {
       error: 'ERR_TRADING_ETHFX_APPROVE_ETH_NOT_REQUIRED',
-      reason: reasons.ERR_TRADING_ETHFX_APPROVE_ETH_NOT_REQUIRED.trim()
+      reason: reasons.ERR_TRADING_ETHFX_APPROVE_ETH_NOT_REQUIRED.trim(),
+      originalError: e.message
     }
   }
 

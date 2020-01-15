@@ -26,7 +26,7 @@ module.exports = () => {
         starkVaultId: '0xb2'
       },
       ZRX: {
-        decimals: 16,
+        decimals: 18,
         tokenAddress: '0xe41d2489571d322189246dafa5ebde1f4699f498',
         minOrderSize: 40,
         starkTokenId:

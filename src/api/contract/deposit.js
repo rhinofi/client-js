@@ -34,7 +34,8 @@ module.exports = async (dvf, vaultId, token, amount, ownerAddress) => {
     if (!dvf.contract.isApproved(token)) {
       return {
         error: 'ERR_CORE_ETHFX_NEEDS_APPROVAL',
-        reason: reasons.ERR_CORE_ETHFX_NEEDS_APPROVAL.trim()
+        reason: reasons.ERR_CORE_ETHFX_NEEDS_APPROVAL.trim(),
+        originalError: e.message
       }
     } else {
       throw e

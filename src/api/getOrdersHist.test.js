@@ -7,19 +7,14 @@ const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 let dvf
 
-describe('getOrdersHist', () => {
-
+describe('orderHistory', () => {
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()
     dvf = await instance()
   })
 
-// TODO:
-/*
-
-describe('/orderHistory', () => {
-  it('OrderHistory request to DVF pub api....', async () => {
+  it('Returns the past orders recieved from the API....', async done => {
     const httpResponse = [
       {
         _id: '5b56333fd952c07b351c5940',
@@ -97,37 +92,31 @@ describe('/orderHistory', () => {
       }
     ]
 
-    const nonce = Date.now() / 1000 + ''
-    const signature = await efx.sign(nonce.toString(16))
+    const nonce = Date.now() / 1000 + 30 + ''
+    const signature = await dvf.sign(nonce.toString(16))
 
-    nock('https://staging-api.deversifi.com/')
+    nock('https://app.stg.deversifi.com/')
       .post('/v1/trading/r/orderHistory', body => {
-        assert.ok(body.nonce)
-        assert.ok(body.signature)
-        assert.ok(body.symbol)
-        return true
+        return (
+          _.isMatch(body, {
+            symbol: 'ETH:USDT'
+          }) &&
+          body.signature &&
+          body.nonce
+        )
       })
       .reply(200, httpResponse)
 
-    const response = await efx.getOrdersHist('ETHUSD', nonce, signature)
-    console.log('got result =>', response)
+    const orders = await dvf.getOrdersHist('ETH:USDT')
+    expect(orders).toEqual(httpResponse)
+
+    done()
   })
 
-  it('OrderHistory checks for symbol....', async () => {
-    const nonce = Date.now() / 1000 + 60 * 60 * 24 + ''
-    const signature = await efx.sign(nonce.toString(16))
+  it('OrderHistory checks for symbol....', async done => {
+    const orders = await dvf.getOrdersHist(null)
+    expect(orders.error).toEqual('ERR_INVALID_SYMBOL')
 
-    nock('https://staging-api.deversifi.com/')
-      .post('/v1/trading/r/orderHistory', async body => {
-        assert.equal(body.error, 'ERR_INVALID_SYMBOL')
-        return true
-      })
-      .reply(200)
-    const response = await efx.getOrdersHist(null, nonce, signature)
-    console.log('got result =>', response)
+    done()
   })
-})
-
-*/
-
 })

@@ -7,53 +7,40 @@ const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 let dvf
 
-describe('getOrders', () => {
-
+describe('getOrder', () => {
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()
     dvf = await instance()
   })
 
-// TODO:
-/*
-
-describe('/openOrders', () => {
-  it('openOrders posts to DVF Pub Api....', async () => {
+  it('Gets an order from the API using OrderId....', async done => {
     const apiResponse = [[1234]]
 
     const nonce = Date.now() / 1000 + 60 * 60 * 24 + ''
-    const signature = await efx.sign(nonce.toString(16))
+    const signature = await dvf.sign(nonce.toString(16))
 
-    nock('https://staging-api.deversifi.com/')
-      .post('/v1/trading/r/openOrders', body => {
-        assert.ok(body.nonce)
-        assert.ok(body.signature)
-        assert.ok(body.symbol)
-        return true
+    nock('https://app.stg.deversifi.com/')
+      .post('/v1/trading/r/getOrder', body => {
+        return (
+          _.isMatch(body, {
+            orderId: '123'
+          }) &&
+          body.signature &&
+          body.nonce
+        )
       })
       .reply(200, apiResponse)
 
-    const response = await efx.getOrders('ETHUSD', nonce, signature)
-    console.log('got result =>', response)
-    assert.deepEqual(response, apiResponse)
+    const order = await dvf.getOrder('123')
+    expect(order).toEqual(apiResponse)
+
+    done()
   })
 
-  it('OpenOrders checks for symbol....', async () => {
-    const nonce = Date.now() / 1000 + 60 * 60 * 24 + ''
-    const signature = await efx.sign(nonce.toString(16))
-
-    nock('https://staging-api.deversifi.com/')
-      .post('/v1/trading/r/openOrders', async body => {
-        assert.equal(body.error, 'ERR_INVALID_SYMBOL')
-        return true
-      })
-      .reply(200)
-    const response = await efx.getOrders(null, nonce, signature)
-    console.log('got result =>', response)
+  it('getOrder checks for orderId....', async done => {
+    const order = await dvf.getOrder(null)
+    expect(order.error).toEqual('ERR_INVALID_ORDER_ID')
+    done()
   })
-})
-
-*/
-
 })

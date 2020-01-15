@@ -7,7 +7,6 @@ const mockGetUserConf = require('./test/fixtures/getUserConf')
 let dvf
 
 describe('getUserConfig', () => {
-
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()
@@ -15,7 +14,6 @@ describe('getUserConfig', () => {
   })
 
   it('Returns the user config recieved from the API', async done => {
-
     const apiResponse = {
       DVF: {
         exchangeSymbols: ['tETHUSD', 'tZRXUSD', 'tZRXETH'],
@@ -41,7 +39,7 @@ describe('getUserConfig', () => {
           starkVaultId: '0xa2'
         },
         ZRX: {
-          decimals: 16,
+          decimals: 18,
           tokenAddress: '0xe41d2489571d322189246dafa5ebde1f4699f498',
           minOrderSize: 40,
           starkTokenId: '0x3',
@@ -51,8 +49,7 @@ describe('getUserConfig', () => {
     }
 
     nock('https://app.stg.deversifi.com/')
-      .post('/v1/trading/r/getUserConf',
-        body => body.nonce && body.signature)
+      .post('/v1/trading/r/getUserConf', body => body.nonce && body.signature)
       .reply(200, apiResponse)
 
     const config = await dvf.getUserConfig()
@@ -60,5 +57,4 @@ describe('getUserConfig', () => {
 
     done()
   })
-
 })
