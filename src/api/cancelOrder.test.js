@@ -16,7 +16,7 @@ describe('cancelOrder', () => {
     const apiResponse = { cancelOrder: 'success' }
 
     nock(dvf.config.api)
-      .post('/w/cancelOrder', {
+      .post('/v1/trading/w/cancelOrder', {
         orderId: orderId
       })
       .reply(200, apiResponse)
