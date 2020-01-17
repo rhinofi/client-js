@@ -9,7 +9,7 @@ module.exports = async (dvf, vaultId, token, amount, ownerAddress) => {
     .toString()
 
   const args = [
-    `0x${dvf.config.tokenRegistry[token].starkTokenId}`,
+    dvf.config.tokenRegistry[token].starkTokenId,
     vaultId,
     value
   ]

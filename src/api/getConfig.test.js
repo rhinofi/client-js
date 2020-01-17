@@ -38,7 +38,7 @@ describe('getConfig', () => {
           decimals: 18,
           minOrderSize: 40,
           starkTokenId:
-            '22e6d888f32dea3c6e8ba64609a314eebbe1eb704e9e9febe368b0bacb21efe',
+            '0x22e6d888f32dea3c6e8ba64609a314eebbe1eb704e9e9febe368b0bacb21efe',
           tokenAddress: '0xe41d2489571d322189246dafa5ebde1f4699f498'
         }
       },
