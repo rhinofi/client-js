@@ -33,8 +33,8 @@ describe('deposits', () => {
     const amount = 1
     const token = 'ZRX'
 
-    nock('https://app.stg.deversifi.com/')
-      .post('/v1/trading/w/deposit', body => {
+    nock(dvf.config.api)
+      .post('/w/deposit', body => {
         return (
           _.isMatch(body, {
             amount: amount,
