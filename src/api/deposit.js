@@ -45,7 +45,7 @@ module.exports = async (dvf, token, amount, starkKeyPair) => {
     // Error handling, user corrections
   }
 
-  const url = dvf.config.api + '/w/deposit'
+  const url = dvf.config.api + '/v1/trading/w/deposit'
   const data = {
     starkPublicKey,
     token,

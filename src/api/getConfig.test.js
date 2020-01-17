@@ -46,7 +46,7 @@ describe('getConfig', () => {
     }
 
     nock(dvf.config.api)
-      .post('/r/getConf', {})
+      .post('/v1/trading/r/getConf', {})
       .reply(200, apiResponse)
 
     const config = await dvf.getConfig()

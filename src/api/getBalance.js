@@ -14,6 +14,6 @@ module.exports = async (dvf, token) => {
   }
 
   // console.log('data is ', data)
-  const url = dvf.config.api + '/r/getBalance'
+  const url = dvf.config.api + '/v1/trading/r/getBalance'
   return post(url, { json: data })
 }

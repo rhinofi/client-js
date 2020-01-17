@@ -97,7 +97,7 @@ describe('orderHistory', () => {
     const signature = await dvf.sign(nonce.toString(16))
 
     nock(dvf.config.api)
-      .post('/r/orderHistory', body => {
+      .post('/v1/trading/r/orderHistory', body => {
         return (
           _.isMatch(body, {
             symbol: 'ETH:USDT'

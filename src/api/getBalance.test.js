@@ -19,7 +19,7 @@ describe('getBalance', () => {
     const apiResponse = { starkBalance: 'success' }
 
     nock(dvf.config.api)
-      .post('/r/getBalance', body => {
+      .post('/v1/trading/r/getBalance', body => {
         return (
           _.isMatch(body, {
             token: 'ETH'

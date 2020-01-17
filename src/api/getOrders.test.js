@@ -19,7 +19,7 @@ describe('openOrders', () => {
     const apiResponse = { id: '408231' }
 
     nock(dvf.config.api)
-      .post('/r/openOrders', body => {
+      .post('/v1/trading/r/openOrders', body => {
         return (
           _.isMatch(body, {
             symbol: 'ETH:USDT'

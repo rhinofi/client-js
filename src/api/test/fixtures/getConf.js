@@ -36,7 +36,7 @@ module.exports = () => {
     }
   }
 
-  nock('https://app.stg.deversifi.com/')
+  nock('https://app.stg.deversifi.com')
     .post('/v1/trading/r/getConf', {})
     .reply(200, apiResponse)
 }

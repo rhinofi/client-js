@@ -50,7 +50,7 @@ describe('getUserConfig', () => {
     }
 
     nock(dvf.config.api)
-      .post('/r/getUserConf', body => body.nonce && body.signature)
+      .post('/v1/trading/r/getUserConf', body => body.nonce && body.signature)
       .reply(200, apiResponse)
 
     const config = await dvf.getUserConfig()

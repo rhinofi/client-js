@@ -22,7 +22,7 @@ describe('getOrder', () => {
     const signature = await dvf.sign(nonce.toString(16))
 
     nock(dvf.config.api)
-      .post('/r/getOrder', body => {
+      .post('/v1/trading/r/getOrder', body => {
         return (
           _.isMatch(body, {
             orderId: '123'
