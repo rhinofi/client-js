@@ -1,12 +1,15 @@
 const { post } = require('request-promise')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (dvf, starkKey, ethAddress) => {
-  console.log(dvf.config.DVF.starkExContractAddress, starkKey, ethAddress)
-  const assertionError = await validateAssertions({ dvf, starkKey, ethAddress })
+module.exports = async (dvf, starkKey, deFiSignature) => {
+  const assertionError = await validateAssertions({
+    dvf,
+    starkKey,
+    deFiSignature
+  })
   if (assertionError) return assertionError
 
-  const onchainRegister = await dvf.stark.register(dvf, starkKey, ethAddress)
+  const onchainRegister = true //await dvf.stark.register(dvf, starkKey, deFiSignature)
   console.log({ onchainRegister })
   if (onchainRegister && onchainRegister.error) {
     return onchainRegister
@@ -20,6 +23,5 @@ module.exports = async (dvf, starkKey, ethAddress) => {
     nonce,
     signature
   }
-
   return post(url, { json: data })
 }
