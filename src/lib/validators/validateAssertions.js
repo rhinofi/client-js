@@ -13,10 +13,9 @@ module.exports = async parameters => {
   const keys = Object.keys(parameters)
   for (const key of keys) {
     const error = await assertionErrors(key, parameters[key], parameters.dvf)
-    if (!error) {
-      continue
+    if (error) {
+      return error
     }
-    return error
   }
   return null
 }
