@@ -10,7 +10,7 @@ module.exports = async dvf => {
     nonce,
     signature
   }
-
-  const exchangeConf = await parse(post(url, { json: data }))
-  return exchangeConf
+  const exchangeUserConf = await parse(post(url, { json: data }))
+  dvf.config = Object.assign(dvf.config, exchangeUserConf)
+  return exchangeUserConf
 }

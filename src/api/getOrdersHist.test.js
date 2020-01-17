@@ -12,6 +12,7 @@ describe('orderHistory', () => {
     mockGetConf()
     mockGetUserConf()
     dvf = await instance()
+    await dvf.getUserConfig()
   })
 
   it('Returns the past orders recieved from the API....', async done => {
@@ -95,8 +96,8 @@ describe('orderHistory', () => {
     const nonce = Date.now() / 1000 + 30 + ''
     const signature = await dvf.sign(nonce.toString(16))
 
-    nock('https://app.stg.deversifi.com/')
-      .post('/v1/trading/r/orderHistory', body => {
+    nock(dvf.config.api)
+      .post('/r/orderHistory', body => {
         return (
           _.isMatch(body, {
             symbol: 'ETH:USDT'
