@@ -9,7 +9,7 @@ module.exports = async (dvf, starkKey, deFiSignature) => {
   })
   if (assertionError) return assertionError
 
-  const onchainRegister = true //await dvf.stark.register(dvf, starkKey, deFiSignature)
+  const onchainRegister = await dvf.stark.register(dvf, starkKey, deFiSignature)
   console.log({ onchainRegister })
   if (onchainRegister && onchainRegister.error) {
     return onchainRegister
