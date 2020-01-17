@@ -1,6 +1,7 @@
 const BigNumber = require('bignumber.js')
 
 module.exports = async (dvf, vaultId, token, amount, ownerAddress) => {
+  console.log('dvf ', dvf.config.api)
   const currency = dvf.config.tokenRegistry[token]
   const value = new BigNumber(10)
     .pow(currency.decimals)
@@ -35,7 +36,7 @@ module.exports = async (dvf, vaultId, token, amount, ownerAddress) => {
       return {
         error: 'ERR_CORE_ETHFX_NEEDS_APPROVAL',
         reason: reasons.ERR_CORE_ETHFX_NEEDS_APPROVAL.trim(),
-        originalError: e.message
+        originalError: e
       }
     } else {
       throw e
