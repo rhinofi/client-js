@@ -12,6 +12,7 @@ describe('getOrder', () => {
     mockGetConf()
     mockGetUserConf()
     dvf = await instance()
+    await dvf.getUserConfig()
   })
 
   it('Gets an order from the API using OrderId....', async done => {
@@ -20,8 +21,8 @@ describe('getOrder', () => {
     const nonce = Date.now() / 1000 + 60 * 60 * 24 + ''
     const signature = await dvf.sign(nonce.toString(16))
 
-    nock('https://app.stg.deversifi.com/')
-      .post('/v1/trading/r/getOrder', body => {
+    nock(dvf.config.api)
+      .post('/r/getOrder', body => {
         return (
           _.isMatch(body, {
             orderId: '123'

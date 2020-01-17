@@ -2,14 +2,12 @@ const nock = require('nock')
 const instance = require('./test/helpers/instance')
 
 const mockGetConf = require('./test/fixtures/getConf')
-const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 let dvf
 
 describe('getConfig', () => {
   beforeAll(async () => {
     mockGetConf()
-    mockGetUserConf()
     dvf = await instance()
   })
 
@@ -47,8 +45,8 @@ describe('getConfig', () => {
       spareStarkVaultId: 866076352
     }
 
-    nock('https://app.stg.deversifi.com/')
-      .post('/v1/trading/r/getConf', {})
+    nock(dvf.config.api)
+      .post('/r/getConf', {})
       .reply(200, apiResponse)
 
     const config = await dvf.getConfig()

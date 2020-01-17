@@ -12,13 +12,14 @@ describe('openOrders', () => {
     mockGetConf()
     mockGetUserConf()
     dvf = await instance()
+    await dvf.getUserConfig()
   })
 
   it('Fetches orders from public API', async done => {
     const apiResponse = { id: '408231' }
 
-    nock('https://app.stg.deversifi.com/')
-      .post('/v1/trading/r/openOrders', body => {
+    nock(dvf.config.api)
+      .post('/r/openOrders', body => {
         return (
           _.isMatch(body, {
             symbol: 'ETH:USDT'
