@@ -1,7 +1,8 @@
 const reasons = require('../../lib/error/reasons')
 const BN = require('bignumber.js')
 
-module.exports = async (dvf, starkKey, ethAddress) => {
+module.exports = async (dvf, starkKey, deFiSignature) => {
+  const ethAddress = dvf.get('account')
   const { web3 } = dvf
   const starkInstance = new web3.eth.Contract(
     dvf.contract.abi.StarkEx,
@@ -17,14 +18,14 @@ module.exports = async (dvf, starkKey, ethAddress) => {
   let onchainResult = ''
   try {
     onchainResult = await starkInstance.methods
-      .register(`0x${starkKey}`)
+      .register(`0x${starkKey}`, deFiSignature)
       .send(sendArguments)
   } catch (e) {
     console.log('contract/stark/register error is: ', e)
     return {
       error: 'ERR_STARK_REGISTRATION',
       reason: reasons.ERR_STARK_REGISTRATION.trim(),
-      originalError: e.message
+      originalError: e
     }
   }
 
@@ -46,8 +47,7 @@ module.exports = async (dvf, starkKey, ethAddress) => {
       } else {
         return {
           error: 'ERR_STARK_REGISTRATION_MISMATCH',
-          reason: reasons.ERR_STARK_REGISTRATION_MISMATCH.trim(),
-          originalError: e.message
+          reason: reasons.ERR_STARK_REGISTRATION_MISMATCH.trim()
         }
       }
     } catch (e) {
@@ -55,7 +55,7 @@ module.exports = async (dvf, starkKey, ethAddress) => {
       return {
         error: 'ERR_STARK_REGISTRATION_CONFIRMATION',
         reason: reasons.ERR_STARK_REGISTRATION_CONFIRMATION.trim(),
-        originalError: e.message
+        originalError: e
       }
     }
   }
