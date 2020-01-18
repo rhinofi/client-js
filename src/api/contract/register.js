@@ -17,8 +17,13 @@ module.exports = async (dvf, starkKey, deFiSignature) => {
 
   let onchainResult = ''
   try {
+    // TODO: un comment and use when new registration
+    // starl contract is updated for new registration process
+    // onchainResult = await starkInstance.methods
+    //   .register(`0x${starkKey}`, deFiSignature)
+    //   .send(sendArguments)
     onchainResult = await starkInstance.methods
-      .register(`0x${starkKey}`, deFiSignature)
+      .register(`0x${starkKey}`)
       .send(sendArguments)
   } catch (e) {
     console.log('contract/stark/register error is: ', e)

@@ -70,7 +70,6 @@ module.exports = () => {
   dvf.submitOrder = compose(require('../../api/submitOrder'))
   dvf.submitSellOrder = compose(require('../../api/submitSellOrder'))
   dvf.preRegister = compose(require('../../api/preRegister'))
-  dvf.newRegister = compose(require('../../api/newRegister'))
 
   return dvf
 }
