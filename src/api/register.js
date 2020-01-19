@@ -8,7 +8,7 @@ module.exports = async (dvf, starkKey) => {
   })
   if (assertionError) return assertionError
 
-  const onchainRegister = await dvf.stark.register(dvf, starkKey)
+  const onchainRegister = true //await dvf.stark.register(dvf, starkKey)
   console.log('onchain register contract call result: ', onchainRegister)
   if (onchainRegister.error) {
     return onchainRegister
