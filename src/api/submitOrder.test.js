@@ -31,7 +31,7 @@ describe('submitOrder', () => {
     const starkKey = publicKey.pub.getX().toString()
 
     nock(dvf.config.api)
-      .post('/w/submitOrder', body => {
+      .post('/v1/trading/w/submitOrder', body => {
         return _.matches({
           type: 'EXCHANGE LIMIT',
           symbol: 'ETH:USDT',
@@ -80,7 +80,7 @@ describe('submitOrder', () => {
     const starkKey = publicKey.pub.getX().toString()
 
     nock(dvf.config.api)
-      .post('/w/submitOrder', body => {
+      .post('/v1/trading/w/submitOrder', body => {
         return _.matches({
           type: 'EXCHANGE LIMIT',
           symbol: 'ETH:USDT',

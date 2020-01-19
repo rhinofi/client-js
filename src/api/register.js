@@ -16,7 +16,7 @@ module.exports = async (dvf, starkKey) => {
 
   const nonce = Date.now() / 1000 + 30 + ''
   const signature = await dvf.sign(nonce.toString(16))
-  const url = dvf.config.api + '/w/register'
+  const url = dvf.config.api + '/v1/trading/w/register'
   const data = {
     starkKey,
     nonce,

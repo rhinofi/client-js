@@ -26,7 +26,7 @@ describe('preRegister', () => {
 
     const starkKey = fullPublicKey.pub.getX().toString('hex')
     nock(dvf.config.api)
-      .post('/w/preRegister', body => {
+      .post('/v1/trading/w/preRegister', body => {
         return (
           _.isMatch(body, {
             starkKey: starkKey

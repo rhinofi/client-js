@@ -26,7 +26,7 @@ describe('registers', () => {
     console.log({ starkKey })
     console.log('about to call register from test ', { starkKey })
     nock(dvf.config.api)
-      .post('/w/register', body => {
+      .post('/v1/trading/w/register', body => {
         return (
           _.isMatch(body, {
             starkKey: starkKey

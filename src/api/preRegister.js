@@ -11,7 +11,7 @@ module.exports = async (dvf, starkKey) => {
     return assertionError
   }
 
-  const url = dvf.config.api + '/w/preRegister'
+  const url = dvf.config.api + '/v1/trading/w/preRegister'
   const data = {
     starkKey,
     ethAddress
