@@ -61,6 +61,6 @@ module.exports = async (
     starkSignature: starkSignature
   }
 
-  const url = dvf.config.api + '/w/submitOrder'
+  const url = dvf.config.api + '/v1/trading/w/submitOrder'
   return post(url, { json: data })
 }

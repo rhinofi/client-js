@@ -1,5 +1,6 @@
 const { post } = require('request-promise')
 const sw = require('starkware_crypto')
+const reasons = require('../lib/error/reasons')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
 module.exports = async (dvf, token, amount, starkKeyPair) => {
@@ -26,7 +27,7 @@ module.exports = async (dvf, token, amount, starkKeyPair) => {
       Math.floor(Date.now() / (1000 * 3600)) + dvf.config.defaultExpiry
   try {
     const depositStatus = await dvf.contract.deposit(tempVaultId, token, amount)
-    console.log('deposit contract call result: ', depositStatus)
+    console.log('onchain deposit contract call result: ', depositStatus)
 
     starkMessage = dvf.stark.getTransferMsg(
       amount,
@@ -41,11 +42,14 @@ module.exports = async (dvf, token, amount, starkKeyPair) => {
     starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
     console.log({ starkMessage, starkSignature })
   } catch (e) {
-    console.log(`error: ${e.message}`)
-    // Error handling, user corrections
+    return {
+      error: 'ERR_ONCHAIN_DEPOSIT',
+      reason: reasons.ERR_ONCHAIN_DEPOSIT.trim(),
+      originalError: e
+    }
   }
 
-  const url = dvf.config.api + '/w/deposit'
+  const url = dvf.config.api + '/v1/trading/w/deposit'
   const data = {
     starkPublicKey,
     token,

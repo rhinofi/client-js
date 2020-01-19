@@ -12,12 +12,13 @@ describe('getBalance', () => {
     mockGetConf()
     mockGetUserConf()
     dvf = await instance()
+    await dvf.getUserConfig()
   })
 
   it('Returns the config recieved from the API', async done => {
     const apiResponse = { starkBalance: 'success' }
 
-    nock('https://app.stg.deversifi.com/')
+    nock(dvf.config.api)
       .post('/v1/trading/r/getBalance', body => {
         return (
           _.isMatch(body, {

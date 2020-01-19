@@ -1,8 +1,8 @@
 const { post } = require('request-promise')
 
-module.exports = async efx => {
-  const url = efx.config.api + '/r/getConf'
+module.exports = async dvf => {
+  const url = dvf.config.api + '/v1/trading/r/getConf'
   const exchangeConf = await post(url, { json: {} })
-  efx.config = Object.assign({}, efx.config, exchangeConf)
+  dvf.config = Object.assign({}, dvf.config, exchangeConf)
   return exchangeConf
 }

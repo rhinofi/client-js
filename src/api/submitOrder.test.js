@@ -10,34 +10,40 @@ const _ = require('lodash')
 let dvf
 
 describe('submitOrder', () => {
-
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()
     dvf = await instance()
+    await dvf.getUserConfig()
   })
 
   it('Submits buy order and receives response', async done => {
-
     const apiResponse = { id: '408231' }
 
     // User Specific Parameters
-    const privateKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    const privateKey =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const starkKeyPair = sw.ec.keyFromPrivate(privateKey, 'hex')
-    const publicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
+    const publicKey = sw.ec.keyFromPublic(
+      starkKeyPair.getPublic(true, 'hex'),
+      'hex'
+    )
     const starkKey = publicKey.pub.getX().toString()
 
-    nock('https://app.stg.deversifi.com/')
-      .post('/v1/trading/w/submitOrder', _.matches({
-        type: 'EXCHANGE LIMIT',
-        symbol: 'ETH:USDT',
-        amount: '0.1',
-        price: 1000,
-        meta: {
-          ethAddress: '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404',
-          starkKey: '3382153814239323293087870650452838988136913683747955644970514321018482846275',
-        }
-      }))
+    nock(dvf.config.api)
+      .post('/v1/trading/w/submitOrder', body => {
+        return _.matches({
+          type: 'EXCHANGE LIMIT',
+          symbol: 'ETH:USDT',
+          amount: '0.1',
+          price: 1000,
+          meta: {
+            ethAddress: '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404',
+            starkKey:
+              '3382153814239323293087870650452838988136913683747955644970514321018482846275'
+          }
+        })
+      })
       .reply(200, apiResponse)
 
     const response = await dvf.submitOrder(
@@ -61,26 +67,32 @@ describe('submitOrder', () => {
   })
 
   it('Submits sell order and receives response', async done => {
-
     const apiResponse = { id: '408231' }
 
     // User Specific Parameters
-    const privateKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    const privateKey =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const starkKeyPair = sw.ec.keyFromPrivate(privateKey, 'hex')
-    const publicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
+    const publicKey = sw.ec.keyFromPublic(
+      starkKeyPair.getPublic(true, 'hex'),
+      'hex'
+    )
     const starkKey = publicKey.pub.getX().toString()
 
-    nock('https://app.stg.deversifi.com/')
-      .post('/v1/trading/w/submitOrder', _.matches({
-        type: 'EXCHANGE LIMIT',
-        symbol: 'ETH:USDT',
-        amount: '-0.1',
-        price: 1000,
-        meta: {
-          ethAddress: '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404',
-          starkKey: '3382153814239323293087870650452838988136913683747955644970514321018482846275',
-        }
-      }))
+    nock(dvf.config.api)
+      .post('/v1/trading/w/submitOrder', body => {
+        return _.matches({
+          type: 'EXCHANGE LIMIT',
+          symbol: 'ETH:USDT',
+          amount: '-0.1',
+          price: 1000,
+          meta: {
+            ethAddress: '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404',
+            starkKey:
+              '3382153814239323293087870650452838988136913683747955644970514321018482846275'
+          }
+        })
+      })
       .reply(200, apiResponse)
 
     const response = await dvf.submitOrder(
@@ -104,7 +116,6 @@ describe('submitOrder', () => {
   })
 
   it('Gives an error on missing symbol in request', async done => {
-
     const response = await dvf.submitOrder(
       '', // symbol
       '0.1', // amount
@@ -125,7 +136,6 @@ describe('submitOrder', () => {
   })
 
   it('Gives an error on invalid symbol format', async done => {
-
     const response = await dvf.submitOrder(
       'ETHS', // symbol
       '0.1', // amount
@@ -146,7 +156,6 @@ describe('submitOrder', () => {
   })
 
   it('Gives an error on invalid amount', async done => {
-
     const response = await dvf.submitOrder(
       'ETH:USDT', // symbol
       '0', // amount
@@ -167,7 +176,6 @@ describe('submitOrder', () => {
   })
 
   it('Gives an error on missing price', async done => {
-
     const response = await dvf.submitOrder(
       'ETH:USDT', // symbol
       '10', // amount
@@ -188,11 +196,14 @@ describe('submitOrder', () => {
   })
 
   it('Gives an error on missing starkKey', async done => {
-
     // User Specific Parameters
-    const privateKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    const privateKey =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const starkKeyPair = sw.ec.keyFromPrivate(privateKey, 'hex')
-    const publicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
+    const publicKey = sw.ec.keyFromPublic(
+      starkKeyPair.getPublic(true, 'hex'),
+      'hex'
+    )
     const starkKey = publicKey.pub.getX().toString()
 
     const response = await dvf.submitOrder(
@@ -215,11 +226,14 @@ describe('submitOrder', () => {
   })
 
   it('Gives an error on missing starkKeyPair', async done => {
-
     // User Specific Parameters
-    const privateKey = '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    const privateKey =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const starkKeyPair = sw.ec.keyFromPrivate(privateKey, 'hex')
-    const publicKey = sw.ec.keyFromPublic(starkKeyPair.getPublic(true, 'hex'), 'hex')
+    const publicKey = sw.ec.keyFromPublic(
+      starkKeyPair.getPublic(true, 'hex'),
+      'hex'
+    )
     const starkKey = publicKey.pub.getX().toString()
 
     const response = await dvf.submitOrder(
@@ -240,5 +254,4 @@ describe('submitOrder', () => {
 
     done()
   })
-
 })

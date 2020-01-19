@@ -1,11 +1,11 @@
 const { post } = require('request-promise')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (efx, orderId) => {
-  const assertionError = await validateAssertions({efx, orderId})
+module.exports = async (dvf, orderId) => {
+  const assertionError = await validateAssertions({dvf, orderId})
   if (assertionError) return assertionError
 
-  const url = efx.config.api + '/w/cancelOrder'
+  const url = dvf.config.api + '/v1/trading/w/cancelOrder'
   let data = {
     orderId: orderId
   }

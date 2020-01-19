@@ -2,15 +2,12 @@ const nock = require('nock')
 const instance = require('./test/helpers/instance')
 
 const mockGetConf = require('./test/fixtures/getConf')
-const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 let dvf
 
 describe('cancelOrder', () => {
-
   beforeAll(async () => {
     mockGetConf()
-    mockGetUserConf()
     dvf = await instance()
   })
 
@@ -18,7 +15,7 @@ describe('cancelOrder', () => {
     const orderId = '1'
     const apiResponse = { cancelOrder: 'success' }
 
-    nock('https://app.stg.deversifi.com/')
+    nock(dvf.config.api)
       .post('/v1/trading/w/cancelOrder', {
         orderId: orderId
       })
@@ -27,5 +24,4 @@ describe('cancelOrder', () => {
     expect(response).toEqual(apiResponse)
     done()
   })
-
 })

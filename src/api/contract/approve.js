@@ -18,7 +18,7 @@ module.exports = async (efx, token) => {
     return {
       error: 'ERR_TRADING_ETHFX_CANT_APPROVE_USDT_TWICE',
       reason: reasons.ERR_TRADING_ETHFX_CANT_APPROVE_USDT_TWICE.trim(),
-      originalError: e.message
+      originalError: e
     }
   }
 
@@ -26,7 +26,7 @@ module.exports = async (efx, token) => {
     return {
       error: 'ERR_TRADING_ETHFX_APPROVE_ETH_NOT_REQUIRED',
       reason: reasons.ERR_TRADING_ETHFX_APPROVE_ETH_NOT_REQUIRED.trim(),
-      originalError: e.message
+      originalError: e
     }
   }
 

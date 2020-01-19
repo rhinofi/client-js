@@ -11,10 +11,13 @@ const validateOrderId = require('./validateOrderId'),
 
 module.exports = async parameters => {
   const keys = Object.keys(parameters)
-  for (let key of keys) {
-    if ((result = await assertionErrors(key, parameters[key], parameters.dvf))) { return result }
+  for (const key of keys) {
+    const error = await assertionErrors(key, parameters[key], parameters.dvf)
+    if (error) {
+      return error
+    }
   }
-  return false
+  return null
 }
 
 const validators = {
@@ -27,7 +30,8 @@ const validators = {
   price: validatePrice,
   starkKey: validateStarkKey,
   starkKeyPair: validateStarkKeyPair,
-  ethAddress: validateAddress
+  ethAddress: validateAddress,
+  deFiSignature: validateSignature
 }
 
 const assertionErrors = (param, value, dvf) => {

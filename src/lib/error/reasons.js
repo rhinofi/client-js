@@ -1,4 +1,7 @@
 module.exports = {
+  ERR_ONCHAIN_DEPOSIT: `
+    There was an error while processing onchain deposit
+  `,
   ERR_ETH_ADDRESS_MISSING: `
     NO Ethereum Account address provided
   `,

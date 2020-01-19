@@ -14,6 +14,7 @@ describe('deposits', () => {
     mockGetConf()
     mockGetUserConf()
     dvf = await instance()
+    await dvf.getUserConfig()
   })
 
   it('Deposits token to users vault', async done => {
@@ -33,7 +34,7 @@ describe('deposits', () => {
     const amount = 1
     const token = 'ZRX'
 
-    nock('https://app.stg.deversifi.com/')
+    nock(dvf.config.api)
       .post('/v1/trading/w/deposit', body => {
         return (
           _.isMatch(body, {

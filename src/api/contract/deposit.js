@@ -8,7 +8,11 @@ module.exports = async (dvf, vaultId, token, amount, ownerAddress) => {
     .integerValue(BigNumber.ROUND_FLOOR)
     .toString()
 
-  const args = [dvf.config.tokenRegistry[token].starkTokenId, vaultId, value]
+  const args = [
+    dvf.config.tokenRegistry[token].starkTokenId,
+    vaultId,
+    value
+  ]
   console.log('about to call deposit: ', args)
   const action = 'deposit'
   // In order to lock ETH we simply send ETH to the lockerAddress
@@ -35,7 +39,7 @@ module.exports = async (dvf, vaultId, token, amount, ownerAddress) => {
       return {
         error: 'ERR_CORE_ETHFX_NEEDS_APPROVAL',
         reason: reasons.ERR_CORE_ETHFX_NEEDS_APPROVAL.trim(),
-        originalError: e.message
+        originalError: e
       }
     } else {
       throw e

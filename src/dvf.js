@@ -3,7 +3,7 @@ const defaultConfig = require('./config')
 const Web3 = require('web3')
 const aware = require('aware')
 const BigNumber = require('bignumber.js')
-BigNumber.config({ EXPONENTIAL_AT: 1e+9 })
+BigNumber.config({ EXPONENTIAL_AT: 1e9 })
 
 /**
  * web3 - web3 object
@@ -56,10 +56,6 @@ module.exports = async (web3, userConfig = {}) => {
   if (!dvf.get('account')) {
     console.warn('Please specify a valid account or account index')
   }
-
-  // Add userConfig to config
-  const exchangeUserConf = await dvf.getUserConfig()
-  dvf.config = Object.assign(dvf.config, exchangeUserConf)
 
   return dvf
 }
