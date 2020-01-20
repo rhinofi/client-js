@@ -24,18 +24,21 @@ describe('preRegister', () => {
       'hex'
     )
 
-    const starkKey = fullPublicKey.pub.getX().toString('hex')
+    const starkPublicKey = {
+      x: fullPublicKey.pub.getX().toString('hex'),
+      y: fullPublicKey.pub.getY().toString('hex')
+    }
     nock(dvf.config.api)
       .post('/v1/trading/w/preRegister', body => {
         return (
           _.isMatch(body, {
-            starkKey: starkKey
+            starkKey: starkPublicKey.x
           }) && body.ethAddress
         )
       })
       .reply(200, apiResponse)
 
-    const response = await dvf.preRegister(starkKey)
+    const response = await dvf.preRegister(starkPublicKey)
     expect(response).toEqual(apiResponse)
 
     done()
