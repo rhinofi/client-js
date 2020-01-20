@@ -29,7 +29,8 @@ module.exports = () => {
     getTransferMsg: require('../../api/contract/getTransferMessage'),
     createPrivateKey: require('../../api/stark/createPrivateKey'),
     createStarkKeyPair: require('../../api/stark/createStarkKeyPair'),
-    register: require('../../api/contract/register')
+    register: require('../../api/contract/register'),
+    createRawStarkKeyPair: require('../../api/stark/createRawStarkKeyPair')
   }
   // dvf.contract functions
   dvf.contract = {
