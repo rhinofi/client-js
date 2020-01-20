@@ -7,7 +7,8 @@ const validateOrderId = require('./validateOrderId'),
   validatePrice = require('./validatePrice'),
   validateStarkKey = require('./validateStarkKey'),
   validateStarkKeyPair = require('./validateStarkKeyPair'),
-  validateAddress = require('./validateAddress')
+  validateAddress = require('./validateAddress'),
+  validateStarkPrivateKey = require('./validateStarkPrivateKey')
 
 module.exports = async parameters => {
   const keys = Object.keys(parameters)
@@ -28,10 +29,11 @@ const validators = {
   signature: validateSignature,
   amount: validateAmount,
   price: validatePrice,
-  starkKey: validateStarkKey,
+  starkPublicKey: validateStarkKey,
   starkKeyPair: validateStarkKeyPair,
   ethAddress: validateAddress,
-  deFiSignature: validateSignature
+  deFiSignature: validateSignature,
+  starkPrivateKey: validateStarkPrivateKey
 }
 
 const assertionErrors = (param, value, dvf) => {
