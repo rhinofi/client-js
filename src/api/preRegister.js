@@ -1,11 +1,11 @@
 const { post } = require('request-promise')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (dvf, starkKey) => {
+module.exports = async (dvf, starkPublicKey) => {
   const ethAddress = dvf.get('account')
   const assertionError = await validateAssertions({
     dvf,
-    starkKey
+    starkPublicKey
   })
   if (assertionError) {
     return assertionError
@@ -13,7 +13,7 @@ module.exports = async (dvf, starkKey) => {
 
   const url = dvf.config.api + '/v1/trading/w/preRegister'
   const data = {
-    starkKey,
+    starkKey: starkPublicKey.x,
     ethAddress
   }
   return post(url, { json: data })

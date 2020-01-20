@@ -19,17 +19,8 @@ describe('submitOrder', () => {
 
   it('Submits buy order and receives response', async done => {
     const apiResponse = { id: '408231' }
-
-    // User Specific Parameters
     const privateKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
-    const starkKeyPair = sw.ec.keyFromPrivate(privateKey, 'hex')
-    const publicKey = sw.ec.keyFromPublic(
-      starkKeyPair.getPublic(true, 'hex'),
-      'hex'
-    )
-    const starkKey = publicKey.pub.getX().toString()
-
     nock(dvf.config.api)
       .post('/v1/trading/w/submitOrder', body => {
         return _.matches({
@@ -40,7 +31,7 @@ describe('submitOrder', () => {
           meta: {
             ethAddress: '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404',
             starkKey:
-              '3382153814239323293087870650452838988136913683747955644970514321018482846275'
+              '77a3b314db07c45076d11f62b6f9e748a39790441823307743cf00d6597ea43'
           }
         })
       })
@@ -57,10 +48,8 @@ describe('submitOrder', () => {
       '', // partnerId
       '', // feeRate
       '', // dynamicFeeRate
-      starkKey,
-      starkKeyPair
+      privateKey
     )
-
     expect(response.id).toEqual(apiResponse.id)
 
     done()
@@ -89,7 +78,7 @@ describe('submitOrder', () => {
           meta: {
             ethAddress: '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404',
             starkKey:
-              '3382153814239323293087870650452838988136913683747955644970514321018482846275'
+              '77a3b314db07c45076d11f62b6f9e748a39790441823307743cf00d6597ea43'
           }
         })
       })
@@ -106,10 +95,8 @@ describe('submitOrder', () => {
       '', // partnerId
       '', // feeRate
       '', // dynamicFeeRate
-      starkKey,
-      starkKeyPair
+      privateKey
     )
-
     expect(response.id).toEqual(apiResponse.id)
 
     done()
@@ -127,7 +114,6 @@ describe('submitOrder', () => {
       '', // partnerId
       '', // feeRate
       '', // dynamicFeeRate
-      '',
       ''
     )
     expect(response.error).toEqual('ERR_INVALID_SYMBOL')
@@ -147,7 +133,6 @@ describe('submitOrder', () => {
       '', // partnerId
       '', // feeRate
       '', // dynamicFeeRate
-      '',
       ''
     )
     expect(response.error).toEqual('ERR_INVALID_SYMBOL')
@@ -167,7 +152,6 @@ describe('submitOrder', () => {
       '', // partnerId
       '', // feeRate
       '', // dynamicFeeRate
-      '',
       ''
     )
     expect(response.error).toEqual('ERR_AMOUNT_MISSING')
@@ -187,7 +171,6 @@ describe('submitOrder', () => {
       '', // partnerId
       '', // feeRate
       '', // dynamicFeeRate
-      '',
       ''
     )
     expect(response.error).toEqual('ERR_PRICE_MISSING')
@@ -195,17 +178,7 @@ describe('submitOrder', () => {
     done()
   })
 
-  it('Gives an error on missing starkKey', async done => {
-    // User Specific Parameters
-    const privateKey =
-      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
-    const starkKeyPair = sw.ec.keyFromPrivate(privateKey, 'hex')
-    const publicKey = sw.ec.keyFromPublic(
-      starkKeyPair.getPublic(true, 'hex'),
-      'hex'
-    )
-    const starkKey = publicKey.pub.getX().toString()
-
+  it('Gives an error on missing starkPrivateKey', async done => {
     const response = await dvf.submitOrder(
       'ETH:USDT', // symbol
       '10', // amount
@@ -217,40 +190,9 @@ describe('submitOrder', () => {
       '', // partnerId
       '', // feeRate
       '', // dynamicFeeRate
-      '',
-      starkKeyPair
-    )
-    expect(response.error).toEqual('ERR_STARK_KEY_MISSING')
-
-    done()
-  })
-
-  it('Gives an error on missing starkKeyPair', async done => {
-    // User Specific Parameters
-    const privateKey =
-      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
-    const starkKeyPair = sw.ec.keyFromPrivate(privateKey, 'hex')
-    const publicKey = sw.ec.keyFromPublic(
-      starkKeyPair.getPublic(true, 'hex'),
-      'hex'
-    )
-    const starkKey = publicKey.pub.getX().toString()
-
-    const response = await dvf.submitOrder(
-      'ETH:USDT', // symbol
-      '10', // amount
-      '100', // price
-      '', // gid
-      '', // cid
-      '0', // signedOrder
-      '0', // validFor
-      '', // partnerId
-      '', // feeRate
-      '', // dynamicFeeRate
-      starkKey,
       ''
     )
-    expect(response.error).toEqual('ERR_STARK_KEY_PAIR_MISSING')
+    expect(response.error).toEqual('ERR_STARK_PRIVATE_KEY_MISSING')
 
     done()
   })

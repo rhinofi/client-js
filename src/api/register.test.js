@@ -22,14 +22,15 @@ describe('registers', () => {
       starkKeyPair.getPublic(true, 'hex'),
       'hex'
     )
-    const starkKey = fullPublicKey.pub.getX().toString('hex')
-    console.log({ starkKey })
-    console.log('about to call register from test ', { starkKey })
+    const starkPublicKey = {
+      x: fullPublicKey.pub.getX().toString('hex'),
+      y: fullPublicKey.pub.getY().toString('hex')
+    }
     nock(dvf.config.api)
       .post('/v1/trading/w/register', body => {
         return (
           _.isMatch(body, {
-            starkKey: starkKey
+            starkKey: starkPublicKey.x
           }) &&
           body.signature &&
           body.nonce
@@ -37,15 +38,15 @@ describe('registers', () => {
       })
       .reply(200, apiResponse)
 
-    const result = await dvf.register(starkKey)
+    const result = await dvf.register(starkPublicKey)
     expect(result).toEqual(apiResponse)
 
     done()
   })
 
   it('Register method checks for starkKey', async done => {
-    const starkKey = ''
-    const response = await dvf.register(starkKey)
+    const starkPublicKey = ''
+    const response = await dvf.register(starkPublicKey)
     expect(response.error).toEqual('ERR_STARK_KEY_MISSING')
     done()
   })

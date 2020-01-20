@@ -9,6 +9,7 @@ module.exports = privateKey => {
 
   try {
     const starkKeyPair = sw.ec.keyFromPrivate(privateKey, 'hex')
+
     const fullPublicKey = sw.ec.keyFromPublic(
       starkKeyPair.getPublic(true, 'hex'),
       'hex'
@@ -17,11 +18,12 @@ module.exports = privateKey => {
       x: fullPublicKey.pub.getX().toString('hex'),
       y: fullPublicKey.pub.getY().toString('hex')
     }
-    return { privateKey, starkPublicKey }
+
+    return { privateKey, starkKeyPair, starkPublicKey }
   } catch (e) {
     return {
-      error: 'ERR_KEYPAIR_CREATION',
-      reason: errorReasons.ERR_KEYPAIR_CREATION
+      error: 'ERR_PUBLICKEY_CREATION',
+      reason: errorReasons.ERR_PUBLICKEY_CREATION
     }
   }
 }

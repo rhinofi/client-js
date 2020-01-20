@@ -3,8 +3,13 @@ const sw = require('starkware_crypto')
 const reasons = require('../lib/error/reasons')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (dvf, token, amount, starkKeyPair) => {
-  const assertionError = await validateAssertions({ dvf, amount, token })
+module.exports = async (dvf, token, amount, starkPrivateKey) => {
+  const assertionError = await validateAssertions({
+    dvf,
+    amount,
+    token,
+    starkPrivateKey
+  })
   if (assertionError) return assertionError
 
   const tempVaultId = 1
@@ -12,21 +17,16 @@ module.exports = async (dvf, token, amount, starkKeyPair) => {
   const tokenId = dvf.config.tokenRegistry[token].starkTokenId
   const vaultId = dvf.config.tokenRegistry[token].starkVaultId
 
-  const fullPublicKey = sw.ec.keyFromPublic(
-    starkKeyPair.getPublic(true, 'hex'),
-    'hex'
+  const { starkPublicKey, starkKeyPair } = dvf.stark.createRawStarkKeyPair(
+    starkPrivateKey
   )
-  const starkPublicKey = {
-    x: fullPublicKey.pub.getX().toString('hex'),
-    y: fullPublicKey.pub.getY().toString('hex')
-  }
 
   var starkMessage = '',
     starkSignature = '',
     expireTime =
       Math.floor(Date.now() / (1000 * 3600)) + dvf.config.defaultExpiry
   try {
-    const depositStatus = await dvf.contract.deposit(tempVaultId, token, amount)
+    const depositStatus = true // await dvf.contract.deposit(tempVaultId, token, amount)
     console.log('onchain deposit contract call result: ', depositStatus)
 
     starkMessage = dvf.stark.getTransferMsg(

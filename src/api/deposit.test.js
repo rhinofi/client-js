@@ -46,7 +46,7 @@ describe('deposits', () => {
       })
       .reply(200, apiResponse)
 
-    const result = await dvf.deposit(token, amount, starkKeyPair)
+    const result = await dvf.deposit(token, amount, pvtKey)
     expect(result).toEqual(apiResponse)
 
     done()
@@ -55,20 +55,10 @@ describe('deposits', () => {
   it('Gives error for deposit with value of 0', async done => {
     const pvtKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
-    const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
-    const fullPublicKey = sw.ec.keyFromPublic(
-      starkKeyPair.getPublic(true, 'hex'),
-      'hex'
-    )
-    const starkPublicKey = {
-      x: fullPublicKey.pub.getX().toString('hex'),
-      y: fullPublicKey.pub.getY().toString('hex')
-    }
-
     const amount = 0
     const token = 'ZRX'
 
-    const result = await dvf.deposit(token, amount, starkKeyPair)
+    const result = await dvf.deposit(token, amount, pvtKey)
     expect(result.error).toEqual('ERR_AMOUNT_MISSING')
 
     done()
@@ -77,20 +67,10 @@ describe('deposits', () => {
   it('Gives error if token is missing', async done => {
     const pvtKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
-    const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
-    const fullPublicKey = sw.ec.keyFromPublic(
-      starkKeyPair.getPublic(true, 'hex'),
-      'hex'
-    )
-    const starkPublicKey = {
-      x: fullPublicKey.pub.getX().toString('hex'),
-      y: fullPublicKey.pub.getY().toString('hex')
-    }
-
     const amount = 57
     const token = ''
 
-    const result = await dvf.deposit(token, amount, starkKeyPair)
+    const result = await dvf.deposit(token, amount, pvtKey)
     expect(result.error).toEqual('ERR_TOKEN_MISSING')
 
     done()
@@ -99,21 +79,22 @@ describe('deposits', () => {
   it('Gives error if token is not supported', async done => {
     const pvtKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
-    const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
-    const fullPublicKey = sw.ec.keyFromPublic(
-      starkKeyPair.getPublic(true, 'hex'),
-      'hex'
-    )
-    const starkPublicKey = {
-      x: fullPublicKey.pub.getX().toString('hex'),
-      y: fullPublicKey.pub.getY().toString('hex')
-    }
-
     const amount = 57
     const token = 'XYZ'
 
-    const result = await dvf.deposit(token, amount, starkKeyPair)
+    const result = await dvf.deposit(token, amount, pvtKey)
     expect(result.error).toEqual('ERR_INVALID_TOKEN')
+
+    done()
+  })
+
+  it('Gives error if pvtKey is not supported', async done => {
+    const pvtKey = ''
+    const amount = 57
+    const token = 'ZRX'
+
+    const result = await dvf.deposit(token, amount, pvtKey)
+    expect(result.error).toEqual('ERR_STARK_PRIVATE_KEY_MISSING')
 
     done()
   })
