@@ -1,4 +1,5 @@
 const { post } = require('request-promise')
+const sw = require('starkware_crypto')
 const validAssertions = require('../lib/validators/validateAssertions')
 
 module.exports = async (
@@ -13,16 +14,14 @@ module.exports = async (
   partnerId,
   feeRate,
   dynamicFeeRate,
-  starkKey,
-  starkKeyPair
+  starkPrivateKey
 ) => {
   const assertionError = await validAssertions({
     dvf,
     amount,
     symbol,
     price,
-    starkKey,
-    starkKeyPair
+    starkPrivateKey
   })
   if (assertionError) return assertionError
 
@@ -34,6 +33,9 @@ module.exports = async (
     price,
     validFor,
     feeRate
+  )
+  const { starkKeyPair, starkPublicKey } = dvf.stark.createRawStarkKeyPair(
+    starkPrivateKey
   )
 
   const starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
@@ -57,7 +59,7 @@ module.exports = async (
     starkOrder: starkOrder,
     starkMessage: starkMessage,
     ethAddress: ethAddress,
-    starkKey: starkKey,
+    starkKey: starkPublicKey.x,
     starkSignature: starkSignature
   }
 

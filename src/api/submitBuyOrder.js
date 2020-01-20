@@ -10,8 +10,7 @@ module.exports = (
   partner_id,
   fee_rate,
   dynamicFeeRate,
-  starkKey,
-  starkKeyPair
+  starkPrivateKey
 ) => {
   // force amount to be positive ( buy order )
   amount = Math.abs(amount)
@@ -26,7 +25,6 @@ module.exports = (
     partner_id,
     fee_rate,
     dynamicFeeRate,
-    starkKey,
-    starkKeyPair
+    starkPrivateKey
   )
 }
