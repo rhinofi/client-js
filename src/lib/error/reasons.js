@@ -185,5 +185,9 @@ module.exports = {
   `,
   ERR_TOKEN_MISSING: `
   Token not provided or token provided is not valid
+  `,
+  ERR_STARK_PRIVATE_KEY_MISSING: `User private key is missing`,
+  ERR_PUBLICKEY_CREATION: `
+    There was an error in creating a public key
   `
 }
