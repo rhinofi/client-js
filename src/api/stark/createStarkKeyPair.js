@@ -13,8 +13,11 @@ module.exports = privateKey => {
       starkKeyPair.getPublic(true, 'hex'),
       'hex'
     )
-    const starkKey = fullPublicKey.pub.getX().toString('hex')
-    return { privateKey, starkKey }
+    const starkPublicKey = {
+      x: fullPublicKey.pub.getX().toString('hex'),
+      y: fullPublicKey.pub.getY().toString('hex')
+    }
+    return { privateKey, starkPublicKey }
   } catch (e) {
     return {
       error: 'ERR_KEYPAIR_CREATION',
