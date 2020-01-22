@@ -38,7 +38,7 @@ module.exports = () => {
     ethAddress: '0xf858c2f2ac6b96df8c801bce90a3124a52d1915a'
   }
 
-  nock('https://app.stg.deversifi.com')
+  nock('https://api.deversifi.dev')
     .post('/v1/trading/r/getUserConf', body => {
       return true
     })

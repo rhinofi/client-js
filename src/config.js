@@ -1,6 +1,6 @@
 module.exports = {
   // api: 'https://api.deversifi.com/v1/trading',
-  api: 'https://app.stg.deversifi.com',
+  api: 'https://api.deversifi.dev',
 
   // default expiration time for orders in hours, used by create_order.js
   defaultExpiry: 720,
