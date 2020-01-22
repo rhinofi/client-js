@@ -9,9 +9,9 @@ module.exports = (dvf, nonce) => {
       reason: errorReasons.ERR_INVALID_NONCE
     }
   }
-  if ((Date.now() / 1000) - nonce > 1000) {
+  if (Date.now() - nonce > dvf.defaultNonceAge) {
     return {
-      error: 'NONCE_IS_TOO_OLD',
+      error: 'ERR_NONCE_IS_TOO_OLD',
       reason: errorReasons.ERR_NONCE_OLD
     }
   }
