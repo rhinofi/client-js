@@ -9,6 +9,7 @@ module.exports = async (dvf, nonce, signature, token) => {
     nonce,
     signature
   }
+  
   if (token) {
     data.token = token
   }

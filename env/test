@@ -1,7 +1,10 @@
 # replace with your own infura key, this key isn't guaranteed to work forever
 # using private node url for stark ex blockchain
 // Eth Node to connect
-NODE_URL=http://3.130.41.130:8545
+NODE_URL=https://ropsten.infura.io/v3/7bfab7398ae84af3b1b70c955cfd9491
+
+//http://0.0.0.0:8543
+//http://3.130.41.130:8545
 
 # Ethereum private key#prefixed with 0x
 PRIVATE_KEY=0x2111111111111111111111111111111111111111111111111111111111111111

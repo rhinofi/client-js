@@ -38,9 +38,10 @@ describe('deposits', () => {
       .post('/v1/trading/w/deposit', body => {
         return (
           _.isMatch(body, {
-            amount: amount,
             token: token,
-            starkPublicKey: starkPublicKey
+            amount: amount,
+            starkPublicKey: starkPublicKey,
+            starkVaultId: dvf.config.spareStarkVaultId
           }) && body.starkSignature
         )
       })

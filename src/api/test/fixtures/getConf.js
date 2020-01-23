@@ -34,7 +34,7 @@ module.exports = () => {
     spareStarkVaultId: 2090569095
   }
 
-  nock('https://app.stg.deversifi.com')
+  nock('https://api.deversifi.dev')
     .post('/v1/trading/r/getConf', {})
     .reply(200, apiResponse)
 }

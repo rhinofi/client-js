@@ -24,9 +24,9 @@ module.exports = () => {
   }
 
   dvf.stark = {
-    createOrder: compose(require('../../api/contract/createOrder')),
+    createStarkOrder: compose(require('../../api/stark/createStarkOrder')),
     sign: compose(require('../../api/contract/signOrder')),
-    getTransferMsg: require('../../api/contract/getTransferMessage'),
+    createTransferMsg: require('../../api/stark/createTransferMessage'),
     createPrivateKey: require('../../api/stark/createPrivateKey'),
     createStarkKeyPair: require('../../api/stark/createStarkKeyPair'),
     register: require('../../api/contract/register'),
@@ -37,7 +37,6 @@ module.exports = () => {
     approve: compose(require('../../api/contract/approve')),
     isApproved: compose(require('../../api/contract/isApproved')),
     deposit: compose(require('../../api/contract/deposit')),
-    createOrderV2: compose(require('../../api/contract/createOrder')),
     abi: {
       token: require('../../api/contract/abi/token.abi'),
       StarkEx: require('../../api/contract/abi/StarkEx.abi')
