@@ -8,11 +8,7 @@ module.exports = async (dvf, vaultId, token, amount, ownerAddress) => {
     .integerValue(BigNumber.ROUND_FLOOR)
     .toString()
 
-  const args = [
-    dvf.config.tokenRegistry[token].starkTokenId,
-    vaultId,
-    value
-  ]
+  const args = [dvf.config.tokenRegistry[token].starkTokenId, vaultId, value]
   console.log('about to call deposit: ', args)
   const action = 'deposit'
   // In order to lock ETH we simply send ETH to the lockerAddress

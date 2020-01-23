@@ -7,8 +7,8 @@ module.exports = async (dvf, starkPublicKey) => {
     starkPublicKey
   })
   if (assertionError) return assertionError
-
-  const onchainRegister = true // await dvf.stark.register(dvf, starkKey)
+  const starkKey = starkPublicKey.x
+  const onchainRegister = await dvf.stark.register(dvf, starkKey)
   console.log('onchain register contract call result: ', onchainRegister)
   if (onchainRegister.error) {
     return onchainRegister
@@ -18,7 +18,7 @@ module.exports = async (dvf, starkPublicKey) => {
   const signature = await dvf.sign(nonce.toString(16))
   const url = dvf.config.api + '/v1/trading/w/register'
   const data = {
-    starkKey: starkPublicKey.x,
+    starkKey,
     nonce,
     signature
   }
