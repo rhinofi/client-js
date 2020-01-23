@@ -93,7 +93,7 @@ describe('orderHistory', () => {
       }
     ]
 
-    const nonce = Date.now() / 1000 + 30 + ''
+    const nonce = Date.now() / 1000
     const signature = await dvf.sign(nonce.toString(16))
 
     nock(dvf.config.api)

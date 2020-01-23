@@ -5,7 +5,7 @@ module.exports = {
   // default expiration time for orders in hours, used by create_order.js
   defaultStarkExpiry: 720,
   // default nonce age in milli seconds
-  defaultNonceAge: 10800000,
+  defaultNonceAge: 10800,
   // in case no provider is provided we will try connecting to the this default
   // address
   defaultProvider: 'http://localhost:8545',

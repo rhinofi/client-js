@@ -24,6 +24,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
 
   var starkMessage = '',
     starkSignature = '',
+    // This should be in hours
     expireTime =
       Math.floor(Date.now() / (1000 * 3600)) + dvf.config.defaultStarkExpiry
   try {

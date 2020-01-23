@@ -56,7 +56,7 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
     // console.log( "Selling " + Math.abs(amount) + ' ' + sellSymbol + " for: " + price + ' ' + buySymbol )
   }
 
-  let expiration
+  let expiration // in hours
   expiration = Math.floor(Date.now() / (1000 * 3600))
   expiration += parseInt(validFor || dvf.config.defaultStarkExpiry)
 

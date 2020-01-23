@@ -18,7 +18,7 @@ describe('getBalance', () => {
   it(`Returns the user's token balance`, async done => {
     const apiResponse = { starkBalance: 'success' }
 
-    const nonce = Date.now()
+    const nonce = Date.now() / 1000
     const signature = await dvf.sign(nonce.toString(16))
 
     nock(dvf.config.api)
