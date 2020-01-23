@@ -12,7 +12,10 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
   const sellCurrency = dvf.config.tokenRegistry[sellSymbol]
   const buyCurrency = dvf.config.tokenRegistry[buySymbol]
   const vaultIdSell = sellCurrency.starkVaultId
-  const vaultIdBuy = buyCurrency.starkVaultId
+  let vaultIdBuy = buyCurrency.starkVaultId
+  if (!vaultIdBuy) {
+    vaultIdBuy = dvf.config.spareStarkVaultId
+  }
 
   if (!(sellCurrency && buyCurrency)) {
     throw new Error(`Symbol does not match`)
@@ -55,7 +58,7 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
 
   let expiration
   expiration = Math.floor(Date.now() / (1000 * 3600))
-  expiration += parseInt(validFor || dvf.config.defaultExpiry)
+  expiration += parseInt(validFor || dvf.config.defaultStarkExpiry)
 
   const starkOrder = {
     vaultIdSell: vaultIdSell,

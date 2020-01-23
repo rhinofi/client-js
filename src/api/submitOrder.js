@@ -27,7 +27,7 @@ module.exports = async (
 
   const ethAddress = dvf.get('account')
 
-  const { starkOrder, starkMessage } = dvf.stark.createOrder(
+  const { starkOrder, starkMessage } = dvf.stark.createStarkOrder(
     symbol,
     amount,
     price,
