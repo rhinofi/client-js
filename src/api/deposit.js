@@ -50,11 +50,8 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     }
   }
 
-  //const url = dvf.config.api + '/v1/trading/w/deposit'
-  //temp for local testing
-  const url = 'http://localhost:7777' + '/v1/trading/w/deposit'
+  const url = dvf.config.api + '/v1/trading/w/deposit'
   const data = {
-    
     token,
     amount,
     starkPublicKey,
