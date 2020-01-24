@@ -1,5 +1,5 @@
 const BigNumber = require('bignumber.js')
-const sw = require('starkware_crypto')
+const errorReasons = require('.././../lib/error/reasons')
 
 module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
   // symbols are always 3 letters
@@ -12,13 +12,22 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
   const sellCurrency = dvf.config.tokenRegistry[sellSymbol]
   const buyCurrency = dvf.config.tokenRegistry[buySymbol]
   const vaultIdSell = sellCurrency.starkVaultId
+  if (!vaultIdSell) {
+    return {
+      error: 'ERR_NO_TOKEN_VAULT',
+      reason: errorReasons.ERR_NO_TOKEN_VAULT
+    }
+  }
   let vaultIdBuy = buyCurrency.starkVaultId
   if (!vaultIdBuy) {
     vaultIdBuy = dvf.config.spareStarkVaultId
   }
 
   if (!(sellCurrency && buyCurrency)) {
-    throw new Error(`Symbol does not match`)
+    return {
+      error: 'ERR_SYMBOL_DOES_NOT_MATCH',
+      reason: errorReasons.ERR_SYMBOL_DOES_NOT_MATCH
+    }
   }
   let buyAmount, sellAmount
 
@@ -35,7 +44,21 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
       .times(price)
       .times(1 + (sellCurrency.settleSpread || 0))
       .integerValue(BigNumber.ROUND_FLOOR)
-    // console.log( "Buying " + amount + ' ' + buySymbol + " for: " + price + ' ' + sellSymbol )
+    console.log(
+      'Buying ' + amount + ' ' + buySymbol + ' for: ' + price + ' ' + sellSymbol
+    )
+    console.log(
+      'Buying ' +
+        buyAmount +
+        ' ' +
+        buySymbol +
+        ' for: ' +
+        price +
+        ' ' +
+        sellAmount +
+        ' ' +
+        sellSymbol
+    )
   }
 
   if (amount < 0) {
@@ -53,7 +76,21 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
       .abs()
       .times(1 + (sellCurrency.settleSpread || 0))
       .integerValue(BigNumber.ROUND_FLOOR)
-    // console.log( "Selling " + Math.abs(amount) + ' ' + sellSymbol + " for: " + price + ' ' + buySymbol )
+    console.log(
+      'Buying ' + amount + ' ' + buySymbol + ' for: ' + price + ' ' + sellSymbol
+    )
+    console.log(
+      'Buying ' +
+        buyAmount +
+        ' ' +
+        buySymbol +
+        ' for: ' +
+        price +
+        ' selling ' +
+        sellAmount +
+        ' ' +
+        sellSymbol
+    )
   }
 
   let expiration // in hours
@@ -76,23 +113,9 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
     nonce: 0,
     expirationTimestamp: expiration
   }
-  // console.log('stark order: ', starkOrder)
-  let starkMessage = ''
-  try {
-    starkMessage = sw.get_limit_order_msg(
-      vaultIdSell, // vault_sell (uint31)
-      vaultIdBuy, // vault_buy (uint31)
-      starkOrder.amountSell, // amount_sell (uint63 decimal str)
-      starkOrder.amountBuy, // amount_buy (uint63 decimal str)
-      starkOrder.tokenSell, // token_sell (hex str with 0x prefix < prime)np
-      starkOrder.tokenBuy, // token_buy (hex str with 0x prefix < prime)
-      starkOrder.nonce, // nonce (uint31)
-      starkOrder.expirationTimestamp // expiration_timestamp (uint22)
-    )
-    // Create stark message for order
-  } catch (e) {
-    throw `unable to create stark order message: ${e}`
-  }
+  console.log('stark order: ', starkOrder)
+  const starkMessage = dvf.stark.createOrderMessage(starkOrder)
+
   return {
     starkOrder: starkOrder,
     starkMessage: starkMessage

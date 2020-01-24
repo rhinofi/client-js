@@ -42,8 +42,8 @@ module.exports = async (
   const type = 'EXCHANGE LIMIT'
   const protocol = 'stark'
   const data = {
-    gid,
     cid,
+    gid,
     type,
     symbol,
     amount,

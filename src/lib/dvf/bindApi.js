@@ -25,7 +25,8 @@ module.exports = () => {
 
   dvf.stark = {
     createStarkOrder: compose(require('../../api/stark/createStarkOrder')),
-    sign: compose(require('../../api/contract/signOrder')),
+    createOrderMessage: require('../../api/stark/createOrderMessage'),
+    sign: require('../../api/stark/starkSign'),
     createTransferMsg: require('../../api/stark/createTransferMessage'),
     createPrivateKey: require('../../api/stark/createPrivateKey'),
     createStarkKeyPair: require('../../api/stark/createStarkKeyPair'),
