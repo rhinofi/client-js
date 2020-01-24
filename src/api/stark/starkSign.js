@@ -1,6 +1,7 @@
+const errorReasons = require('.././../lib/error/reasons')
 const sw = require('starkware_crypto')
 
-module.exports = (efx, starkKeyPair, starkMessage) => {
+module.exports = (starkKeyPair, starkMessage) => {
   let starkSignature = ''
   if (!starkKeyPair || !starkMessage) {
     throw 'Stark key pair or stark message missing'
@@ -8,7 +9,10 @@ module.exports = (efx, starkKeyPair, starkMessage) => {
   try {
     starkSignature = sw.sign(starkKeyPair, starkMessage)
   } catch (e) {
-    throw 'unable to sign'
+    return {
+      error: 'ERR_CREATING_STARK_SIGNATURE',
+      reason: errorReasons.ERR_CREATING_STARK_SIGNATURE
+    }
   }
   return starkSignature
 }
