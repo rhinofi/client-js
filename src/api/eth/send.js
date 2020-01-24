@@ -11,13 +11,8 @@ module.exports = async (dvf, abi, address, action, args, value = 0) => {
 
   let options = {
     from: dvf.get('account'),
-    // value: value,
-    gasLimit: 200000,
-    gasPrice: 14000000000
-  }
-
-  if (dvf.get('gasPrice')) {
-    options.gasPrice = dvf.get('gasPrice')
+    gasLimit: dvf.config.defaultGasLimit,
+    gasPrice: dvf.config.defaultGasPrice
   }
 
   return method.send(options)

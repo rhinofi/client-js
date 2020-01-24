@@ -11,8 +11,8 @@ module.exports = async (dvf, starkKey, deFiSignature) => {
 
   const sendArguments = {
     from: ethAddress,
-    gasLimit: 200000,
-    gasPrice: 14000000000
+    gasLimit: dvf.config.defaultGasLimit,
+    gasPrice: dvf.config.defaultGasPrice
   }
 
   let onchainResult = ''
