@@ -9,19 +9,10 @@ module.exports = async (dvf, abi, address, action, args, value = 0) => {
 
   const method = contract.methods[action](...args)
 
-  const estimatedGas = await method.estimateGas({
-    from: dvf.get('account'),
-    value: value
-  })
-
   let options = {
     from: dvf.get('account'),
-    value: value,
-    gas: estimatedGas
-  }
-
-  if (dvf.get('gasPrice')) {
-    options.gasPrice = dvf.get('gasPrice')
+    gasLimit: dvf.config.defaultGasLimit,
+    gasPrice: dvf.config.defaultGasPrice
   }
 
   return method.send(options)

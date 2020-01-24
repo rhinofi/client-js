@@ -28,6 +28,7 @@ describe('preRegister', () => {
       x: fullPublicKey.pub.getX().toString('hex'),
       y: fullPublicKey.pub.getY().toString('hex')
     }
+
     nock(dvf.config.api)
       .post('/v1/trading/w/preRegister', body => {
         return (

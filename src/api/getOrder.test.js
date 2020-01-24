@@ -18,9 +18,6 @@ describe('getOrder', () => {
   it('Gets an order from the API using OrderId....', async done => {
     const apiResponse = [[1234]]
 
-    const nonce = Date.now() / 1000 + 60 * 60 * 24 + ''
-    const signature = await dvf.sign(nonce.toString(16))
-
     nock(dvf.config.api)
       .post('/v1/trading/r/getOrder', body => {
         return (
