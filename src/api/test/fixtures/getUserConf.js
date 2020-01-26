@@ -15,23 +15,29 @@ module.exports = () => {
         decimals: 18,
         minOrderSize: 0.1,
         starkTokenId: '0x1',
-        starkVaultId: 1251434240
+        starkVaultId: 1000001
       },
-      USDT: {
+      USD: {
         decimals: 6,
-        tokenAddress: '0xdac17f958d2ee523a2206206994597c13d831ec7',
         minOrderSize: 25,
         settleSpread: -0.026,
         starkTokenId: '0x2',
-        starkVaultId: 9876512
+        tokenAddress: '0x4c5f66596197a86fb30a2435e2ef4ddcb39342c9',
+        starkVaultId: 1000002
       },
       ZRX: {
-        decimals: 16,
-        tokenAddress: '0xe41d2489571d322189246dafa5ebde1f4699f498',
+        decimals: 18,
         minOrderSize: 40,
-        starkTokenId:
-          '0x22e6d888f32dea3c6e8ba64609a314eebbe1eb704e9e9febe368b0bacb21efe',
-        starkVaultId: 1771994328
+        starkTokenId: '0x3',
+        tokenAddress: '0xcd077abedd831a3443ffbe24fb76661bbb17eb69',
+        starkVaultId: 1000003
+      },
+      BTC: {
+        decimals: 18,
+        minOrderSize: 0.0001,
+        starkTokenId: '0x4',
+        tokenAddress: '0x40d8978500bf68324a51533cd6a21e3e59be324a',
+        starkVaultId: 1000004
       }
     },
     spareStarkVaultId: 2090569095,
