@@ -17,8 +17,12 @@ describe('deposits', () => {
     await dvf.getUserConfig()
   })
 
-  it('Deposits token to users vault', async done => {
-    const apiResponse = { deposit: 'success' }
+  it('Deposits ERC20 token to users vault', async done => {
+    //1
+    //1000000000000000000
+    //18000000000000000000
+    const amount = 1
+    const token = 'ZRX'
 
     const pvtKey = '100'
     const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
@@ -30,24 +34,70 @@ describe('deposits', () => {
       x: fullPublicKey.pub.getX().toString('hex'),
       y: fullPublicKey.pub.getY().toString('hex')
     }
-
-    const amount = 1
-    const token = 'ZRX'
+    const apiResponse = {
+      token,
+      amount,
+      starkPublicKey
+    }
 
     nock(dvf.config.api)
       .post('/v1/trading/w/deposit', body => {
+        //console.log({ body })
         return (
-          _.isMatch(body, {
-            token: token,
-            amount: amount,
-            starkPublicKey: starkPublicKey,
-            starkVaultId: dvf.config.spareStarkVaultId
-          }) && body.starkSignature
+          _.isMatch(body, apiResponse) &&
+          body.starkSignature &&
+          body.starkVaultId
         )
       })
       .reply(200, apiResponse)
 
     const result = await dvf.deposit(token, amount, pvtKey)
+    //console.log({ result })
+    expect(result).toEqual(apiResponse)
+
+    done()
+  })
+
+  it('Deposits ETH to users vault', async done => {
+    //1
+    //1000000000000000000
+    //18000000000000000000
+    const amount = 0.01
+    const token = 'ETH'
+
+    const pvtKey = '100'
+    const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
+    const fullPublicKey = sw.ec.keyFromPublic(
+      starkKeyPair.getPublic(true, 'hex'),
+      'hex'
+    )
+    const starkPublicKey = {
+      x: fullPublicKey.pub.getX().toString('hex'),
+      y: fullPublicKey.pub.getY().toString('hex')
+    }
+    const apiResponse = {
+      token,
+      amount,
+      starkPublicKey
+    }
+
+    nock(dvf.config.api)
+      .post('/v1/trading/w/deposit', body => {
+        //console.log({ body })
+        return (
+          _.isMatch(body, {
+            token: token,
+            amount: amount,
+            starkPublicKey: starkPublicKey
+          }) &&
+          body.starkSignature &&
+          body.starkVaultId
+        )
+      })
+      .reply(200, apiResponse)
+
+    const result = await dvf.deposit(token, amount, pvtKey)
+    //console.log({ result })
     expect(result).toEqual(apiResponse)
 
     done()

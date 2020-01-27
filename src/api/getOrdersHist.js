@@ -8,7 +8,7 @@ module.exports = async (dvf, symbol, nonce, signature) => {
   if (assertionError) return assertionError
 
   if (!nonce) {
-    nonce = Date.now() / 1000
+    nonce = Date.now() / 1000 + ''
     signature = await dvf.sign(nonce.toString(16))
   }
 
