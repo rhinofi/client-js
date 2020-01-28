@@ -4,7 +4,7 @@ const parse = require('../lib/parse/response/orders')
 module.exports = async (dvf, nonce, signature) => {
   const url = dvf.config.api + '/v1/trading/r/getUserConf'
 
-  if (!nonce) {
+  if (!(nonce && signature)) {
     nonce = Date.now() / 1000 + ''
     signature = await dvf.sign(nonce.toString(16))
   }
