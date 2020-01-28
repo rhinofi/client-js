@@ -60,7 +60,7 @@ describe('getUserConfig', () => {
       .reply(200, apiResponse)
 
     const config = await dvf.getUserConfig()
-    console.log(config)
+    // console.log(config)
     expect(config).toMatchObject(apiResponse)
 
     done()

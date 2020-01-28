@@ -93,11 +93,11 @@ describe('orderHistory', () => {
       }
     ]
 
-    const symbol = 'ETH:USD'
+    const symbol = 'ETH:USDT'
 
     nock(dvf.config.api)
       .post('/v1/trading/r/orderHistory', body => {
-        console.log('order history ', body)
+        //console.log('order history ', body)
         return (
           _.isMatch(body, {
             symbol

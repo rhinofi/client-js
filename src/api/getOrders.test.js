@@ -20,10 +20,10 @@ describe('openOrders', () => {
 
     nock(dvf.config.api)
       .post('/v1/trading/r/openOrders', body => {
-        console.log('get all orders ', body)
+        //console.log('get all orders ', body)
         return (
           _.isMatch(body, {
-            symbol: 'ETH:USD'
+            symbol: 'ETH:USDT'
           }) &&
           body.nonce &&
           body.signature
@@ -31,7 +31,7 @@ describe('openOrders', () => {
       })
       .reply(200, apiResponse)
 
-    const response = await dvf.getOrders('ETH:USD')
+    const response = await dvf.getOrders('ETH:USDT')
     expect(response.id).toEqual(apiResponse.id)
 
     done()

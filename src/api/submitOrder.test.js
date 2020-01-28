@@ -19,7 +19,7 @@ describe('submitOrder', () => {
 
   it('Submits buy order and receives response', async done => {
     const apiResponse = { id: '408231' }
-    const privateKey =
+    const starkPrivateKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     nock(dvf.config.api)
       .post('/v1/trading/w/submitOrder', body => {
@@ -38,7 +38,7 @@ describe('submitOrder', () => {
       .reply(200, apiResponse)
 
     const response = await dvf.submitOrder(
-      'ETH:USD', // symbol
+      'ETH:USDT', // symbol
       '0.1', // amount
       1000, // price
       '', // gid
@@ -48,7 +48,7 @@ describe('submitOrder', () => {
       '', // partnerId
       '', // feeRate
       '', // dynamicFeeRate
-      privateKey
+      starkPrivateKey
     )
     expect(response.id).toEqual(apiResponse.id)
 
@@ -59,20 +59,14 @@ describe('submitOrder', () => {
     const apiResponse = { id: '408231' }
 
     // User Specific Parameters
-    const privateKey =
+    const starkPrivateKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
-    const starkKeyPair = sw.ec.keyFromPrivate(privateKey, 'hex')
-    const publicKey = sw.ec.keyFromPublic(
-      starkKeyPair.getPublic(true, 'hex'),
-      'hex'
-    )
-    const starkKey = publicKey.pub.getX().toString()
 
     nock(dvf.config.api)
       .post('/v1/trading/w/submitOrder', body => {
         return _.matches({
           type: 'EXCHANGE LIMIT',
-          symbol: 'ETH:USD',
+          symbol: 'ETH:USDT',
           amount: '-0.1',
           price: 1000,
           meta: {
@@ -95,7 +89,7 @@ describe('submitOrder', () => {
       '', // partnerId
       '', // feeRate
       '', // dynamicFeeRate
-      privateKey
+      starkPrivateKey
     )
     expect(response.id).toEqual(apiResponse.id)
 

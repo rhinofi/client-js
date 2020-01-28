@@ -83,7 +83,7 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
     nonce: 0,
     expirationTimestamp: expiration
   }
-  console.log('stark order: ', starkOrder)
+  //console.log('stark order: ', starkOrder)
   const starkMessage = dvf.stark.createOrderMessage(starkOrder)
 
   return {
