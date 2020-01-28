@@ -9,7 +9,7 @@ module.exports = async (dvf, starkPublicKey) => {
   if (assertionError) return assertionError
   const starkKey = starkPublicKey.x
   const onchainRegister = await dvf.stark.register(dvf, starkKey)
-  console.log('onchain register contract call result: ', onchainRegister)
+  //console.log('onchain register contract call result: ', onchainRegister)
   if (onchainRegister.error) {
     return onchainRegister
   }
@@ -23,6 +23,6 @@ module.exports = async (dvf, starkPublicKey) => {
     nonce,
     signature
   }
-  console.log({ data })
+  // console.log({ data })
   return post(url, { json: data })
 }

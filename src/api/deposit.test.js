@@ -40,7 +40,7 @@ describe('deposits', () => {
 
     nock(dvf.config.api)
       .post('/v1/trading/w/deposit', body => {
-        console.log({ body })
+        //console.log({ body })
         return (
           _.isMatch(body, apiResponse) &&
           body.starkSignature &&
@@ -78,7 +78,7 @@ describe('deposits', () => {
 
     nock(dvf.config.api)
       .post('/v1/trading/w/deposit', body => {
-        console.log({ body })
+        //console.log({ body })
         return (
           _.isMatch(body, {
             token: token,
