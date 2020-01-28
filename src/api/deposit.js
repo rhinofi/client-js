@@ -1,4 +1,5 @@
 const { post } = require('request-promise')
+const BigNumber = require('bignumber.js')
 const reasons = require('../lib/error/reasons')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
@@ -10,11 +11,18 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     starkPrivateKey
   })
   if (assertionError) return assertionError
+  const currency = dvf.config.tokenRegistry[token]
+
+  const quantisedAmount = new BigNumber(10)
+    .pow(currency.decimals)
+    .times(amount)
+    .integerValue(BigNumber.ROUND_FLOOR)
+    .toString()
 
   const tempVaultId = 1
   const nonce = '1'
-  const tokenId = dvf.config.tokenRegistry[token].starkTokenId
-  let starkVaultId = dvf.config.tokenRegistry[token].starkVaultId
+  const starkTokenId = currency.starkTokenId
+  let starkVaultId = currency.starkVaultId
   if (!starkVaultId) {
     starkVaultId = dvf.config.spareStarkVaultId
   }
@@ -28,18 +36,19 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     expireTime =
       Math.floor(Date.now() / (1000 * 3600)) + dvf.config.defaultStarkExpiry
   try {
-    const depositStatus = await dvf.contract.deposit(tempVaultId, token, amount)
-    console.log('onchain deposit contract call result: ', depositStatus)
+    const depositStatus = dvf.contract.deposit(tempVaultId, token, amount)
+    //console.log('onchain deposit contract call result: ', depositStatus)
 
     starkMessage = dvf.stark.createTransferMsg(
-      amount,
+      quantisedAmount,
       nonce, // nonce
       tempVaultId, // sender_vault_id
-      tokenId, // token
+      starkTokenId, // token
       starkVaultId, // receiver_vault_id
       `0x${starkPublicKey.x}`, // receiver_public_key
       expireTime // expiration_timestamp
     ).starkMessage
+    
 
     starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
     //console.log({ starkMessage, starkSignature })
