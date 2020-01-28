@@ -1,11 +1,13 @@
 const { post } = require('request-promise')
 const parse = require('../lib/parse/response/orders')
 
-module.exports = async dvf => {
+module.exports = async (dvf, nonce, signature) => {
   const url = dvf.config.api + '/v1/trading/r/getUserConf'
-  const nonce = Date.now() / 1000 + ''
-  const signature = await dvf.sign(nonce.toString(16))
 
+  if (!nonce) {
+    nonce = Date.now() / 1000 + ''
+    signature = await dvf.sign(nonce.toString(16))
+  }
   const data = {
     nonce,
     signature
