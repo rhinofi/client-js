@@ -36,7 +36,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     expireTime =
       Math.floor(Date.now() / (1000 * 3600)) + dvf.config.defaultStarkExpiry
   try {
-    const depositStatus = dvf.contract.deposit(tempVaultId, token, amount)
+    const depositStatus = await dvf.contract.deposit(tempVaultId, token, amount)
     //console.log('onchain deposit contract call result: ', depositStatus)
 
     starkMessage = dvf.stark.createTransferMsg(
@@ -48,7 +48,6 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
       `0x${starkPublicKey.x}`, // receiver_public_key
       expireTime // expiration_timestamp
     ).starkMessage
-    
 
     starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
     //console.log({ starkMessage, starkSignature })
