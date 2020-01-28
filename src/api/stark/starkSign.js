@@ -8,6 +8,7 @@ module.exports = (starkKeyPair, starkMessage) => {
   }
   try {
     starkSignature = sw.sign(starkKeyPair, starkMessage)
+    //console.log('stark Signature ', starkSignature)
   } catch (e) {
     return {
       error: 'ERR_CREATING_STARK_SIGNATURE',

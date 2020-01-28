@@ -38,7 +38,7 @@ describe('submitOrder', () => {
       .reply(200, apiResponse)
 
     const response = await dvf.submitOrder(
-      'ETH:USDT', // symbol
+      'ETH:USD', // symbol
       '0.1', // amount
       1000, // price
       '', // gid
@@ -72,7 +72,7 @@ describe('submitOrder', () => {
       .post('/v1/trading/w/submitOrder', body => {
         return _.matches({
           type: 'EXCHANGE LIMIT',
-          symbol: 'ETH:USDT',
+          symbol: 'ETH:USD',
           amount: '-0.1',
           price: 1000,
           meta: {

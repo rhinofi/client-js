@@ -23,6 +23,7 @@ describe('getBalance', () => {
 
     nock(dvf.config.api)
       .post('/v1/trading/r/getBalance', body => {
+        //console.log('get balance ', body)
         return (
           _.isMatch(body, {
             token: 'ETH'

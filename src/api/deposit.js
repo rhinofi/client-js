@@ -57,7 +57,8 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     amount,
     starkPublicKey,
     starkSignature,
-    starkVaultId
+    starkVaultId,
+    expireTime
   }
 
   return post(url, { json: data })
