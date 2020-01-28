@@ -15,7 +15,7 @@ describe('getOrder', () => {
     await dvf.getUserConfig()
   })
 
-  it('Gets an order from the API using OrderId....', async done => {
+  it('gets an order from the API using OrderId....', async done => {
     const apiResponse = [[1234]]
 
     nock(dvf.config.api)

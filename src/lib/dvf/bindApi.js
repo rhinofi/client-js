@@ -64,7 +64,7 @@ module.exports = () => {
   dvf.getConfig = compose(require('../../api/getConfig'))
   dvf.getDeposits = compose(require('../../api/getDeposits.js'))
   dvf.getFeeRate = compose(require('../../api/getFeeRate'))
-  dvf.getOrder = compose(require('../../api/getWithdrawal'))
+  dvf.getOrder = compose(require('../../api/getOrder'))
   dvf.getOrders = compose(require('../../api/getOrders'))
   dvf.getOrdersHist = compose(require('../../api/getOrdersHist'))
   dvf.getUserConfig = compose(require('../../api/getUserConfig'))
