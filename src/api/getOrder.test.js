@@ -20,6 +20,7 @@ describe('getOrder', () => {
 
     nock(dvf.config.api)
       .post('/v1/trading/r/getOrder', body => {
+        //console.log('singe order ', body)
         return (
           _.isMatch(body, {
             orderId: '123'

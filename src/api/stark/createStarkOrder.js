@@ -44,21 +44,6 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
       .times(price)
       .times(1 + (sellCurrency.settleSpread || 0))
       .integerValue(BigNumber.ROUND_FLOOR)
-    console.log(
-      'Buying ' + amount + ' ' + buySymbol + ' for: ' + price + ' ' + sellSymbol
-    )
-    console.log(
-      'Buying ' +
-        buyAmount +
-        ' ' +
-        buySymbol +
-        ' for: ' +
-        price +
-        ' ' +
-        sellAmount +
-        ' ' +
-        sellSymbol
-    )
   }
 
   if (amount < 0) {
@@ -76,21 +61,6 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
       .abs()
       .times(1 + (sellCurrency.settleSpread || 0))
       .integerValue(BigNumber.ROUND_FLOOR)
-    console.log(
-      'Buying ' + amount + ' ' + buySymbol + ' for: ' + price + ' ' + sellSymbol
-    )
-    console.log(
-      'Buying ' +
-        buyAmount +
-        ' ' +
-        buySymbol +
-        ' for: ' +
-        price +
-        ' selling ' +
-        sellAmount +
-        ' ' +
-        sellSymbol
-    )
   }
 
   let expiration // in hours

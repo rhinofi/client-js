@@ -93,14 +93,14 @@ describe('orderHistory', () => {
       }
     ]
 
-    const nonce = Date.now() / 1000 + ''
-    const signature = await dvf.sign(nonce.toString(16))
+    const symbol = 'ETH:USD'
 
     nock(dvf.config.api)
       .post('/v1/trading/r/orderHistory', body => {
+        console.log('order history ', body)
         return (
           _.isMatch(body, {
-            symbol: 'ETH:USDT'
+            symbol
           }) &&
           body.signature &&
           body.nonce
@@ -108,7 +108,7 @@ describe('orderHistory', () => {
       })
       .reply(200, httpResponse)
 
-    const orders = await dvf.getOrdersHist('ETH:USDT')
+    const orders = await dvf.getOrdersHist(symbol)
     expect(orders).toEqual(httpResponse)
 
     done()

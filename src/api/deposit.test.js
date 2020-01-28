@@ -18,14 +18,11 @@ describe('deposits', () => {
   })
 
   it('Deposits ERC20 token to users vault', async done => {
-    //1
-    //1000000000000000000
-    //18000000000000000000
     const amount = 1
     const token = 'ZRX'
 
-    const pvtKey = '100'
-    const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
+    const starkPrivateKey = '100'
+    const starkKeyPair = sw.ec.keyFromPrivate(starkPrivateKey, 'hex')
     const fullPublicKey = sw.ec.keyFromPublic(
       starkKeyPair.getPublic(true, 'hex'),
       'hex'
@@ -34,6 +31,7 @@ describe('deposits', () => {
       x: fullPublicKey.pub.getX().toString('hex'),
       y: fullPublicKey.pub.getY().toString('hex')
     }
+
     const apiResponse = {
       token,
       amount,
@@ -42,7 +40,7 @@ describe('deposits', () => {
 
     nock(dvf.config.api)
       .post('/v1/trading/w/deposit', body => {
-        //console.log({ body })
+        console.log({ body })
         return (
           _.isMatch(body, apiResponse) &&
           body.starkSignature &&
@@ -51,7 +49,7 @@ describe('deposits', () => {
       })
       .reply(200, apiResponse)
 
-    const result = await dvf.deposit(token, amount, pvtKey)
+    const result = await dvf.deposit(token, amount, starkPrivateKey)
     //console.log({ result })
     expect(result).toEqual(apiResponse)
 
@@ -59,14 +57,11 @@ describe('deposits', () => {
   })
 
   it('Deposits ETH to users vault', async done => {
-    //1
-    //1000000000000000000
-    //18000000000000000000
     const amount = 0.01
     const token = 'ETH'
 
-    const pvtKey = '100'
-    const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
+    const starkPrivateKey = '100'
+    const starkKeyPair = sw.ec.keyFromPrivate(starkPrivateKey, 'hex')
     const fullPublicKey = sw.ec.keyFromPublic(
       starkKeyPair.getPublic(true, 'hex'),
       'hex'
@@ -83,7 +78,7 @@ describe('deposits', () => {
 
     nock(dvf.config.api)
       .post('/v1/trading/w/deposit', body => {
-        //console.log({ body })
+        console.log({ body })
         return (
           _.isMatch(body, {
             token: token,
@@ -96,7 +91,7 @@ describe('deposits', () => {
       })
       .reply(200, apiResponse)
 
-    const result = await dvf.deposit(token, amount, pvtKey)
+    const result = await dvf.deposit(token, amount, starkPrivateKey)
     //console.log({ result })
     expect(result).toEqual(apiResponse)
 
@@ -104,47 +99,47 @@ describe('deposits', () => {
   })
 
   it('Gives error for deposit with value of 0', async done => {
-    const pvtKey =
+    const starkPrivateKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const amount = 0
     const token = 'ZRX'
 
-    const result = await dvf.deposit(token, amount, pvtKey)
+    const result = await dvf.deposit(token, amount, starkPrivateKey)
     expect(result.error).toEqual('ERR_AMOUNT_MISSING')
 
     done()
   })
 
   it('Gives error if token is missing', async done => {
-    const pvtKey =
+    const starkPrivateKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const amount = 57
     const token = ''
 
-    const result = await dvf.deposit(token, amount, pvtKey)
+    const result = await dvf.deposit(token, amount, starkPrivateKey)
     expect(result.error).toEqual('ERR_TOKEN_MISSING')
 
     done()
   })
 
   it('Gives error if token is not supported', async done => {
-    const pvtKey =
+    const starkPrivateKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const amount = 57
     const token = 'XYZ'
 
-    const result = await dvf.deposit(token, amount, pvtKey)
+    const result = await dvf.deposit(token, amount, starkPrivateKey)
     expect(result.error).toEqual('ERR_INVALID_TOKEN')
 
     done()
   })
 
-  it('Gives error if pvtKey is not supported', async done => {
-    const pvtKey = ''
+  it('Gives error if starkPrivateKey is not supported', async done => {
+    const starkPrivateKey = ''
     const amount = 57
     const token = 'ZRX'
 
-    const result = await dvf.deposit(token, amount, pvtKey)
+    const result = await dvf.deposit(token, amount, starkPrivateKey)
     expect(result.error).toEqual('ERR_STARK_PRIVATE_KEY_MISSING')
 
     done()
