@@ -57,21 +57,23 @@ module.exports = () => {
   dvf.sign.request = compose(require('../../api/sign/request'))
 
   // dvf main functions
-  dvf.getConfig = compose(require('../../api/getConfig'))
-  dvf.getUserConfig = compose(require('../../api/getUserConfig'))
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
   dvf.deposit = compose(require('../../api/deposit'))
-  dvf.getDeposits = compose(require('../../api/getDeposits.js'))
   dvf.getBalance = compose(require('../../api/getBalance'))
+  dvf.getConfig = compose(require('../../api/getConfig'))
+  dvf.getDeposits = compose(require('../../api/getDeposits.js'))
   dvf.getFeeRate = compose(require('../../api/getFeeRate'))
-  dvf.getOrder = compose(require('../../api/getOrder'))
-  dvf.getOrdersHist = compose(require('../../api/getOrdersHist'))
+  dvf.getOrder = compose(require('../../api/getWithdrawal'))
   dvf.getOrders = compose(require('../../api/getOrders'))
+  dvf.getOrdersHist = compose(require('../../api/getOrdersHist'))
+  dvf.getUserConfig = compose(require('../../api/getUserConfig'))
+  dvf.preRegister = compose(require('../../api/preRegister'))
   dvf.register = compose(require('../../api/register'))
   dvf.submitBuyOrder = compose(require('../../api/submitBuyOrder'))
   dvf.submitOrder = compose(require('../../api/submitOrder'))
   dvf.submitSellOrder = compose(require('../../api/submitSellOrder'))
-  dvf.preRegister = compose(require('../../api/preRegister'))
+  dvf.getWithdrawal = compose(require('../../api/getWithdrawal.js'))
+  dvf.getWithdrawals = compose(require('../../api/getWithdrawals.js'))
 
   return dvf
 }
