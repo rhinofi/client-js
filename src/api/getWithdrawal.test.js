@@ -7,7 +7,7 @@ const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 let dvf
 
-describe('getOrder', () => {
+describe('getWithdrawal', () => {
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()
@@ -15,15 +15,15 @@ describe('getOrder', () => {
     await dvf.getUserConfig()
   })
 
-  it('gets an order from the API using OrderId....', async done => {
+  it('gets a withdrawal from the API using withdrawalId....', async done => {
     const apiResponse = [[1234]]
 
     nock(dvf.config.api)
-      .post('/v1/trading/r/getOrder', body => {
-        //console.log('singe order ', body)
+      .post('/v1/trading/r/getWithdrawal', body => {
+        //console.log('singe withdrawal ', body)
         return (
           _.isMatch(body, {
-            orderId: '123'
+            withdrawalId: '123'
           }) &&
           body.signature &&
           body.nonce
@@ -31,15 +31,15 @@ describe('getOrder', () => {
       })
       .reply(200, apiResponse)
 
-    const order = await dvf.getOrder('123')
-    expect(order).toEqual(apiResponse)
+    const withdrawal = await dvf.getWithdrawal('123')
+    expect(withdrawal).toEqual(apiResponse)
 
     done()
   })
 
-  it('getOrder checks for orderId....', async done => {
-    const order = await dvf.getOrder(null)
-    expect(order.error).toEqual('ERR_INVALID_ORDER_ID')
+  it('checks for withdrawalId....', async done => {
+    const withdrawal = await dvf.getWithdrawal(null)
+    expect(withdrawal.error).toEqual('ERR_INVALID_WITHDRAWAL_ID')
     done()
   })
 })

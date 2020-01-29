@@ -80,11 +80,7 @@ describe('deposits', () => {
       .post('/v1/trading/w/deposit', body => {
         //console.log({ body })
         return (
-          _.isMatch(body, {
-            token: token,
-            amount: amount,
-            starkPublicKey: starkPublicKey
-          }) &&
+          _.isMatch(body, apiResponse) &&
           body.starkSignature &&
           body.starkVaultId
         )
@@ -126,7 +122,7 @@ describe('deposits', () => {
     const starkPrivateKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const amount = 57
-    const token = 'XYZ'
+    const token = 'NOT'
 
     const result = await dvf.deposit(token, amount, starkPrivateKey)
     expect(result.error).toEqual('ERR_INVALID_TOKEN')
@@ -134,7 +130,7 @@ describe('deposits', () => {
     done()
   })
 
-  it('Gives error if starkPrivateKey is not supported', async done => {
+  it('Gives error if starkPrivateKey is not provided', async done => {
     const starkPrivateKey = ''
     const amount = 57
     const token = 'ZRX'

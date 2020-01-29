@@ -35,6 +35,9 @@ module.exports = {
   ERR_INVALID_ORDER_ID: `
     No order id provided or the order id provided is not valid
   `,
+  ERR_INVALID_WITHDRAWAL_ID: `
+    No withdrawal id provided or the withdrawal id provided is not valid
+  `,
   ERR_SYMBOL_DOES_NOT_MATCH: `
     The chosen symbol to trade is not available
   `,

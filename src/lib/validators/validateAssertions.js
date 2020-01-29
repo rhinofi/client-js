@@ -1,4 +1,5 @@
 const validateOrderId = require('./validateOrderId'),
+  validateWithdrawalId = require('./validateWithdrawalId'),
   validateSymbol = require('./validateSymbol'),
   validateToken = require('./validateToken'),
   validateNonce = require('./validateNonce'),
@@ -33,7 +34,8 @@ const validators = {
   starkKeyPair: validateStarkKeyPair,
   ethAddress: validateAddress,
   deFiSignature: validateSignature,
-  starkPrivateKey: validateStarkPrivateKey
+  starkPrivateKey: validateStarkPrivateKey,
+  withdrawalId: validateWithdrawalId
 }
 
 const assertionErrors = (param, value, dvf) => {
