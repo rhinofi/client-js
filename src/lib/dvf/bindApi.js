@@ -55,14 +55,17 @@ module.exports = () => {
   dvf.sign = compose(require('../../api/sign/sign'))
   dvf.sign.cancelOrder = compose(require('../../api/sign/cancelOrder'))
   dvf.sign.request = compose(require('../../api/sign/request'))
+  dvf.sign.nonceSignature = compose(
+    require('../../api/sign/createNonceAndSignature')
+  )
 
   // dvf main functions
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
   dvf.deposit = compose(require('../../api/deposit'))
-  dvf.getDeposits = compose(require('../../api/getDeposits.js'))
+  dvf.getDeposits = compose(require('../../api/getDeposits'))
   dvf.getBalance = compose(require('../../api/getBalance'))
   dvf.getConfig = compose(require('../../api/getConfig'))
-  dvf.getDeposits = compose(require('../../api/getDeposits.js'))
+  dvf.getDeposits = compose(require('../../api/getDeposits'))
   dvf.getFeeRate = compose(require('../../api/getFeeRate'))
   dvf.getOrder = compose(require('../../api/getOrder'))
   dvf.getOrders = compose(require('../../api/getOrders'))
@@ -73,7 +76,7 @@ module.exports = () => {
   dvf.submitBuyOrder = compose(require('../../api/submitBuyOrder'))
   dvf.submitOrder = compose(require('../../api/submitOrder'))
   dvf.submitSellOrder = compose(require('../../api/submitSellOrder'))
-  dvf.getWithdrawal = compose(require('../../api/getWithdrawal.js'))
+  dvf.getWithdrawal = compose(require('../../api/getWithdrawal'))
   dvf.getWithdrawals = compose(require('../../api/getWithdrawals'))
   dvf.withdrawal = compose(require('../../api/withdraw'))
 
