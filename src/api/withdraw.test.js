@@ -24,7 +24,7 @@ describe('getBalance', () => {
 
     const apiResponse = { token, amount, nonce, signature }
     nock(dvf.config.api)
-      .post('/v1/trading/w/withdrawal', body => {
+      .post('/v1/trading/w/withdraw', body => {
         //console.log('get balance ', body)
         return _.isMatch(body, apiResponse)
       })
@@ -43,7 +43,7 @@ describe('getBalance', () => {
 
     const apiResponse = { token, amount }
     nock(dvf.config.api)
-      .post('/v1/trading/w/withdrawal', body => {
+      .post('/v1/trading/w/withdraw', body => {
         //console.log('get balance ', body)
         return _.isMatch(body, apiResponse)
       })
