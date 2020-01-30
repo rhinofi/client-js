@@ -74,7 +74,8 @@ module.exports = () => {
   dvf.submitOrder = compose(require('../../api/submitOrder'))
   dvf.submitSellOrder = compose(require('../../api/submitSellOrder'))
   dvf.getWithdrawal = compose(require('../../api/getWithdrawal.js'))
-  dvf.getWithdrawals = compose(require('../../api/getWithdrawals.js'))
+  dvf.getWithdrawals = compose(require('../../api/getWithdrawals'))
+  dvf.withdrawal = compose(require('../../api/withdrawal'))
 
   return dvf
 }
