@@ -30,7 +30,7 @@ describe('getBalance', () => {
       })
       .reply(200, apiResponse)
 
-    const result = await dvf.withdrawal(token, amount, nonce, signature)
+    const result = await dvf.withdraw(token, amount, nonce, signature)
     expect(result).toEqual(apiResponse)
 
     done()
@@ -49,7 +49,7 @@ describe('getBalance', () => {
       })
       .reply(200, apiResponse)
 
-    const result = await dvf.withdrawal(token, amount)
+    const result = await dvf.withdraw(token, amount)
     //console.log(result)
     expect(result).toEqual(apiResponse)
 

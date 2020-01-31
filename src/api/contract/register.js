@@ -26,7 +26,7 @@ module.exports = async (dvf, starkKey, deFiSignature) => {
       .register(`0x${starkKey}`)
       .send(sendArguments)
   } catch (e) {
-    console.log('contract/stark/register error is: ', e)
+    console.log('lib/stark/register error is: ', e)
     return {
       error: 'ERR_STARK_REGISTRATION',
       reason: reasons.ERR_STARK_REGISTRATION.trim(),

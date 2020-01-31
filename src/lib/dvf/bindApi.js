@@ -24,14 +24,14 @@ module.exports = () => {
   }
 
   dvf.stark = {
-    createStarkOrder: compose(require('../../api/stark/createStarkOrder')),
-    createOrderMessage: require('../../api/stark/createOrderMessage'),
-    sign: require('../../api/stark/starkSign'),
-    createTransferMsg: require('../../api/stark/createTransferMessage'),
-    createPrivateKey: require('../../api/stark/createPrivateKey'),
-    createStarkKeyPair: require('../../api/stark/createStarkKeyPair'),
+    createStarkOrder: compose(require('../../lib/stark/createStarkOrder')),
+    createOrderMessage: require('../../lib/stark/createOrderMessage'),
+    sign: require('../../lib/stark/starkSign'),
+    createTransferMsg: require('../../lib/stark/createTransferMessage'),
+    createPrivateKey: require('../../lib/stark/createPrivateKey'),
+    createStarkKeyPair: require('../../lib/stark/createStarkKeyPair'),
     register: require('../../api/contract/register'),
-    createRawStarkKeyPair: require('../../api/stark/createRawStarkKeyPair')
+    createRawStarkKeyPair: require('../../lib/stark/createRawStarkKeyPair')
   }
   // dvf.contract functions
   dvf.contract = {
@@ -53,7 +53,7 @@ module.exports = () => {
 
   // dvf.sign functions
   dvf.sign = compose(require('../../api/sign/sign'))
-  dvf.sign.cancelOrder = compose(require('../../api/sign/cancelOrder'))
+  //dvf.sign.cancelOrder = compose(require('../../api/sign/cancelOrder'))
   dvf.sign.request = compose(require('../../api/sign/request'))
   dvf.sign.nonceSignature = compose(
     require('../../api/sign/createNonceAndSignature')
@@ -78,7 +78,7 @@ module.exports = () => {
   dvf.submitSellOrder = compose(require('../../api/submitSellOrder'))
   dvf.getWithdrawal = compose(require('../../api/getWithdrawal'))
   dvf.getWithdrawals = compose(require('../../api/getWithdrawals'))
-  dvf.withdrawal = compose(require('../../api/withdraw'))
+  dvf.withdraw = compose(require('../../api/withdraw'))
 
   return dvf
 }
