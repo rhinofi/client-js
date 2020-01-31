@@ -10,7 +10,7 @@ module.exports = (dvf, symbol) => {
   if (symbol) {
     const from = symbol.toString().split(':')[0]
     const to = symbol.toString().split(':')[1]
-    if (!dvf.config.tokenRegistry[from] || !dvf.config.tokenRegistry[to]) {
+    if (!dvf.token.getTokenInfo(from) || !dvf.token.getTokenInfo(to)) {
       return {
         error: 'ERR_INVALID_SYMBOL',
         reason: errorReasons.ERR_INVALID_SYMBOL

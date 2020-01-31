@@ -6,11 +6,7 @@ module.exports = async (dvf, withdrawalId, nonce, signature) => {
 
   const assertionError = await validateAssertions({ dvf, withdrawalId })
   if (assertionError) return assertionError
-
-  if (!(nonce && signature)) {
-    nonce = Date.now() / 1000 + ''
-    signature = await dvf.sign(nonce.toString(16))
-  }
+  ;({ nonce, signature } = dvf.sign.nonceSignature(nonce, signature))
 
   const data = {
     withdrawalId,

@@ -24,14 +24,14 @@ module.exports = () => {
   }
 
   dvf.stark = {
-    createStarkOrder: compose(require('../../api/stark/createStarkOrder')),
-    createOrderMessage: require('../../api/stark/createOrderMessage'),
-    sign: require('../../api/stark/starkSign'),
-    createTransferMsg: require('../../api/stark/createTransferMessage'),
-    createPrivateKey: require('../../api/stark/createPrivateKey'),
-    createStarkKeyPair: require('../../api/stark/createStarkKeyPair'),
+    createStarkOrder: compose(require('../../lib/stark/createStarkOrder')),
+    createOrderMessage: require('../../lib/stark/createOrderMessage'),
+    sign: require('../../lib/stark/starkSign'),
+    createTransferMsg: require('../../lib/stark/createTransferMessage'),
+    createPrivateKey: require('../../lib/stark/createPrivateKey'),
+    createStarkKeyPair: require('../../lib/stark/createStarkKeyPair'),
     register: require('../../api/contract/register'),
-    createRawStarkKeyPair: require('../../api/stark/createRawStarkKeyPair')
+    createRawStarkKeyPair: require('../../lib/stark/createRawStarkKeyPair')
   }
   // dvf.contract functions
   dvf.contract = {
@@ -43,6 +43,11 @@ module.exports = () => {
       StarkEx: require('../../api/contract/abi/StarkEx.abi')
     }
   }
+  // dvf.token functions
+  dvf.token = {
+    getTokenInfo: compose(require('../../lib/getTokenRegistry.js')),
+    getTokenUnit: compose(require('../../lib/getTokenRegistry.js'))
+  }
 
   // dvf.eth functions
   dvf.eth = {
@@ -53,16 +58,20 @@ module.exports = () => {
 
   // dvf.sign functions
   dvf.sign = compose(require('../../api/sign/sign'))
-  dvf.sign.cancelOrder = compose(require('../../api/sign/cancelOrder'))
+  //dvf.sign.cancelOrder = compose(require('../../api/sign/cancelOrder'))
   dvf.sign.request = compose(require('../../api/sign/request'))
+  dvf.sign.nonceSignature = compose(
+    require('../../api/sign/createNonceAndSignature')
+  )
 
+  
   // dvf main functions
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
   dvf.deposit = compose(require('../../api/deposit'))
-  dvf.getDeposits = compose(require('../../api/getDeposits.js'))
+  dvf.getDeposits = compose(require('../../api/getDeposits'))
   dvf.getBalance = compose(require('../../api/getBalance'))
   dvf.getConfig = compose(require('../../api/getConfig'))
-  dvf.getDeposits = compose(require('../../api/getDeposits.js'))
+  dvf.getDeposits = compose(require('../../api/getDeposits'))
   dvf.getFeeRate = compose(require('../../api/getFeeRate'))
   dvf.getOrder = compose(require('../../api/getOrder'))
   dvf.getOrders = compose(require('../../api/getOrders'))
@@ -73,8 +82,9 @@ module.exports = () => {
   dvf.submitBuyOrder = compose(require('../../api/submitBuyOrder'))
   dvf.submitOrder = compose(require('../../api/submitOrder'))
   dvf.submitSellOrder = compose(require('../../api/submitSellOrder'))
-  dvf.getWithdrawal = compose(require('../../api/getWithdrawal.js'))
-  dvf.getWithdrawals = compose(require('../../api/getWithdrawals.js'))
+  dvf.getWithdrawal = compose(require('../../api/getWithdrawal'))
+  dvf.getWithdrawals = compose(require('../../api/getWithdrawals'))
+  dvf.withdraw = compose(require('../../api/withdraw'))
 
   return dvf
 }

@@ -10,8 +10,10 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     token,
     starkPrivateKey
   })
+
   if (assertionError) return assertionError
-  const currency = dvf.config.tokenRegistry[token]
+
+  const currency = dvf.token.getTokenInfo(token)
 
   const quantisedAmount = new BigNumber(10)
     .pow(currency.decimals)
@@ -37,7 +39,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
       Math.floor(Date.now() / (1000 * 3600)) + dvf.config.defaultStarkExpiry
   try {
     const depositStatus = await dvf.contract.deposit(tempVaultId, token, amount)
-    //console.log('onchain deposit contract call result: ', depositStatus)
+    console.log('onchain deposit contract call result: ', depositStatus)
 
     starkMessage = dvf.stark.createTransferMsg(
       quantisedAmount,

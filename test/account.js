@@ -19,7 +19,7 @@ it('efx.account.select(0) // first account is selected by default', () => {
   efx.account.select(0)
 
   // you can fetch and subscribe to an account at the same time:
-  efx.on('account', (account) => {
+  efx.on('account', account => {
     console.log('Your current account:', account)
   })
 

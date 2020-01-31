@@ -7,7 +7,7 @@ module.exports = (dvf, token) => {
       reason: errorReasons.ERR_TOKEN_MISSING
     }
   }
-  if (!dvf.config.tokenRegistry[token]) {
+  if (!dvf.token.getTokenInfo(token)) {
     return {
       error: 'ERR_INVALID_TOKEN',
       reason: errorReasons.ERR_INVALID_TOKEN

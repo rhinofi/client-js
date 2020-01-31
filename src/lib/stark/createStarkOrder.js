@@ -9,8 +9,8 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
   const buySymbol = amount > 0 ? baseSymbol : quoteSymbol
   const sellSymbol = amount > 0 ? quoteSymbol : baseSymbol
 
-  const sellCurrency = dvf.config.tokenRegistry[sellSymbol]
-  const buyCurrency = dvf.config.tokenRegistry[buySymbol]
+  const sellCurrency = dvf.token.getTokenInfo(sellSymbol)
+  const buyCurrency = dvf.token.getTokenInfo(buySymbol)
   const vaultIdSell = sellCurrency.starkVaultId
   if (!vaultIdSell) {
     return {
