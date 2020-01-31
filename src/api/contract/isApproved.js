@@ -3,7 +3,7 @@
  */
 module.exports = (efx, token) => {
   // REVIEW: shall we throw if token is ETH or USDT ?
-  const currency = efx.config.tokenRegistry[token]
+  const currency = efx.token.getTokenInfo(token)
 
   const args = [
     efx.get('account'), // address _owner
@@ -12,5 +12,10 @@ module.exports = (efx, token) => {
 
   const action = 'allowance'
 
-  return efx.eth.call(efx.contract.abi.token, currency.tokenAddress, action, args)
+  return efx.eth.call(
+    efx.contract.abi.token,
+    currency.tokenAddress,
+    action,
+    args
+  )
 }

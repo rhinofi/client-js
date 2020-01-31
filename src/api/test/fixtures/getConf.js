@@ -16,7 +16,7 @@ module.exports = () => {
         minOrderSize: 0.1,
         starkTokenId: '0x1'
       },
-      USDT: {
+      USD: {
         decimals: 6,
         minOrderSize: 25,
         settleSpread: -0.026,

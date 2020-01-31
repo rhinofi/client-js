@@ -43,6 +43,11 @@ module.exports = () => {
       StarkEx: require('../../api/contract/abi/StarkEx.abi')
     }
   }
+  // dvf.token functions
+  dvf.token = {
+    getTokenInfo: compose(require('../../lib/getTokenRegistry.js')),
+    getTokenUnit: compose(require('../../lib/getTokenRegistry.js'))
+  }
 
   // dvf.eth functions
   dvf.eth = {
@@ -59,6 +64,7 @@ module.exports = () => {
     require('../../api/sign/createNonceAndSignature')
   )
 
+  
   // dvf main functions
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
   dvf.deposit = compose(require('../../api/deposit'))

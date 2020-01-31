@@ -4,7 +4,7 @@ const reasons = require('../../lib/error/reasons')
  *
  */
 module.exports = async (efx, token) => {
-  const currency = efx.config.tokenRegistry[token]
+  const currency = efx.token.getTokenInfo(token)
 
   const amount = (2 ** 256 - 1).toString(16)
 
