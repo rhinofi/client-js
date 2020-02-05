@@ -1,6 +1,6 @@
 const sw = require('starkware_crypto')
 const createPrivateKey = require('./createPrivateKey')
-const errorReasons = require('../error/reasons')
+const errorReasons = require('../../lib/dvf/DVFError')
 
 module.exports = privateKey => {
   if (!privateKey) {
@@ -13,8 +13,11 @@ module.exports = privateKey => {
       starkKeyPair.getPublic(true, 'hex'),
       'hex'
     )
-    const starkKey = fullPublicKey.pub.getX().toString('hex')
-    return { privateKey, starkKey }
+    const starkPublicKey = {
+      x: fullPublicKey.pub.getX().toString('hex'),
+      y: fullPublicKey.pub.getY().toString('hex')
+    }
+    return { privateKey, starkPublicKey }
   } catch (e) {
     return {
       error: 'ERR_KEYPAIR_CREATION',

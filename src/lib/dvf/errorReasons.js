@@ -1,4 +1,16 @@
 module.exports = {
+  ERR_CREATING_STARK_ORDER_MESSAGE: `
+    There was an error in creating Stark order message
+  `,
+  ERR_CREATING_STARK_SIGNATURE: `
+    There was an error in creating a Stark signature
+  `,
+  ERR_NO_TOKEN_VAULT: `
+    There is no vault owned by the user for the token
+  `,
+  ERR_ONCHAIN_DEPOSIT: `
+    There was an error while processing onchain deposit
+  `,
   ERR_ETH_ADDRESS_MISSING: `
     NO Ethereum Account address provided
   `,
@@ -6,10 +18,10 @@ module.exports = {
     The Ethreum account address provided is not valid
   `,
   ERR_STARK_REGISTRATION_MISMATCH: `
-    The registered stark key does not match the provided stark key
+    The registered Stark key does not match the provided Stark key
   `,
   ERR_STARK_REGISTRATION_CONFIRMATION: `
-    There was an error in confirming if stark registration was successful
+    There was an error in confirming if Stark registration was successful
   `,
   ERR_STARK_REGISTRATION: `
     There was an error while registering with Stark onchain
@@ -22,6 +34,12 @@ module.exports = {
   `,
   ERR_INVALID_ORDER_ID: `
     No order id provided or the order id provided is not valid
+  `,
+  ERR_INVALID_WITHDRAWAL_ID: `
+    No withdrawal id provided or the withdrawal id provided is not valid
+  `,
+  ERR_SYMBOL_DOES_NOT_MATCH: `
+    The chosen symbol to trade is not available
   `,
   ERR_MAKERTOKEN_ADDRESS_INVALID: `
     The 'maker' token address provided in the signed-order did not
@@ -182,5 +200,9 @@ module.exports = {
   `,
   ERR_TOKEN_MISSING: `
   Token not provided or token provided is not valid
+  `,
+  ERR_STARK_PRIVATE_KEY_MISSING: `User private key is missing`,
+  ERR_PUBLICKEY_CREATION: `
+    There was an error in creating a public key
   `
 }

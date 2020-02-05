@@ -1,4 +1,4 @@
-module.exports = async (dvf, abi, address, action, args, value = 0) => {
+module.exports = async (dvf, abi, address, action, args, value) => {
   if (dvf.config.send) {
     return dvf.config.send(dvf, abi, address, action, args, value)
   }
@@ -6,23 +6,15 @@ module.exports = async (dvf, abi, address, action, args, value = 0) => {
   const { web3 } = dvf
 
   const contract = new web3.eth.Contract(abi, address)
-
+  // console.log(...args)
   const method = contract.methods[action](...args)
-
-  const estimatedGas = await method.estimateGas({
-    from: dvf.get('account'),
-    value: value
-  })
 
   let options = {
     from: dvf.get('account'),
-    value: value,
-    gas: estimatedGas
+    gasLimit: dvf.config.defaultGasLimit,
+    gasPrice: dvf.config.defaultGasPrice,
+    ...(value && { value })
   }
-
-  if (dvf.get('gasPrice')) {
-    options.gasPrice = dvf.get('gasPrice')
-  }
-
+  // console.log({ options })
   return method.send(options)
 }

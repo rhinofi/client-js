@@ -7,40 +7,43 @@ const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 let dvf
 
-describe('getOrder', () => {
+describe('dvf.getOrder', () => {
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()
     dvf = await instance()
+    await dvf.getUserConfig()
   })
 
-  it('Gets an order from the API using OrderId....', async done => {
-    const apiResponse = [[1234]]
+  it('Posts to get order API and gets response', async () => {
+    const orderId = '1'
+    const apiResponse = {cancelOrder: 'success'}
+    
+    const payloadValidator = jest.fn((body) => {
+      expect(body.orderId).toBe(orderId)
+      expect(typeof body.orderId).toBe('string')
 
-    const nonce = Date.now() / 1000 + 60 * 60 * 24 + ''
-    const signature = await dvf.sign(nonce.toString(16))
+      return true
+    })
 
-    nock('https://app.stg.deversifi.com/')
-      .post('/v1/trading/r/getOrder', body => {
-        return (
-          _.isMatch(body, {
-            orderId: '123'
-          }) &&
-          body.signature &&
-          body.nonce
-        )
-      })
+    nock(dvf.config.api)
+      .post('/v1/trading/r/getOrder', payloadValidator)
       .reply(200, apiResponse)
 
-    const order = await dvf.getOrder('123')
-    expect(order).toEqual(apiResponse)
-
-    done()
+    const response = await dvf.getOrder(orderId)
+    
+    expect(payloadValidator).toBeCalled()
+    
+    expect(response).toEqual(apiResponse)
   })
 
-  it('getOrder checks for orderId....', async done => {
-    const order = await dvf.getOrder(null)
-    expect(order.error).toEqual('ERR_INVALID_ORDER_ID')
-    done()
+  it('getOrder checks for orderId....', async () => {
+    try {
+      await dvf.getOrder(null)
+
+      throw new Error('function should throw')
+    } catch(error) {
+      expect(error.message).toEqual('ERR_INVALID_ORDER_ID')
+    }
   })
 })

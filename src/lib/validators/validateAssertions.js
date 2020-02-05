@@ -1,36 +1,32 @@
-const validateOrderId = require('./validateOrderId'),
-  validateSymbol = require('./validateSymbol'),
-  validateToken = require('./validateToken'),
-  validateNonce = require('./validateNonce'),
-  validateSignature = require('./validateSignature'),
-  validateAmount = require('./validateAmount'),
-  validatePrice = require('./validatePrice'),
-  validateStarkKey = require('./validateStarkKey'),
-  validateStarkKeyPair = require('./validateStarkKeyPair'),
-  validateAddress = require('./validateAddress')
-
-module.exports = async parameters => {
-  const keys = Object.keys(parameters)
-  for (let key of keys) {
-    if ((result = await assertionErrors(key, parameters[key], parameters.dvf))) { return result }
-  }
-  return false
-}
-
 const validators = {
-  orderId: validateOrderId,
-  symbol: validateSymbol,
-  token: validateToken,
-  nonce: validateNonce,
-  signature: validateSignature,
-  amount: validateAmount,
-  price: validatePrice,
-  starkKey: validateStarkKey,
-  starkKeyPair: validateStarkKeyPair,
-  ethAddress: validateAddress
+  orderId: require('./orderId'),
+  symbol: require('./symbol'),
+  token: require('./token'),
+  nonce: require('./nonce'),
+  signature: require('./deFiSignature'),
+  amount: require('./amount'),
+  price: require('./price'),
+  starkPublicKey: require('./starkPublicKey'),
+  starkKeyPair: require('./starkKeyPair'),
+  ethAddress: require('./ethAddress'),
+  deFiSignature: require('./deFiSignature'),
+  starkPrivateKey: require('./starkPrivateKey'),
+  withdrawalId: require('./withdrawalId')
 }
 
-const assertionErrors = (param, value, dvf) => {
-  if (!validators[param]) return
-  return validators[param](dvf, value)
+module.exports = (dvf, parameters) => {
+  for (const [key, value] of Object.entries(parameters)) {
+
+    if (!validators[key]) {
+      continue
+    }
+
+    const result = validators[key](dvf, value)
+
+    if(result) { 
+      return result 
+    }
+  }
+  
+  return false
 }

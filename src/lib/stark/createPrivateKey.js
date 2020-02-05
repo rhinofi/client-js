@@ -1,4 +1,4 @@
-const errorReasons = require('../error/reasons')
+const errorReasons = require('../../lib/dvf/DVFError')
 const crypto = require('crypto')
 // TODO: Add check to ensure private key generated
 //       is less than penderson EC_ORDER

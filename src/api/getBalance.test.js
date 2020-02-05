@@ -7,18 +7,23 @@ const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 let dvf
 
-describe('getBalance', () => {
+describe('dvf.getBalance', () => {
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()
     dvf = await instance()
+    await dvf.getUserConfig()
   })
 
-  it('Returns the config recieved from the API', async done => {
+  it(`Returns the user's token balance`, async () => {
     const apiResponse = { starkBalance: 'success' }
 
-    nock('https://app.stg.deversifi.com/')
+    const nonce = Date.now() / 1000 + ''
+    const signature = await dvf.sign(nonce.toString(16))
+
+    nock(dvf.config.api)
       .post('/v1/trading/r/getBalance', body => {
+        //console.log('get balance ', body)
         return (
           _.isMatch(body, {
             token: 'ETH'
@@ -27,23 +32,21 @@ describe('getBalance', () => {
       })
       .reply(200, apiResponse)
 
-    const balance = await dvf.getBalance('ETH')
+    const balance = await dvf.getBalance(nonce, signature, 'ETH')
     expect(balance).toEqual(apiResponse)
-
-    done()
   })
 
-  it('GetBalance checks for missing token', async done => {
-    const balance = await dvf.getBalance(null)
-    expect(balance.error).toEqual('ERR_TOKEN_MISSING')
+  // it('GetBalance checks for missing token', async done => {
+  //   const balance = await dvf.getBalance(null)
+  //   expect(balance.error).toEqual('ERR_TOKEN_MISSING')
 
-    done()
-  })
+  //   done()
+  // })
 
-  it('GetBalance checks for missing token', async done => {
-    const balance = await dvf.getBalance('ETHUSD')
-    expect(balance.error).toEqual('ERR_INVALID_TOKEN')
+  // it('GetBalance checks for missing token', async done => {
+  //   const balance = await dvf.getBalance('ETHUSD')
+  //   expect(balance.error).toEqual('ERR_INVALID_TOKEN')
 
-    done()
-  })
+  //   done()
+  // })
 })

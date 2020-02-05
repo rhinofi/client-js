@@ -13,12 +13,12 @@ module.exports = async () => {
   const provider = new HDWalletProvider(privateKey, nodeURL)
 
   const web3 = new Web3(provider)
-  
+
   let config = {}
 
   // It's possible to overwrite the API address with the testnet address
   // for example like this:
-  config.api = 'https://staging-api.deversifi.com/v1/trading'
+  //config.api = 'https://staging-api.deversifi.com/v1/trading'
   // config.api = 'http://localhost:7777/v1/trading'
   return EFX(web3, config)
 }

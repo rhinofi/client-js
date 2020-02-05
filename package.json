@@ -1,6 +1,6 @@
 {
   "name": "dvf-client-js",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "main": "src/dvf.js",
   "contributors": [
     "Henrique Matias <hems.inlet@gmail.com>",
@@ -22,7 +22,7 @@
     "build:web:hash": "hash-filename ./dist/dvf*.js;del ./dist/{dvf.js,dvf.min.js}",
     "build:web:run": "browserify --debug ./src/dvf.js --standalone EFX | browser-run --port 2222",
     "test": "env-cmd -f ./env/test jest --testTimeout 200000",
-    "test:watch": "env-cmd -f ./env/test jest --watch --coverage",
+    "test:watch": "env-cmd -f ./env/test jest --watch --testTimeout 200000 --coverage",
     "test:coverage": "env-cmd -f ./env/test jest --testTimeout 2000000 --coverage"
   },
   "jest": {

@@ -1,7 +1,7 @@
 const { post } = require('request-promise')
 const validAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (
+module.exports = (
   dvf,
   symbol,
   amount,
@@ -13,35 +13,30 @@ module.exports = async (
   partnerId,
   feeRate,
   dynamicFeeRate,
-  starkKey,
-  starkKeyPair
+  starkPrivateKey
 ) => {
-  const assertionError = await validAssertions({
-    dvf,
-    amount,
-    symbol,
-    price,
-    starkKey,
-    starkKeyPair
-  })
-  if (assertionError) return assertionError
+  validAssertions(dvf, {amount, symbol, price, starkPrivateKey})
+
 
   const ethAddress = dvf.get('account')
 
-  const { starkOrder, starkMessage } = dvf.stark.createOrder(
+  const { starkOrder, starkMessage } = dvf.stark.createStarkOrder(
     symbol,
     amount,
     price,
     validFor,
     feeRate
   )
+  const { starkKeyPair, starkPublicKey } = dvf.stark.createRawStarkKeyPair(
+    starkPrivateKey
+  )
 
   const starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
   const type = 'EXCHANGE LIMIT'
   const protocol = 'stark'
   const data = {
-    gid,
     cid,
+    gid,
     type,
     symbol,
     amount,
@@ -57,10 +52,10 @@ module.exports = async (
     starkOrder: starkOrder,
     starkMessage: starkMessage,
     ethAddress: ethAddress,
-    starkKey: starkKey,
+    starkKey: starkPublicKey.x,
     starkSignature: starkSignature
   }
-
-  const url = dvf.config.api + '/w/submitOrder'
+  // console.log(data, data.meta, starkOrder, starkSignature)
+  const url = dvf.config.api + '/v1/trading/w/submitOrder'
   return post(url, { json: data })
 }
