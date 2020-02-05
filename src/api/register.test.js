@@ -8,7 +8,7 @@ const _ = require('lodash')
 
 let dvf
 
-describe('registers', () => {
+describe('dvf.register', () => {
   beforeAll(async () => {
     mockGetConf()
     dvf = await instance()

@@ -7,7 +7,7 @@ const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 let dvf
 
-describe('orderHistory', () => {
+describe('dvf.getOrdersHist', () => {
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()

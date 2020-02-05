@@ -9,7 +9,7 @@ const _ = require('lodash')
 
 let dvf
 
-describe('submitOrder', () => {
+describe('dvf.submitOrder', () => {
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()

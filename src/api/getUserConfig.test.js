@@ -5,7 +5,7 @@ const mockGetConf = require('./test/fixtures/getConf')
 
 let dvf
 
-describe('getUserConfig', () => {
+describe('dvf.getUserConfig', () => {
   beforeAll(async () => {
     mockGetConf()
     dvf = await instance()

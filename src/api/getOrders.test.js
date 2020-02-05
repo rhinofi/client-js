@@ -7,7 +7,7 @@ const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 let dvf
 
-describe('openOrders', () => {
+describe('dvf.getOrders', () => {
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()
@@ -15,7 +15,7 @@ describe('openOrders', () => {
     await dvf.getUserConfig()
   })
 
-  it('Fetches orders from public API', async done => {
+  it('Queries all orders from public API', async done => {
     const apiResponse = { id: '408231' }
 
     const payloadValidator = jest.fn((body) => {
@@ -37,7 +37,7 @@ describe('openOrders', () => {
     done()
   })
 
-  it('GetOrder checks for orderId....', async done => {
+  it('GetOrders checks for symbol....', async done => {
     const orders = await dvf.getOrders(null)
     
     expect(orders.error).toEqual('ERR_INVALID_SYMBOL')

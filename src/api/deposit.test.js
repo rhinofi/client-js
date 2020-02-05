@@ -9,7 +9,7 @@ const _ = require('lodash')
 
 let dvf
 
-describe('deposits', () => {
+describe('dvf.deposit', () => {
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()

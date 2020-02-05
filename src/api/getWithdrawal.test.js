@@ -7,7 +7,7 @@ const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 let dvf
 
-describe('getWithdrawal', () => {
+describe('dvf.getWithdrawal', () => {
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()

@@ -5,7 +5,7 @@ const mockGetConf = require('./test/fixtures/getConf')
 
 let dvf
 
-describe('cancelOrder', () => {
+describe('dvf.cancelOrder', () => {
   beforeAll(async () => {
     mockGetConf()
     dvf = await instance()
