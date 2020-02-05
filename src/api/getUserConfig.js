@@ -1,14 +1,11 @@
-const { post } = require('request-promise')
-const parse = require('../lib/parse/response/orders')
+const post = require('../lib/dvf/post-authenticated')
 
 module.exports = async (dvf, nonce, signature) => {
-  const url = dvf.config.api + '/v1/trading/r/getUserConf'
-  ;({ nonce, signature } = dvf.sign.nonceSignature(nonce, signature))
-  const data = {
-    nonce,
-    signature
-  }
-  const exchangeUserConf = await parse(post(url, { json: data }))
+  const endpoint = '/v1/trading/r/getUserConf'
+
+  const exchangeUserConf = await post(dvf, endpoint, nonce, signature)
+  
   dvf.config = Object.assign(dvf.config, exchangeUserConf)
+  
   return exchangeUserConf
 }
