@@ -1,4 +1,4 @@
-const errorReasons = require('.././../lib/error/reasons')
+const errorReasons = require('../../lib/dvf/DVFError')
 const sw = require('starkware_crypto')
 
 module.exports = (starkKeyPair, starkMessage) => {

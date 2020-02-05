@@ -7,7 +7,7 @@ const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 let dvf
 
-describe('getBalance', () => {
+describe('dvf.getDeposits', () => {
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()
@@ -15,55 +15,75 @@ describe('getBalance', () => {
     await dvf.getUserConfig()
   })
 
-  it(`Returns the user's deposits`, async done => {
+  it(`Query for all deposits`, async () => {
+    const apiResponse = []
+    
+    const payloadValidator = jest.fn((body) => {
+      expect(typeof body.nonce).toBe('number')
+      expect(typeof body.signature).toBe('string')
+      expect(typeof body.token).toBe('undefined')
+
+      return true
+    })
+
+    nock(dvf.config.api)
+      .post('/v1/trading/r/getDeposits', payloadValidator)
+      .reply(200, apiResponse)
+
+    const result = await dvf.getDeposits()
+
+    expect(payloadValidator).toBeCalled()
+
+    expect(result).toEqual(apiResponse)
+  })
+
+  it(`Query for deposits for a given token`, async () => {
     const nonce = Date.now() / 1000 + ''
     const signature = await dvf.sign(nonce.toString(16))
     const token = 'ETH'
-    const apiResponse = { nonce, signature, token }
+
+    const apiResponse = []
+
+    const payloadValidator = jest.fn((body) => {
+      expect(body.nonce).toEqual(nonce)
+      expect(body.signature).toEqual(signature)
+      expect(body.token).toEqual(token)
+
+      return true
+    })
+
     nock(dvf.config.api)
-      .post('/v1/trading/r/getDeposits', body => {
-        //console.log('get balance ', body)
-        return _.isMatch(body, apiResponse)
-      })
+      .post('/v1/trading/r/getDeposits', payloadValidator)
       .reply(200, apiResponse)
 
-    const result = await dvf.getDeposits(nonce, signature, token)
-    expect(result).toEqual(apiResponse)
+    const result = await dvf.getDeposits(token, nonce, signature)
 
-    done()
+    expect(payloadValidator).toBeCalled()
+
+    expect(result).toEqual(apiResponse)
   })
 
-  it(`Lets nonce and signature to be optional`, async done => {
-    const nonce = ''
-    const signature = null
+  it(`Lets nonce and signature to be optional`, async () => {
     const token = 'ZRX'
-    const apiResponse = { token }
+
+    const apiResponse = []
+
+    const payloadValidator = jest.fn((body) => {
+      expect(typeof body.nonce).toBe('number')
+      expect(typeof body.signature).toBe('string')
+      return true
+    })
+
     nock(dvf.config.api)
-      .post('/v1/trading/r/getDeposits', body => {
-        return _.isMatch(body, apiResponse) && body.signature && body.nonce
-      })
+      .post('/v1/trading/r/getDeposits', payloadValidator)
       .reply(200, apiResponse)
 
-    const result = await dvf.getDeposits(nonce, signature, token)
-    expect(result).toEqual(apiResponse)
+    const result = await dvf.getDeposits(token)
 
-    done()
+    expect(payloadValidator).toBeCalled()
+
+    expect(result).toEqual(apiResponse)
   })
 
-  it(`Lets token be optional`, async done => {
-    const nonce = Date.now() / 1000 + ''
-    const signature = await dvf.sign(nonce.toString(16))
-    const apiResponse = { nonce, signature }
-    nock(dvf.config.api)
-      .post('/v1/trading/r/getDeposits', body => {
-        //console.log('get balance ', body)
-        return _.isMatch(body, apiResponse)
-      })
-      .reply(200, apiResponse)
 
-    const result = await dvf.getDeposits(nonce, signature)
-    expect(result).toEqual(apiResponse)
-
-    done()
-  })
 })

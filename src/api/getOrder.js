@@ -1,18 +1,13 @@
-const { post } = require('request-promise')
+const post = require('../lib/dvf/post-authenticated')
+
 const validateAssertions = require('../lib/validators/validateAssertions')
 
 module.exports = async (dvf, orderId, nonce, signature) => {
-  var url = dvf.config.api + '/v1/trading/r/getOrder'
+  validateAssertions(dvf, {orderId })
 
-  const assertionError = await validateAssertions({ dvf, orderId })
-  if (assertionError) return assertionError
-  ;({ nonce, signature } = dvf.sign.nonceSignature(nonce, signature))
+  const endpoint = '/v1/trading/r/getOrder'
 
-  const data = {
-    orderId,
-    nonce,
-    signature
-  }
+  const data = {orderId}
 
-  return post(url, { json: data })
+  return post(dvf, endpoint, nonce, signature, data)
 }

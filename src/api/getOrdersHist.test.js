@@ -7,7 +7,7 @@ const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 let dvf
 
-describe('orderHistory', () => {
+describe('dvf.getOrdersHist', () => {
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()
@@ -15,8 +15,8 @@ describe('orderHistory', () => {
     await dvf.getUserConfig()
   })
 
-  it('Returns the past orders recieved from the API....', async done => {
-    const httpResponse = [
+  it('Returns the past orders recieved from the API....', async () => {
+    const apiResponse = [
       {
         _id: '5b56333fd952c07b351c5940',
         id: '1151079509',
@@ -95,29 +95,33 @@ describe('orderHistory', () => {
 
     const symbol = 'ETH:USDT'
 
+    const payloadValidator = jest.fn((body) => {
+      expect(body.symbol).toBe(symbol)
+      expect(typeof body.symbol).toBe('string')
+      expect(typeof body.nonce).toBe('number')
+      expect(typeof body.signature).toBe('string')
+
+      return true
+    })
+
     nock(dvf.config.api)
-      .post('/v1/trading/r/orderHistory', body => {
-        //console.log('order history ', body)
-        return (
-          _.isMatch(body, {
-            symbol
-          }) &&
-          body.signature &&
-          body.nonce
-        )
-      })
-      .reply(200, httpResponse)
+      .post('/v1/trading/r/orderHistory', payloadValidator)
+      .reply(200, apiResponse)
 
     const orders = await dvf.getOrdersHist(symbol)
-    expect(orders).toEqual(httpResponse)
 
-    done()
+    expect(payloadValidator).toBeCalled()
+
+    expect(orders).toEqual(apiResponse)
   })
 
-  it('OrderHistory checks for symbol....', async done => {
-    const orders = await dvf.getOrdersHist(null)
-    expect(orders.error).toEqual('ERR_INVALID_SYMBOL')
+  it('OrderHistory checks for symbol....', async () => {
+    try {
+      await dvf.getOrdersHist(null)
 
-    done()
+      throw new Error('function should throw')
+    } catch(error) {
+      expect(error.message).toEqual('ERR_INVALID_SYMBOL')
+    }
   })
 })

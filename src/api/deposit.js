@@ -1,17 +1,10 @@
 const { post } = require('request-promise')
 const BigNumber = require('bignumber.js')
-const reasons = require('../lib/error/reasons')
+const reasons = require('../lib/dvf/errorReasons')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
 module.exports = async (dvf, token, amount, starkPrivateKey) => {
-  const assertionError = await validateAssertions({
-    dvf,
-    amount,
-    token,
-    starkPrivateKey
-  })
-
-  if (assertionError) return assertionError
+  validateAssertions(dvf, {amount, token, starkPrivateKey})
 
   const currency = dvf.token.getTokenInfo(token)
 

@@ -2,8 +2,7 @@ const { post } = require('request-promise')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
 module.exports = async (dvf, nonce, signature, token) => {
-  const assertionError = await validateAssertions({ dvf, nonce, signature })
-  if (assertionError) return assertionError
+  validateAssertions(dvf, {nonce, signature })
 
   const data = {
     nonce,

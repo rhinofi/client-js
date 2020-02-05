@@ -7,7 +7,7 @@ const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 let dvf
 
-describe('getBalance', () => {
+describe('dvf.getBalance', () => {
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()
@@ -15,7 +15,7 @@ describe('getBalance', () => {
     await dvf.getUserConfig()
   })
 
-  it(`Returns the user's token balance`, async done => {
+  it(`Returns the user's token balance`, async () => {
     const apiResponse = { starkBalance: 'success' }
 
     const nonce = Date.now() / 1000 + ''
@@ -34,8 +34,6 @@ describe('getBalance', () => {
 
     const balance = await dvf.getBalance(nonce, signature, 'ETH')
     expect(balance).toEqual(apiResponse)
-
-    done()
   })
 
   // it('GetBalance checks for missing token', async done => {

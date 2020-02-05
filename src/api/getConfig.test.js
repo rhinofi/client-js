@@ -5,13 +5,13 @@ const mockGetConf = require('./test/fixtures/getConf')
 
 let dvf
 
-describe('getConfig', () => {
+describe('dvf.getConfig', () => {
   beforeAll(async () => {
     mockGetConf()
     dvf = await instance()
   })
 
-  it('Returns the config recieved from the API', async done => {
+  it('Returns the config recieved from the API', async () => {
     const apiResponse = {
       DVF: {
         depositExpiry: 720,
@@ -56,7 +56,5 @@ describe('getConfig', () => {
 
     const config = await dvf.getConfig()
     expect(config).toEqual(apiResponse)
-
-    done()
   })
 })

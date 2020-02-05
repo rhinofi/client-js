@@ -5,13 +5,13 @@ const mockGetConf = require('./test/fixtures/getConf')
 
 let dvf
 
-describe('getUserConfig', () => {
+describe('dvf.getUserConfig', () => {
   beforeAll(async () => {
     mockGetConf()
     dvf = await instance()
   })
 
-  it('Returns the user config recieved from the API', async done => {
+  it('Returns the user config recieved from the API', async () => {
     const apiResponse = {
       DVF: {
         exchangeSymbols: ['tETHUSD', 'tZRXUSD', 'tZRXETH'],
@@ -55,14 +55,19 @@ describe('getUserConfig', () => {
       ethAddress: '0xf858c2f2ac6b96df8c801bce90a3124a52d1915a'
     }
 
+    const payloadValidator = jest.fn((body) => {
+      expect(typeof body.nonce).toEqual('number')
+      expect(typeof body.signature).toEqual('string')
+      return true
+    })
+
     nock(dvf.config.api)
-      .post('/v1/trading/r/getUserConf', body => body.nonce && body.signature)
+      .post('/v1/trading/r/getUserConf', payloadValidator)
       .reply(200, apiResponse)
 
     const config = await dvf.getUserConfig()
-    // console.log(config)
-    expect(config).toMatchObject(apiResponse)
 
-    done()
+    expect(payloadValidator).toBeCalled()
+    expect(config).toMatchObject(apiResponse)
   })
 })

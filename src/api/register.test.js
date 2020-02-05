@@ -8,13 +8,13 @@ const _ = require('lodash')
 
 let dvf
 
-describe('registers', () => {
+describe('dvf.register', () => {
   beforeAll(async () => {
     mockGetConf()
     dvf = await instance()
   })
 
-  it('Registers user with Stark Ex', async done => {
+  it('Registers user with Stark Ex', async () => {
     const apiResponse = { register: 'success' }
     const pvtKey = '100'
     const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
@@ -40,14 +40,17 @@ describe('registers', () => {
 
     const result = await dvf.register(starkPublicKey)
     expect(result).toEqual(apiResponse)
-
-    done()
   })
 
-  it('Register method checks for starkKey', async done => {
+  it.only('Register method checks for starkKey', async () => {
     const starkPublicKey = ''
-    const response = await dvf.register(starkPublicKey)
-    expect(response.error).toEqual('ERR_STARK_KEY_MISSING')
-    done()
+
+    try {
+      await dvf.register(starkPublicKey)
+
+      throw new Error('function should throw')
+    } catch(error) {
+      expect(error.message).toEqual('ERR_STARK_KEY_MISSING')
+    }
   })
 })

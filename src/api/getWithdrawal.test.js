@@ -7,7 +7,7 @@ const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 let dvf
 
-describe('getWithdrawal', () => {
+describe('dvf.getWithdrawal', () => {
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()
@@ -15,31 +15,36 @@ describe('getWithdrawal', () => {
     await dvf.getUserConfig()
   })
 
-  it('gets a withdrawal from the API using withdrawalId....', async done => {
+  it('Query for specific withdrawalId', async () => {
     const apiResponse = [[1234]]
 
+    const payloadValidator = jest.fn((body) => {
+      expect(body.withdrawalId).toBe('123')
+
+      expect(typeof body.nonce).toBe('number')
+      expect(typeof body.signature).toBe('string')
+
+      return true
+    })
+
     nock(dvf.config.api)
-      .post('/v1/trading/r/getWithdrawal', body => {
-        //console.log('singe withdrawal ', body)
-        return (
-          _.isMatch(body, {
-            withdrawalId: '123'
-          }) &&
-          body.signature &&
-          body.nonce
-        )
-      })
+      .post('/v1/trading/r/getWithdrawal', payloadValidator)
       .reply(200, apiResponse)
 
     const withdrawal = await dvf.getWithdrawal('123')
-    expect(withdrawal).toEqual(apiResponse)
 
-    done()
+    expect(payloadValidator).toBeCalled()
+
+    expect(withdrawal).toEqual(apiResponse)
   })
 
-  it('checks for withdrawalId....', async done => {
-    const withdrawal = await dvf.getWithdrawal(null)
-    expect(withdrawal.error).toEqual('ERR_INVALID_WITHDRAWAL_ID')
-    done()
+  it('validate withdrawalId....', async () => {
+    try {
+      await dvf.getWithdrawal(null)
+
+      throw new Error('function should throw')
+    } catch(error) {
+      expect(error.message).toEqual('ERR_INVALID_WITHDRAWAL_ID')
+    }
   })
 })

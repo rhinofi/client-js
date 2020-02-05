@@ -9,7 +9,7 @@ const _ = require('lodash')
 
 let dvf
 
-describe('submitOrder', () => {
+describe('dvf.submitOrder', () => {
   beforeAll(async () => {
     mockGetConf()
     mockGetUserConf()
@@ -17,10 +17,11 @@ describe('submitOrder', () => {
     await dvf.getUserConfig()
   })
 
-  it('Submits buy order and receives response', async done => {
+  it('Submits buy order and receives response', async () => {
     const apiResponse = { id: '408231' }
     const starkPrivateKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    
     nock(dvf.config.api)
       .post('/v1/trading/w/submitOrder', body => {
         return _.matches({
@@ -51,11 +52,9 @@ describe('submitOrder', () => {
       starkPrivateKey
     )
     expect(response.id).toEqual(apiResponse.id)
-
-    done()
   })
 
-  it('Submits sell order and receives response', async done => {
+  it('Submits sell order and receives response', async () => {
     const apiResponse = { id: '408231' }
 
     // User Specific Parameters
@@ -92,102 +91,115 @@ describe('submitOrder', () => {
       starkPrivateKey
     )
     expect(response.id).toEqual(apiResponse.id)
-
-    done()
   })
 
-  it('Gives an error on missing symbol in request', async done => {
-    const response = await dvf.submitOrder(
-      '', // symbol
-      '0.1', // amount
-      1000, // price
-      '', // gid
-      '', // cid
-      '0', // signedOrder
-      '0', // validFor
-      '', // partnerId
-      '', // feeRate
-      '', // dynamicFeeRate
-      ''
-    )
-    expect(response.error).toEqual('ERR_INVALID_SYMBOL')
+  it('Gives an error on missing symbol in request', async () => {
+    try {
+      await dvf.submitOrder(
+        '', // symbol
+        '0.1', // amount
+        1000, // price
+        '', // gid
+        '', // cid
+        '0', // signedOrder
+        '0', // validFor
+        '', // partnerId
+        '', // feeRate
+        '', // dynamicFeeRate
+        ''
+      )
 
-    done()
+      throw new Error('function should throw')
+    } catch(error) {
+      expect(error.message).toEqual('ERR_INVALID_SYMBOL')
+    }
   })
 
-  it('Gives an error on invalid symbol format', async done => {
-    const response = await dvf.submitOrder(
-      'ETHS', // symbol
-      '0.1', // amount
-      1000, // price
-      '', // gid
-      '', // cid
-      '0', // signedOrder
-      '0', // validFor
-      '', // partnerId
-      '', // feeRate
-      '', // dynamicFeeRate
-      ''
-    )
-    expect(response.error).toEqual('ERR_INVALID_SYMBOL')
+  it('Gives an error on invalid symbol format', async () => {
+    try {
+      await dvf.submitOrder(
+        'ETHS', // symbol
+        '0.1', // amount
+        1000, // price
+        '', // gid
+        '', // cid
+        '0', // signedOrder
+        '0', // validFor
+        '', // partnerId
+        '', // feeRate
+        '', // dynamicFeeRate
+        ''
+      )
 
-    done()
+      throw new Error('function should throw')
+    } catch(error) {
+      expect(error.message).toEqual('ERR_INVALID_SYMBOL')
+    }
   })
 
-  it('Gives an error on invalid amount', async done => {
-    const response = await dvf.submitOrder(
-      'ETH:USDT', // symbol
-      '0', // amount
-      1000, // price
-      '', // gid
-      '', // cid
-      '0', // signedOrder
-      '0', // validFor
-      '', // partnerId
-      '', // feeRate
-      '', // dynamicFeeRate
-      ''
-    )
-    expect(response.error).toEqual('ERR_AMOUNT_MISSING')
+  it('Gives an error on invalid amount', async () => {
+    try {
+      await dvf.submitOrder(
+        'ETH:USDT', // symbol
+        '0', // amount
+        1000, // price
+        '', // gid
+        '', // cid
+        '0', // signedOrder
+        '0', // validFor
+        '', // partnerId
+        '', // feeRate
+        '', // dynamicFeeRate
+        ''
+      )
 
-    done()
+      throw new Error('function should throw')
+    } catch(error) {
+      expect(error.message).toEqual('ERR_AMOUNT_MISSING')
+    }
   })
 
-  it('Gives an error on missing price', async done => {
-    const response = await dvf.submitOrder(
-      'ETH:USDT', // symbol
-      '10', // amount
-      '', // price
-      '', // gid
-      '', // cid
-      '0', // signedOrder
-      '0', // validFor
-      '', // partnerId
-      '', // feeRate
-      '', // dynamicFeeRate
-      ''
-    )
-    expect(response.error).toEqual('ERR_PRICE_MISSING')
+  it('Gives an error on missing price', async () => {
+    try {
+      await dvf.submitOrder(
+        'ETH:USDT', // symbol
+        '10', // amount
+        '', // price
+        '', // gid
+        '', // cid
+        '0', // signedOrder
+        '0', // validFor
+        '', // partnerId
+        '', // feeRate
+        '', // dynamicFeeRate
+        ''
+      )
 
-    done()
+      throw new Error('function should throw')
+    } catch(error) {
+      expect(error.message).toEqual('ERR_PRICE_MISSING')
+    }
   })
 
-  it('Gives an error on missing starkPrivateKey', async done => {
-    const response = await dvf.submitOrder(
-      'ETH:USDT', // symbol
-      '10', // amount
-      '100', // price
-      '', // gid
-      '', // cid
-      '0', // signedOrder
-      '0', // validFor
-      '', // partnerId
-      '', // feeRate
-      '', // dynamicFeeRate
-      ''
-    )
-    expect(response.error).toEqual('ERR_STARK_PRIVATE_KEY_MISSING')
+  it('Gives an error on missing starkPrivateKey', async () => {
+    try {
+      await dvf.submitOrder(
+        'ETH:USDT', // symbol
+        '10', // amount
+        '100', // price
+        '', // gid
+        '', // cid
+        '0', // signedOrder
+        '0', // validFor
+        '', // partnerId
+        '', // feeRate
+        '', // dynamicFeeRate
+        ''
+      )
 
-    done()
+      throw new Error('function should throw')
+    } catch(error) {
+      expect(error.message).toEqual('ERR_STARK_PRIVATE_KEY_MISSING')
+    }
   })
 })
