@@ -7,7 +7,7 @@ module.exports = (dvf, nonce) => {
     throw new DVFError('ERR_INVALID_NONCE')
   }
   
-  if ((Date.now() / 1000) - nonce > 1000) {
+  if ((Date.now() / 1000) - nonce > 3 * 60 * 60 * 1000) {
     throw new DVFError('NONCE_IS_TOO_OLD')
   }
 }
