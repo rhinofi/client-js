@@ -2,7 +2,7 @@
  * For more info on Custom Errors, check:
  * https://rclayton.silvrback.com/custom-errors-in-node-js
  */
-const REASONS = require('./ErrorReasons')
+const REASONS = require('./errorReasons')
 
 module.exports = class DVFError extends Error {
   constructor(errorCode, data) {
