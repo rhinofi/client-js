@@ -15,26 +15,26 @@ describe('getOrder', () => {
     await dvf.getUserConfig()
   })
 
-  it('gets an order from the API using OrderId....', async done => {
-    const apiResponse = [[1234]]
+  it('Posts to get order API and gets response', async () => {
+    const orderId = '1'
+    const apiResponse = {cancelOrder: 'success'}
+    
+    const payloadValidator = jest.fn((body) => {
+      expect(body.orderId).toBe(orderId)
+      expect(typeof body.orderId).toBe('string')
+
+      return true
+    })
 
     nock(dvf.config.api)
-      .post('/v1/trading/r/getOrder', body => {
-        //console.log('singe order ', body)
-        return (
-          _.isMatch(body, {
-            orderId: '123'
-          }) &&
-          body.signature &&
-          body.nonce
-        )
-      })
+      .post('/v1/trading/r/getOrder', payloadValidator)
       .reply(200, apiResponse)
 
-    const order = await dvf.getOrder('123')
-    expect(order).toEqual(apiResponse)
-
-    done()
+    const response = await dvf.getOrder(orderId)
+    
+    expect(payloadValidator).toBeCalled()
+    
+    expect(response).toEqual(apiResponse)
   })
 
   it('getOrder checks for orderId....', async done => {
