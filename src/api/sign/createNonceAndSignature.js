@@ -6,10 +6,12 @@
  *
  */
 
-module.exports = (dvf, nonce, signature) => {
+module.exports = async (dvf, nonce, signature) => {
   if (!(nonce && signature)) {
-    nonce = Date.now() / 1000 + ''
-    signature = dvf.sign(nonce.toString(16))
+    nonce = Date.now() / 1000
+    signature = await dvf.sign(String(nonce).toString(16))
   }
-  return { nonce, signature }
+
+  
+  return {nonce, signature}
 }
