@@ -45,8 +45,7 @@ module.exports = () => {
   }
   // dvf.token functions
   dvf.token = {
-    getTokenInfo: compose(require('../../lib/getTokenRegistry.js')),
-    getTokenUnit: compose(require('../../lib/getTokenRegistry.js'))
+    getTokenInfo: compose(require('../../lib/getTokenRegistry.js'))
   }
 
   // dvf.eth functions
