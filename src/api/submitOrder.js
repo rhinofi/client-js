@@ -1,8 +1,7 @@
 const { post } = require('request-promise')
-const sw = require('starkware_crypto')
 const validAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (
+module.exports = (
   dvf,
   symbol,
   amount,
@@ -16,14 +15,8 @@ module.exports = async (
   dynamicFeeRate,
   starkPrivateKey
 ) => {
-  const assertionError = await validAssertions({
-    dvf,
-    amount,
-    symbol,
-    price,
-    starkPrivateKey
-  })
-  if (assertionError) return assertionError
+  validAssertions(dvf, {amount, symbol, price, starkPrivateKey})
+
 
   const ethAddress = dvf.get('account')
 

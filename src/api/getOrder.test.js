@@ -37,9 +37,13 @@ describe('dvf.getOrder', () => {
     expect(response).toEqual(apiResponse)
   })
 
-  it('getOrder checks for orderId....', async done => {
-    const order = await dvf.getOrder(null)
-    expect(order.error).toEqual('ERR_INVALID_ORDER_ID')
-    done()
+  it('getOrder checks for orderId....', async () => {
+    try {
+      await dvf.getOrder(null)
+
+      throw new Error('function should throw')
+    } catch(error) {
+      expect(error.message).toEqual('ERR_INVALID_ORDER_ID')
+    }
   })
 })

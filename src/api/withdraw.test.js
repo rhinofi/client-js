@@ -15,7 +15,7 @@ describe('dvf.withdraw', () => {
     await dvf.getUserConfig()
   })
 
-  it(`posts user's withdrawal request`, async done => {
+  it(`posts user's withdrawal request`, async () => {
     const token = 'ETH'
     const amount = 1
 
@@ -38,8 +38,6 @@ describe('dvf.withdraw', () => {
 
     expect(payloadValidator).toBeCalled()
     expect(result).toEqual(apiResponse)
-
-    done()
   })
 
 })

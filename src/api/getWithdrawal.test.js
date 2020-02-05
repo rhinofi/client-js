@@ -15,7 +15,7 @@ describe('dvf.getWithdrawal', () => {
     await dvf.getUserConfig()
   })
 
-  it('Query for specific withdrawalId', async done => {
+  it('Query for specific withdrawalId', async () => {
     const apiResponse = [[1234]]
 
     const payloadValidator = jest.fn((body) => {
@@ -36,14 +36,15 @@ describe('dvf.getWithdrawal', () => {
     expect(payloadValidator).toBeCalled()
 
     expect(withdrawal).toEqual(apiResponse)
-
-    done()
   })
 
-  it('validate withdrawalId....', async done => {
-    const withdrawal = await dvf.getWithdrawal(null)
+  it('validate withdrawalId....', async () => {
+    try {
+      await dvf.getWithdrawal(null)
 
-    expect(withdrawal.error).toEqual('ERR_INVALID_WITHDRAWAL_ID')
-    done()
+      throw new Error('function should throw')
+    } catch(error) {
+      expect(error.message).toEqual('ERR_INVALID_WITHDRAWAL_ID')
+    }
   })
 })

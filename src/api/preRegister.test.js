@@ -14,7 +14,7 @@ describe('dvf.preRegister', () => {
     dvf = await instance()
   })
 
-  it('Pre-registers the starkKey and ethAddress', async done => {
+  it('Pre-registers the starkKey and ethAddress', async () => {
     const apiResponse = { register: 'success' }
 
     const pvtKey = '100'
@@ -41,13 +41,15 @@ describe('dvf.preRegister', () => {
 
     const response = await dvf.preRegister(starkPublicKey)
     expect(response).toEqual(apiResponse)
-
-    done()
   })
 
-  it('Pre-register checks for stark Key', async done => {
-    const preRegister = await dvf.preRegister(null)
-    expect(preRegister.error).toEqual('ERR_STARK_KEY_MISSING')
-    done()
+  it('Pre-register checks for stark Key', async () => {
+    try {
+      await dvf.preRegister(null)
+
+      throw new Error('function should throw')
+    } catch(error) {
+      expect(error.message).toEqual('ERR_STARK_KEY_MISSING')
+    }
   })
 })

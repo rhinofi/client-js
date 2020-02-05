@@ -11,7 +11,7 @@ describe('dvf.getConfig', () => {
     dvf = await instance()
   })
 
-  it('Returns the config recieved from the API', async done => {
+  it('Returns the config recieved from the API', async () => {
     const apiResponse = {
       DVF: {
         depositExpiry: 720,
@@ -56,7 +56,5 @@ describe('dvf.getConfig', () => {
 
     const config = await dvf.getConfig()
     expect(config).toEqual(apiResponse)
-
-    done()
   })
 })

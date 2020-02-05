@@ -116,7 +116,12 @@ describe('dvf.getOrdersHist', () => {
   })
 
   it('OrderHistory checks for symbol....', async () => {
-    const orders = await dvf.getOrdersHist(null)
-    expect(orders.error).toEqual('ERR_INVALID_SYMBOL')
+    try {
+      await dvf.getOrdersHist(null)
+
+      throw new Error('function should throw')
+    } catch(error) {
+      expect(error.message).toEqual('ERR_INVALID_SYMBOL')
+    }
   })
 })

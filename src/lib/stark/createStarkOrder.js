@@ -1,5 +1,5 @@
 const BigNumber = require('bignumber.js')
-const errorReasons = require('.././../lib/error/reasons')
+const errorReasons = require('../../lib/dvf/DVFError')
 
 module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
   // symbols are always 3 letters

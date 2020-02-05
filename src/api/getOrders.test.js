@@ -15,7 +15,7 @@ describe('dvf.getOrders', () => {
     await dvf.getUserConfig()
   })
 
-  it('Queries all orders from public API', async done => {
+  it('Queries all orders from public API', async () => {
     const apiResponse = { id: '408231' }
 
     const payloadValidator = jest.fn((body) => {
@@ -33,15 +33,15 @@ describe('dvf.getOrders', () => {
 
     expect(payloadValidator).toBeCalled()
     expect(response.id).toEqual(apiResponse.id)
-
-    done()
   })
 
-  it('GetOrders checks for symbol....', async done => {
-    const orders = await dvf.getOrders(null)
-    
-    expect(orders.error).toEqual('ERR_INVALID_SYMBOL')
+  it('GetOrders checks for symbol....', async () => {
+    try {
+      await dvf.getOrders(null)
 
-    done()
+      throw new Error('function should throw')
+    } catch(error) {
+      expect(error.message).toEqual('ERR_INVALID_SYMBOL')
+    }
   })
 })

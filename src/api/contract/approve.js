@@ -1,4 +1,4 @@
-const reasons = require('../../lib/error/reasons')
+const reasons = require('../../lib/dvf/DVFError')
 /**
  * Approves a token for locking
  *

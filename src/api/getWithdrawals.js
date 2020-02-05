@@ -3,8 +3,7 @@ const validateAssertions = require('../lib/validators/validateAssertions')
 
 module.exports = async (dvf, token, nonce, signature) => {
   if (token) {
-    const assertionError = await validateAssertions({ dvf, token })
-    if (assertionError) return assertionError
+    validateAssertions(dvf, {token })
   }
 
   const endpoint = '/v1/trading/r/getWithdrawals'

@@ -1,5 +1,5 @@
 const sw = require('starkware_crypto')
-const errorReasons = require('.././../lib/error/reasons')
+const errorReasons = require('../../lib/dvf/DVFError')
 
 module.exports = starkOrder => {
   try {
