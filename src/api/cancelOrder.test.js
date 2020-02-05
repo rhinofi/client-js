@@ -18,7 +18,9 @@ describe('cancelOrder', () => {
     const payloadValidator = jest.fn((body) => {
       expect(body.orderId).toBe(orderId)
       expect(typeof body.orderId).toBe('string')
-
+      expect(typeof body.nonce).toBe('number')
+      expect(typeof body.signature).toBe('string')
+      
       return true
     })
 
