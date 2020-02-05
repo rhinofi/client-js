@@ -61,7 +61,7 @@ module.exports = () => {
   //dvf.sign.cancelOrder = compose(require('../../api/sign/cancelOrder'))
   dvf.sign.request = compose(require('../../api/sign/request'))
   dvf.sign.nonceSignature = compose(
-    require('../../api/sign/createNonceAndSignature')
+    require('../../api/sign/nonceSignature')
   )
 
   

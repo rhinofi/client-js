@@ -15,44 +15,31 @@ describe('dvf.withdraw', () => {
     await dvf.getUserConfig()
   })
 
-  it(`posts user's deposit request`, async done => {
+  it(`posts user's withdrawal request`, async done => {
     const token = 'ETH'
     const amount = 1
-    const nonce = Date.now() / 1000 + ''
-    const signature = await dvf.sign(nonce.toString(16))
-    const ethAddress = dvf.get('account')
 
-    const apiResponse = { token, amount, nonce, signature }
+    const apiResponse = { ok: true }
+
+    const payloadValidator = jest.fn((body) => {
+      expect(body.token).toEqual(token)
+      expect(body.amount).toEqual(amount)
+
+      expect(typeof body.nonce).toBe('number')
+      expect(typeof body.signature).toBe('string')
+      return true
+    })
+
     nock(dvf.config.api)
-      .post('/v1/trading/w/withdraw', body => {
-        //console.log('get balance ', body)
-        return _.isMatch(body, apiResponse)
-      })
-      .reply(200, apiResponse)
-
-    const result = await dvf.withdraw(token, amount, nonce, signature)
-    expect(result).toEqual(apiResponse)
-
-    done()
-  })
-
-  it(`Lets nonce and signature to be optional`, async done => {
-    const token = 'ETH'
-    const amount = 1
-    const ethAddress = dvf.get('account')
-
-    const apiResponse = { token, amount }
-    nock(dvf.config.api)
-      .post('/v1/trading/w/withdraw', body => {
-        //console.log('get balance ', body)
-        return _.isMatch(body, apiResponse)
-      })
+      .post('/v1/trading/w/withdraw', payloadValidator)
       .reply(200, apiResponse)
 
     const result = await dvf.withdraw(token, amount)
-    //console.log(result)
+
+    expect(payloadValidator).toBeCalled()
     expect(result).toEqual(apiResponse)
 
     done()
   })
+
 })
