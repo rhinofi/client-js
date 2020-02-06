@@ -19,34 +19,33 @@ describe('dvf.submitOrder', () => {
 
   it('Submits buy order and receives response', async () => {
     const apiResponse = { id: '408231' }
-    const starkPrivateKey =
-      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
-    
+    const starkPrivateKey = '100'
+
     nock(dvf.config.api)
       .post('/v1/trading/w/submitOrder', body => {
         return _.matches({
           type: 'EXCHANGE LIMIT',
-          symbol: 'ETH:USDT',
-          amount: '0.1',
-          price: 1000,
+          symbol: 'ETH:ZRX',
+          amount: '1',
+          price: 1,
           meta: {
-            ethAddress: '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404',
+            ethAddress: '0x341e46a49f15785373ede443df0220dea6a41bbc',
             starkKey:
-              '77a3b314db07c45076d11f62b6f9e748a39790441823307743cf00d6597ea43'
+              '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075'
           }
         })
       })
       .reply(200, apiResponse)
 
     const response = await dvf.submitOrder(
-      'ETH:USDT', // symbol
-      '0.1', // amount
-      1000, // price
+      'ETH:ZRX', // symbol
+      1, // amount
+      1, // price
       '', // gid
       '', // cid
       '0', // signedOrder
       '0', // validFor
-      '', // partnerId
+      'P1', // partnerId
       '', // feeRate
       '', // dynamicFeeRate
       starkPrivateKey
@@ -110,7 +109,7 @@ describe('dvf.submitOrder', () => {
       )
 
       throw new Error('function should throw')
-    } catch(error) {
+    } catch (error) {
       expect(error.message).toEqual('ERR_INVALID_SYMBOL')
     }
   })
@@ -132,7 +131,7 @@ describe('dvf.submitOrder', () => {
       )
 
       throw new Error('function should throw')
-    } catch(error) {
+    } catch (error) {
       expect(error.message).toEqual('ERR_INVALID_SYMBOL')
     }
   })
@@ -154,7 +153,7 @@ describe('dvf.submitOrder', () => {
       )
 
       throw new Error('function should throw')
-    } catch(error) {
+    } catch (error) {
       expect(error.message).toEqual('ERR_AMOUNT_MISSING')
     }
   })
@@ -176,7 +175,7 @@ describe('dvf.submitOrder', () => {
       )
 
       throw new Error('function should throw')
-    } catch(error) {
+    } catch (error) {
       expect(error.message).toEqual('ERR_PRICE_MISSING')
     }
   })
@@ -198,7 +197,7 @@ describe('dvf.submitOrder', () => {
       )
 
       throw new Error('function should throw')
-    } catch(error) {
+    } catch (error) {
       expect(error.message).toEqual('ERR_STARK_PRIVATE_KEY_MISSING')
     }
   })
