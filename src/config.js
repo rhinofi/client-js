@@ -7,7 +7,7 @@ module.exports = {
   defaultGasPrice: 14000000000,
   // default expiration time for orders in hours, used by create_order.js
   defaultStarkExpiry: 720,
-  // default nonce age in milli seconds
+  // default nonce age in seconds
   defaultNonceAge: 10800,
   // in case no provider is provided we will try connecting to the this default
   // address
