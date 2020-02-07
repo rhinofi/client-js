@@ -1,5 +1,5 @@
 const sw = require('starkware_crypto')
-const errorReasons = require('../../lib/dvf/DVFError')
+const DVFError = require('../dvf/DVFError')
 
 module.exports = starkOrder => {
   try {
@@ -15,9 +15,6 @@ module.exports = starkOrder => {
     )
     return message
   } catch (err) {
-    return {
-      error: 'ERR_CREATING_STARK_ORDER_MESSAGE',
-      reason: errorReasons.ERR_CREATING_STARK_ORDER_MESSAGE
-    }
+    throw new DVFError('ERR_CREATING_STARK_ORDER_MESSAGE')
   }
 }

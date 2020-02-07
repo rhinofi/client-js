@@ -15,8 +15,7 @@ module.exports = (
   dynamicFeeRate,
   starkPrivateKey
 ) => {
-  validAssertions(dvf, {amount, symbol, price, starkPrivateKey})
-
+  validAssertions(dvf, { amount, symbol, price, starkPrivateKey })
 
   const ethAddress = dvf.get('account')
 
@@ -49,13 +48,15 @@ module.exports = (
   }
 
   data.meta = {
-    starkOrder: starkOrder,
-    starkMessage: starkMessage,
-    ethAddress: ethAddress,
-    starkKey: starkPublicKey.x,
-    starkSignature: starkSignature
+    starkOrder,
+    starkMessage,
+    ethAddress,
+    starkPublicKey,
+    starkSignature
   }
-  // console.log(data, data.meta, starkOrder, starkSignature)
+
+  //console.log(data, data.meta, starkOrder, starkSignature)
   const url = dvf.config.api + '/v1/trading/w/submitOrder'
+  //const url = 'http://localhost:7777' + '/v1/trading/w/submitOrder'
   return post(url, { json: data })
 }
