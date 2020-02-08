@@ -2,6 +2,15 @@ const BigNumber = require('bignumber.js')
 
 module.exports = async (dvf, vaultId, token, amount, ethAddress) => {
   const currency = dvf.token.getTokenInfo(token)
+  
+  let value =''
+  if(token==='ETH') {
+    value = dvf.token.toBaseUnit(token, amount)
+  }
+  else {
+    value = dvf.token.toQuantizedUnit(token, amount)
+  }
+
   const value = new BigNumber(10)
     .pow(currency.decimals)
     .times(amount)

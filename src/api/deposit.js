@@ -1,6 +1,5 @@
 const { post } = require('request-promise')
-const BigNumber = require('bignumber.js')
-const reasons = require('../lib/dvf/errorReasons')
+const DVFError = require('../lib/dvf/DVFError')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
 module.exports = async (dvf, token, amount, starkPrivateKey) => {
@@ -21,34 +20,31 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     starkPrivateKey
   )
 
-  var starkMessage = '',
-    starkSignature = '',
-    // This should be in hours
-    expireTime =
-      Math.floor(Date.now() / (1000 * 3600)) + dvf.config.defaultStarkExpiry
-  try {
-    const depositStatus = await dvf.contract.deposit(tempVaultId, token, amount)
-    console.log('onchain deposit contract call result: ', depositStatus)
+  // This should be in hours
+  expireTime =
+    Math.floor(Date.now() / (1000 * 3600)) + dvf.config.defaultStarkExpiry
 
-    starkMessage = dvf.stark.createTransferMsg(
-      quantisedAmount,
-      nonce, // nonce
-      tempVaultId, // sender_vault_id
-      starkTokenId, // token
-      starkVaultId, // receiver_vault_id
-      `0x${starkPublicKey.x}`, // receiver_public_key
-      expireTime // expiration_timestamp
-    ).starkMessage
-
-    starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
-    //console.log({ starkMessage, starkSignature })
-  } catch (e) {
-    return {
-      error: 'ERR_ONCHAIN_DEPOSIT',
-      reason: reasons.ERR_ONCHAIN_DEPOSIT.trim(),
-      originalError: e
-    }
+  const { status, transactionHash } = await dvf.contract.deposit(
+    tempVaultId,
+    token,
+    amount
+  )
+  if (!status) {
+    throw new DVFError('ERR_ONCHAIN_DEPOSIT')
   }
+
+  const { starkMessage } = dvf.stark.createTransferMsg(
+    quantisedAmount,
+    nonce, // nonce
+    tempVaultId, // sender_vault_id
+    starkTokenId, // token
+    starkVaultId, // receiver_vault_id
+    `0x${starkPublicKey.x}`, // receiver_public_key
+    expireTime // expiration_timestamp
+  )
+
+  const starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
+  //console.log({ starkMessage, starkSignature })
 
   const url = dvf.config.api + '/v1/trading/w/deposit'
 
@@ -58,7 +54,8 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     starkPublicKey,
     starkSignature,
     starkVaultId,
-    expireTime
+    expireTime,
+    ethTxHash: transactionHash
   }
 
   return post(url, { json: data })
