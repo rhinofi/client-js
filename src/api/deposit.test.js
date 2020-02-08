@@ -40,7 +40,7 @@ describe('dvf.deposit', () => {
 
     nock(dvf.config.api)
       .post('/v1/trading/w/deposit', body => {
-        //console.log({ body })
+        // console.log({ body })
         return (
           _.isMatch(body, apiResponse) &&
           body.starkSignature &&
@@ -50,7 +50,7 @@ describe('dvf.deposit', () => {
       .reply(200, apiResponse)
 
     const result = await dvf.deposit(token, amount, starkPrivateKey)
-    //console.log({ result })
+    // console.log({ result })
     expect(result).toEqual(apiResponse)
   })
 
@@ -90,52 +90,52 @@ describe('dvf.deposit', () => {
     expect(result).toEqual(apiResponse)
   })
 
-  it.only('Gives error for deposit with value of 0', async () => {
+  it('Gives error for deposit with value of 0', async () => {
     const starkPrivateKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const amount = 0
     const token = 'ZRX'
 
-    try{
+    try {
       await dvf.deposit(token, amount, starkPrivateKey)
 
       throw new Error('function should throw')
-    } catch(error) {
+    } catch (error) {
       expect(error.message).toEqual('ERR_AMOUNT_MISSING')
     }
   })
 
-  it.only('Gives error if token is missing', async () => {
+  it('Gives error if token is missing', async () => {
     const starkPrivateKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const amount = 57
     const token = ''
 
-    try{
+    try {
       await dvf.deposit(token, amount, starkPrivateKey)
 
       throw new Error('function should throw')
-    } catch(error) {
+    } catch (error) {
       expect(error.message).toEqual('ERR_TOKEN_MISSING')
     }
   })
 
-  it.only('Gives error if token is not supported', async () => {
+  it('Gives error if token is not supported', async () => {
     const starkPrivateKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
     const amount = 57
     const token = 'NOT'
 
-    try{
+    try {
       await dvf.deposit(token, amount, starkPrivateKey)
 
       throw new Error('function should throw')
-    } catch(error) {
+    } catch (error) {
       expect(error.message).toEqual('ERR_INVALID_TOKEN')
     }
   })
 
-  it.only('Gives error if starkPrivateKey is not provided', async () => {
+  it('Gives error if starkPrivateKey is not provided', async () => {
     const starkPrivateKey = ''
     const amount = 57
     const token = 'ZRX'
@@ -144,7 +144,7 @@ describe('dvf.deposit', () => {
       await dvf.deposit(token, amount, starkPrivateKey)
 
       throw new Error('function should throw')
-    } catch(error) {
+    } catch (error) {
       expect(error.message).toEqual('ERR_STARK_PRIVATE_KEY_MISSING')
     }
   })

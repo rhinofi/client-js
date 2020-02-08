@@ -4,15 +4,11 @@ const reasons = require('../lib/dvf/errorReasons')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
 module.exports = async (dvf, token, amount, starkPrivateKey) => {
-  validateAssertions(dvf, {amount, token, starkPrivateKey})
+  validateAssertions(dvf, { amount, token, starkPrivateKey })
 
   const currency = dvf.token.getTokenInfo(token)
 
-  const quantisedAmount = new BigNumber(10)
-    .pow(currency.decimals)
-    .times(amount)
-    .integerValue(BigNumber.ROUND_FLOOR)
-    .toString()
+  const quantisedAmount = dvf.token.toQuantizedUnit(token, amount)
 
   const tempVaultId = 1
   const nonce = '1'
@@ -55,6 +51,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   }
 
   const url = dvf.config.api + '/v1/trading/w/deposit'
+
   const data = {
     token,
     amount,

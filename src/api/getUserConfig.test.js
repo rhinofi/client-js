@@ -24,12 +24,14 @@ describe('dvf.getUserConfig', () => {
       tokenRegistry: {
         ETH: {
           decimals: 18,
+          quantization: 10000000000,
           minOrderSize: 0.1,
           starkTokenId: '0x1',
           starkVaultId: 1000001
         },
         USD: {
           decimals: 6,
+          quantization: 1,
           minOrderSize: 25,
           settleSpread: -0.026,
           starkTokenId: '0x2',
@@ -38,6 +40,7 @@ describe('dvf.getUserConfig', () => {
         },
         ZRX: {
           decimals: 18,
+          quantization: 10000000000,
           minOrderSize: 40,
           starkTokenId: '0x3',
           tokenAddress: '0xcd077abedd831a3443ffbe24fb76661bbb17eb69',
@@ -45,6 +48,7 @@ describe('dvf.getUserConfig', () => {
         },
         BTC: {
           decimals: 18,
+          quantization: 10000000000,
           minOrderSize: 0.0001,
           starkTokenId: '0x4',
           tokenAddress: '0x40d8978500bf68324a51533cd6a21e3e59be324a',
@@ -55,7 +59,7 @@ describe('dvf.getUserConfig', () => {
       ethAddress: '0xf858c2f2ac6b96df8c801bce90a3124a52d1915a'
     }
 
-    const payloadValidator = jest.fn((body) => {
+    const payloadValidator = jest.fn(body => {
       expect(typeof body.nonce).toEqual('number')
       expect(typeof body.signature).toEqual('string')
       return true

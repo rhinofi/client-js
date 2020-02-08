@@ -45,7 +45,11 @@ module.exports = () => {
   }
   // dvf.token functions
   dvf.token = {
-    getTokenInfo: compose(require('../../lib/getTokenRegistry.js'))
+    getTokenInfo: compose(require('./token/getTokenRegistry')),
+    fromBaseUnit: require('./token/fromBaseUnit'),
+    fromQuantizedUnit: require('./token/fromQuantizedUnit'),
+    toBaseUnit: require('./token/toBaseUnit'),
+    toQuantizedUnit: compose(require('./token/toQuantizedUnit'))
   }
 
   // dvf.eth functions
@@ -59,11 +63,8 @@ module.exports = () => {
   dvf.sign = compose(require('../../api/sign/sign'))
   //dvf.sign.cancelOrder = compose(require('../../api/sign/cancelOrder'))
   dvf.sign.request = compose(require('../../api/sign/request'))
-  dvf.sign.nonceSignature = compose(
-    require('../../api/sign/nonceSignature')
-  )
+  dvf.sign.nonceSignature = compose(require('../../api/sign/nonceSignature'))
 
-  
   // dvf main functions
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
   dvf.deposit = compose(require('../../api/deposit'))
