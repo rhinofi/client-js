@@ -35,32 +35,44 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
     buyAmount = new BigNumber(10)
       .pow(buyCurrency.decimals)
       .times(amount)
+      .dividedBy(buyCurrency.quantization)
       .times(1 + (buyCurrency.settleSpread || 0))
       .times(1 - feeRate)
       .integerValue(BigNumber.ROUND_FLOOR)
+      .abs()
+      .toString()
     sellAmount = new BigNumber(10)
       .pow(sellCurrency.decimals)
       .times(amount)
+      .dividedBy(buyCurrency.quantization)
       .times(price)
       .times(1 + (sellCurrency.settleSpread || 0))
       .integerValue(BigNumber.ROUND_FLOOR)
+      .abs()
+      .toString()
   }
 
   if (amount < 0) {
     buyAmount = new BigNumber(10)
       .pow(buyCurrency.decimals)
+      .dividedBy(buyCurrency.quantization)
       .times(amount)
       .times(price)
       .abs()
       .times(1 + (buyCurrency.settleSpread || 0))
       .times(1 - feeRate)
       .integerValue(BigNumber.ROUND_FLOOR)
+      .abs()
+      .toString()
     sellAmount = new BigNumber(10)
       .pow(sellCurrency.decimals)
+      .dividedBy(buyCurrency.quantization)
       .times(amount)
       .abs()
       .times(1 + (sellCurrency.settleSpread || 0))
       .integerValue(BigNumber.ROUND_FLOOR)
+      .abs()
+      .toString()
   }
 
   let expiration // in hours
@@ -70,14 +82,8 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
   const starkOrder = {
     vaultIdSell: vaultIdSell,
     vaultIdBuy: vaultIdBuy,
-    amountSell: sellAmount
-      .integerValue()
-      .abs()
-      .toString(),
-    amountBuy: buyAmount
-      .integerValue()
-      .abs()
-      .toString(),
+    amountSell: sellAmount,
+    amountBuy: buyAmount,
     tokenSell: sellCurrency.starkTokenId,
     tokenBuy: buyCurrency.starkTokenId,
     nonce: 0,
