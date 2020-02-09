@@ -56,9 +56,7 @@ module.exports = (
   }
 
   //console.log(data, data.meta, starkOrder, starkSignature)
-  //const url = dvf.config.api + '/v1/trading/w/submitOrder'
-  const url = 'https://api.deversifi.dev' + '/v1/trading/w/submitOrder'
-  const res = post(url, { json: data })
-  console.log({ res })
-  return res
+  const url = dvf.config.api + '/v1/trading/w/submitOrder'
+  //const url = 'http://localhost:7777' + '/v1/trading/w/submitOrder'
+  return post(url, { json: data })
 }

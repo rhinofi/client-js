@@ -24,15 +24,11 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   expireTime =
     Math.floor(Date.now() / (1000 * 3600)) + dvf.config.defaultStarkExpiry
 
-  // const { status, transactionHash } = await dvf.contract.deposit(
-  //   tempVaultId,
-  //   token,
-  //   amount
-  // )
-  const { status, transactionHash } = {
-    status: true,
-    transactionHash: '0xa1b2c3'
-  }
+  const { status, transactionHash } = await dvf.contract.deposit(
+    tempVaultId,
+    token,
+    amount
+  )
 
   if (!status) {
     throw new DVFError('ERR_ONCHAIN_DEPOSIT')

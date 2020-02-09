@@ -1,6 +1,6 @@
 module.exports = {
   // api: 'https://api.deversifi.com/v1/trading',
-  api: 'http://dvf.config.com', //'https://api.deversifi.dev',
+  api: 'https://api.deversifi.dev',
 
   // default transaction arguments
   defaultGasLimit: 200000,
