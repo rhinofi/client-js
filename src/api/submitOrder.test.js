@@ -17,12 +17,13 @@ describe('dvf.submitOrder', () => {
     await dvf.getUserConfig()
   })
 
-  it('Submits buy order and receives response', async () => {
+  it.only('Submits buy order and receives response', async () => {
     const apiResponse = { id: '408231' }
     const starkPrivateKey = '100'
 
     nock(dvf.config.api)
       .post('/v1/trading/w/submitOrder', body => {
+        console.log({ body })
         return _.matches({
           type: 'EXCHANGE LIMIT',
           symbol: 'ETH:ZRX',
@@ -50,6 +51,7 @@ describe('dvf.submitOrder', () => {
       '', // dynamicFeeRate
       starkPrivateKey
     )
+    console.log({ response })
     expect(response.id).toEqual(apiResponse.id)
   })
 

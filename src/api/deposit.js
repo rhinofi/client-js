@@ -7,7 +7,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
 
   const currency = dvf.token.getTokenInfo(token)
 
-  const quantisedAmount = dvf.token.toQuantizedUnit(token, amount)
+  const quantisedAmount = dvf.token.toQuantizedAmount(token, amount)
 
   const tempVaultId = 1
   const nonce = '1'
@@ -24,11 +24,15 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   expireTime =
     Math.floor(Date.now() / (1000 * 3600)) + dvf.config.defaultStarkExpiry
 
-  const { status, transactionHash } = await dvf.contract.deposit(
-    tempVaultId,
-    token,
-    amount
-  )
+  // const { status, transactionHash } = await dvf.contract.deposit(
+  //   tempVaultId,
+  //   token,
+  //   amount
+  // )
+  const { status, transactionHash } = {
+    status: true,
+    transactionHash: '0xa1b2c3'
+  }
 
   if (!status) {
     throw new DVFError('ERR_ONCHAIN_DEPOSIT')

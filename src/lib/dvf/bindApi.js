@@ -46,10 +46,10 @@ module.exports = () => {
   // dvf.token functions
   dvf.token = {
     getTokenInfo: compose(require('./token/getTokenRegistry')),
-    fromBaseUnit: require('./token/fromBaseUnit'),
-    fromQuantizedUnit: require('./token/fromQuantizedUnit'),
-    toBaseUnit: require('./token/toBaseUnit'),
-    toQuantizedUnit: compose(require('./token/toQuantizedUnit'))
+    fromBaseUnitAmount: require('./token/fromBaseUnitAmount'),
+    fromQuantizedAmount: require('./token/fromQuantizedAmount'),
+    toBaseUnitAmount: require('./token/toBaseUnitAmount'),
+    toQuantizedAmount: compose(require('./token/toQuantizedAmount'))
   }
 
   // dvf.eth functions

@@ -5,9 +5,9 @@ module.exports = async (dvf, vaultId, token, amount, ethAddress) => {
 
   let value
   if (token === 'ETH') {
-    value = dvf.token.toBaseUnit(token, amount)
+    value = dvf.token.toBaseUnitAmount(token, amount)
   } else {
-    value = dvf.token.toQuantizedUnit(token, amount)
+    value = dvf.token.toQuantizedAmount(token, amount)
   }
 
   const args = [dvf.token.getTokenInfo(token).starkTokenId, vaultId, value]
