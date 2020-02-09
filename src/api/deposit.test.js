@@ -18,7 +18,7 @@ describe('dvf.deposit', () => {
   })
 
   it('Deposits ERC20 token to users vault', async () => {
-    const amount = 1
+    const amount = 31
     const token = 'ZRX'
 
     const starkPrivateKey = '100'
@@ -40,7 +40,7 @@ describe('dvf.deposit', () => {
 
     nock(dvf.config.api)
       .post('/v1/trading/w/deposit', body => {
-        // console.log({ body })
+        //console.log({ body })
         return (
           _.isMatch(body, apiResponse) &&
           body.starkSignature &&
@@ -50,7 +50,7 @@ describe('dvf.deposit', () => {
       .reply(200, apiResponse)
 
     const result = await dvf.deposit(token, amount, starkPrivateKey)
-    // console.log({ result })
+    //console.log({ result })
     expect(result).toEqual(apiResponse)
   })
 

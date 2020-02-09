@@ -29,6 +29,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     token,
     amount
   )
+
   if (!status) {
     throw new DVFError('ERR_ONCHAIN_DEPOSIT')
   }
@@ -47,6 +48,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   //console.log({ starkMessage, starkSignature })
 
   const url = dvf.config.api + '/v1/trading/w/deposit'
+  //const url = 'https://api.deversifi.dev' + '/v1/trading/w/deposit'
 
   const data = {
     token,
@@ -57,6 +59,6 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     expireTime,
     ethTxHash: transactionHash
   }
-
+  //console.log({ data })
   return post(url, { json: data })
 }
