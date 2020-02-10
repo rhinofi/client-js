@@ -1,6 +1,6 @@
 const BN = require('bignumber.js')
 
-module.exports = (token, amount) => {
+module.exports = (dvf, token, amount) => {
   const tokenInfo = dvf.token.getTokenInfo(token)
 
   return new BN(10)
