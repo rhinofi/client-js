@@ -27,11 +27,7 @@ module.exports = async (dvf, starkKey, deFiSignature) => {
       .send(sendArguments)
   } catch (e) {
     console.log('lib/stark/register error is: ', e)
-    return {
-      error: 'ERR_STARK_REGISTRATION',
-      reason: reasons.ERR_STARK_REGISTRATION.trim(),
-      originalError: e
-    }
+    throw new DVFError('ERR_STARK_REGISTRATION')
   }
 
   if (onchainResult || onchainResult.status === true) {
@@ -50,18 +46,11 @@ module.exports = async (dvf, starkKey, deFiSignature) => {
       if (fromStarkHex === starkKey) {
         return true
       } else {
-        return {
-          error: 'ERR_STARK_REGISTRATION_MISMATCH',
-          reason: reasons.ERR_STARK_REGISTRATION_MISMATCH.trim()
-        }
+        throw new DVFError('ERR_STARK_REGISTRATION_MISMATCH')
       }
     } catch (e) {
       console.log('contract/stark/getStarkKey error is: ', e)
-      return {
-        error: 'ERR_STARK_REGISTRATION_CONFIRMATION',
-        reason: reasons.ERR_STARK_REGISTRATION_CONFIRMATION.trim(),
-        originalError: e
-      }
+      throw new DVFError('ERR_STARK_REGISTRATION_CONFIRMATION')
     }
   }
 }
