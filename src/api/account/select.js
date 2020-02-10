@@ -11,9 +11,10 @@ module.exports = async (dvf, id) => {
     if (!accounts[id]) {
       console.error('Error: You have no account at index:', +id)
     }
-
     // emit and store current account
-    return dvf.set('account', accounts[id].toLowerCase())
+    else {
+      return dvf.set('account', accounts[id].toLowerCase())
+    }
   }
 
   for (let index in accounts) {
