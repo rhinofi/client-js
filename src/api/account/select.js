@@ -3,9 +3,9 @@
  *
  * id - Can be an index of the array such as 0 or an address
  **/
-module.exports = async (efx, id) => {
+module.exports = async (dvf, id) => {
   // check for ethereum accounts and select a default one
-  const accounts = await efx.web3.eth.getAccounts()
+  const accounts = await dvf.web3.eth.getAccounts()
 
   if (typeof id === 'number') {
     if (!accounts[id]) {
@@ -13,15 +13,18 @@ module.exports = async (efx, id) => {
     }
 
     // emit and store current account
-    return efx.set('account', accounts[id])
+    return dvf.set('account', accounts[id].toLowerCase())
   }
 
   for (let index in accounts) {
     if (accounts[index] === id) {
       // emit and store current account
-      return efx.set('account', accounts[index])
+      return dvf.set(
+        'account',
+        dvf.web3.utils.toChecksumAddress(accounts[index].toLowerCase())
+      )
     }
   }
 
-  return efx.set('account', null)
+  return dvf.set('account', null)
 }

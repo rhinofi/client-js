@@ -2,11 +2,13 @@ const BigNumber = require('bignumber.js')
 
 module.exports = async (dvf, vaultId, token, amount, ethAddress) => {
   const currency = dvf.token.getTokenInfo(token)
-  const value = new BigNumber(10)
-    .pow(currency.decimals)
-    .times(amount)
-    .integerValue(BigNumber.ROUND_FLOOR)
-    .toString()
+
+  let value
+  if (token === 'ETH') {
+    value = dvf.token.toBaseUnitAmount(token, amount)
+  } else {
+    value = dvf.token.toQuantizedAmount(token, amount)
+  }
 
   const args = [dvf.token.getTokenInfo(token).starkTokenId, vaultId, value]
   const action = 'deposit'
