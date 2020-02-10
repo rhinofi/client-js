@@ -17,7 +17,7 @@ describe('dvf.submitOrder', () => {
     await dvf.getUserConfig()
   })
 
-  it.only('Submits buy order and receives response', async () => {
+  it('Submits buy order and receives response', async () => {
     const apiResponse = { id: '408231' }
     const starkPrivateKey = '100'
 
@@ -26,8 +26,8 @@ describe('dvf.submitOrder', () => {
         console.log({ body })
         return _.matches({
           type: 'EXCHANGE LIMIT',
-          symbol: 'ETH:ZRX',
-          amount: '1',
+          symbol: 'ZRX:ETH',
+          amount: '10',
           price: 1,
           meta: {
             ethAddress: '0x341e46a49f15785373ede443df0220dea6a41bbc',
@@ -39,8 +39,8 @@ describe('dvf.submitOrder', () => {
       .reply(200, apiResponse)
 
     const response = await dvf.submitOrder(
-      'ETH:ZRX', // symbol
-      1, // amount
+      'ZRX:ETH', // symbol
+      10, // amount
       1, // price
       '', // gid
       '', // cid
@@ -80,8 +80,8 @@ describe('dvf.submitOrder', () => {
 
     const response = await dvf.submitOrder(
       'ETH:USDT', // symbol
-      '-0.1', // amount
-      1000, // price
+      '-1', // amount
+      100, // price
       '', // gid
       '', // cid
       '0', // signedOrder
