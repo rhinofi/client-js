@@ -148,4 +148,33 @@ describe('dvf.deposit', () => {
       expect(error.message).toEqual('ERR_STARK_PRIVATE_KEY_MISSING')
     }
   })
+
+  it('Posts to deposit API and gets error response', async () => {
+    const apiErrorResponse = {
+      statusCode: 422,
+      error: 'Unprocessable Entity',
+      message:
+        'Please contact support if you believe there should not be an error here',
+      details: {
+        error: {
+          type: 'DVFError',
+          message: 'MUST_REGISTER_PRE_DEPOSIT'
+        }
+      }
+    }
+
+    nock(dvf.config.api)
+      .post('/v1/trading/w/deposit')
+      .reply(422, apiErrorResponse)
+
+    try {
+      await dvf.deposit(
+        'ZRX',
+        31,
+        '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+      )
+    } catch (e) {
+      expect(e.error).toEqual(apiErrorResponse)
+    }
+  })
 })

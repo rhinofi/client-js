@@ -203,4 +203,44 @@ describe('dvf.submitOrder', () => {
       expect(error.message).toEqual('ERR_STARK_PRIVATE_KEY_MISSING')
     }
   })
+
+  it('Posts to submit order config API and gets error response', async () => {
+    const apiErrorResponse = {
+      statusCode: 422,
+      error: 'Unprocessable Entity',
+      message:
+        'Please contact support if you believe there should not be an error here',
+      details: {
+        error: {
+          type: 'DVFError',
+          message: 'MUST_REGISTER_PRE_DEPOSIT'
+        }
+      }
+    }
+
+    const payloadValidator = jest.fn(() => true)
+
+    nock(dvf.config.api)
+      .post('/v1/trading/w/submitOrder', payloadValidator)
+      .reply(422, apiErrorResponse)
+
+    try {
+      await dvf.submitOrder(
+        'ETH:ZRX', // symbol
+        1, // amount
+        1, // price
+        '', // gid
+        '', // cid
+        '0', // signedOrder
+        '0', // validFor
+        'P1', // partnerId
+        '', // feeRate
+        '', // dynamicFeeRate
+        '100'
+      )
+    } catch (e) {
+      expect(e.error).toEqual(apiErrorResponse)
+      expect(payloadValidator).toBeCalled()
+    }
+  })
 })

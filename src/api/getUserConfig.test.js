@@ -74,4 +74,32 @@ describe('dvf.getUserConfig', () => {
     expect(payloadValidator).toBeCalled()
     expect(config).toMatchObject(apiResponse)
   })
+
+  it('Posts to user config API and gets error response', async () => {
+    const apiErrorResponse = {
+      statusCode: 422,
+      error: 'Unprocessable Entity',
+      message:
+        'Please contact support if you believe there should not be an error here',
+      details: {
+        error: {
+          type: 'DVFError',
+          message: 'STARK_SIGNATURE_VERIFICATION_ERROR'
+        }
+      }
+    }
+
+    const payloadValidator = jest.fn(() => true)
+
+    nock(dvf.config.api)
+      .post('/v1/trading/r/getUserConf', payloadValidator)
+      .reply(422, apiErrorResponse)
+
+    try {
+      await dvf.getUserConfig()
+    } catch (e) {
+      expect(e.error).toEqual(apiErrorResponse)
+      expect(payloadValidator).toBeCalled()
+    }
+  })
 })

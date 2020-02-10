@@ -48,8 +48,29 @@ describe('dvf.preRegister', () => {
       await dvf.preRegister(null)
 
       throw new Error('function should throw')
-    } catch(error) {
+    } catch (error) {
       expect(error.message).toEqual('ERR_STARK_KEY_MISSING')
+    }
+  })
+
+  it('Posts to pre register config API and gets error response', async () => {
+    const apiErrorResponse = {
+      statusCode: 422,
+      error: 'Unprocessable Entity',
+      message: 'ERR_DEFI_SIGN'
+    }
+
+    const payloadValidator = jest.fn(() => true)
+
+    nock(dvf.config.api)
+      .post('/v1/trading/w/preRegister', payloadValidator)
+      .reply(422, apiErrorResponse)
+
+    try {
+      await dvf.preRegister('0x')
+    } catch (e) {
+      expect(e.error).toEqual(apiErrorResponse)
+      expect(payloadValidator).toBeCalled()
     }
   })
 })

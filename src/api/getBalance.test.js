@@ -49,4 +49,32 @@ describe('dvf.getBalance', () => {
 
   //   done()
   // })
+
+  it('Posts to get balance API and gets error response', async () => {
+    const nonce = Date.now() / 1000 + ''
+    const signature = await dvf.sign(nonce.toString(16))
+
+    const apiErrorResponse = {
+      statusCode: 422,
+      error: 'Unprocessable Entity',
+      message:
+        'Please contact support if you believe there should not be an error here',
+      details: {
+        error: {
+          type: 'DVFError',
+          message: 'STARK_ORDER_VERIFICATION_ERROR'
+        }
+      }
+    }
+
+    nock(dvf.config.api)
+      .post('/v1/trading/r/getBalance')
+      .reply(422, apiErrorResponse)
+
+    try {
+      await dvf.getBalance(nonce, signature, 'ETH')
+    } catch (e) {
+      expect(e.error).toEqual(apiErrorResponse)
+    }
+  })
 })
