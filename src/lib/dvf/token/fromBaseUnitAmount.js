@@ -1,8 +1,7 @@
-const getTokenRegistry = require('./getTokenRegistry')
 const BN = require('bignumber.js')
 
-module.exports = (token, baseUnitAmount) => {
-  const tokenInfo = getTokenRegistry(token)
+module.exports = (dvf, token, baseUnitAmount) => {
+  const tokenInfo = dvf.token.getTokenInfo(token)
 
   return new BN(baseUnitAmount)
     .shiftedBy(-1 * tokenInfo.decimals)

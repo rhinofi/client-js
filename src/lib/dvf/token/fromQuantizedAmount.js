@@ -1,8 +1,7 @@
-const getTokenRegistry = require('./getTokenRegistry')
 const BN = require('bignumber.js')
 
-module.exports = (token, quantizedAmount) => {
-  const tokenInfo = getTokenRegistry(token)
+module.exports = (dvf, token, quantizedAmount) => {
+  const tokenInfo = dvf.token.getTokenInfo(token)
 
   return new BN(quantizedAmount)
     .times(tokenInfo.quantization)
