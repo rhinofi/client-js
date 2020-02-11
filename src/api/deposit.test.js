@@ -54,7 +54,7 @@ describe('dvf.deposit', () => {
     expect(result).toEqual(apiResponse)
   })
 
-  it('Deposits ETH to users vault', async () => {
+  xit('Deposits ETH to users vault', async () => {
     const amount = 0.01
     const token = 'ETH'
 

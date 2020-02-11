@@ -19,11 +19,11 @@ describe('dvf.submitOrder', () => {
 
   it('Submits buy order and receives response', async () => {
     const apiResponse = { id: '408231' }
-    const starkPrivateKey = '100'
+    const starkPrivateKey =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
 
     nock(dvf.config.api)
       .post('/v1/trading/w/submitOrder', body => {
-        console.log({ body })
         return _.matches({
           type: 'EXCHANGE LIMIT',
           symbol: 'ZRX:ETH',
@@ -51,7 +51,6 @@ describe('dvf.submitOrder', () => {
       '', // dynamicFeeRate
       starkPrivateKey
     )
-    console.log({ response })
     expect(response.id).toEqual(apiResponse.id)
   })
 
@@ -204,7 +203,9 @@ describe('dvf.submitOrder', () => {
     }
   })
 
+
   it('Posts to submit order config API and gets error response', async () => {
+
     const apiErrorResponse = {
       statusCode: 422,
       error: 'Unprocessable Entity',

@@ -18,7 +18,7 @@ describe('dvf.getOrders', () => {
   it('Queries all orders from public API', async () => {
     const apiResponse = { id: '408231' }
 
-    const payloadValidator = jest.fn((body) => {
+    const payloadValidator = jest.fn(body => {
       expect(body.symbol).toEqual('ETH:USDT')
       expect(typeof body.nonce).toEqual('number')
       expect(typeof body.signature).toEqual('string')
@@ -40,8 +40,36 @@ describe('dvf.getOrders', () => {
       await dvf.getOrders(null)
 
       throw new Error('function should throw')
-    } catch(error) {
+    } catch (error) {
       expect(error.message).toEqual('ERR_INVALID_SYMBOL')
+    }
+  })
+
+  it('Posts to open orders API and gets error response', async () => {
+    const symbol = 'ETH:USDT'
+    const apiErrorResponse = {
+      statusCode: 422,
+      error: 'Unprocessable Entity',
+      message:
+        'Please contact support if you believe there should not be an error here',
+      details: {
+        error: {
+          type: 'DVFError',
+          message: 'STARK_ORDER_SIGNATURE_VERIFICATION_FAILED'
+        }
+      }
+    }
+    const payloadValidator = jest.fn(() => true)
+
+    nock(dvf.config.api)
+      .post('/v1/trading/r/openOrders', payloadValidator)
+      .reply(422, apiErrorResponse)
+
+    try {
+      await dvf.getOrders(symbol)
+    } catch (e) {
+      expect(e.error).toEqual(apiErrorResponse)
+      expect(payloadValidator).toBeCalled()
     }
   })
 })
