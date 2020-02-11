@@ -1,6 +1,6 @@
 const sw = require('starkware_crypto')
 const createPrivateKey = require('./createPrivateKey')
-const errorReasons = require('../../lib/dvf/DVFError')
+const errorReasons = require('../dvf/DVFError')
 
 // QUESTION: remove async from function and make privateKey mandatory?
 module.exports = (privateKey) => {

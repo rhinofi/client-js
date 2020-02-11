@@ -29,7 +29,7 @@ work = async () => {
   // generate a new private key with:
   // starkPrivKey = dvf.stark.createPrivateKey()
 
-  const keyPair = await dvf.stark.createStarkKeyPair(starkPrivKey)
+  const keyPair = await dvf.stark.createKeyPair(starkPrivKey)
 
   // const response = await dvf.preRegister(keyPair.starkPublicKey)
   // response.deFiSignature = '0x1831c85de46ce337c300debf82e87114fef7d23c04bfaca7b2ed292c78c361ec2a2b69a8b7f7751f0531ec6350ccc3f0177ce023404215992b0bf14badf7f8c01c'

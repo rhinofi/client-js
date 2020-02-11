@@ -16,7 +16,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   if (!starkVaultId) {
     starkVaultId = dvf.config.spareStarkVaultId
   }
-  const { starkPublicKey, starkKeyPair } = await dvf.stark.createStarkKeyPair(
+  const { starkPublicKey, starkKeyPair } = await dvf.stark.createKeyPair(
     starkPrivateKey
   )
 

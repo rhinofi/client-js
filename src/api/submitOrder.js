@@ -36,7 +36,7 @@ module.exports = async (
   )
 
 
-  const { starkKeyPair, starkPublicKey } = await dvf.stark.createStarkKeyPair(
+  const { starkKeyPair, starkPublicKey } = await dvf.stark.createKeyPair(
     starkPrivateKey
   )
 

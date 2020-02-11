@@ -29,7 +29,7 @@ module.exports = () => {
     sign: require('../../lib/stark/starkSign'),
     createTransferMsg: require('../../lib/stark/createTransferMessage'),
     createPrivateKey: require('../../lib/stark/createPrivateKey'),
-    createStarkKeyPair: require('../../lib/stark/createStarkKeyPair'),
+    createKeyPair: require('../stark/createKeyPair'),
     register: require('../../api/contract/register')
   }
 
