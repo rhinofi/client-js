@@ -3,16 +3,13 @@ const instance = require('./test/helpers/instance')
 const _ = require('lodash')
 
 const mockGetConf = require('./test/fixtures/getConf')
-const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 let dvf
 
 describe('dvf.getOrdersHist', () => {
   beforeAll(async () => {
     mockGetConf()
-    mockGetUserConf()
     dvf = await instance()
-    await dvf.getUserConfig()
   })
 
   it('Returns the past orders recieved from the API....', async () => {

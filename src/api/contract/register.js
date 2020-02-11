@@ -1,4 +1,4 @@
-const reasons = require('../../lib/dvf/DVFError')
+const DVFError = require('../../lib/dvf/DVFError')
 const BN = require('bignumber.js')
 
 module.exports = async (dvf, starkKey, deFiSignature) => {

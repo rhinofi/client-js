@@ -8,7 +8,7 @@ const DVF = require('../../../dvf')
 
 module.exports = async () => {
   const nodeURL = process.env.NODE_URL
-  const privateKey = process.env.PRIVATE_KEY
+  const privateKey = process.env.PRIVATE_ETH_KEY
 
   const provider = new HDWalletProvider(privateKey, nodeURL)
 

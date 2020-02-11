@@ -1,8 +1,7 @@
 const getUSDPrice = require('./getUSDPrice')
 
 module.exports = async (symbol, amount, price) => {
-  const baseSymbol = symbol.substr(0, symbol.length - 3)
-  const quoteSymbol = symbol.substr(-3)
+  const quoteSymbol = symbol.split(':')[1]
 
   quoteSymbolPrice = await getUSDPrice(quoteSymbol)
 

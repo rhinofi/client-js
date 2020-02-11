@@ -1,5 +1,5 @@
 const BigNumber = require('bignumber.js')
-const errorReasons = require('../../lib/dvf/DVFError')
+const DVFError = require('../dvf/DVFError')
 
 module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
   // symbols are always 3 letters
@@ -12,23 +12,27 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
   const sellCurrency = dvf.token.getTokenInfo(sellSymbol)
   const buyCurrency = dvf.token.getTokenInfo(buySymbol)
   const vaultIdSell = sellCurrency.starkVaultId
+
+  // console.log("sell :", sellSymbol, sellCurrency)
+  // console.log("buy  :", buySymbol, buyCurrency)
+  
   if (!vaultIdSell) {
-    return {
-      error: 'ERR_NO_TOKEN_VAULT',
-      reason: errorReasons.ERR_NO_TOKEN_VAULT
-    }
+    console.error("No token vault for :", sellSymbol)
+    
+    throw new DVFError('ERR_NO_TOKEN_VAULT')
   }
+
   let vaultIdBuy = buyCurrency.starkVaultId
   if (!vaultIdBuy) {
     vaultIdBuy = dvf.config.spareStarkVaultId
   }
 
   if (!(sellCurrency && buyCurrency)) {
-    return {
-      error: 'ERR_SYMBOL_DOES_NOT_MATCH',
-      reason: errorReasons.ERR_SYMBOL_DOES_NOT_MATCH
+    if (!vaultIdSell) {
+      throw new DVFError('ERR_SYMBOL_DOES_NOT_MATCH')
     }
   }
+  
   let buyAmount, sellAmount
 
   if (amount > 0) {
@@ -86,6 +90,10 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
     amountBuy: buyAmount,
     tokenSell: sellCurrency.starkTokenId,
     tokenBuy: buyCurrency.starkTokenId,
+
+    // TODO: generate unique nonce. Shall we just use Date.now() or
+    // shall we generate a random bytes?
+    // crypto.randomBytes(16).toString('hex')
     nonce: 0,
     expirationTimestamp: expiration
   }
