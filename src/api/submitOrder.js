@@ -55,8 +55,8 @@ module.exports = (
     starkSignature
   }
 
-  //console.log(data, data.meta, starkOrder, starkSignature)
-  const url = dvf.config.api + '/v1/trading/w/submitOrder'
-  //const url = 'http://localhost:7777' + '/v1/trading/w/submitOrder'
+  console.log(data, data.meta, starkOrder, starkSignature)
+  //const url = dvf.config.api + '/v1/trading/w/submitOrder'
+  const url = 'http://localhost:7777' + '/v1/trading/w/submitOrder'
   return post(url, { json: data })
 }
