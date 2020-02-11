@@ -95,7 +95,7 @@ describe('dvf.getOrdersHist', () => {
 
     const symbol = 'ETH:USDT'
 
-    const payloadValidator = jest.fn((body) => {
+    const payloadValidator = jest.fn(body => {
       expect(body.symbol).toBe(symbol)
       expect(typeof body.symbol).toBe('string')
       expect(typeof body.nonce).toBe('number')
@@ -120,8 +120,37 @@ describe('dvf.getOrdersHist', () => {
       await dvf.getOrdersHist(null)
 
       throw new Error('function should throw')
-    } catch(error) {
+    } catch (error) {
       expect(error.message).toEqual('ERR_INVALID_SYMBOL')
+    }
+  })
+
+  it('Posts to order history API and gets error response', async () => {
+    const symbol = 'ETH:USDT'
+
+    const apiErrorResponse = {
+      statusCode: 422,
+      error: 'Unprocessable Entity',
+      message:
+        'Please contact support if you believe there should not be an error here',
+      details: {
+        error: {
+          type: 'DVFError',
+          message: 'STARK_SIGNATURE_VERIFICATION_ERROR'
+        }
+      }
+    }
+    const payloadValidator = jest.fn(() => true)
+
+    nock(dvf.config.api)
+      .post('/v1/trading/r/orderHistory', payloadValidator)
+      .reply(422, apiErrorResponse)
+
+    try {
+      await dvf.getOrdersHist(symbol)
+    } catch (e) {
+      expect(e.error).toEqual(apiErrorResponse)
+      expect(payloadValidator).toBeCalled()
     }
   })
 })
