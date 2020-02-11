@@ -49,8 +49,36 @@ describe('dvf.register', () => {
       await dvf.register(starkPublicKey)
 
       throw new Error('function should throw')
-    } catch(error) {
+    } catch (error) {
       expect(error.message).toEqual('ERR_STARK_KEY_MISSING')
+    }
+  })
+
+  it('Posts to pre register config API and gets error response', async () => {
+    const apiErrorResponse = {
+      statusCode: 422,
+      error: 'Unprocessable Entity',
+      message:
+        'Please contact support if you believe there should not be an error here',
+      details: {
+        error: {
+          type: 'DVFError',
+          message: 'MUST_REGISTER_PRE_DEPOSIT'
+        }
+      }
+    }
+
+    const payloadValidator = jest.fn(() => true)
+
+    nock(dvf.config.api)
+      .post('/v1/trading/w/register', payloadValidator)
+      .reply(422, apiErrorResponse)
+
+    try {
+      await dvf.register('0x')
+    } catch (e) {
+      expect(e.error).toEqual(apiErrorResponse)
+      expect(payloadValidator).toBeCalled()
     }
   })
 })

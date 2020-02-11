@@ -61,4 +61,27 @@ describe('dvf.getConfig', () => {
     const config = await dvf.getConfig()
     expect(config).toEqual(apiResponse)
   })
+
+  it('Posts to config API and gets error response', async () => {
+    const apiErrorResponse = {
+      statusCode: 422,
+      error: 'Unprocessable Entity',
+      message:
+        'Please contact support if you believe there should not be an error here',
+      details: {
+        name: 'RequestError',
+        message: 'Error: connect ECONNREFUSED 127.0.0.1:2222'
+      }
+    }
+
+    nock(dvf.config.api)
+      .post('/v1/trading/r/getConf')
+      .reply(422, apiErrorResponse)
+
+    try {
+      await dvf.getConfig()
+    } catch (e) {
+      expect(e.error).toEqual(apiErrorResponse)
+    }
+  })
 })

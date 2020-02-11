@@ -203,8 +203,8 @@ describe('dvf.submitOrder', () => {
     }
   })
 
-  it('Posts to submit order API and gets error response', async () => {
-    const symbol = 'ETH:USDT'
+
+  it('Posts to submit order config API and gets error response', async () => {
 
     const apiErrorResponse = {
       statusCode: 422,
@@ -218,6 +218,7 @@ describe('dvf.submitOrder', () => {
         }
       }
     }
+
     const payloadValidator = jest.fn(() => true)
 
     nock(dvf.config.api)
@@ -226,17 +227,17 @@ describe('dvf.submitOrder', () => {
 
     try {
       await dvf.submitOrder(
-        'ETH:USDT', // symbol
-        '-0.1', // amount
-        1000, // price
+        'ETH:ZRX', // symbol
+        1, // amount
+        1, // price
         '', // gid
         '', // cid
         '0', // signedOrder
         '0', // validFor
-        '', // partnerId
+        'P1', // partnerId
         '', // feeRate
         '', // dynamicFeeRate
-        '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+        '100'
       )
     } catch (e) {
       expect(e.error).toEqual(apiErrorResponse)
