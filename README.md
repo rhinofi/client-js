@@ -50,7 +50,7 @@ A js client library for DeversiFi - StarkWare orders
 
 Alternatively on the browser you can use the standalone build
 ```html
-<script src="http://path/to/dist/efx.js"></script>
+<script src="http://path/to/dist/dvf.js"></script>
 ```
 
 ## Setup
@@ -76,16 +76,16 @@ to be prepared separately.
 ```javascript
 
 // In case of MetaMask make sure you call ethereum.enable() before using it
-const EFX = require('dvf-client-js')
-const efx = await EFX()
+const DVF = require('dvf-client-js')
+const dvf = await DVF()
 ```
 
 #### Using a remote node
 
 ```javascript
-const EFX = require('dvf-client-js')
-const web3 = new EFX.Web3("https://your-web3-provider")
-const efx = await EFX(web3)
+const DVF = require('dvf-client-js')
+const web3 = new DVF.Web3("https://your-web3-provider")
+const dvf = await DVF(web3)
 ```
 
 #### Using Infura
@@ -102,7 +102,7 @@ const infuraURL = 'https://mainnet.infura.io/v3/' + infuraKey
 const provider = new HDWalletProvider(privateKey, infuraURL)
 const web3 = new Web3(provider)
 
-efx = await EFX(web3)
+dvf = await DVF(web3)
 ````
 
 View the full example: [/examples/node_sell_eth_infura.js](/examples/node_sell_eth_infura.js)
@@ -112,12 +112,12 @@ View the full example: [/examples/node_sell_eth_infura.js](/examples/node_sell_e
 It's possible to overwrite values on the configuration on a per instance basis.
 
 The [default configuration](./src/config.js) can be overwriten with an optional
-parameter `userConf` when calling the EFX function.
+parameter `userConf` when calling the DVF function.
 
 For instance:
 
 ```javascript
-  efx = await EFX(web3, {
+  dvf = await DVF(web3, {
     api: 'https://your-custom-api-address'
   })
 ```
@@ -151,21 +151,21 @@ to this:
 }
 ```
 
-The complete compiled configuration is accessible through `efx.config`, for instance:
+The complete compiled configuration is accessible through `dvf.config`, for instance:
 
 ```javascript
-const efx = await EFX()
+const dvf = await DVF()
 
-const config = efx.config
+const config = dvf.config
 ```
 
 #### Gas Price
 
 You can setup a custom gas price by setting up the 'gasPrice' property
 ```javascript
-const efx = await EFX()
+const dvf = await DVF()
 
-efx.set('gasPrice', web3.utils.toWei('2', 'gwei'))
+dvf.set('gasPrice', web3.utils.toWei('2', 'gwei'))
 
 ```
 
@@ -184,7 +184,7 @@ you are required to approve it to interact with the time-lock smart contracts.
 
 ```javascript
 const token = 'ZRX'
-efx.contract.approve(token)
+dvf.contract.approve(token)
 ```
 
 This step does not need to be repeated again, and subsequently you are required
@@ -199,7 +199,7 @@ const token = 'ZRX'
 const amount = 15 // Number of tokens to lock
 const forTime = 48 // Time after which unlocking does not require permission
 
-const response = await efx.contract.lock(token, amount, forTime)
+const response = await dvf.contract.lock(token, amount, forTime)
 ```
 
 The time limit specified when locking is a maximum - tokens can always be
@@ -216,7 +216,7 @@ const symbol = 'ZRXETH'
 const amount = -15
 const price = 0.0025
 
-const orderId = await efx.submitOrder(symbol, amount, price)
+const orderId = await dvf.submitOrder(symbol, amount, price)
 ```
 
 Orders are generated and submitted, returning either an `orderId` or error. A
@@ -273,7 +273,7 @@ For example, if placing a buy order on the ETH/USD(T) market at a price of 100 U
 Equally a sell order at 100 USD would receive 102 USDT when settled on Trustless.
 
 ```javascript
-efx.submitOrder(symbol, amount, price) // => settlementPrice = price * (1 + settleSpread)
+dvf.submitOrder(symbol, amount, price) // => settlementPrice = price * (1 + settleSpread)
 ```
 The `settleSpread` parameter is set dynamically as a 30 minute rolling mean of the USDT/USD
 market exchange rate. When placing orders using `submitOrder` or generating them with
@@ -289,7 +289,7 @@ address which created and placed the order.
 In case you're not signing the requests yourself
 
 ```javascript
-await efx.cancelOrder(orderId)
+await dvf.cancelOrder(orderId)
 ```
 
 #### Signing Externally
@@ -297,10 +297,10 @@ await efx.cancelOrder(orderId)
 In case you're signing the requests yourself:
 
 ```javascript
-const sig = await efx.sign(parseInt(orderId).toString(16))
+const sig = await dvf.sign(parseInt(orderId).toString(16))
 const sigConcat = ethUtils.toRpcSig(sig.v, ethUtils.toBuffer(sig.r), ethUtils.toBuffer(sig.s))
 
-await efx.cancelOrder(parseInt(orderId), sigConcat)
+await dvf.cancelOrder(parseInt(orderId), sigConcat)
 ```
 
 ### Account History
@@ -310,10 +310,10 @@ you can simply get open orders and order history from the API as follows:
 
 ```javascript
 // Get all open orders
-const openOrders = await efx.getOrders()
+const openOrders = await dvf.getOrders()
 
 // Get all historical orders
-const historicalOrders = await efx.getOrdersHist()
+const historicalOrders = await dvf.getOrdersHist()
 ```
 
 If an unlocked account is not available to sign with, for example when using a
@@ -332,10 +332,10 @@ const hash = ethUtils.hashPersonalMessage(ethUtils.toBuffer(nonce.toString(16)))
 const signature = ethUtils.ecsign(hash, privKey)
 
 // Get all open orders
-const openOrders = await efx.getOrders(null, null, nonce, signature)
+const openOrders = await dvf.getOrders(null, null, nonce, signature)
 
 // Get all historical orders
-const historicalOrders = await efx.getOrdersHist(null, null, nonce, signature)
+const historicalOrders = await dvf.getOrdersHist(null, null, nonce, signature)
 ```
 
 ### Unlocking tokens
@@ -351,7 +351,7 @@ on Deversifi API to ask for such permission.
 ```javascript
 const token = 'ZRX'
 const amount = 15
-const response = await efx.contract.unlock(token, amount)
+const response = await dvf.contract.unlock(token, amount)
 ```
 
 When a particular token's lock time has not yet expired, permission is required
@@ -376,7 +376,7 @@ const nonce = ((Date.now() / 1000) + 350) + ''
 const hash = ethUtils.hashPersonalMessage(ethUtils.toBuffer(nonce.toString(16)))
 const signature = ethUtils.ecsign(hash, privKey)
 
-const response = await efx.contract.unlock(token, amount, nonce, signature)
+const response = await dvf.contract.unlock(token, amount, nonce, signature)
 
 ```
 
@@ -388,7 +388,7 @@ const response = await efx.contract.unlock(token, amount, nonce, signature)
 const token = 'ZRX'
 const amount = 0.001
 
-const response = await efx.contract.unlock(token, amount, forTime)
+const response = await dvf.contract.unlock(token, amount, forTime)
 
 ```
 
@@ -403,7 +403,7 @@ const symbol = 'ETHUSD'
 const amount = 1
 const price = 100
 
-efx.submitOrder(symbol, amount, price)
+dvf.submitOrder(symbol, amount, price)
 
 ```
 
@@ -415,7 +415,7 @@ const symbol = 'ETHUSD'
 const amount = -1
 const price = 100
 
-const orderId = await efx.submitOrder(symbol, amount, price)
+const orderId = await dvf.submitOrder(symbol, amount, price)
 
 ```
 
@@ -425,7 +425,7 @@ const orderId = await efx.submitOrder(symbol, amount, price)
 
 const id = 1
 
-const order = await efx.getOrder(id)
+const order = await dvf.getOrder(id)
 
 ```
 

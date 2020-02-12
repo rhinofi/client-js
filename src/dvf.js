@@ -57,5 +57,8 @@ module.exports = async (web3, userConfig = {}) => {
     console.warn('Please specify a valid account or account index')
   }
 
+  // get user config once we get the Web3 provider and Eth Address
+  await dvf.getUserConfig()
+
   return dvf
 }

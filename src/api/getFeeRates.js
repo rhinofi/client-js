@@ -1,4 +1,4 @@
-const { get } = require('request-promise')
+const post = require('../lib/dvf/post-authenticated')
 const _ = require('lodash')
 
 const calculateVolume = require('../lib/bfx/calculateVolume')
@@ -7,16 +7,12 @@ const calculateVolume = require('../lib/bfx/calculateVolume')
  *
  * Calculate feeRate based on deversifi feeRate rules
  */
-module.exports = async (dvf, symbol, amount, price) => {
+module.exports = async (dvf, symbol, amount, price, nonce, signature) => {
   const volume = await calculateVolume(symbol, amount, price)
 
-  // fetch freeRate from the api
+  const endpoint = '/v1/trading/r/getFeeRates'
 
-  const account = dvf.get('account')
-
-  const url = dvf.config.api + '/api/v1/feeRate/' + account
-
-  let feeRates = await get(url, { json: true })
+  let feeRates = await post(dvf, endpoint, nonce, signature)
 
   // filter all fees with threshold below volume
   let feeRate = _.filter(feeRates.fees, item => item.threshold <= volume)
