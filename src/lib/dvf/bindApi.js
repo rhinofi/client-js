@@ -24,15 +24,15 @@ module.exports = () => {
   }
 
   dvf.stark = {
-    createStarkOrder: compose(require('../../lib/stark/createStarkOrder')),
+    createOrder: compose(require('../stark/createOrder')),
     createOrderMessage: require('../../lib/stark/createOrderMessage'),
     sign: require('../../lib/stark/starkSign'),
     createTransferMsg: require('../../lib/stark/createTransferMessage'),
     createPrivateKey: require('../../lib/stark/createPrivateKey'),
-    createStarkKeyPair: require('../../lib/stark/createStarkKeyPair'),
-    register: require('../../api/contract/register'),
-    createRawStarkKeyPair: require('../../lib/stark/createRawStarkKeyPair')
+    createKeyPair: require('../stark/createKeyPair'),
+    register: require('../../api/contract/register')
   }
+
   // dvf.contract functions
   dvf.contract = {
     approve: compose(require('../../api/contract/approve')),
@@ -72,7 +72,8 @@ module.exports = () => {
   dvf.getBalance = compose(require('../../api/getBalance'))
   dvf.getConfig = compose(require('../../api/getConfig'))
   dvf.getDeposits = compose(require('../../api/getDeposits'))
-  dvf.getFeeRate = compose(require('../../api/getFeeRate'))
+  dvf.getFeeRates = compose(require('../../api/getFeeRates'))
+  dvf.getFeeRate = compose(require('../../api/getFeeRates'))
   dvf.getOrder = compose(require('../../api/getOrder'))
   dvf.getOrders = compose(require('../../api/getOrders'))
   dvf.getOrdersHist = compose(require('../../api/getOrdersHist'))

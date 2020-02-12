@@ -1,7 +1,7 @@
 const { post } = require('request-promise')
 const validAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = (
+module.exports = async (
   dvf,
   symbol,
   amount,
@@ -15,22 +15,33 @@ module.exports = (
   dynamicFeeRate,
   starkPrivateKey
 ) => {
-  validAssertions(dvf, { amount, symbol, price, starkPrivateKey })
+  validAssertions(dvf, {amount, symbol, price, starkPrivateKey})
 
   const ethAddress = dvf.get('account')
 
-  const { starkOrder, starkMessage } = dvf.stark.createStarkOrder(
+  const reuslt = dvf.stark.createOrder(
     symbol,
     amount,
     price,
     validFor,
     feeRate
   )
-  const { starkKeyPair, starkPublicKey } = dvf.stark.createRawStarkKeyPair(
+
+  const { starkOrder, starkMessage } = dvf.stark.createOrder(
+    symbol,
+    amount,
+    price,
+    validFor,
+    feeRate
+  )
+
+
+  const { starkKeyPair, starkPublicKey } = await dvf.stark.createKeyPair(
     starkPrivateKey
   )
 
   const starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
+
   const type = 'EXCHANGE LIMIT'
   const protocol = 'stark'
   const data = {

@@ -3,16 +3,13 @@ const instance = require('./test/helpers/instance')
 const _ = require('lodash')
 
 const mockGetConf = require('./test/fixtures/getConf')
-const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 let dvf
 
 describe('dvf.getOrders', () => {
   beforeAll(async () => {
     mockGetConf()
-    mockGetUserConf()
     dvf = await instance()
-    await dvf.getUserConfig()
   })
 
   it('Queries all orders from public API', async () => {
@@ -33,16 +30,6 @@ describe('dvf.getOrders', () => {
 
     expect(payloadValidator).toBeCalled()
     expect(response.id).toEqual(apiResponse.id)
-  })
-
-  it('GetOrders checks for symbol....', async () => {
-    try {
-      await dvf.getOrders(null)
-
-      throw new Error('function should throw')
-    } catch (error) {
-      expect(error.message).toEqual('ERR_INVALID_SYMBOL')
-    }
   })
 
   it('Posts to open orders API and gets error response', async () => {

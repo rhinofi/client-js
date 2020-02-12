@@ -3,16 +3,13 @@ const instance = require('./test/helpers/instance')
 const _ = require('lodash')
 
 const mockGetConf = require('./test/fixtures/getConf')
-const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 let dvf
 
 describe('dvf.getBalance', () => {
   beforeAll(async () => {
     mockGetConf()
-    mockGetUserConf()
     dvf = await instance()
-    await dvf.getUserConfig()
   })
 
   it(`Returns the user's token balance`, async () => {
@@ -32,7 +29,7 @@ describe('dvf.getBalance', () => {
       })
       .reply(200, apiResponse)
 
-    const balance = await dvf.getBalance(nonce, signature, 'ETH')
+    const balance = await dvf.getBalance('ETH', nonce, signature)
     expect(balance).toEqual(apiResponse)
   })
 
@@ -72,7 +69,7 @@ describe('dvf.getBalance', () => {
       .reply(422, apiErrorResponse)
 
     try {
-      await dvf.getBalance(nonce, signature, 'ETH')
+      await dvf.getBalance('ETH', nonce, signature)
     } catch (e) {
       expect(e.error).toEqual(apiErrorResponse)
     }

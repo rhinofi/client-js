@@ -2,7 +2,6 @@ const nock = require('nock')
 const instance = require('./test/helpers/instance')
 
 const mockGetConf = require('./test/fixtures/getConf')
-const mockGetUserConf = require('./test/fixtures/getUserConf')
 
 const sw = require('starkware_crypto')
 const _ = require('lodash')
@@ -12,9 +11,7 @@ let dvf
 describe('dvf.deposit', () => {
   beforeAll(async () => {
     mockGetConf()
-    mockGetUserConf()
     dvf = await instance()
-    await dvf.getUserConfig()
   })
 
   it('Deposits ERC20 token to users vault', async () => {

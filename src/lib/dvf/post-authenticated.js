@@ -23,5 +23,4 @@ module.exports = async (dvf, endpoint, nonce, signature, data = {}) => {
   data = _.omitBy(data, _.isNil)
 
   return post(url, {json: data})
-
 }
