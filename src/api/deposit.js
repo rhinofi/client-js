@@ -9,8 +9,8 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
 
   const quantisedAmount = dvf.token.toQuantizedAmount(token, amount)
 
-  const tempVaultId = dvf.config.tempStarkVaultId
-  const nonce = dvf.config.depositNonce
+  const tempVaultId = dvf.config.DVF.tempStarkVaultId
+  const nonce = dvf.config.DVF.depositNonce
   const starkTokenId = currency.starkTokenId
   let starkVaultId = currency.starkVaultId
   if (!starkVaultId) {

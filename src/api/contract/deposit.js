@@ -1,8 +1,6 @@
 const BigNumber = require('bignumber.js')
 
 module.exports = async (dvf, vaultId, token, amount, ethAddress) => {
-  const currency = dvf.token.getTokenInfo(token)
-
   let value
   if (token === 'ETH') {
     value = dvf.token.toBaseUnitAmount(token, amount)
