@@ -11,8 +11,8 @@ module.exports = (starkKeyPair, starkMessage) => {
   try {
     tempSignature = sw.sign(starkKeyPair, starkMessage)
     starkSignature = {
-      r: '0x' + tempSignature.r,
-      w: '0x' + tempSignature.s.invm(sw.ec.n)
+      r: '0x' + tempSignature.r.toString('hex'),
+      w: '0x' + tempSignature.s.invm(sw.ec.n).toString('hex')
     }
     console.log('tempSignature, starkSignature ', tempSignature, starkSignature)
   } catch (e) {

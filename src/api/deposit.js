@@ -24,11 +24,14 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   expireTime =
     Math.floor(Date.now() / (1000 * 3600)) + dvf.config.defaultStarkExpiry
 
-  const { status, transactionHash } = await dvf.contract.deposit(
-    tempVaultId,
-    token,
-    amount
-  )
+  // const { status, transactionHash } = await dvf.contract.deposit(
+  //   tempVaultId,
+  //   token,
+  //   amount
+  // )
+
+  // used for testing without making onchain request
+  // const { status, transactionHash } = { status: true, transactionHash: '0xabc' }
 
   if (!status) {
     throw new DVFError('ERR_ONCHAIN_DEPOSIT')
@@ -45,11 +48,8 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   )
 
   const starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
-  //console.log({ starkMessage, starkSignature })
 
-  //const url = dvf.config.api + '/v1/trading/w/deposit'
-  //const url = 'https://api.deversifi.dev' + '/v1/trading/w/deposit'
-  const url = 'http://localhost:7777' + '/v1/trading/w/deposit'
+  const url = dvf.config.api + '/v1/trading/w/deposit'
 
   const data = {
     token,
