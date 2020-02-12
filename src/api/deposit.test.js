@@ -155,7 +155,7 @@ describe('dvf.deposit', () => {
       details: {
         error: {
           type: 'DVFError',
-          message: 'MUST_REGISTER_PRE_DEPOSIT'
+          message: 'MUST_REGISTER'
         }
       }
     }

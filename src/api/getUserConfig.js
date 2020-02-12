@@ -5,7 +5,12 @@ module.exports = async (dvf, nonce, signature) => {
 
   const exchangeUserConf = await post(dvf, endpoint, nonce, signature)
 
-  dvf.config = Object.assign(dvf.config, exchangeUserConf)
+  // TODO: here we have to check what was the response, if we need to 
+  // register then simply ignore and return, otherwise merge the config.
+  // REVIEW: test e2e, is this if actually working?
+  if(!exchangeUserConf.error){
+    dvf.config = Object.assign(dvf.config, exchangeUserConf)
+  }
 
   return exchangeUserConf
 }
