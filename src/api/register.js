@@ -1,12 +1,12 @@
 const { post } = require('request-promise')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (dvf, starkPublicKey) => {
-  validateAssertions(dvf, {starkPublicKey})
+module.exports = async (dvf, starkPublicKey, deFiSignature) => {
+  validateAssertions(dvf, { starkPublicKey, deFiSignature })
 
   const starkKey = starkPublicKey.x
-  const onchainRegister = await dvf.stark.register(dvf, starkKey)
-  
+  const onchainRegister = await dvf.stark.register(dvf, starkKey, deFiSignature)
+
   //console.log('onchain register contract call result: ', onchainRegister)
   if (onchainRegister.error) {
     return onchainRegister

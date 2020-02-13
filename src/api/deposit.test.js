@@ -15,7 +15,7 @@ describe('dvf.deposit', () => {
   })
 
   it('Deposits ERC20 token to users vault', async () => {
-    const amount = 31
+    const amount = 71
     const token = 'ZRX'
 
     const starkPrivateKey = '100'
@@ -47,11 +47,11 @@ describe('dvf.deposit', () => {
       .reply(200, apiResponse)
 
     const result = await dvf.deposit(token, amount, starkPrivateKey)
-    //console.log({ result })
+    console.log({ result })
     expect(result).toEqual(apiResponse)
   })
 
-  xit('Deposits ETH to users vault', async () => {
+  it('Deposits ETH to users vault', async () => {
     const amount = 0.01
     const token = 'ETH'
 

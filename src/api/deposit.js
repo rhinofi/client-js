@@ -9,8 +9,8 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
 
   const quantisedAmount = dvf.token.toQuantizedAmount(token, amount)
 
-  const tempVaultId = 1
-  const nonce = '1'
+  const tempVaultId = dvf.config.DVF.tempStarkVaultId
+  const nonce = dvf.config.DVF.depositNonce
   const starkTokenId = currency.starkTokenId
   let starkVaultId = currency.starkVaultId
   if (!starkVaultId) {
@@ -30,6 +30,9 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     amount
   )
 
+  // used for testing without making onchain request
+  // const { status, transactionHash } = { status: true, transactionHash: '0xabc' }
+
   if (!status) {
     throw new DVFError('ERR_ONCHAIN_DEPOSIT')
   }
@@ -45,10 +48,8 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   )
 
   const starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
-  //console.log({ starkMessage, starkSignature })
 
   const url = dvf.config.api + '/v1/trading/w/deposit'
-  //const url = 'https://api.deversifi.dev' + '/v1/trading/w/deposit'
 
   const data = {
     token,
@@ -59,7 +60,6 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     expireTime,
     ethTxHash: transactionHash
   }
-  
-  //console.log({ data })
+  console.log({ data })
   return post(url, { json: data })
 }

@@ -59,7 +59,7 @@ describe('dvf.submitOrder', () => {
     expect(response.id).toEqual(apiResponse.id)
   })
 
-  it('Submits sell order and receives response', async () => {
+  it.only('Submits sell order and receives response', async () => {
     const apiResponse = { id: '408231' }
 
     // User Specific Parameters
@@ -70,9 +70,9 @@ describe('dvf.submitOrder', () => {
       .post('/v1/trading/w/submitOrder', body => {
         return _.matches({
           type: 'EXCHANGE LIMIT',
-          symbol: 'ETH:USDT',
-          amount: '-0.1',
-          price: 1000,
+          symbol: 'ZRX:ETH',
+          amount: '-15',
+          price: 100,
           meta: {
             ethAddress: '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404',
             starkKey:
@@ -83,8 +83,8 @@ describe('dvf.submitOrder', () => {
       .reply(200, apiResponse)
 
     const response = await dvf.submitOrder(
-      'ETH:USDT', // symbol
-      '-1', // amount
+      'ZRX:ETH', // symbol
+      '-55', // amount
       100, // price
       '', // gid
       '', // cid
@@ -95,6 +95,7 @@ describe('dvf.submitOrder', () => {
       '', // dynamicFeeRate
       starkPrivateKey
     )
+    console.log({ response })
     expect(response.id).toEqual(apiResponse.id)
   })
 
