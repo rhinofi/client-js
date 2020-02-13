@@ -5,6 +5,6 @@ module.exports = (dvf, token, baseUnitAmount) => {
 
   return new BN(baseUnitAmount)
     .shiftedBy(-1 * tokenInfo.decimals)
-    .integerValue(BN.ROUND_FLOOR)
+    .decimalPlaces(3)
     .toString()
 }
