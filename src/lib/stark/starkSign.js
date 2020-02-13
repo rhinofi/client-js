@@ -9,12 +9,10 @@ module.exports = (starkKeyPair, starkMessage) => {
   }
 
   try {
-    tempSignature = sw.sign(starkKeyPair, starkMessage)
-    starkSignature = {
-      r: '0x' + tempSignature.r.toString('hex'),
-      w: '0x' + tempSignature.s.invm(sw.ec.n).toString('hex')
-    }
-    console.log('tempSignature, starkSignature ', tempSignature, starkSignature)
+    starkSignature = sw.sign(starkKeyPair, starkMessage)
+    // adding parameter required for transfer verification
+    starkSignature.w = starkSignature.s.invm(sw.ec.n).toString('hex')
+    console.log('starkSignature ', starkSignature)
   } catch (e) {
     return {
       error: 'ERR_CREATING_STARK_SIGNATURE',

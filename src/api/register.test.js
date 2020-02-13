@@ -78,7 +78,7 @@ describe('dvf.register', () => {
       .reply(422, apiErrorResponse)
 
     try {
-      await dvf.register('0x')
+      await dvf.register('0x', '0xdefi01')
     } catch (e) {
       expect(e.error).toEqual(apiErrorResponse)
       expect(payloadValidator).toBeCalled()
