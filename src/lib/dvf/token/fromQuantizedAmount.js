@@ -6,6 +6,6 @@ module.exports = (dvf, token, quantizedAmount) => {
   return new BN(quantizedAmount)
     .times(tokenInfo.quantization)
     .shiftedBy(-1 * tokenInfo.decimals)
-    .integerValue(BN.ROUND_FLOOR)
+    .decimalPlaces(3)
     .toString()
 }
