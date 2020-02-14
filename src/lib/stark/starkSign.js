@@ -1,4 +1,4 @@
-const errorReasons = require('../../lib/dvf/DVFError')
+const DVFError = require('../../lib/dvf/DVFError')
 const sw = require('starkware_crypto')
 
 module.exports = (starkKeyPair, starkMessage) => {
@@ -12,12 +12,10 @@ module.exports = (starkKeyPair, starkMessage) => {
     starkSignature = sw.sign(starkKeyPair, starkMessage)
     // adding parameter required for transfer verification
     starkSignature.w = starkSignature.s.invm(sw.ec.n).toString('hex')
-    console.log('starkSignature ', starkSignature)
+    //console.log('starkSignature ', starkSignature)
   } catch (e) {
-    return {
-      error: 'ERR_CREATING_STARK_SIGNATURE',
-      reason: errorReasons.ERR_CREATING_STARK_SIGNATURE
-    }
+    cossole.log('/starkSign ', e)
+    throw new DVFError('ERR_CREATING_STARK_SIGNATURE')
   }
 
   return starkSignature
