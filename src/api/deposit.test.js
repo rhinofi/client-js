@@ -14,19 +14,13 @@ describe('dvf.deposit', () => {
     dvf = await instance()
   })
 
-  it('Deposits ERC20 token to users vault', async () => {
-    const amount = 71
-    const token = 'ZRX'
-
+  it(`Deposits ERC20 token to user's vault`, async () => {
     const starkPrivateKey = '100'
-    const starkKeyPair = sw.ec.keyFromPrivate(starkPrivateKey, 'hex')
-    const fullPublicKey = sw.ec.keyFromPublic(
-      starkKeyPair.getPublic(true, 'hex'),
-      'hex'
-    )
+    const amount = 67
+    const token = 'USDT'
     const starkPublicKey = {
-      x: fullPublicKey.pub.getX().toString('hex'),
-      y: fullPublicKey.pub.getY().toString('hex')
+      x: '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
+      y: '58f7ce5eb6eb5bd24f70394622b1f4d2c54ebca317a3e61bf9f349dccf166cf'
     }
 
     const apiResponse = {
@@ -35,56 +29,71 @@ describe('dvf.deposit', () => {
       starkPublicKey
     }
 
+    const payloadValidator = jest.fn(body => {
+      expect(body.token).toBe(apiResponse.token)
+      expect(body.amount).toBe(apiResponse.amount)
+      expect(body.starkPublicKey).toMatchObject(apiResponse.starkPublicKey)
+      expect(body.starkSignature.r).toMatch(/[\da-f]/i)
+      expect(body.starkSignature.s).toMatch(/[\da-f]/i)
+      expect(body.starkSignature.w).toMatch(/[\da-f]/i)
+      expect(body.starkSignature.recoveryParam).toBeLessThan(5)
+      expect(typeof body.starkVaultId).toBe('number')
+      expect(typeof body.expireTime).toBe('number')
+      expect(body.ethTxHash).toMatch(/[\da-f]/i)
+      return true
+    })
+
     nock(dvf.config.api)
-      .post('/v1/trading/w/deposit', body => {
-        //console.log({ body })
-        return (
-          _.isMatch(body, apiResponse) &&
-          body.starkSignature &&
-          body.starkVaultId
-        )
-      })
+      .post('/v1/trading/w/deposit', payloadValidator)
       .reply(200, apiResponse)
 
-    const result = await dvf.deposit(token, amount, starkPrivateKey)
-    console.log({ result })
-    expect(result).toEqual(apiResponse)
+    await dvf.deposit(token, amount, starkPrivateKey)
+
+    expect(payloadValidator).toBeCalled()
   })
 
   it('Deposits ETH to users vault', async () => {
-    const amount = 0.01
-    const token = 'ETH'
-
     const starkPrivateKey = '100'
-    const starkKeyPair = sw.ec.keyFromPrivate(starkPrivateKey, 'hex')
-    const fullPublicKey = sw.ec.keyFromPublic(
-      starkKeyPair.getPublic(true, 'hex'),
-      'hex'
-    )
+    const amount = 0.317
+    const token = 'ETH'
     const starkPublicKey = {
-      x: fullPublicKey.pub.getX().toString('hex'),
-      y: fullPublicKey.pub.getY().toString('hex')
+      x: '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
+      y: '58f7ce5eb6eb5bd24f70394622b1f4d2c54ebca317a3e61bf9f349dccf166cf'
     }
+
     const apiResponse = {
       token,
       amount,
-      starkPublicKey
+      starkPublicKey,
+      starkSignature: {
+        r: '58f105272e16fde0d633aa6a1f11524a9b2392febe4072f3d5b53f5e6a5380c',
+        s: '33c21d423d5717f4b8b70a71ca3966c5c4fe3e607d3fd100b52529f22119a84',
+        recoveryParam: 1,
+        w: '48ec5712517784ca0bca83392129e70bb32fcfab7d31c881c5f6e51b9689803'
+      }
     }
 
+    const payloadValidator = jest.fn(body => {
+      expect(body.token).toBe(apiResponse.token)
+      expect(body.amount).toBe(apiResponse.amount)
+      expect(body.starkPublicKey).toMatchObject(apiResponse.starkPublicKey)
+      expect(body.starkSignature.r).toMatch(/[\da-f]/i)
+      expect(body.starkSignature.s).toMatch(/[\da-f]/i)
+      expect(body.starkSignature.w).toMatch(/[\da-f]/i)
+      expect(body.starkSignature.recoveryParam).toBeLessThan(5)
+      expect(typeof body.starkVaultId).toBe('number')
+      expect(typeof body.expireTime).toBe('number')
+      expect(body.ethTxHash).toMatch(/[\da-f]/i)
+      return true
+    })
+
     nock(dvf.config.api)
-      .post('/v1/trading/w/deposit', body => {
-        //console.log({ body })
-        return (
-          _.isMatch(body, apiResponse) &&
-          body.starkSignature &&
-          body.starkVaultId
-        )
-      })
+      .post('/v1/trading/w/deposit', payloadValidator)
       .reply(200, apiResponse)
 
-    const result = await dvf.deposit(token, amount, starkPrivateKey)
-    //console.log({ result })
-    expect(result).toEqual(apiResponse)
+    await dvf.deposit(token, amount, starkPrivateKey)
+
+    expect(payloadValidator).toBeCalled()
   })
 
   it('Gives error for deposit with value of 0', async () => {
