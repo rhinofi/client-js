@@ -15,51 +15,64 @@ describe('dvf.submitOrder', () => {
   })
 
   it.only('Submits buy order and receives response', async () => {
-    const apiResponse = { id: '408231' }
+    const symbol = 'ETH:USDT'
+    const amount = 0.137
+    const price = 250
+
+    const expectedBody = {
+      cid: '1',
+      gid: '1',
+      type: 'EXCHANGE LIMIT',
+      symbol,
+      amount,
+      price,
+      meta: {
+        starkPublicKey: {
+          x: '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
+          y: '58f7ce5eb6eb5bd24f70394622b1f4d2c54ebca317a3e61bf9f349dccf166cf'
+        }
+      },
+      protocol: 'stark',
+      partnerId: 'P1',
+      feeRate: '0',
+      dynamicFeeRate: '0'
+    }
     const starkPrivateKey = process.env.PRIVATE_STARK_KEY
 
-    const payloadValidator = jest.fn((body) => {
-      // console.log("posted body ->", body)
-
-      // TODO: validate payload properly
-      //     type: 'EXCHANGE LIMIT',
-      //     symbol: 'ZRX:ETH',
-      //     amount: '10',
-      //     price: 1,
-      //     meta: {
-      //       ethAddress: '0x341e46a49f15785373ede443df0220dea6a41bbc',
-      //       starkKey:
-      //         '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075'
-      //     }
-      //   })
-      expect(body.type).toEqual('EXCHANGE LIMIT')
+    const payloadValidator = jest.fn(body => {
+      console.log('posted body ->', body)
+      expect(body).toMatchObject(expectedBody)
+      expect(body.meta.ethAddress).toMatch(/[\da-f]/i)
+      expect(body.meta.starkMessage).toMatch(/[\da-f]/i)
+      expect(body.meta.starkSignature.r).toMatch(/[\da-f]/i)
+      expect(body.meta.starkSignature.s).toMatch(/[\da-f]/i)
+      expect(body.meta.starkSignature.w).toMatch(/[\da-f]/i)
+      expect(body.meta.starkSignature.recoveryParam).toBeLessThan(5)
+      expect(typeof body.meta.starkOrder.expirationTimestamp).toBe('number')
+      expect(typeof body.meta.starkOrder.nonce).toBe('number')
       return true
     })
 
     nock(dvf.config.api)
       .post('/v1/trading/w/submitOrder', payloadValidator)
-      .reply(200, apiResponse)
+      .reply(200)
 
     const response = await dvf.submitOrder(
-      'ZRX:ETH', // symbol
-      10, // amount
-      1, // price
-      '', // gid
-      '', // cid
+      symbol,
+      amount, // amount
+      price, // price
+      '1', // gid
+      '1', // cid
       '0', // signedOrder
       '0', // validFor
       'P1', // partnerId
-      '', // feeRate
-      '', // dynamicFeeRate
+      '0', // feeRate
+      '0', // dynamicFeeRate
       starkPrivateKey
     )
-
-    return
-    
-    expect(response.id).toEqual(apiResponse.id)
   })
 
-  it.only('Submits sell order and receives response', async () => {
+  it('Submits sell order and receives response', async () => {
     const apiResponse = { id: '408231' }
 
     // User Specific Parameters
@@ -71,8 +84,8 @@ describe('dvf.submitOrder', () => {
         return _.matches({
           type: 'EXCHANGE LIMIT',
           symbol: 'ZRX:ETH',
-          amount: '-15',
-          price: 100,
+          amount: '-41',
+          price: 0.079091,
           meta: {
             ethAddress: '0x65CEEE596B2aba52Acc09f7B6C81955C1DB86404',
             starkKey:
@@ -209,9 +222,7 @@ describe('dvf.submitOrder', () => {
     }
   })
 
-
   it('Posts to submit order config API and gets error response', async () => {
-
     const apiErrorResponse = {
       statusCode: 422,
       error: 'Unprocessable Entity',
