@@ -14,7 +14,7 @@ module.exports = async (dvf, token) => {
   ]
 
   // TODO: review error format
-  if (token === 'USD' && (await dvf.contract.isApproved(token)) !== 0) {
+  if (token === 'USD' && parseInt(await dvf.contract.isApproved(token)) !== 0) {
     throw new DVFError('ERR_TRADING_ETHFX_CANT_APPROVE_USDT_TWICE')
   }
 
