@@ -14,9 +14,9 @@ describe('dvf.deposit', () => {
     dvf = await instance()
   })
 
-  it(`Deposits ERC20 token to user's vault`, async () => {
+  it.only(`Deposits ERC20 token to user's vault`, async () => {
     const starkPrivateKey = '100'
-    const amount = 67
+    const amount = 1394
     const token = 'USDT'
     const starkPublicKey = {
       x: '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
@@ -30,9 +30,7 @@ describe('dvf.deposit', () => {
     }
 
     const payloadValidator = jest.fn(body => {
-      expect(body.token).toBe(apiResponse.token)
-      expect(body.amount).toBe(apiResponse.amount)
-      expect(body.starkPublicKey).toMatchObject(apiResponse.starkPublicKey)
+      expect(body).toMatchObject(apiResponse)
       expect(body.starkSignature.r).toMatch(/[\da-f]/i)
       expect(body.starkSignature.s).toMatch(/[\da-f]/i)
       expect(body.starkSignature.w).toMatch(/[\da-f]/i)
@@ -54,29 +52,19 @@ describe('dvf.deposit', () => {
 
   it('Deposits ETH to users vault', async () => {
     const starkPrivateKey = '100'
-    const amount = 0.317
     const token = 'ETH'
-    const starkPublicKey = {
-      x: '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
-      y: '58f7ce5eb6eb5bd24f70394622b1f4d2c54ebca317a3e61bf9f349dccf166cf'
-    }
-
+    const amount = 1.117
     const apiResponse = {
       token,
       amount,
-      starkPublicKey,
-      starkSignature: {
-        r: '58f105272e16fde0d633aa6a1f11524a9b2392febe4072f3d5b53f5e6a5380c',
-        s: '33c21d423d5717f4b8b70a71ca3966c5c4fe3e607d3fd100b52529f22119a84',
-        recoveryParam: 1,
-        w: '48ec5712517784ca0bca83392129e70bb32fcfab7d31c881c5f6e51b9689803'
+      starkPublicKey: {
+        x: '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
+        y: '58f7ce5eb6eb5bd24f70394622b1f4d2c54ebca317a3e61bf9f349dccf166cf'
       }
     }
 
     const payloadValidator = jest.fn(body => {
-      expect(body.token).toBe(apiResponse.token)
-      expect(body.amount).toBe(apiResponse.amount)
-      expect(body.starkPublicKey).toMatchObject(apiResponse.starkPublicKey)
+      expect(body).toMatchObject(apiResponse)
       expect(body.starkSignature.r).toMatch(/[\da-f]/i)
       expect(body.starkSignature.s).toMatch(/[\da-f]/i)
       expect(body.starkSignature.w).toMatch(/[\da-f]/i)
