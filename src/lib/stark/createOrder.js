@@ -15,10 +15,10 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
 
   // console.log("sell :", sellSymbol, sellCurrency)
   // console.log("buy  :", buySymbol, buyCurrency)
-  
+
   if (!vaultIdSell) {
-    console.error("No token vault for :", sellSymbol)
-    
+    console.error('No token vault for :', sellSymbol)
+
     throw new DVFError('ERR_NO_TOKEN_VAULT')
   }
 
@@ -32,7 +32,7 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
       throw new DVFError('ERR_SYMBOL_DOES_NOT_MATCH')
     }
   }
-  
+
   let buyAmount, sellAmount
 
   if (amount > 0) {
@@ -48,7 +48,7 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
     sellAmount = new BigNumber(10)
       .pow(sellCurrency.decimals)
       .times(amount)
-      .dividedBy(buyCurrency.quantization)
+      .dividedBy(sellCurrency.quantization)
       .times(price)
       .times(1 + (sellCurrency.settleSpread || 0))
       .integerValue(BigNumber.ROUND_FLOOR)
@@ -62,7 +62,6 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
       .dividedBy(buyCurrency.quantization)
       .times(amount)
       .times(price)
-      .abs()
       .times(1 + (buyCurrency.settleSpread || 0))
       .times(1 - feeRate)
       .integerValue(BigNumber.ROUND_FLOOR)
@@ -70,9 +69,8 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
       .toString()
     sellAmount = new BigNumber(10)
       .pow(sellCurrency.decimals)
-      .dividedBy(buyCurrency.quantization)
+      .dividedBy(sellCurrency.quantization)
       .times(amount)
-      .abs()
       .times(1 + (sellCurrency.settleSpread || 0))
       .integerValue(BigNumber.ROUND_FLOOR)
       .abs()
