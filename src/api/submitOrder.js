@@ -19,8 +19,6 @@ module.exports = async (
 
   const ethAddress = dvf.get('account')
 
-  const reuslt = dvf.stark.createOrder(symbol, amount, price, validFor, feeRate)
-
   const { starkOrder, starkMessage } = dvf.stark.createOrder(
     symbol,
     amount,
@@ -59,8 +57,9 @@ module.exports = async (
     starkSignature
   }
 
-  //console.log(data, data.meta, starkOrder, starkSignature)
-  const url = dvf.config.api + '/v1/trading/w/submitOrder'
+  //const url = dvf.config.api + '/v1/trading/w/submitOrder'
+  const url = 'https://api.deversifi.dev' + '/v1/trading/w/submitOrder'
 
-  return post(url, { json: data })
+  const a = post(url, { json: data })
+  console.log(a)
 }
