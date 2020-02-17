@@ -14,7 +14,7 @@ describe('dvf.submitOrder', () => {
     dvf = await instance()
   })
 
-  it.only('Submits buy order and receives response', async () => {
+  it('Submits buy order and receives response', async () => {
     const symbol = 'ETH:USDT'
     const amount = 0.137
     const price = 250

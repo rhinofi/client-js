@@ -14,7 +14,7 @@ describe('dvf.deposit', () => {
     dvf = await instance()
   })
 
-  it.only(`Deposits ERC20 token to user's vault`, async () => {
+  it(`Deposits ERC20 token to user's vault`, async () => {
     const starkPrivateKey = '100'
     const amount = 1394
     const token = 'USDT'
