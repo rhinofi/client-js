@@ -57,9 +57,6 @@ module.exports = async (
     starkSignature
   }
 
-  //const url = dvf.config.api + '/v1/trading/w/submitOrder'
-  const url = 'https://api.deversifi.dev' + '/v1/trading/w/submitOrder'
-
-  const a = post(url, { json: data })
-  console.log(a)
+  const url = dvf.config.api + '/v1/trading/w/submitOrder'
+  return post(url, { json: data })
 }
