@@ -39,12 +39,12 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
 
   const { starkMessage } = dvf.stark.createTransferMsg(
     quantisedAmount,
-    nonce, // nonce
-    tempVaultId, // sender_vault_id
-    starkTokenId, // token
-    starkVaultId, // receiver_vault_id
-    `0x${starkPublicKey.x}`, // receiver_public_key
-    expireTime // expiration_timestamp
+    nonce,
+    tempVaultId,
+    starkTokenId,
+    starkVaultId,
+    `0x${starkPublicKey.x}`,
+    expireTime
   )
 
   const starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
@@ -60,6 +60,6 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     expireTime,
     ethTxHash: transactionHash
   }
-  console.log({ data })
+  //console.log({ data })
   return post(url, { json: data })
 }

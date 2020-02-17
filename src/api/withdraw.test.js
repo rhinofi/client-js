@@ -13,8 +13,8 @@ describe('dvf.withdraw', () => {
   })
 
   it(`posts user's withdrawal request`, async () => {
-    const token = 'ETH'
-    const amount = 1
+    const token = 'ZRX'
+    const amount = 100
 
     const apiResponse = { ok: true }
 
