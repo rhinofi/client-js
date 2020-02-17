@@ -14,7 +14,7 @@ describe('dvf.submitOrder', () => {
     dvf = await instance()
   })
 
-  it.only('Submits buy order and receives response', async () => {
+  it('Submits buy order and receives response', async () => {
     const symbol = 'ETH:USDT'
     const amount = 0.137
     const price = 250
@@ -46,7 +46,6 @@ describe('dvf.submitOrder', () => {
       expect(body.meta.starkMessage).toMatch(/[\da-f]/i)
       expect(body.meta.starkSignature.r).toMatch(/[\da-f]/i)
       expect(body.meta.starkSignature.s).toMatch(/[\da-f]/i)
-      expect(body.meta.starkSignature.w).toMatch(/[\da-f]/i)
       expect(body.meta.starkSignature.recoveryParam).toBeLessThan(5)
       expect(typeof body.meta.starkOrder.expirationTimestamp).toBe('number')
       expect(typeof body.meta.starkOrder.nonce).toBe('number')

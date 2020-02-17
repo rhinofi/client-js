@@ -14,7 +14,7 @@ describe('dvf.deposit', () => {
     dvf = await instance()
   })
 
-  it.only(`Deposits ERC20 token to user's vault`, async () => {
+  it(`Deposits ERC20 token to user's vault`, async () => {
     const starkPrivateKey = '100'
     const amount = 1394
     const token = 'USDT'
@@ -33,7 +33,6 @@ describe('dvf.deposit', () => {
       expect(body).toMatchObject(apiResponse)
       expect(body.starkSignature.r).toMatch(/[\da-f]/i)
       expect(body.starkSignature.s).toMatch(/[\da-f]/i)
-      expect(body.starkSignature.w).toMatch(/[\da-f]/i)
       expect(body.starkSignature.recoveryParam).toBeLessThan(5)
       expect(typeof body.starkVaultId).toBe('number')
       expect(typeof body.expireTime).toBe('number')
@@ -67,7 +66,6 @@ describe('dvf.deposit', () => {
       expect(body).toMatchObject(apiResponse)
       expect(body.starkSignature.r).toMatch(/[\da-f]/i)
       expect(body.starkSignature.s).toMatch(/[\da-f]/i)
-      expect(body.starkSignature.w).toMatch(/[\da-f]/i)
       expect(body.starkSignature.recoveryParam).toBeLessThan(5)
       expect(typeof body.starkVaultId).toBe('number')
       expect(typeof body.expireTime).toBe('number')
