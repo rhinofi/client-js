@@ -1,8 +1,10 @@
 const nock = require('nock')
 const instance = require('./test/helpers/instance')
-const _ = require('lodash')
 
 const mockGetConf = require('./test/fixtures/getConf')
+
+const sw = require('starkware_crypto')
+const _ = require('lodash')
 
 let dvf
 
@@ -12,18 +14,28 @@ describe('dvf.withdraw', () => {
     dvf = await instance()
   })
 
-  it(`posts user's withdrawal request`, async () => {
-    const token = 'ZRX'
-    const amount = 100
+  it(`Withdrawas ERC20 token to user's vault`, async () => {
+    const starkPrivateKey = '100'
+    const amount = 12
+    const token = 'USDT'
+    const starkPublicKey = {
+      x: '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
+      y: '58f7ce5eb6eb5bd24f70394622b1f4d2c54ebca317a3e61bf9f349dccf166cf'
+    }
 
-    const apiResponse = { ok: true }
+    const apiResponse = {
+      token,
+      amount,
+      starkPublicKey
+    }
 
     const payloadValidator = jest.fn(body => {
-      expect(body.token).toEqual(token)
-      expect(body.amount).toEqual(amount)
-
-      expect(typeof body.nonce).toBe('number')
-      expect(typeof body.signature).toBe('string')
+      expect(body).toMatchObject(apiResponse)
+      expect(body.starkSignature.r).toMatch(/[\da-f]/i)
+      expect(body.starkSignature.s).toMatch(/[\da-f]/i)
+      expect(body.starkSignature.recoveryParam).toBeLessThan(5)
+      expect(typeof body.starkVaultId).toBe('number')
+      expect(typeof body.expireTime).toBe('number')
       return true
     })
 
@@ -31,10 +43,100 @@ describe('dvf.withdraw', () => {
       .post('/v1/trading/w/withdraw', payloadValidator)
       .reply(200, apiResponse)
 
-    const result = await dvf.withdraw(token, amount)
+    await dvf.withdraw(token, amount, starkPrivateKey)
 
     expect(payloadValidator).toBeCalled()
-    expect(result).toEqual(apiResponse)
+  })
+
+  it('Withdraws ETH to users vault', async () => {
+    const starkPrivateKey = '100'
+    const token = 'ETH'
+    const amount = 1.117
+    const apiResponse = {
+      token,
+      amount,
+      starkPublicKey: {
+        x: '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
+        y: '58f7ce5eb6eb5bd24f70394622b1f4d2c54ebca317a3e61bf9f349dccf166cf'
+      }
+    }
+
+    const payloadValidator = jest.fn(body => {
+      expect(body).toMatchObject(apiResponse)
+      expect(body.starkSignature.r).toMatch(/[\da-f]/i)
+      expect(body.starkSignature.s).toMatch(/[\da-f]/i)
+      expect(body.starkSignature.recoveryParam).toBeLessThan(5)
+      expect(typeof body.starkVaultId).toBe('number')
+      expect(typeof body.expireTime).toBe('number')
+      return true
+    })
+
+    nock(dvf.config.api)
+      .post('/v1/trading/w/withdraw', payloadValidator)
+      .reply(200, apiResponse)
+
+    await dvf.withdraw(token, amount, starkPrivateKey)
+
+    expect(payloadValidator).toBeCalled()
+  })
+
+  it('Gives error for withdrawal with value of 0', async () => {
+    const starkPrivateKey =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    const amount = 0
+    const token = 'ZRX'
+
+    try {
+      await dvf.withdraw(token, amount, starkPrivateKey)
+
+      throw new Error('function should throw')
+    } catch (error) {
+      expect(error.message).toEqual('ERR_AMOUNT_MISSING')
+    }
+  })
+
+  it('Gives error if token is missing', async () => {
+    const starkPrivateKey =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    const amount = 57
+    const token = ''
+
+    try {
+      await dvf.withdraw(token, amount, starkPrivateKey)
+
+      throw new Error('function should throw')
+    } catch (error) {
+      expect(error.message).toEqual('ERR_TOKEN_MISSING')
+    }
+  })
+
+  it('Gives error if token is not supported', async () => {
+    const starkPrivateKey =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+    const amount = 57
+    const token = 'NOT'
+
+    try {
+      await dvf.withdraw(token, amount, starkPrivateKey)
+
+      throw new Error('function should throw')
+    } catch (error) {
+      expect(error.message).toEqual('ERR_INVALID_TOKEN')
+    }
+  })
+
+  it('Gives error if starkPrivateKey is not provided', async () => {
+    const starkPrivateKey = ''
+    const amount = 57
+    const token = 'ZRX'
+
+    try {
+      await dvf.withdraw(token, amount, starkPrivateKey)
+
+      throw new Error('function should throw')
+    } catch (error) {
+      expect(error.message).toEqual('ERR_STARK_PRIVATE_KEY_MISSING')
+    }
   })
 
   it('Posts to withdrawal API and gets error response', async () => {
@@ -46,22 +148,23 @@ describe('dvf.withdraw', () => {
       details: {
         error: {
           type: 'DVFError',
-          message: 'STARK_SIGNATURE_VERIFICATION_ERROR'
+          message: 'MUST_REGISTER'
         }
       }
     }
 
-    const payloadValidator = jest.fn(() => true)
-
     nock(dvf.config.api)
-      .post('/v1/trading/w/withdraw', payloadValidator)
+      .post('/v1/trading/w/withdraw')
       .reply(422, apiErrorResponse)
 
     try {
-      await dvf.withdraw('ETH', 1)
+      await dvf.withdraw(
+        'ZRX',
+        31,
+        '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+      )
     } catch (e) {
       expect(e.error).toEqual(apiErrorResponse)
-      expect(payloadValidator).toBeCalled()
     }
   })
 })
