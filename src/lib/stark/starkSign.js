@@ -10,8 +10,6 @@ module.exports = (starkKeyPair, starkMessage) => {
 
   try {
     starkSignature = sw.sign(starkKeyPair, starkMessage)
-    // adding parameter required for transfer verification
-    starkSignature.w = starkSignature.s.invm(sw.ec.n).toString('hex')
     //console.log('starkSignature ', starkSignature)
   } catch (e) {
     cossole.log('/starkSign ', e)
