@@ -46,7 +46,6 @@ describe('dvf.submitOrder', () => {
       expect(body.meta.starkMessage).toMatch(/[\da-f]/i)
       expect(body.meta.starkSignature.r).toMatch(/[\da-f]/i)
       expect(body.meta.starkSignature.s).toMatch(/[\da-f]/i)
-      expect(body.meta.starkSignature.w).toMatch(/[\da-f]/i)
       expect(body.meta.starkSignature.recoveryParam).toBeLessThan(5)
       expect(typeof body.meta.starkOrder.expirationTimestamp).toBe('number')
       expect(typeof body.meta.starkOrder.nonce).toBe('number')
