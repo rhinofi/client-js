@@ -1,12 +1,49 @@
-const post = require('../lib/dvf/post-authenticated')
+const { post } = require('request-promise')
+const DVFError = require('../lib/dvf/DVFError')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (dvf, token, amount, nonce, signature) => {
-  validateAssertions(dvf, {token, amount })
+module.exports = async (dvf, token, amount, starkPrivateKey) => {
+  validateAssertions(dvf, { amount, token, starkPrivateKey })
 
-  const endpoint = '/v1/trading/w/withdraw'
+  const currency = dvf.token.getTokenInfo(token)
 
-  const data = {token, amount}
+  const quantisedAmount = dvf.token.toQuantizedAmount(token, amount)
 
-  return post(dvf, endpoint, nonce, signature, data)
+  const tempVaultId = dvf.config.DVF.tempStarkVaultId
+  const nonce = dvf.config.DVF.depositNonce
+  const starkTokenId = currency.starkTokenId
+  let starkVaultId = currency.starkVaultId
+
+  const { starkPublicKey, starkKeyPair } = await dvf.stark.createKeyPair(
+    starkPrivateKey
+  )
+
+  // This should be in hours
+  expireTime =
+    Math.floor(Date.now() / (1000 * 3600)) + dvf.config.defaultStarkExpiry
+
+  const { starkMessage } = dvf.stark.createTransferMsg(
+    quantisedAmount,
+    nonce,
+    starkVaultId,
+    starkTokenId,
+    tempVaultId,
+    `0x${starkPublicKey.x}`,
+    expireTime
+  )
+
+  const starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
+
+  const url = dvf.config.api + '/v1/trading/w/withdraw'
+
+  const data = {
+    token,
+    amount,
+    starkPublicKey,
+    starkSignature,
+    starkVaultId,
+    expireTime
+  }
+  //console.log({ data })
+  return post(url, { json: data })
 }
