@@ -18,7 +18,7 @@ module.exports = () => {
         starkTokenId:
           '0xb333e3142fe16b78628f19bb15afddaef437e72d6d7f5c6c20c6801a27fba6'
       },
-      USD: {
+      USDT: {
         decimals: 6,
         quantization: 1,
         minOrderSize: 25,
@@ -69,7 +69,7 @@ module.exports = () => {
           '0xb333e3142fe16b78628f19bb15afddaef437e72d6d7f5c6c20c6801a27fba6',
         starkVaultId: 1000001
       },
-      USD: {
+      USDT: {
         decimals: 6,
         quantization: 1,
         minOrderSize: 25,

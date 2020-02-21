@@ -20,10 +20,6 @@ module.exports = async (dvf, starkKey, deFiSignature) => {
     onchainResult = await starkInstance.methods
       .register(`0x${starkKey}`, deFiSignature)
       .send(sendArguments)
-    // leaving the old registration process code while we test the new method
-    // onchainResult = await starkInstance.methods
-    //   .register(`0x${starkKey}`)
-    //   .send(sendArguments)
   } catch (e) {
     console.log('lib/stark/register error is: ', e)
     throw new DVFError('ERR_STARK_REGISTRATION')
