@@ -1,5 +1,3 @@
-const BigNumber = require('bignumber.js')
-
 module.exports = async (dvf, vaultId, token, amount, ethAddress) => {
   let value
   if (token === 'ETH') {

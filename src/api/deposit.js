@@ -30,7 +30,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     amount
   )
 
-  // used for testing without making onchain request
+  // //used for testing without making onchain contract call
   // const { status, transactionHash } = { status: true, transactionHash: '0xabc' }
 
   if (!status) {
