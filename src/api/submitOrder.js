@@ -58,10 +58,5 @@ module.exports = async (
   }
 
   const url = dvf.config.api + '/v1/trading/w/submitOrder'
-  
-  const submitRespose = await post(url, { json: data })
-
-   await dvf.getUserConfig()
-
-   return submitRespose
+  return post(url, { json: data })
 }

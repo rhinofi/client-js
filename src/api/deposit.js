@@ -61,9 +61,5 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     ethTxHash: transactionHash
   }
   //console.log({ data })
-  const depositRespose = await post(url, { json: data })
-
-  await dvf.getUserConfig()
-
-  return depositRespose
+  return post(url, { json: data })
 }
