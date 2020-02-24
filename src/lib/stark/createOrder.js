@@ -72,7 +72,7 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
       .dividedBy(sellCurrency.quantization)
       .times(amount)
       .times(1 + (sellCurrency.settleSpread || 0))
-      .integerValue(BigNumber.ROUND_CIEL)
+      .integerValue(BigNumber.ROUND_FLOOR)
       .abs()
       .toString()
   }
