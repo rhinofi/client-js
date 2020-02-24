@@ -21,6 +21,10 @@ module.exports = async (dvf, starkPublicKey, deFiSignature) => {
     nonce,
     signature
   }
-  // console.log({ data })
-  return post(url, { json: data })
+
+  const registerResponse = await post(url, { json: data })
+
+  await dvf.getUserConfig()
+
+  return registerResponse
 }
