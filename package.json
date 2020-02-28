@@ -1,0 +1,72 @@
+{
+  "name": "dvf-client-js",
+  "version": "0.1.0",
+  "main": "src/dvf.js",
+  "contributors": [
+    "Henrique Matias <hems.inlet@gmail.com>",
+    "Will Harborne <will@deversifi.com>",
+    "Meer Ali <meer.ali@deversifi.com>"
+  ],
+  "standard": {
+    "ignore": [
+      "/examples",
+      "/dist"
+    ]
+  },
+  "scripts": {
+    "lint": "standard",
+    "lint:fix": "standard --fix",
+    "build": "npm run build:web:browserify; npm run build:web:minify; npm run build:web:hash",
+    "build:web:browserify": "del ./dist/*.js; browserify ./src/dvf.js --standalone EFX -o ./dist/dvf.js",
+    "build:web:minify": "node-minify --compressor uglify-es --input './dist/dvf.js' --output './dist/dvf.min.js'",
+    "build:web:hash": "hash-filename ./dist/dvf*.js;del ./dist/{dvf.js,dvf.min.js}",
+    "build:web:run": "browserify --debug ./src/dvf.js --standalone EFX | browser-run --port 2222",
+    "test": "env-cmd -f ./env/test jest --testTimeout 200000",
+    "test:watch": "env-cmd -f ./env/test jest --watch --testTimeout 200000 --verbose true",
+    "test:coverage": "env-cmd -f ./env/test jest --testTimeout 2000000 --coverage"
+  },
+  "jest": {
+    "coverageReporters": [
+      "html"
+    ],
+    "coverageDirectory": ".coverage"
+  },
+  "keywords": [
+    "deversifi",
+    "ethereum",
+    "trading"
+  ],
+  "homepage": "https://github.com/ethfinex/dvf-client-js",
+  "license": "MIT",
+  "dependencies": {
+    "aware": "^0.3.1",
+    "bignumber.js": "^7.2.1",
+    "bluebird": "^3.5.1",
+    "env-cmd": "^10.0.1",
+    "ethereumjs-util": "^5.2.0",
+    "lodash": "^4.17.10",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2",
+    "starkware_crypto": "https://github.com/ethfinex/starkware-crypto",
+    "web3": "^1.2.4"
+  },
+  "devDependencies": {
+    "aigle": "^1.14.1",
+    "browser-run": "^5.0.0",
+    "browserify": "^16.2.2",
+    "del": "^3.0.0",
+    "del-cli": "^1.1.0",
+    "ganache-cli": "^6.1.4",
+    "hash-filename": "^1.0.4",
+    "jest": "^24.9.0",
+    "keccak": "^1.4.0",
+    "mustache": "^4.0.0",
+    "nock": "^9.4.1",
+    "node-minify": "^3.2.0",
+    "solc": "^0.4.24",
+    "standard": "^11.0.1",
+    "supertest": "^4.0.2",
+    "tor-request": "^3.1.0",
+    "truffle-hdwallet-provider": "^1.0.17"
+  }
+}
