@@ -4,6 +4,12 @@
 
 A js client library for DeversiFi - StarkWare orders
 
+**Note:** This library is for the new DeversiFi 2.0 platform, scheduled to launch on Ethereum mainnet later in 2020. Currently a test version of it is live on the Ropsten test network at https://app.deversifi.dev // https://api.deversifi.dev
+
+For the current production version of DeversiFi use the [old client library](https://github.com/ethfinex/efx-api-node).
+
+## Contents
+
 - [Installation](#installation)
     - [NPM](#npm)
     - [Prebuild for browser](#prebuild-for-browser)
@@ -387,7 +393,7 @@ const response = await dvf.contract.unlock(token, amount, forTime)
 
 ## More Examples
 
-Aside from these examples, there are complete examples in the [examples folder](./src/examples)
+Aside from these examples, there are complete examples in the [examples folder](./examples)
 
 ### Submitting a buy order
 
@@ -420,15 +426,14 @@ const order = await dvf.getOrder(id)
 ## Troubleshooting
 
 A list of error codes returned by the API and reasons are available [here](./src/lib/error/reasons.js#L1).
-Some more detailed explanations can also be found in the [API Documentation](https://docs.Deversifi.com).
+Some more detailed explanations can also be found in the [API Documentation](https://docs.beta.Deversifi.com).
 
 If you have suggestions to improve this guide or any of the available
 documentation, please raise an issue on Github, or email [feedback@Deversifi.com](mailto:feedback@Deversifi.com).
 
 ## Links
 
- - [API documentation](https://docs.Deversifi.com)
- - [Deversifi trustless developer guide](https://blog.Deversifi.com/Deversifi-trustless-developer-guide/)
+ - [API documentation](https://docs.beta.Deversifi.com)
 
 ## Developing
 
