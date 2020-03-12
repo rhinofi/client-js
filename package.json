@@ -36,7 +36,7 @@
     "ethereum",
     "trading"
   ],
-  "homepage": "https://github.com/ethfinex/dvf-client-js",
+  "homepage": "https://github.com/deversifi/dvf-client-js",
   "license": "MIT",
   "dependencies": {
     "aware": "^0.3.1",
@@ -47,7 +47,7 @@
     "lodash": "^4.17.10",
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
-    "starkware_crypto": "https://github.com/ethfinex/starkware-crypto",
+    "starkware_crypto": "https://github.com/deversifi/starkware-crypto",
     "web3": "^1.2.4"
   },
   "devDependencies": {

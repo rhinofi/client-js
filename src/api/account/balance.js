@@ -1,6 +1,6 @@
 /**
  * Returns ETH balance
  */
-module.exports = (efx) => {
-  return efx.web3.eth.getBalance(efx.get('account'))
+module.exports = (dvf) => {
+  return dvf.web3.eth.getBalance(dvf.get('account'))
 }
