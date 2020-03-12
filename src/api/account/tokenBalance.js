@@ -1,11 +1,11 @@
-module.exports = (efx, token) => {
-  const currency = efx.token.getTokenInfo(token)
+module.exports = (dvf, token) => {
+  const currency = dvf.token.getTokenInfo(token)
   const action = 'balanceOf'
-  const args = [efx.get('account')]
+  const args = [dvf.get('account')]
 
-  return efx.eth.call(
-    efx.contract.abi.token,
-    currency.wrapperAddress,
+  return dvf.eth.call(
+    dvf.contract.abi.token,
+    currency.tokenAddress,
     action,
     args
   )

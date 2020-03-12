@@ -1,0 +1,7 @@
+# Add Web3 url
+NODE_URL=/*INSERT_HERE*/
+
+# Ethereum private key prefixed with 0x
+PRIVATE_ETH_KEY=0x/*INSERT_HERE*/
+PUBLIC_ETH_ADDRESS=0x/*INSERT_HERE*/
+PRIVATE_STARK_KEY=/*INSERT_HERE*/
