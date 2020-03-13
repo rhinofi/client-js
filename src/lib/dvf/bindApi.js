@@ -38,6 +38,10 @@ module.exports = () => {
     approve: compose(require('../../api/contract/approve')),
     isApproved: compose(require('../../api/contract/isApproved')),
     deposit: compose(require('../../api/contract/deposit')),
+    getStarkKey: compose(require('../../api/contract/getStarkKey')),
+    getWithdrawalBalance: compose(
+      require('../../api/contract/getWithdrawalBalance')
+    ),
     withdraw: compose(require('../../api/contract/withdraw')),
     abi: {
       token: require('../../api/contract/abi/token.abi'),
