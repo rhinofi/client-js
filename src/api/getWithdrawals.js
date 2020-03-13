@@ -10,5 +10,24 @@ module.exports = async (dvf, token, nonce, signature) => {
 
   const data = { token }
 
-  return post(dvf, endpoint, nonce, signature, data)
+  const withdrawals = await post(dvf, endpoint, nonce, signature, data)
+
+  for (const key in dvf.config.tokenRegistry) {
+    const available = await dvf.contract.getWithdrawalBalance(key)
+
+    if (parseInt(available) > 0) {
+      const amount = dvf.token.toBaseUnitAmount(
+        key,
+        dvf.token.fromQuantizedAmount(key, available)
+      )
+
+      withdrawals.push({
+        token: key,
+        status: 'ready',
+        amount
+      })
+    }
+  }
+
+  return withdrawals
 }
