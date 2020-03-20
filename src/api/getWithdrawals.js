@@ -6,7 +6,7 @@ module.exports = async (dvf, token, nonce, signature) => {
     validateAssertions(dvf, { token })
   }
 
-  const endpoint = '/v1/trading/r/getWithdrawals'
+  const endpoint = '/v1/trading/r/getPendingWithdrawals'
 
   const data = { token }
 
