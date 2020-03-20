@@ -25,7 +25,10 @@ module.exports = async (dvf, token, amount, path) => {
     starkVaultId = dvf.config.spareStarkVaultId
   }
 
-  const { starkKey, starkSignature } = await dvf.stark.ledger(
+  const {
+    starkKey,
+    starkSignature
+  } = await dvf.stark.ledger.createSignedTransfer(
     path, // string a path in BIP 32 format
     transferTokenAddress, // string?
     transferQuantization, // BigNumber quantization used for the token to be transferred
