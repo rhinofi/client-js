@@ -1,6 +1,4 @@
 const { post } = require('request-promise')
-//const Transport = require('@ledgerhq/hw-transport-node-hid')
-const Transport = require('@ledgerhq/hw-transport-u2f')
 const DVFError = require('../../lib/dvf/DVFError')
 const BN = require('bignumber.js')
 const validateAssertions = require('../../lib/validators/validateAssertions')
