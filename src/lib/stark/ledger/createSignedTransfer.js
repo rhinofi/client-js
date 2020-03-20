@@ -1,4 +1,3 @@
-const sw = require('starkware_crypto')
 const Transport = require('@ledgerhq/hw-transport-node-hid').default
 const Eth = require('@ledgerhq/hw-app-eth').default
 
@@ -16,7 +15,7 @@ module.exports = (
   const transport = await Transport.open()
   const eth = new Eth(transport)
   const starkKey = await eth.starkGetPublicKey(path)
-  console.log({ starkGetPublicKey })
+  //console.log({ starkKey })
   
   const starkSignature = await eth.starkSignTransfer(
     path,
