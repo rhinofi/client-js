@@ -30,7 +30,11 @@ module.exports = () => {
     createTransferMsg: require('../../lib/stark/createTransferMessage'),
     createPrivateKey: require('../../lib/stark/createPrivateKey'),
     createKeyPair: require('../stark/createKeyPair'),
-    register: require('../../api/contract/register')
+    register: require('../../api/contract/register'),
+    ledger: {
+      //createSignedOrder: require('../../lib/stark/ledger/createSignedOrder'),
+      createSignedTransfer: require('../stark/ledger/createSignedTransfer')
+    }
   }
 
   // dvf.contract functions
@@ -97,6 +101,9 @@ module.exports = () => {
   dvf.getWithdrawals = compose(require('../../api/getWithdrawals'))
   dvf.withdraw = compose(require('../../api/withdraw'))
   dvf.withdrawOnchain = compose(require('../../api/withdrawOnchain'))
-
+  dvf.ledger = {
+    deposit: compose(require('../../api/ledger/deposit'))
+    // withdraw: compose(require('../../api/ledger/withdraw'))
+  }
   return dvf
 }
