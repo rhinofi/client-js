@@ -12,7 +12,7 @@ describe('dvf.getDeposits', () => {
     dvf = await instance()
   })
 
-  it.skip(`Query for all deposits`, async () => {
+  it(`Query for all deposits`, async () => {
     const apiResponse = []
 
     const payloadValidator = jest.fn(body => {
@@ -34,7 +34,7 @@ describe('dvf.getDeposits', () => {
     expect(result).toEqual(apiResponse)
   })
 
-  it.skip(`Query for deposits for a given token`, async () => {
+  it(`Query for deposits for a given token`, async () => {
     const nonce = Date.now() / 1000 + ''
     const signature = await dvf.sign(nonce.toString(16))
     const token = 'ETH'
@@ -60,7 +60,7 @@ describe('dvf.getDeposits', () => {
     expect(result).toEqual(apiResponse)
   })
 
-  it.skip(`Lets nonce and signature to be optional`, async () => {
+  it(`Lets nonce and signature to be optional`, async () => {
     const token = 'ZRX'
 
     const apiResponse = []
@@ -82,7 +82,7 @@ describe('dvf.getDeposits', () => {
     expect(result).toEqual(apiResponse)
   })
 
-  it.skip('Posts to deposits API and gets error response', async () => {
+  it('Posts to deposits API and gets error response', async () => {
     const apiErrorResponse = {
       statusCode: 422,
       error: 'Unprocessable Entity',
