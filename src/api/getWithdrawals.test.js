@@ -43,7 +43,7 @@ describe('dvf.getWithdrawals', () => {
     })
 
     nock(dvf.config.api)
-      .post('/v1/trading/r/getWithdrawals', payloadValidator)
+      .post('/v1/trading/r/getPendingWithdrawals', payloadValidator)
       .reply(200, apiResponse)
 
     const result = await dvf.getWithdrawals()
@@ -83,7 +83,7 @@ describe('dvf.getWithdrawals', () => {
     })
 
     nock(dvf.config.api)
-      .post('/v1/trading/r/getWithdrawals', payloadValidator)
+      .post('/v1/trading/r/getPendingWithdrawals', payloadValidator)
       .reply(200, apiResponse)
 
     const result = await dvf.getWithdrawals(token, nonce, signature)
@@ -105,7 +105,7 @@ describe('dvf.getWithdrawals', () => {
     })
 
     nock(dvf.config.api)
-      .post('/v1/trading/r/getWithdrawals', payloadValidator)
+      .post('/v1/trading/r/getPendingWithdrawals', payloadValidator)
       .reply(200, apiResponse)
 
     const result = await dvf.getWithdrawals(token)
@@ -132,7 +132,7 @@ describe('dvf.getWithdrawals', () => {
     const payloadValidator = jest.fn(() => true)
 
     nock(dvf.config.api)
-      .post('/v1/trading/r/getWithdrawals', payloadValidator)
+      .post('/v1/trading/r/getPendingWithdrawals', payloadValidator)
       .reply(422, apiErrorResponse)
 
     try {
