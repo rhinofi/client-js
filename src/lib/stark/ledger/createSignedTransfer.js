@@ -1,7 +1,7 @@
 const Transport = require('@ledgerhq/hw-transport-node-hid').default
 const Eth = require('@ledgerhq/hw-app-eth').default
 
-module.exports = (
+module.exports = async (
   path, // string a path in BIP 32 format
   transferTokenAddress, // string?
   transferQuantization, // BigNumber quantization used for the token to be transferred
@@ -11,12 +11,11 @@ module.exports = (
   nonce, // number transaction nonce
   timestamp // number transaction validity timestamp
 ) => {
-
   const transport = await Transport.open()
   const eth = new Eth(transport)
   const starkKey = await eth.starkGetPublicKey(path)
   //console.log({ starkKey })
-  
+
   const starkSignature = await eth.starkSignTransfer(
     path,
     transferTokenAddress.substr(2),
