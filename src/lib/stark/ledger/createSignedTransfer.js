@@ -2,7 +2,7 @@ const Transport = require('@ledgerhq/hw-transport-node-hid').default
 const Eth = require('@ledgerhq/hw-app-eth').default
 const byContractAddress = require('@ledgerhq/hw-app-eth/erc20')
   .byContractAddress
-const DVFError = require('../../lib/dvf/DVFError')
+const DVFError = require('../../dvf/DVFError')
 
 module.exports = async (
   path, // string a path in BIP 32 format
@@ -17,12 +17,16 @@ module.exports = async (
   const transport = await Transport.open()
   const eth = new Eth(transport)
   const starkKey = (await eth.starkGetPublicKey(path)).toString('hex')
-
+  console.log({ transferTokenAddress })
   if (transferTokenAddress) {
     const tokenInfo = byContractAddress(transferTokenAddress)
+
+    if (tokenInfo) {
+      await eth.provideERC20TokenInformation(tokenInfo)
+    } else {
+      throw new DVFError('LEDGER_TOKENINFO_ERR')
+    }
     transferTokenAddress = transferTokenAddress.substr(2)
-    if (tokenInfo) await eth.provideERC20TokenInformation(tokenInfo)
-    else throw new DVFError('LEDGER_TOKENINFO_ERR')
   } else {
     transferTokenAddress = null
   }
