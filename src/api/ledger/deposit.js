@@ -7,6 +7,7 @@ module.exports = async (dvf, token, amount, path) => {
   validateAssertions(dvf, { amount, token })
 
   const currency = dvf.token.getTokenInfo(token)
+  // console.log({ currency })
   const quantisedAmount = dvf.token.toQuantizedAmount(token, amount)
   const tempVaultId = dvf.config.DVF.tempStarkVaultId
   const nonce = dvf.util.generateRandomNonce()
@@ -37,6 +38,7 @@ module.exports = async (dvf, token, amount, path) => {
     expireTime // number transaction validity timestamp
   )
 
+  // console.log({ starkKey, starkSignature })
   // const { status, transactionHash } = await dvf.contract.deposit(
   //   tempVaultId,
   //   token,

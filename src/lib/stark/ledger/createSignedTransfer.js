@@ -13,20 +13,23 @@ module.exports = async (
 ) => {
   const transport = await Transport.open()
   const eth = new Eth(transport)
-  const starkKey = await eth.starkGetPublicKey(path)
-  //console.log({ starkKey })
-
-  const starkSignature = await eth.starkSignTransfer(
-    path,
-    transferTokenAddress.substr(2),
-    transferQuantization,
-    starkKey,
-    sourceVault,
-    destinationVault,
-    amountTransfer,
-    nonce,
-    timestamp
-  )
+  const starkKey = (await eth.starkGetPublicKey(path)).toString('hex')
+  transferTokenAddress = transferTokenAddress
+    ? transferTokenAddress.substr(2)
+    : null
+  const starkSignature = (
+    await eth.starkSignTransfer(
+      path,
+      transferTokenAddress,
+      transferQuantization,
+      starkKey,
+      sourceVault,
+      destinationVault,
+      amountTransfer,
+      nonce,
+      timestamp
+    )
+  ).toString('hex')
 
   return { starkKey, starkSignature }
 }
