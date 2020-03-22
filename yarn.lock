@@ -301,13 +301,22 @@
   resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-5.11.0.tgz#722151b36ce1d53f555eeaae3e66f819c2362b28"
   integrity sha512-o9Mx10+qZwuS6tKe6Z2mQJMClIvVtRNt/tdz4P/pNcGeT/0d6jdUfyF+J5P7RF3au0e9HTxG2LMCPFPZ2Tnibg==
 
-"@ledgerhq/hw-app-eth@^5.11.0":
-  version "5.11.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-app-eth/-/hw-app-eth-5.11.0.tgz#5db6abe0ddf5b5266ed09868de12021f59c1a33e"
-  integrity sha512-qgpPwZzM8UMHYMC5+9xYV2O+8kgkDAl9+38w9JiBksaGmUFqcS4najsB1nj6AWf2rGEuXdKMb2WEYRskVypJrA==
+"@ledgerhq/hw-app-eth@5.12.0-alpha.6":
+  version "5.12.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-app-eth/-/hw-app-eth-5.12.0-alpha.6.tgz#e199a7739067f27548ace8f3aa5977b67ef4390e"
+  integrity sha512-gk6mFkeYLobIrrdNAfNoRE9x5wqQ8rx/hFJG9sfvjD8GlQlD3TA994YpXyizC8B8v3Zy6QG+Zly4pFpOiTO+JQ==
   dependencies:
     "@ledgerhq/errors" "^5.11.0"
     "@ledgerhq/hw-transport" "^5.11.0"
+    bignumber.js "^9.0.0"
+
+"@ledgerhq/hw-transport-mocker@^5.11.0":
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-mocker/-/hw-transport-mocker-5.11.0.tgz#45311a7a6c7ceeeb3daad98ed2c1b06f6157f8a5"
+  integrity sha512-wET2+VNsApg25OYzGUG8Og/q7dqtvfPsujp9Owza38WL6pItC9SBGHE5JcmBvEhENpfxWXmBxRw9lWYvo9Answ==
+  dependencies:
+    "@ledgerhq/hw-transport" "^5.11.0"
+    "@ledgerhq/logs" "^5.11.0"
 
 "@ledgerhq/hw-transport-node-hid-noevents@^5.11.0":
   version "5.11.0"
@@ -343,6 +352,16 @@
     "@ledgerhq/hw-transport" "^5.11.0"
     "@ledgerhq/logs" "^5.11.0"
     u2f-api "0.2.7"
+
+"@ledgerhq/hw-transport-webhid@^5.11.0":
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-webhid/-/hw-transport-webhid-5.11.0.tgz#329031e1f7798d62e595fae392edef255bb570c3"
+  integrity sha512-fCoxrdxfdLShsGT8UFuzcsHEIJQmU1t5DKcdXTI6WFTarvd1zrrEVr81DMH+vuL0Sl6UJVxeVqyTSm11FSl8Iw==
+  dependencies:
+    "@ledgerhq/devices" "^5.11.0"
+    "@ledgerhq/errors" "^5.11.0"
+    "@ledgerhq/hw-transport" "^5.11.0"
+    "@ledgerhq/logs" "^5.11.0"
 
 "@ledgerhq/hw-transport@^5.11.0":
   version "5.11.0"
@@ -1220,6 +1239,11 @@ bignumber.js@^7.2.1:
   version "7.2.1"
   resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-7.2.1.tgz#80c048759d826800807c4bfd521e50edbba57a5f"
   integrity sha512-S4XzBk5sMB+Rcb/LNcpzXr57VRTxgAvaAEDAl1AwRx27j00hT84O6OkteE7u8UB3NuaaygCRrEpqox4uDOrbdQ==
+
+bignumber.js@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.0.0.tgz#805880f84a329b5eac6e7cb6f8274b6d82bdf075"
+  integrity sha512-t/OYhhJ2SD+YGBQcjY8GzzDHEk9f3nerxjtfa6tlMXfe7frs/WozhvCNoGvpM0P3bNf3Gq5ZRMlGr5f3r4/N8A==
 
 bindings@^1.2.1, bindings@^1.3.1, bindings@^1.4.0, bindings@^1.5.0:
   version "1.5.0"
