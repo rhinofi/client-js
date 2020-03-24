@@ -1,11 +1,20 @@
 const { post } = require('request-promise')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (dvf, starkPublicKey, deFiSignature) => {
-  validateAssertions(dvf, { starkPublicKey, deFiSignature })
+module.exports = async (dvf, starkPublicKey) => {
+  validateAssertions(dvf, { starkPublicKey })
 
+  const ethAddress = dvf.get('account')
   const starkKey = starkPublicKey.x
-  const onchainRegister = await dvf.stark.register(dvf, starkKey, deFiSignature)
+  let url = dvf.config.api + '/v1/trading/w/preRegister'
+  let data = {
+    starkKey,
+    ethAddress
+  }
+
+  const { deFiSignature } = await post(url, { json: data })
+
+  const onchainRegister = true //await dvf.stark.register(dvf, starkKey, deFiSignature)
 
   //console.log('onchain register contract call result: ', onchainRegister)
   if (onchainRegister.error) {
@@ -14,9 +23,9 @@ module.exports = async (dvf, starkPublicKey, deFiSignature) => {
 
   const nonce = Date.now() / 1000 + ''
   const signature = await dvf.sign(nonce.toString(16))
-  const url = dvf.config.api + '/v1/trading/w/register'
+  url = dvf.config.api + '/v1/trading/w/register'
 
-  const data = {
+  data = {
     starkKey,
     nonce,
     signature
