@@ -4,21 +4,22 @@ const byContractAddress = require('@ledgerhq/hw-app-eth/erc20')
   .byContractAddress
 const DVFError = require('../../dvf/DVFError')
 const BN = require('bignumber.js')
+const ethUtil = require('ethereumjs-util')
 
 module.exports = async (
   dvf,
   path,
   token,
   amount,
-  sourceVault, // number ID of the source vault
-  destinationVault // number ID of the destination vault
+  sourceVault,
+  destinationVault
 ) => {
   const currency = dvf.token.getTokenInfo(token)
-  // console.log({ currency })
   const nonce = dvf.util.generateRandomNonce()
   let transferTokenAddress = currency.tokenAddress
   const transferQuantization = new BN(currency.quantization)
   const amountTransfer = new BN(dvf.token.toBaseUnitAmount(token, amount))
+
   expireTime =
     Math.floor(Date.now() / (1000 * 3600)) +
     parseInt(dvf.config.defaultStarkExpiry)
@@ -26,7 +27,7 @@ module.exports = async (
   const transport = await Transport.create()
   const eth = new Eth(transport)
   const starkKey = (await eth.starkGetPublicKey(path)).toString('hex')
-  console.log({ transferTokenAddress })
+
   if (transferTokenAddress) {
     let tokenInfo
     tokenInfo = byContractAddress(transferTokenAddress)
@@ -49,21 +50,27 @@ module.exports = async (
     transferTokenAddress = null
   }
 
-  const starkSignature = (
-    await eth.starkSignTransfer(
-      path,
-      transferTokenAddress,
-      transferQuantization,
-      starkKey,
-      sourceVault,
-      destinationVault,
-      amountTransfer,
-      nonce,
-      expireTime
-    )
-  ).toString('hex')
+  const rpcSignature = await eth.starkSignTransfer(
+    path,
+    transferTokenAddress,
+    transferQuantization,
+    starkKey,
+    sourceVault,
+    destinationVault,
+    amountTransfer,
+    nonce,
+    expireTime
+  )
+
+  const { r, s } = ethUtil.fromRpcSig(rpcSignature)
+
+  const starkSignature = {
+    r: ethUtil.bufferToHex(r),
+    s: ethUtil.bufferToHex(s)
+  }
 
   transport.close()
+
   const starkPublicKey = { x: starkKey }
   starkTransferData = { starkPublicKey, nonce, expireTime, starkSignature }
   return starkTransferData
