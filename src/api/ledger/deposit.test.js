@@ -35,7 +35,6 @@ describe('dvf.deposit', () => {
       expect(body.starkSignature.s).toMatch(/[\da-f]/i)
       expect(typeof body.starkVaultId).toBe('number')
       expect(typeof body.expireTime).toBe('number')
-      expect(body.ethTxHash).toMatch(/[\da-f]/i)
       return true
     })
 
@@ -75,7 +74,6 @@ describe('dvf.deposit', () => {
       expect(body.starkSignature.s).toMatch(/[\da-f]/i)
       expect(typeof body.starkVaultId).toBe('number')
       expect(typeof body.expireTime).toBe('number')
-      expect(body.ethTxHash).toMatch(/[\da-f]/i)
       return true
     })
 
