@@ -31,7 +31,8 @@ describe('dvf.deposit', () => {
     const payloadValidator = jest.fn(body => {
       expect(body).toMatchObject(apiResponse)
       expect(typeof body.nonce).toBe('number')
-      expect(body.starkSignature).toMatch(/[\da-f]/i)
+      expect(body.starkSignature.r).toMatch(/[\da-f]/i)
+      expect(body.starkSignature.s).toMatch(/[\da-f]/i)
       expect(typeof body.starkVaultId).toBe('number')
       expect(typeof body.expireTime).toBe('number')
       return true
@@ -69,7 +70,8 @@ describe('dvf.deposit', () => {
     const payloadValidator = jest.fn(body => {
       expect(body).toMatchObject(apiResponse)
       expect(typeof body.nonce).toBe('number')
-      expect(body.starkSignature).toMatch(/[\da-f]/i)
+      expect(body.starkSignature.r).toMatch(/[\da-f]/i)
+      expect(body.starkSignature.s).toMatch(/[\da-f]/i)
       expect(typeof body.starkVaultId).toBe('number')
       expect(typeof body.expireTime).toBe('number')
       return true
