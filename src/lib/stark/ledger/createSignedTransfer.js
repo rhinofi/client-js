@@ -65,8 +65,8 @@ module.exports = async (
   const { r, s } = ethUtil.fromRpcSig(rpcSignature)
 
   const starkSignature = {
-    r: ethUtil.bufferToHex(r),
-    s: ethUtil.bufferToHex(s)
+    r: ethUtil.bufferToHex(r).substr(2),
+    s: ethUtil.bufferToHex(s).substr(2)
   }
 
   transport.close()
