@@ -296,10 +296,24 @@
     "@ledgerhq/logs" "^5.11.0"
     rxjs "^6.5.4"
 
+"@ledgerhq/devices@^5.12.0":
+  version "5.12.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/devices/-/devices-5.12.0.tgz#974c6a418b80b3917a3a7527e80e82886a0b3580"
+  integrity sha512-6dduN4KkSMtBUmxLUBlTH7RXwnc0+1aiCjZMl2unL8CY9u4hGNzu1eN7y2SnR0V5PQQrDXCbQ+MAKmFJa0eR6w==
+  dependencies:
+    "@ledgerhq/errors" "^5.12.0"
+    "@ledgerhq/logs" "^5.11.0"
+    rxjs "^6.5.4"
+
 "@ledgerhq/errors@^5.11.0":
   version "5.11.0"
   resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-5.11.0.tgz#722151b36ce1d53f555eeaae3e66f819c2362b28"
   integrity sha512-o9Mx10+qZwuS6tKe6Z2mQJMClIvVtRNt/tdz4P/pNcGeT/0d6jdUfyF+J5P7RF3au0e9HTxG2LMCPFPZ2Tnibg==
+
+"@ledgerhq/errors@^5.12.0":
+  version "5.12.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-5.12.0.tgz#2fdfb08ee54c8bb73e0074835c24243cedf4583f"
+  integrity sha512-jF5Km9Zh9Swt9tsNoFtB4tfcb7PmK/tubx+Z9Kt8ivJ9pF8+zthlTNr6sL1hBsfkjln+gYqLIHSUWcitlMN/Kw==
 
 "@ledgerhq/hw-app-eth@5.12.0-alpha.6":
   version "5.12.0-alpha.6"
@@ -353,14 +367,24 @@
     "@ledgerhq/logs" "^5.11.0"
     u2f-api "0.2.7"
 
-"@ledgerhq/hw-transport-webhid@^5.11.0":
-  version "5.11.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-webhid/-/hw-transport-webhid-5.11.0.tgz#329031e1f7798d62e595fae392edef255bb570c3"
-  integrity sha512-fCoxrdxfdLShsGT8UFuzcsHEIJQmU1t5DKcdXTI6WFTarvd1zrrEVr81DMH+vuL0Sl6UJVxeVqyTSm11FSl8Iw==
+"@ledgerhq/hw-transport-webhid@^5.12.0":
+  version "5.12.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-webhid/-/hw-transport-webhid-5.12.0.tgz#0c0c4f78bf6f3e5b69d88b51b88a2cab162cb547"
+  integrity sha512-wJD4KYbuzWV2lZrYG0cdFfi2Ad/KV13kpbI/cDSVxofHJv+8GixUWPhcYtOh9YU6Bi85hvQepl2dDzK53J2N8w==
   dependencies:
-    "@ledgerhq/devices" "^5.11.0"
-    "@ledgerhq/errors" "^5.11.0"
-    "@ledgerhq/hw-transport" "^5.11.0"
+    "@ledgerhq/devices" "^5.12.0"
+    "@ledgerhq/errors" "^5.12.0"
+    "@ledgerhq/hw-transport" "^5.12.0"
+    "@ledgerhq/logs" "^5.11.0"
+
+"@ledgerhq/hw-transport-webusb@^5.12.0":
+  version "5.12.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-webusb/-/hw-transport-webusb-5.12.0.tgz#e877368adc30e5b1b01f7eb4b201682c87e36907"
+  integrity sha512-ptuxioxcZPU8N6xmyP6PhuF86gHKxhRAxGe5oYd2Rb78b9V1lkPoaJRJlkLpm2Br/vXhzLyOM1RbVTEMN+2a6Q==
+  dependencies:
+    "@ledgerhq/devices" "^5.12.0"
+    "@ledgerhq/errors" "^5.12.0"
+    "@ledgerhq/hw-transport" "^5.12.0"
     "@ledgerhq/logs" "^5.11.0"
 
 "@ledgerhq/hw-transport@^5.11.0":
@@ -370,6 +394,15 @@
   dependencies:
     "@ledgerhq/devices" "^5.11.0"
     "@ledgerhq/errors" "^5.11.0"
+    events "^3.1.0"
+
+"@ledgerhq/hw-transport@^5.12.0":
+  version "5.12.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-5.12.0.tgz#1fc6ca7e96851e4ffbb550c2980dc676abf4ed5e"
+  integrity sha512-TsGLDY4anie4f3nMPPC4defJAVfuakkTOKntKcPhnGBGFO4HhJGlpZ5LWx50RhYGP7c86QpwPhmxsnx8sLIJjQ==
+  dependencies:
+    "@ledgerhq/devices" "^5.12.0"
+    "@ledgerhq/errors" "^5.12.0"
     events "^3.1.0"
 
 "@ledgerhq/logs@^5.11.0":
