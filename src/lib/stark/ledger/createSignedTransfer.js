@@ -1,10 +1,10 @@
-const Transport = require('@ledgerhq/hw-transport-node-hid').default
 const Eth = require('@ledgerhq/hw-app-eth').default
 const byContractAddress = require('@ledgerhq/hw-app-eth/erc20')
   .byContractAddress
 const DVFError = require('../../dvf/DVFError')
 const BN = require('bignumber.js')
 const ethUtil = require('ethereumjs-util')
+const selectTransport = require('../../ledger/selectTransport')
 
 module.exports = async (
   dvf,
@@ -14,6 +14,7 @@ module.exports = async (
   sourceVault,
   destinationVault
 ) => {
+  const Transport = selectTransport(dvf.isBrowser)
   const currency = dvf.token.getTokenInfo(token)
   const nonce = dvf.util.generateRandomNonce()
   let transferTokenAddress = currency.tokenAddress
@@ -26,7 +27,12 @@ module.exports = async (
 
   const transport = await Transport.create()
   const eth = new Eth(transport)
-  const starkKey = (await eth.starkGetPublicKey(path)).toString('hex')
+  const tempKey = (await eth.starkGetPublicKey(path)).toString('hex')
+  console.log({ tempKey })
+  const starkPublicKey = {
+    x: tempKey.substr(2, 64),
+    y: tempKey.substr(66)
+  }
 
   if (transferTokenAddress) {
     let tokenInfo
@@ -54,14 +60,14 @@ module.exports = async (
     path,
     transferTokenAddress,
     transferQuantization,
-    starkKey,
+    starkPublicKey.x,
     sourceVault,
     destinationVault,
     amountTransfer,
     nonce,
     expireTime
   )
-
+  console.log({ rpcSignature: rpcSignature.toString('hex') })
   const { r, s } = ethUtil.fromRpcSig(rpcSignature)
 
   const starkSignature = {
@@ -71,7 +77,6 @@ module.exports = async (
 
   transport.close()
 
-  const starkPublicKey = { x: starkKey }
   starkTransferData = { starkPublicKey, nonce, expireTime, starkSignature }
   return starkTransferData
 }

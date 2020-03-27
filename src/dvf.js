@@ -26,7 +26,7 @@ module.exports = async (web3, userConfig = {}) => {
   dvf.config = Object.assign({}, defaultConfig, exchangeConf, userConfig)
 
   // working towards being as compatible as possible
-  dvf.isBrowser = typeof window !== 'undefined'
+  dvf.isBrowser = !process.versions.node
 
   dvf.isMetaMask = false
 
@@ -59,11 +59,12 @@ module.exports = async (web3, userConfig = {}) => {
 
   // get user config once we get the Web3 provider and Eth Address
   if (dvf.config.autoLoadUserConf) {
-    try{
+    try {
       await dvf.getUserConfig()
-    }
-    catch(e){
-      console.log('Could not retrieve user configuration. Did the user register?')
+    } catch (e) {
+      console.log(
+        'Could not retrieve user configuration. Did the user register?'
+      )
     }
   }
 
