@@ -32,6 +32,7 @@ module.exports = () => {
     createKeyPair: require('../stark/createKeyPair'),
     register: require('../../api/contract/register'),
     ledger: {
+      getPublicKey: compose(require('../stark/ledger/getPublicKey')),
       //createSignedOrder: require('../../lib/stark/ledger/createSignedOrder'),
       createWithdrawalData: compose(
         require('../stark/ledger/createWithdrawalData')
