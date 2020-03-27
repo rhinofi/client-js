@@ -315,13 +315,13 @@
   resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-5.12.0.tgz#2fdfb08ee54c8bb73e0074835c24243cedf4583f"
   integrity sha512-jF5Km9Zh9Swt9tsNoFtB4tfcb7PmK/tubx+Z9Kt8ivJ9pF8+zthlTNr6sL1hBsfkjln+gYqLIHSUWcitlMN/Kw==
 
-"@ledgerhq/hw-app-eth@5.12.0-alpha.6":
-  version "5.12.0-alpha.6"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-app-eth/-/hw-app-eth-5.12.0-alpha.6.tgz#e199a7739067f27548ace8f3aa5977b67ef4390e"
-  integrity sha512-gk6mFkeYLobIrrdNAfNoRE9x5wqQ8rx/hFJG9sfvjD8GlQlD3TA994YpXyizC8B8v3Zy6QG+Zly4pFpOiTO+JQ==
+"@ledgerhq/hw-app-eth@^5.12.2":
+  version "5.12.2"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-app-eth/-/hw-app-eth-5.12.2.tgz#dee1b79ab263f3e119d7cee7133a37743df71677"
+  integrity sha512-fj6vT/VhaxTuZyTz7kgJ93+3JCUKd+NdBnZUc1N2xWyIyX2+lgStwo8y/9KJfM3JMr/7AzjBEScjnFhxa2SjsQ==
   dependencies:
-    "@ledgerhq/errors" "^5.11.0"
-    "@ledgerhq/hw-transport" "^5.11.0"
+    "@ledgerhq/errors" "^5.12.0"
+    "@ledgerhq/hw-transport" "^5.12.0"
     bignumber.js "^9.0.0"
 
 "@ledgerhq/hw-transport-mocker@^5.11.0":
