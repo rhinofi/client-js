@@ -19,7 +19,7 @@ module.exports = async (
   const nonce = dvf.util.generateRandomNonce()
   let transferTokenAddress = currency.tokenAddress
   const transferQuantization = new BN(currency.quantization)
-  const amountTransfer = new BN(dvf.token.toBaseUnitAmount(token, amount))
+  const amountTransfer = new BN(dvf.token.toQuantizedAmount(token, amount))
 
   expireTime =
     Math.floor(Date.now() / (1000 * 3600)) +
@@ -28,7 +28,6 @@ module.exports = async (
   const transport = await Transport.create()
   const eth = new Eth(transport)
   const tempKey = (await eth.starkGetPublicKey(path)).toString('hex')
-  console.log({ tempKey })
   const starkPublicKey = {
     x: tempKey.substr(2, 64),
     y: tempKey.substr(66)
@@ -67,16 +66,15 @@ module.exports = async (
     nonce,
     expireTime
   )
-  console.log({ rpcSignature: rpcSignature.toString('hex') })
-  const { r, s } = ethUtil.fromRpcSig(rpcSignature)
 
   const starkSignature = {
-    r: ethUtil.bufferToHex(r).substr(2),
-    s: ethUtil.bufferToHex(s).substr(2)
+    r: rpcSignature.r,
+    s: rpcSignature.s
   }
-
+  // console.log({ starkSignature })
   transport.close()
 
   starkTransferData = { starkPublicKey, nonce, expireTime, starkSignature }
+
   return starkTransferData
 }
