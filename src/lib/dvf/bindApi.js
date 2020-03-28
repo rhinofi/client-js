@@ -62,7 +62,7 @@ module.exports = () => {
   }
   // dvf.token functions
   dvf.token = {
-    getTokenInfo: compose(require('./token/getTokenRegistry')),
+    getTokenInfo: compose(require('./token/getTokenInfo')),
     fromBaseUnitAmount: compose(require('./token/fromBaseUnitAmount')),
     fromQuantizedAmount: compose(require('./token/fromQuantizedAmount')),
     toBaseUnitAmount: compose(require('./token/toBaseUnitAmount')),
