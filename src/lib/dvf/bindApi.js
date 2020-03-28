@@ -34,13 +34,18 @@ module.exports = () => {
     register: require('../../api/contract/register'),
     ledger: {
       getPublicKey: compose(require('../stark/ledger/getPublicKey')),
-      //createSignedOrder: require('../../lib/stark/ledger/createSignedOrder'),
       createWithdrawalData: compose(
         require('../stark/ledger/createWithdrawalData')
       ),
       createDepositData: compose(require('../stark/ledger/createDepositData')),
       createSignedTransfer: compose(
         require('../stark/ledger/createSignedTransfer')
+      ),
+      createSignedOrder: compose(
+        require('../../lib/stark/ledger/createSignedOrder')
+      ),
+      createOrderMetaData: compose(
+        require('../../lib/stark/ledger/createOrderMetaData')
       )
     }
   }
