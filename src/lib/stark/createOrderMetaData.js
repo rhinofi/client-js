@@ -1,5 +1,6 @@
 const BigNumber = require('bignumber.js')
 const DVFError = require('../dvf/DVFError')
+const validAssertions = require('../validators/validateAssertions')
 
 module.exports = async (
   dvf,
@@ -10,6 +11,8 @@ module.exports = async (
   feeRate = 0.0025,
   starkPrivateKey
 ) => {
+  validAssertions(dvf, { amount, symbol, price, starkPrivateKey })
+
   const { starkOrder, starkMessage } = dvf.stark.createOrder(
     symbol,
     amount,

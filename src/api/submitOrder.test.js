@@ -19,6 +19,8 @@ describe('dvf.submitOrder', () => {
     const symbol = 'ETH:USDT'
     const amount = 0.137
     const price = 250
+    validFor = '0'
+    feeRate = '0'
 
     const expectedBody = {
       cid: '1',
@@ -29,8 +31,8 @@ describe('dvf.submitOrder', () => {
       price,
       meta: {
         starkPublicKey: {
-          x: '2dc183c09c1570ecf25be134dc15fb19522978cbadd272f467a129657e2259c',
-          y: '6a21efc122085a930eb0db316113cb8134d13e8b96bca1f7e39cbd56cd7b529'
+          x: '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
+          y: '58f7ce5eb6eb5bd24f70394622b1f4d2c54ebca317a3e61bf9f349dccf166cf'
         }
       },
       protocol: 'stark',
@@ -57,18 +59,22 @@ describe('dvf.submitOrder', () => {
       .post('/v1/trading/w/submitOrder', payloadValidator)
       .reply(200)
 
-    const response = await dvf.submitOrder(
+    const orderMetaData = await dvf.stark.createOrderMetaData(
       symbol,
-      amount, // amount
-      price, // price
+      amount,
+      price,
+      validFor,
+      feeRate,
+      starkPrivateKey
+    )
+
+    const response = await dvf.submitOrder(
       '1', // gid
       '1', // cid
-      '0', // signedOrder
-      '0', // validFor
       'P1', // partnerId
       '0', // feeRate
       '0', // dynamicFeeRate
-      starkPrivateKey
+      orderMetaData
     )
   })
 
@@ -96,37 +102,37 @@ describe('dvf.submitOrder', () => {
       })
       .reply(200, apiResponse)
 
-    const response = await dvf.submitOrder(
+    const orderMetaData = await dvf.stark.createOrderMetaData(
       'ZRX:ETH', // symbol
       '-55', // amount
       100, // price
+      '0', // validFor
+      '', // feeRate
+      starkPrivateKey
+    )
+
+    const response = await dvf.submitOrder(
       '', // gid
       '', // cid
       '0', // signedOrder
-      '0', // validFor
       '', // partnerId
-      '', // feeRate
       '', // dynamicFeeRate
-      starkPrivateKey
+      orderMetaData
     )
+
     console.log({ response })
     expect(response.id).toEqual(apiResponse.id)
   })
 
   it('Gives an error on missing symbol in request', async () => {
     try {
-      await dvf.submitOrder(
+      await dvf.stark.createOrderMetaData(
         '', // symbol
-        '0.1', // amount
-        1000, // price
-        '', // gid
-        '', // cid
-        '0', // signedOrder
+        '5', // amount
+        219, // price
         '0', // validFor
-        '', // partnerId
         '', // feeRate
-        '', // dynamicFeeRate
-        ''
+        '12345'
       )
 
       throw new Error('function should throw')
@@ -137,18 +143,13 @@ describe('dvf.submitOrder', () => {
 
   it('Gives an error on invalid symbol format', async () => {
     try {
-      await dvf.submitOrder(
-        'ETHS', // symbol
-        '0.1', // amount
-        1000, // price
-        '', // gid
-        '', // cid
-        '0', // signedOrder
+      await dvf.stark.createOrderMetaData(
+        'ETHZRX', // symbol
+        '5', // amount
+        219, // price
         '0', // validFor
-        '', // partnerId
         '', // feeRate
-        '', // dynamicFeeRate
-        ''
+        '12345'
       )
 
       throw new Error('function should throw')
@@ -159,18 +160,13 @@ describe('dvf.submitOrder', () => {
 
   it('Gives an error on invalid amount', async () => {
     try {
-      await dvf.submitOrder(
+      await dvf.stark.createOrderMetaData(
         'ETH:USDT', // symbol
         '0', // amount
-        1000, // price
-        '', // gid
-        '', // cid
-        '0', // signedOrder
+        219, // price
         '0', // validFor
-        '', // partnerId
         '', // feeRate
-        '', // dynamicFeeRate
-        ''
+        '12345'
       )
 
       throw new Error('function should throw')
@@ -181,18 +177,13 @@ describe('dvf.submitOrder', () => {
 
   it('Gives an error on missing price', async () => {
     try {
-      await dvf.submitOrder(
+      await dvf.stark.createOrderMetaData(
         'ETH:USDT', // symbol
-        '10', // amount
+        '-1.2', // amount
         '', // price
-        '', // gid
-        '', // cid
-        '0', // signedOrder
         '0', // validFor
-        '', // partnerId
         '', // feeRate
-        '', // dynamicFeeRate
-        ''
+        '12345'
       )
 
       throw new Error('function should throw')
@@ -203,17 +194,12 @@ describe('dvf.submitOrder', () => {
 
   it('Gives an error on missing starkPrivateKey', async () => {
     try {
-      await dvf.submitOrder(
+      await dvf.stark.createOrderMetaData(
         'ETH:USDT', // symbol
         '10', // amount
-        '100', // price
-        '', // gid
-        '', // cid
-        '0', // signedOrder
+        219, // price
         '0', // validFor
-        '', // partnerId
         '', // feeRate
-        '', // dynamicFeeRate
         ''
       )
 
