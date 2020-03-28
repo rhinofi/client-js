@@ -7,8 +7,8 @@ module.exports = (
   cid,
   signedOrder,
   validFor,
-  partner_id,
-  fee_rate,
+  partnerId,
+  feeRate,
   dynamicFeeRate,
   starkPrivateKey
 ) => {
@@ -22,8 +22,8 @@ module.exports = (
     cid,
     signedOrder,
     validFor,
-    partner_id,
-    fee_rate,
+    partnerId,
+    feeRate,
     dynamicFeeRate,
     starkPrivateKey
   )
