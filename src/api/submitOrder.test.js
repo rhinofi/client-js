@@ -68,7 +68,7 @@ describe('dvf.submitOrder', () => {
       starkPrivateKey
     )
 
-    const response = await dvf.submitOrder(
+    await dvf.submitOrder(
       '1', // gid
       '1', // cid
       'P1', // partnerId
@@ -111,7 +111,7 @@ describe('dvf.submitOrder', () => {
       starkPrivateKey
     )
 
-    const response = await dvf.submitOrder(
+    await dvf.submitOrder(
       '', // gid
       '', // cid
       '0', // signedOrder
@@ -120,7 +120,6 @@ describe('dvf.submitOrder', () => {
       orderMetaData
     )
 
-    console.log({ response })
     expect(response.id).toEqual(apiResponse.id)
   })
 
