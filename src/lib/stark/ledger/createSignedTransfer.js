@@ -34,28 +34,27 @@ module.exports = async (
   }
 
   if (transferTokenAddress) {
-    let tokenInfo
-    tokenInfo = byContractAddress(transferTokenAddress)
+    const tokenInfo = byContractAddress(transferTokenAddress)
     transferTokenAddress = transferTokenAddress.substr(2)
     if (tokenInfo) {
       await eth.provideERC20TokenInformation(tokenInfo)
     } else {
-      console.log('no tokenInfo')
-      // TODO: Remove this for live
-      // console.log('error ', error)
-      // throw new DVFError('LEDGER_TOKENINFO_ERR')
-      tokenInfo = {}
-      tokenInfo['data'] = Buffer.from(
-        `00${transferTokenAddress}0000000000000000`,
-        'hex'
-      )
-      await eth.provideERC20TokenInformation(tokenInfo)
+      if (process.env.NODE_ENV === 'test') {
+        let tokenInfo = {}
+        tokenInfo['data'] = Buffer.from(
+          `00${transferTokenAddress}0000000000000000`,
+          'hex'
+        )
+        await eth.provideERC20TokenInformation(tokenInfo)
+      } else {
+        throw new DVFError('LEDGER_TOKENINFO_ERR')
+      }
     }
   } else {
     transferTokenAddress = null
   }
 
-  const rpcSignature = await eth.starkSignTransfer(
+  const starkSignature = await eth.starkSignTransfer(
     path,
     transferTokenAddress,
     transferQuantization,
@@ -67,10 +66,6 @@ module.exports = async (
     expireTime
   )
 
-  const starkSignature = {
-    r: rpcSignature.r,
-    s: rpcSignature.s
-  }
   // console.log({ starkSignature })
   transport.close()
 
