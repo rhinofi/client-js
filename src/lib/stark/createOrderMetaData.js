@@ -1,5 +1,3 @@
-const BigNumber = require('bignumber.js')
-const DVFError = require('../dvf/DVFError')
 const validAssertions = require('../validators/validateAssertions')
 
 module.exports = async (
