@@ -11,7 +11,7 @@ module.exports = async (
 ) => {
   validAssertions(dvf, { amount, symbol, price, starkPrivateKey })
 
-  const { starkOrder, starkMessage } = dvf.stark.createOrder(
+  const { starkOrder, starkMessage } = await dvf.stark.createOrder(
     symbol,
     amount,
     price,
