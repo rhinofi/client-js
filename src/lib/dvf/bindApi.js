@@ -92,6 +92,9 @@ module.exports = () => {
   dvf.sign.request = compose(require('../../api/sign/request'))
   dvf.sign.nonceSignature = compose(require('../../api/sign/nonceSignature'))
 
+  dvf.createOrderPayload = compose(require('../../lib/dvf/createOrderPayload'))
+  dvf.createOrderMetaData = compose(require('../../lib/dvf/createOrderMetaData'))
+
   // dvf main functions
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
   dvf.deposit = compose(require('../../api/deposit'))
