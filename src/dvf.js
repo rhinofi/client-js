@@ -51,10 +51,13 @@ module.exports = async (web3, userConfig = {}) => {
 
   // REVIEW: should we actually use web3.eth.defaultAccount ?
   // see: https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md#raising_hand-account-list-reflects-user-preference
-  await dvf.account.select(dvf.config.account)
 
-  if (!dvf.get('account')) {
-    console.warn('Please specify a valid account or account index')
+  if (dvf.config.autoSelectAccount) {
+    await dvf.account.select(dvf.config.account)
+
+    if (!dvf.get('account')) {
+      console.warn('Please specify a valid account or account index')
+    }
   }
 
   // get user config once we get the Web3 provider and Eth Address
