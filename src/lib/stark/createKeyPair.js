@@ -19,8 +19,9 @@ module.exports = (privateKey) => {
       x: fullPublicKey.pub.getX().toString('hex'),
       y: fullPublicKey.pub.getY().toString('hex')
     }
+    const starkPrivateKey = privateKey
 
-    return {privateKey, starkKeyPair, starkPublicKey}
+    return {privateKey, starkPrivateKey, starkKeyPair, starkPublicKey}
   } catch (e) {
     return {
       error: 'ERR_PUBLICKEY_CREATION',
