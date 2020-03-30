@@ -26,14 +26,7 @@ module.exports = async (
 ) => {
   validateProps(dvf, ['amount', 'symbol', 'price'], orderData)
 
-  // TODO: refactor createOrder to accept orderData
-  const { starkOrder, starkMessage } = await dvf.stark.createOrder(
-    orderData.symbol,
-    orderData.amount,
-    orderData.price,
-    orderData.validFor,
-    orderData.feeRate
-  )
+  const { starkOrder, starkMessage } = await dvf.stark.createOrder(orderData)
 
   const {
     starkPublicKey,

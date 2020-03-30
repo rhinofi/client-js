@@ -2,7 +2,10 @@ const P = require('aigle')
 const BigNumber = require('bignumber.js')
 const DVFError = require('../dvf/DVFError')
 
-module.exports = async (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
+module.exports = async (
+  dvf,
+  { symbol, amount, price, validFor, feeRate = 0.0025}
+) => {
   // symbols are always 3 letters
   const baseSymbol = symbol.split(':')[0]
   const quoteSymbol = symbol.split(':')[1]
