@@ -15,6 +15,7 @@ module.exports = starkOrder => {
     )
     return message
   } catch (err) {
+    console.error('ERR_CREATING_STARK_ORDER_MESSAGE: error', err)
     throw new DVFError('ERR_CREATING_STARK_ORDER_MESSAGE')
   }
 }
