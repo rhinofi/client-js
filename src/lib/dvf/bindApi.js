@@ -95,7 +95,9 @@ module.exports = () => {
   dvf.postAuthenticated = compose(require('../../lib/dvf/post-authenticated'))
 
   dvf.createOrderPayload = compose(require('../../lib/dvf/createOrderPayload'))
-  dvf.createOrderMetaData = compose(require('../../lib/dvf/createOrderMetaData'))
+  dvf.createOrderMetaData = compose(
+    require('../../lib/dvf/createOrderMetaData')
+  )
 
   // dvf main functions
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
