@@ -1,45 +1,33 @@
 const { post } = require('request-promise')
-const validAssertions = require('../lib/validators/validateAssertions')
+const FP = require('lodash/fp')
+// TODO: define a schema for data and validate it.
+module.exports = async (dvf, orderData) => {
+  // allow passing in ethAddress (useful for testing).
+  const ethAddress = orderData.ethAddress || dvf.get('account')
 
-module.exports = async (
-  dvf,
-  gid,
-  cid,
-  partnerId,
-  feeRate = 0.0025,
-  dynamicFeeRate,
-  orderMetaData
-) => {
-  const ethAddress = dvf.get('account')
-  const type = 'EXCHANGE LIMIT'
-  const protocol = 'stark'
-  const data = {
-    cid,
-    gid,
-    type,
-    symbol: orderMetaData.symbol,
-    amount: orderMetaData.amount,
-    price: orderMetaData.price,
-    meta: {},
-    protocol,
-    partnerId,
-    feeRate,
-    dynamicFeeRate
+  data = {
+    type: 'EXCHANGE LIMIT',
+    protocol: 'stark',
+    feeRate: 0.0025,
+    ...FP.pick(
+      [
+        'amount',
+        'cid',
+        'dynamicFeeRate',
+        'feeRate',
+        'gid',
+        'partnerId',
+        'price',
+        'symbol'
+      ],
+      orderData
+    ),
+    meta: {
+      ethAddress,
+      ...(await dvf.createOrderMetaData(orderData))
+    }
   }
-
-  data.meta = {
-    ethAddress,
-    starkPublicKey: orderMetaData.starkPublicKey,
-    starkOrder: orderMetaData.starkOrder,
-    starkMessage: orderMetaData.starkMessage,
-    starkSignature: orderMetaData.starkSignature
-  }
-
   const url = dvf.config.api + '/v1/trading/w/submitOrder'
 
-  const submitResponse = await post(url, { json: data })
-
-  await dvf.getUserConfig()
-
-  return submitResponse
+  return post(url, { json: data })
 }
