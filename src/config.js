@@ -16,6 +16,9 @@ module.exports = {
   // default account to select in case no account is provided by the userConfig
   // parameter
   account: 0,
+  // selects account from web3 provider based on config.account upon
+  // initialization
+  autoSelectAccount: true,
 
   // enables integrators to select if they want to fetch user config upon initialization
   autoLoadUserConf: true

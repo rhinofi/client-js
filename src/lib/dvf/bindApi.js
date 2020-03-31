@@ -92,6 +92,11 @@ module.exports = () => {
   dvf.sign.request = compose(require('../../api/sign/request'))
   dvf.sign.nonceSignature = compose(require('../../api/sign/nonceSignature'))
 
+  dvf.postAuthenticated = compose(require('../../lib/dvf/post-authenticated'))
+
+  dvf.createOrderPayload = compose(require('../../lib/dvf/createOrderPayload'))
+  dvf.createOrderMetaData = compose(require('../../lib/dvf/createOrderMetaData'))
+
   // dvf main functions
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
   dvf.deposit = compose(require('../../api/deposit'))
@@ -105,6 +110,8 @@ module.exports = () => {
   dvf.getOrders = compose(require('../../api/getOrders'))
   dvf.getOrdersHist = compose(require('../../api/getOrdersHist'))
   dvf.getUserConfig = compose(require('../../api/getUserConfig'))
+  dvf.getVaultId = compose(require('../../api/getVaultId'))
+  dvf.getVaultIdFromServer = compose(require('../../api/getVaultIdFromServer'))
   dvf.preRegister = compose(require('../../api/preRegister'))
   dvf.register = compose(require('../../api/register'))
   dvf.submitBuyOrder = compose(require('../../api/submitBuyOrder'))
