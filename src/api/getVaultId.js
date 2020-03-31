@@ -8,9 +8,6 @@ module.exports = async (dvf, token, nonce, signature) => {
     return existingVaultId
   }
   else {
-    const endpoint = '/v1/trading/r/getVaultId'
-    const data = { token }
-
     const vaultId = await dvf.getVaultIdFromServer(token, nonce, signature)
 
     dvf.config.tokenRegistry[token].starkVaultId = vaultId
