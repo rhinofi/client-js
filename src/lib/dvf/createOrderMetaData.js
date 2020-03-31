@@ -1,12 +1,8 @@
 const validateProps = require('../validators/validateProps')
 const validateAssertions = require('../validators/validateAssertions')
 
-const starkSignedOrder = async (
-  dvf,
-  starkPrivateKey,
-  starkMessage
-) => {
-  validateAssertions(dvf, {starkPrivateKey})
+const starkSignedOrder = async (dvf, starkPrivateKey, starkMessage) => {
+  validateAssertions(dvf, { starkPrivateKey })
 
   const { starkKeyPair, starkPublicKey } = await dvf.stark.createKeyPair(
     starkPrivateKey
@@ -20,22 +16,14 @@ const starkSignedOrder = async (
   }
 }
 
-module.exports = async (
-  dvf,
-  orderData
-) => {
+module.exports = async (dvf, orderData) => {
   validateProps(dvf, ['amount', 'symbol', 'price'], orderData)
 
   const { starkOrder, starkMessage } = await dvf.stark.createOrder(orderData)
 
-  const {
-    starkPublicKey,
-    starkSignature
-  } = await (orderData.ledgerPath ?
-    dvf.stark.ledger.createSignedOrder(path, starkOrder)
-    :
-    starkSignedOrder(dvf, orderData.starkPrivateKey, starkMessage)
-  )
+  const { starkPublicKey, starkSignature } = await (orderData.ledgerPath
+    ? dvf.stark.ledger.createSignedOrder(orderData.ledgerPath, starkOrder)
+    : starkSignedOrder(dvf, orderData.starkPrivateKey, starkMessage))
 
   return {
     starkPublicKey,

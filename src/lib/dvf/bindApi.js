@@ -26,7 +26,6 @@ module.exports = () => {
   dvf.stark = {
     createOrder: compose(require('../stark/createOrder')),
     createOrderMessage: require('../stark/createOrderMessage'),
-    createOrderMetaData: compose(require('../stark/createOrderMetaData')),
     sign: require('../stark/starkSign'),
     createTransferMsg: require('../stark/createTransferMessage'),
     createPrivateKey: require('../stark/createPrivateKey'),
@@ -43,9 +42,6 @@ module.exports = () => {
       ),
       createSignedOrder: compose(
         require('../../lib/stark/ledger/createSignedOrder')
-      ),
-      createOrderMetaData: compose(
-        require('../../lib/stark/ledger/createOrderMetaData')
       )
     }
   }
