@@ -66,6 +66,8 @@ describe('dvf.submitOrder', () => {
       partnerId: 'P1', // partnerId
       dynamicFeeRate: '0'
     })
+
+    expect(payloadValidator).toBeCalled()
   })
 
   it('Submits sell order and receives response', async () => {
@@ -127,6 +129,7 @@ describe('dvf.submitOrder', () => {
       dynamicFeeRate: ''
       // ledgerPath: `21323'/0`
     })
+    expect(payloadValidator).toBeCalled()
   })
 
   it('Gives an error on missing symbol in request', async () => {
@@ -238,7 +241,7 @@ describe('dvf.submitOrder', () => {
     }
   })
 
-  it('Posts to submit order config API and gets error response', async () => {
+  it('Posts to submit order gets error response', async () => {
     const apiErrorResponse = {
       statusCode: 422,
       error: 'Unprocessable Entity',
