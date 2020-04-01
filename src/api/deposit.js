@@ -12,10 +12,8 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   const tempVaultId = dvf.config.DVF.tempStarkVaultId
   const nonce = dvf.util.generateRandomNonce()
   const starkTokenId = currency.starkTokenId
-  let starkVaultId = currency.starkVaultId
-  if (!starkVaultId) {
-    starkVaultId = dvf.config.spareStarkVaultId
-  }
+  const starkVaultId = await dvf.getVaultId(token)
+  console.log({ starkVaultId })
   const { starkPublicKey, starkKeyPair } = await dvf.stark.createKeyPair(
     starkPrivateKey
   )
