@@ -1,32 +1,31 @@
 const FP = require('lodash/fp')
 
-// TODO: define a schema for data.
+// TODO: define a schema for orderData.
 // Default (like the type, protocol, feeRate below) can  go on that schema.
-module.exports = async (dvf, data) => {
+module.exports = async (dvf, orderData) => {
   // allow passing in ethAddress (useful for testing).
-  const ethAddress = data.ethAddress || dvf.get('account')
+  const ethAddress = orderData.ethAddress || dvf.get('account')
 
   return {
     type: 'EXCHANGE LIMIT',
     protocol: 'stark',
     feeRate: 0.0025,
-    ...(
-      FP.pick([
-          'amount',
-          'cid',
-          'dynamicFeeRate',
-          'feeRate',
-          'gid',
-          'partnerId',
-          'price',
-          'symbol',
-        ],
-        data
-      )
+    ...FP.pick(
+      [
+        'amount',
+        'cid',
+        'dynamicFeeRate',
+        'feeRate',
+        'gid',
+        'partnerId',
+        'price',
+        'symbol'
+      ],
+      orderData
     ),
     meta: {
       ethAddress,
-      ...(await dvf.createOrderMetaData(data))
+      ...(await dvf.createOrderMetaData(orderData))
     }
   }
 }
