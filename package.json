@@ -39,6 +39,7 @@
   "homepage": "https://github.com/deversifi/dvf-client-js",
   "license": "MIT",
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
     "@ledgerhq/hw-app-eth": "^5.12.2",
     "@ledgerhq/hw-transport-mocker": "^5.11.0",
     "@ledgerhq/hw-transport-node-hid": "^5.11.0",
