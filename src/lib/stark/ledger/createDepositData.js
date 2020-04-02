@@ -1,11 +1,7 @@
 module.exports = async (dvf, path, token, amount) => {
-  const currency = dvf.token.getTokenInfo(token)
   const tempVaultId = dvf.config.DVF.tempStarkVaultId
-  let starkVaultId = currency.starkVaultId
+  const starkVaultId = await dvf.getVaultId(token)
 
-  if (!starkVaultId) {
-    starkVaultId = dvf.config.spareStarkVaultId
-  }
   const starkDeposit = await dvf.stark.ledger.createSignedTransfer(
     path,
     token,
