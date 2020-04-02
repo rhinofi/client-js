@@ -16,7 +16,7 @@ describe('dvf.getUserConfig', () => {
       DVF: {
         exchangeSymbols: ['tETHUSD', 'tZRXUSD', 'tZRXETH'],
         exchangeAddress: '0xBd25cD867C304F079E696CBE44D958f3d3B683ba',
-        starkExContractAddress: '0x204eAF71D3f15CF6F9A024159228573EE4543bF9',
+        starkExContractAddress: '0x45F5d63b5074E3710760A9A8ecCF96e58F9e11c7',
         tempStarkVaultId: 1,
         defaultFeeRate: 0.0025
       },
