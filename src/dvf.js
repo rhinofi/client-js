@@ -20,7 +20,10 @@ module.exports = async (web3, userConfig = {}) => {
   dvf.config = Object.assign({}, defaultConfig, userConfig)
 
   // ethfinex exchange config
-  const exchangeConf = await dvf.getConfig()
+  const exchangeConf = dvf.config.autoLoadExchangeConf ?
+    await dvf.getConfig()
+    :
+    {}
 
   // user config has priority
   dvf.config = Object.assign({}, defaultConfig, exchangeConf, userConfig)
