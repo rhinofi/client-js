@@ -1,9 +1,9 @@
 const FP = require('lodash/fp')
 const Joi = require('@hapi/joi')
 /*
-repeating the schema here as this method can be called on its own  
-and keeping the schema visible and not in a seperate method 
-for reference as required parameters and tyoes can be checked 
+repeating the schema here as this method can be called on its own
+and keeping the schema visible and not in a seperate method
+for reference as required parameters and tyoes can be checked
 by reading the schema
 */
 const schema = Joi.object({
@@ -15,6 +15,7 @@ const schema = Joi.object({
   validFor: Joi.number().allow(''), // validation time in hours
   feeRate: Joi.number()
     .allow('')
+    .default(0.0025)
     .prefs({ convert: false }), // feeRate if known
   dynamicFeeRate: Joi.number()
     .allow('')
