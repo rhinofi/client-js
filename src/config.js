@@ -5,7 +5,7 @@ module.exports = {
   // default transaction arguments
   defaultGasLimit: 200000,
   defaultGasPrice: 14000000000,
-  // default expiration time for orders in hours, used by create_order.js
+  // default expiration time for transfers and orders in hours
   defaultStarkExpiry: 720,
   // default nonce age in seconds
   defaultNonceAge: 10800,

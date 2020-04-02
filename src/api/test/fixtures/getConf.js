@@ -7,8 +7,7 @@ module.exports = () => {
       exchangeAddress: '0xBd25cD867C304F079E696CBE44D958f3d3B683ba',
       starkExContractAddress: '0x204eAF71D3f15CF6F9A024159228573EE4543bF9',
       tempStarkVaultId: 1,
-      depositExpiry: 720,
-      depositNonce: 1
+      defaultFeeRate: 0.0025
     },
     tokenRegistry: {
       ETH: {
@@ -57,8 +56,7 @@ module.exports = () => {
       exchangeAddress: '0xBd25cD867C304F079E696CBE44D958f3d3B683ba',
       starkExContractAddress: '0x204eAF71D3f15CF6F9A024159228573EE4543bF9',
       tempStarkVaultId: 1,
-      depositExpiry: 720,
-      depositNonce: 1
+      defaultFeeRate: 0.0025
     },
     tokenRegistry: {
       ETH: {

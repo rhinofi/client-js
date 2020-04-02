@@ -13,7 +13,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   const nonce = dvf.util.generateRandomNonce()
   const starkTokenId = currency.starkTokenId
   const starkVaultId = await dvf.getVaultId(token)
-  console.log({ starkVaultId })
+
   const { starkPublicKey, starkKeyPair } = await dvf.stark.createKeyPair(
     starkPrivateKey
   )
@@ -54,8 +54,6 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   if (!status) {
     throw new DVFError('ERR_ONCHAIN_DEPOSIT')
   }
-
-  await dvf.getUserConfig()
 
   return depositResponse
 }
