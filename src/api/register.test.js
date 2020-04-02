@@ -18,7 +18,7 @@ describe('dvf.register', () => {
     const apiResponse = { register: 'success' }
     const preRegisterResponse = {
       deFiSignature:
-        '0xd22fde0d6b71845dea3476bcc3e1806f9278b4c586d894ee8e2653b74946ee367912412d176bb78382658ac3762ba7fa59640efc45ca3bc34c55955f00b5061c1c'
+        '0xb5c3802c7cd4a6832c65b35f7011640ab4307f2109451f3db26f2ccf81639e756b109d63dade93ea7f879c735a11b4a0a6671e308a70b106639b15d43f001aac1c'
     }
     mockGetConf()
 
@@ -74,8 +74,8 @@ describe('dvf.register', () => {
 
   it('Posts to register config API and gets error response', async () => {
     const starkPublicKey = {
-      x: '0x12345',
-      y: '0x12345'
+      x: 'a1b2345',
+      y: 'b1c2345'
     }
     const apiErrorResponse = {
       statusCode: 422,
