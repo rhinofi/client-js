@@ -3,7 +3,7 @@ const BigNumber = require('bignumber.js')
 const DVFError = require('../dvf/DVFError')
 
 module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
-  feeRate = parseFloat(feeRate) || parseFloat(defaultFeeRate)
+  feeRate = parseFloat(feeRate) || dvf.config.DVF.defaultFeeRate
   // symbols are always 3 letters
   const baseSymbol = symbol.split(':')[0]
   const quoteSymbol = symbol.split(':')[1]
