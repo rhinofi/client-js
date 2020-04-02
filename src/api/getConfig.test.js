@@ -14,10 +14,9 @@ describe('dvf.getConfig', () => {
   it('Returns the config recieved from the API', async () => {
     const apiResponse = {
       DVF: {
-        depositExpiry: 720,
-        depositNonce: 1,
+        defaultFeeRate: 0.0025,
         exchangeAddress: '0xBd25cD867C304F079E696CBE44D958f3d3B683ba',
-        starkExContractAddress: '0x204eAF71D3f15CF6F9A024159228573EE4543bF9',
+        starkExContractAddress: '0xc54910Ce7dfaCB54BdF69f860AaECEe7785C516A',
         exchangeSymbols: ['tETHUSD', 'tZRXUSD', 'tZRXETH'],
         tempStarkVaultId: 1
       },
