@@ -21,5 +21,6 @@ module.exports = {
   autoSelectAccount: true,
 
   // enables integrators to select if they want to fetch user config upon initialization
-  autoLoadUserConf: true
+  autoLoadUserConf: true,
+  autoLoadExchangeConf: true
 }
