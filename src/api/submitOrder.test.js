@@ -15,8 +15,8 @@ describe('dvf.submitOrder', () => {
     const symbol = 'ETH:USDT'
     const amount = 0.137
     const price = 250
-    validFor = '0'
-    feeRate = '0'
+    const validFor = '0'
+    const feeRate = '0'
 
     const expectedBody = {
       cid: '1',
@@ -33,7 +33,7 @@ describe('dvf.submitOrder', () => {
       },
       protocol: 'stark',
       partnerId: 'P1',
-      feeRate: '0',
+      feeRate: 0.0025,
       dynamicFeeRate: '0'
     }
     const starkPrivateKey = process.env.PRIVATE_STARK_KEY
@@ -59,7 +59,7 @@ describe('dvf.submitOrder', () => {
       amount,
       price,
       validFor,
-      feeRate,
+      feeRate: 0.0025,
       starkPrivateKey,
       gid: '1', // gid
       cid: '1', // cid
@@ -88,7 +88,7 @@ describe('dvf.submitOrder', () => {
       symbol,
       amount,
       price,
-      feeRate,
+      feeRate: 0.0025,
       meta: {
         starkPublicKey: {
           x: '77a3b314db07c45076d11f62b6f9e748a39790441823307743cf00d6597ea43',
@@ -121,7 +121,7 @@ describe('dvf.submitOrder', () => {
       amount,
       price,
       validFor,
-      feeRate,
+      feeRate: 0.0025,
       starkPrivateKey,
       gid: '', // gid
       cid: '', // cid

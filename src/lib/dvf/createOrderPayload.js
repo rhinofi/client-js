@@ -13,10 +13,7 @@ const schema = Joi.object({
   starkPrivateKey: Joi.string(), // required when using KeyStore wallet
   ledgerPath: Joi.string(), // required when using Ledger wallet
   validFor: Joi.number().allow(''), // validation time in hours
-  feeRate: Joi.number()
-    .allow('')
-    .default(0.0025)
-    .prefs({ convert: false }), // feeRate if known
+  feeRate: Joi.number().allow(''), // feeRate if known
   dynamicFeeRate: Joi.number()
     .allow('')
     .prefs({ convert: false }),
@@ -30,7 +27,7 @@ const schema = Joi.object({
 
 module.exports = async (dvf, orderData) => {
   const { value } = schema.validate(orderData)
-
+  value.feeRate = value.feeRate || dvf.config.DVF.defaultFeeRate
   const ethAddress = orderData.ethAddress || dvf.get('account')
 
   return {

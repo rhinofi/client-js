@@ -19,8 +19,8 @@ module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
     dvf.getVaultId(buySymbol)
   )
 
-  console.log('sell :', sellSymbol, sellCurrency)
-  console.log('buy  :', buySymbol, buyCurrency)
+  // console.log('sell :', sellSymbol, sellCurrency)
+  // console.log('buy  :', buySymbol, buyCurrency)
 
   if (!(sellCurrency && buyCurrency)) {
     if (!vaultIdSell) {
