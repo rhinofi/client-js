@@ -25,27 +25,36 @@ const dvfConfig = {
   const dvf = await DVF(web3, dvfConfig)
 
   // Submit an order to sell 0.3 Eth for USDT ad 250 USDT per 1 Eth
+  const symbol = 'ETH:USDT'
+  const amount = -0.3
+  const price = 250
+  const validFor = '0'
+  const feeRate = '0'
 
-  // First create data parameters by calling createOrderMetaData
-  // this data will be required for submitting order
-  const orderMetaData = await dvf.stark.createOrderMetaData(
-    'ETH:USDT', // symbol
-    -0.3, // amount
-    250, // price
-    0, // validFor
-    '', // feeRate
-    starkPrivKey
-  )
-
-  // Call submitOrder with the data recieved from createOrderMetaData
-  const submitOrderResponse = await dvf.submitOrder(
-    '1', // gid
-    '1', // cid
-    'P1', // partnerId can be blank
-    '0', // feeRate
-    '0', // dynamicFeeRate
-    orderMetaData
-  )
+  console.log({
+    symbol,
+    amount,
+    price,
+    validFor,
+    feeRate,
+    starkPrivateKey: starkPrivKey,
+    gid: '1', // gid
+    cid: '1', // cid
+    partnerId: 'P1', // partnerId
+    dynamicFeeRate: '0'
+  })
+  const submitOrderResponse = await dvf.submitOrder({
+    symbol,
+    amount,
+    price,
+    validFor,
+    feeRate,
+    starkPrivateKey: starkPrivKey,
+    gid: '1', // gid
+    cid: '1', // cid
+    partnerId: 'P1', // partnerId
+    dynamicFeeRate: '0'
+  })
 
   console.log('submitOrder response ->', submitOrderResponse)
 })()
