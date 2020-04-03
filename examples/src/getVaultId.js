@@ -1,4 +1,4 @@
-const amount = 0.05
+const token = 'ETH'
 
 const getVaultIdResponse = await dvf.getVaultId(token)
 

@@ -7,6 +7,7 @@ const Web3 = require('web3')
 const DVF = require('../src/dvf')
 const envVars = require('./helpers/loadFromEnvOrConfig')()
 
+
 const ethPrivKey = envVars.ETH_PRIVATE_KEY
 // NOTE: you can also generate a new key using:`
 // const starkPrivKey = dvf.stark.createPrivateKey()
@@ -21,6 +22,7 @@ const dvfConfig = {
   api: 'https://api.deversifi.dev'
 }
 
+
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
@@ -29,7 +31,7 @@ const dvfConfig = {
   const amount = -0.3
   const price = 250
   const validFor = '0'
-  const feeRate = '0'
+  const feeRate = ''
 
   const submitOrderResponse = await dvf.submitOrder({
     symbol,
@@ -45,13 +47,15 @@ const dvfConfig = {
   })
 
   console.log('submitOrder response ->', submitOrderResponse)
+
 })()
-  // Stop provider to allow process to exit.
-  .then(() => {
-    console.log('Stopping provider...')
-    provider.engine.stop()
-  })
-  .catch(error => {
-    console.error(error)
-    process.exit(1)
-  })
+// Stop provider to allow process to exit.
+.then(() => {
+  console.log('Stopping provider...')
+  provider.engine.stop()
+})
+.catch(error => {
+  console.error(error)
+  process.exit(1)
+})
+
