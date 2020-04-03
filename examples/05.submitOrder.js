@@ -31,18 +31,6 @@ const dvfConfig = {
   const validFor = '0'
   const feeRate = '0'
 
-  console.log({
-    symbol,
-    amount,
-    price,
-    validFor,
-    feeRate,
-    starkPrivateKey: starkPrivKey,
-    gid: '1', // gid
-    cid: '1', // cid
-    partnerId: 'P1', // partnerId
-    dynamicFeeRate: '0'
-  })
   const submitOrderResponse = await dvf.submitOrder({
     symbol,
     amount,
