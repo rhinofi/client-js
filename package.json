@@ -5,7 +5,8 @@
   "contributors": [
     "Henrique Matias <hems.inlet@gmail.com>",
     "Will Harborne <will@deversifi.com>",
-    "Meer Ali <meer.ali@deversifi.com>"
+    "Meer Ali <meer.ali@deversifi.com>",
+    "Thiago Kroger <thiago.kroger@deversifi.com>"
   ],
   "standard": {
     "ignore": [
@@ -21,7 +22,7 @@
     "build:web:minify": "node-minify --compressor uglify-es --input './dist/dvf.js' --output './dist/dvf.min.js'",
     "build:web:hash": "hash-filename ./dist/dvf*.js;del ./dist/{dvf.js,dvf.min.js}",
     "build:web:run": "browserify --debug ./src/dvf.js --standalone EFX | browser-run --port 2222",
-    "test": "env-cmd -f ./env/test jest --testTimeout 200000",
+    "test": "env-cmd -f ./env/test jest --testTimeout 20000000",
     "test:watch": "env-cmd -f ./env/test jest --watch --testTimeout 200000 --verbose true",
     "test:coverage": "env-cmd -f ./env/test jest --testTimeout 2000000 --coverage"
   },
