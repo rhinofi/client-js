@@ -1,7 +1,9 @@
+const P = require('aigle')
 const BigNumber = require('bignumber.js')
 const DVFError = require('../dvf/DVFError')
 
-module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
+module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
+  feeRate = parseFloat(feeRate) || dvf.config.DVF.defaultFeeRate
   // symbols are always 3 letters
   const baseSymbol = symbol.split(':')[0]
   const quoteSymbol = symbol.split(':')[1]
@@ -11,21 +13,14 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
 
   const sellCurrency = dvf.token.getTokenInfo(sellSymbol)
   const buyCurrency = dvf.token.getTokenInfo(buySymbol)
-  const vaultIdSell = sellCurrency.starkVaultId
 
-  // console.log("sell :", sellSymbol, sellCurrency)
-  // console.log("buy  :", buySymbol, buyCurrency)
+  const [vaultIdSell, vaultIdBuy] = await P.join(
+    dvf.getVaultId(sellSymbol),
+    dvf.getVaultId(buySymbol)
+  )
 
-  if (!vaultIdSell) {
-    console.error('No token vault for :', sellSymbol)
-
-    throw new DVFError('ERR_NO_TOKEN_VAULT')
-  }
-
-  let vaultIdBuy = buyCurrency.starkVaultId
-  if (!vaultIdBuy) {
-    vaultIdBuy = dvf.config.spareStarkVaultId
-  }
+  // console.log('sell :', sellSymbol, sellCurrency)
+  // console.log('buy  :', buySymbol, buyCurrency)
 
   if (!(sellCurrency && buyCurrency)) {
     if (!vaultIdSell) {

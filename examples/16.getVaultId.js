@@ -26,11 +26,11 @@ const dvfConfig = {
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
-  const keyPair = await dvf.stark.createKeyPair(starkPrivKey)
+  const token = 'ETH'
 
-  const registerResponse = await dvf.register(keyPair.starkPublicKey)
+  const getVaultIdResponse = await dvf.getVaultId(token)
 
-  console.log('register response ->', registerResponse)
+  console.log('getVaultId response ->', getVaultIdResponse)
 
 })()
 // Stop provider to allow process to exit.

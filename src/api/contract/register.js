@@ -31,14 +31,7 @@ module.exports = async (dvf, starkKey, deFiSignature) => {
         .getStarkKey(ethAddress)
         .call()
 
-      const fromStarkHex = new BN(fromStark).toString(16)
-
-      console.log(
-        'key retrieved registered with stark: ',
-        fromStark,
-        fromStarkHex
-      )
-      if (fromStarkHex === starkKey) {
+      if (new BN(fromStark).eq(new BN(starkKey, 16))) {
         return true
       } else {
         throw new DVFError('ERR_STARK_REGISTRATION_MISMATCH')

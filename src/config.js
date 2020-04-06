@@ -5,7 +5,7 @@ module.exports = {
   // default transaction arguments
   defaultGasLimit: 200000,
   defaultGasPrice: 14000000000,
-  // default expiration time for orders in hours, used by create_order.js
+  // default expiration time for transfers and orders in hours
   defaultStarkExpiry: 720,
   // default nonce age in seconds
   defaultNonceAge: 10800,
@@ -16,7 +16,11 @@ module.exports = {
   // default account to select in case no account is provided by the userConfig
   // parameter
   account: 0,
+  // selects account from web3 provider based on config.account upon
+  // initialization
+  autoSelectAccount: true,
 
   // enables integrators to select if they want to fetch user config upon initialization
-  autoLoadUserConf: true
+  autoLoadUserConf: true,
+  autoLoadExchangeConf: true
 }

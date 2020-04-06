@@ -1,8 +1,10 @@
-const { post } = require('request-promise')
+const FP = require('lodash/fp')
 const Joi = require('@hapi/joi')
 /*
-Keeping the schema visible and not in a seperate method
-for reference as required parameters can be checked by reading
+repeating the schema here as this method can be called on its own
+and keeping the schema visible and not in a seperate method
+for reference as required parameters and tyoes can be checked
+by reading the schema
 */
 const schema = Joi.object({
   symbol: Joi.string().required(), // trading symbol
@@ -14,7 +16,7 @@ const schema = Joi.object({
   feeRate: Joi.number().allow(''), // feeRate if known
   dynamicFeeRate: Joi.number()
     .allow('')
-    .raw(),
+    .prefs({ convert: false }),
   cid: Joi.string().allow(''),
   gid: Joi.string().allow(''),
   partnerId: Joi.string().allow(''),
@@ -25,7 +27,28 @@ const schema = Joi.object({
 
 module.exports = async (dvf, orderData) => {
   const { value } = schema.validate(orderData)
-  return post(dvf.config.api + '/v1/trading/w/submitOrder', {
-    json: await dvf.createOrderPayload(value)
-  })
+  value.feeRate = value.feeRate || dvf.config.DVF.defaultFeeRate
+  const ethAddress = orderData.ethAddress || dvf.get('account')
+
+  return {
+    ...FP.pick(
+      [
+        'amount',
+        'cid',
+        'dynamicFeeRate',
+        'feeRate',
+        'gid',
+        'partnerId',
+        'price',
+        'symbol',
+        'type',
+        'protocol'
+      ],
+      value
+    ),
+    meta: {
+      ethAddress,
+      ...(await dvf.createOrderMetaData(value))
+    }
+  }
 }

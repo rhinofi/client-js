@@ -12,10 +12,8 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   const tempVaultId = dvf.config.DVF.tempStarkVaultId
   const nonce = dvf.util.generateRandomNonce()
   const starkTokenId = currency.starkTokenId
-  let starkVaultId = currency.starkVaultId
-  if (!starkVaultId) {
-    starkVaultId = dvf.config.spareStarkVaultId
-  }
+  const starkVaultId = await dvf.getVaultId(token)
+
   const { starkPublicKey, starkKeyPair } = await dvf.stark.createKeyPair(
     starkPrivateKey
   )
@@ -24,19 +22,6 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   expireTime =
     Math.floor(Date.now() / (1000 * 3600)) +
     parseInt(dvf.config.defaultStarkExpiry)
-
-  const { status, transactionHash } = await dvf.contract.deposit(
-    tempVaultId,
-    token,
-    amount
-  )
-
-  // used for testing without making onchain contract call
-  // const { status, transactionHash } = { status: true, transactionHash: '0xabc' }
-
-  if (!status) {
-    throw new DVFError('ERR_ONCHAIN_DEPOSIT')
-  }
 
   const { starkMessage } = dvf.stark.createTransferMsg(
     quantisedAmount,
@@ -59,14 +44,16 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     starkPublicKey,
     starkSignature,
     starkVaultId,
-    expireTime,
-    ethTxHash: transactionHash
+    expireTime
   }
   //console.log({ data })
 
   const depositResponse = await post(url, { json: data })
+  const { status } = await dvf.contract.deposit(tempVaultId, token, amount)
 
-  await dvf.getUserConfig()
+  if (!status) {
+    throw new DVFError('ERR_ONCHAIN_DEPOSIT')
+  }
 
   return depositResponse
 }
