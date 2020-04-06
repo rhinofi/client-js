@@ -16,7 +16,7 @@ module.exports = async (dvf, starkPublicKey) => {
 
   const onchainRegister = await dvf.stark.register(dvf, starkKey, deFiSignature)
 
-  //console.log('onchain register contract call result: ', onchainRegister)
+  // console.log('onchain register contract call result: ', onchainRegister)
   if (onchainRegister.error) {
     return onchainRegister
   }
