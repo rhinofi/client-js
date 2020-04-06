@@ -28,7 +28,7 @@ module.exports = async (
   const transport = await Transport.create()
   const eth = new Eth(transport)
   const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')
-  const starkPublicKey = {
+  let starkPublicKey = {
     x: tempKey.substr(2, 64),
     y: tempKey.substr(66)
   }
@@ -69,5 +69,6 @@ module.exports = async (
   // console.log({ starkSignature })
   transport.close()
 
+  starkPublicKey = dvf.stark.ledger.normaliseStarkKey(starkPublicKey)
   return { starkPublicKey, nonce, expireTime, starkSignature }
 }

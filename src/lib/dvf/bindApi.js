@@ -34,6 +34,7 @@ module.exports = () => {
     ledger: {
       getPath: require('../stark/ledger/getPath'),
       getPublicKey: compose(require('../stark/ledger/getPublicKey')),
+      normaliseStarkKey: require('../stark/ledger/normaliseStarkKey'),
       createWithdrawalData: compose(
         require('../stark/ledger/createWithdrawalData')
       ),
