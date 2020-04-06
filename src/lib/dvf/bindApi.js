@@ -32,6 +32,7 @@ module.exports = () => {
     createKeyPair: require('../stark/createKeyPair'),
     register: require('../../api/contract/register'),
     ledger: {
+      getPath: require('../stark/ledger/getPath'),
       getPublicKey: compose(require('../stark/ledger/getPublicKey')),
       createWithdrawalData: compose(
         require('../stark/ledger/createWithdrawalData')
@@ -77,14 +78,14 @@ module.exports = () => {
     getNetwork: compose(require('../../api/eth/getNetwork'))
   }
 
-  //dvf utility functions
+  // dvf utility functions
   dvf.util = {
     generateRandomNonce: require('./generateRandomNonce')
   }
 
   // dvf.sign functions
   dvf.sign = compose(require('../../api/sign/sign'))
-  //dvf.sign.cancelOrder = compose(require('../../api/sign/cancelOrder'))
+  // dvf.sign.cancelOrder = compose(require('../../api/sign/cancelOrder'))
   dvf.sign.request = compose(require('../../api/sign/request'))
   dvf.sign.nonceSignature = compose(require('../../api/sign/nonceSignature'))
 
