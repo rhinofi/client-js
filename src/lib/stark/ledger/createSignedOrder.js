@@ -7,6 +7,7 @@ const _ = require('lodash')
 const selectTransport = require('../../ledger/selectTransport')
 
 module.exports = async (dvf, path, starkOrder) => {
+  const starkPath = dvf.stark.ledger.getPath(path)
   const Transport = selectTransport(dvf.isBrowser)
 
   const buyCurrency = _.find(dvf.config.tokenRegistry, {
@@ -18,7 +19,7 @@ module.exports = async (dvf, path, starkOrder) => {
   console.log(buyCurrency, sellCurrency)
   const transport = await Transport.create()
   const eth = new Eth(transport)
-  const tempKey = (await eth.starkGetPublicKey(path)).toString('hex')
+  const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')
   const starkPublicKey = {
     x: tempKey.substr(2, 64),
     y: tempKey.substr(66)
@@ -79,7 +80,7 @@ module.exports = async (dvf, path, starkOrder) => {
   }
 
   const starkSignature = await eth.starkSignOrder(
-    path,
+    starkPath,
     sellTokenAddress,
     new BN(sellCurrency.tokenization),
     buyTokenAddress,
@@ -96,7 +97,5 @@ module.exports = async (dvf, path, starkOrder) => {
 
   transport.close()
 
-  starkOrderData = { starkPublicKey, starkSignature }
-
-  return starkOrderData
+  return { starkPublicKey, starkSignature }
 }

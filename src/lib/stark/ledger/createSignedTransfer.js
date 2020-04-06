@@ -3,7 +3,6 @@ const byContractAddress = require('@ledgerhq/hw-app-eth/erc20')
   .byContractAddress
 const DVFError = require('../../dvf/DVFError')
 const BN = require('bignumber.js')
-const ethUtil = require('ethereumjs-util')
 const selectTransport = require('../../ledger/selectTransport')
 
 module.exports = async (
@@ -14,6 +13,7 @@ module.exports = async (
   sourceVault,
   destinationVault
 ) => {
+  const starkPath = dvf.stark.ledger.getPath(path)
   const Transport = selectTransport(dvf.isBrowser)
   const currency = dvf.token.getTokenInfo(token)
   const nonce = dvf.util.generateRandomNonce()
@@ -21,13 +21,13 @@ module.exports = async (
   const transferQuantization = new BN(currency.quantization)
   const amountTransfer = new BN(dvf.token.toQuantizedAmount(token, amount))
 
-  expireTime =
+  const expireTime =
     Math.floor(Date.now() / (1000 * 3600)) +
     parseInt(dvf.config.defaultStarkExpiry)
 
   const transport = await Transport.create()
   const eth = new Eth(transport)
-  const tempKey = (await eth.starkGetPublicKey(path)).toString('hex')
+  const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')
   const starkPublicKey = {
     x: tempKey.substr(2, 64),
     y: tempKey.substr(66)
@@ -55,7 +55,7 @@ module.exports = async (
   }
 
   const starkSignature = await eth.starkSignTransfer(
-    path,
+    starkPath,
     transferTokenAddress,
     transferQuantization,
     starkPublicKey.x,
@@ -69,7 +69,5 @@ module.exports = async (
   // console.log({ starkSignature })
   transport.close()
 
-  starkTransferData = { starkPublicKey, nonce, expireTime, starkSignature }
-
-  return starkTransferData
+  return { starkPublicKey, nonce, expireTime, starkSignature }
 }
