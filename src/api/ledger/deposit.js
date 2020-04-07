@@ -31,9 +31,5 @@ module.exports = async (dvf, token, amount, starkDeposit) => {
   const url = dvf.config.api + '/v1/trading/w/deposit'
 
   // console.log(data)
-  const depositResponse = await post(url, { json: data })
-
-  await dvf.getUserConfig()
-
-  return depositResponse
+  return post(url, { json: data })
 }
