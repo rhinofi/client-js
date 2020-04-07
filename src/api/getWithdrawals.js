@@ -28,6 +28,6 @@ module.exports = async (dvf, token, nonce, signature) => {
       })
     }
   }
-  console.log(withdrawals)
+  
   return withdrawals
 }
