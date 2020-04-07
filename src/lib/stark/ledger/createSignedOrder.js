@@ -16,15 +16,14 @@ module.exports = async (dvf, path, starkOrder) => {
   const sellCurrency = _.find(dvf.config.tokenRegistry, {
     starkTokenId: starkOrder.tokenSell
   })
-  console.log(buyCurrency, sellCurrency)
+
   const transport = await Transport.create()
   const eth = new Eth(transport)
   const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')
-  const starkPublicKey = {
+  let starkPublicKey = {
     x: tempKey.substr(2, 64),
     y: tempKey.substr(66)
   }
-  console.log(tempKey, starkPublicKey)
 
   // TODO Extract below code to a utility method
   // to be used for both buy as sell tokens and
@@ -93,7 +92,7 @@ module.exports = async (dvf, path, starkOrder) => {
     starkOrder.expirationTimestamp
   )
 
-  console.log(starkOrder, starkPublicKey, starkSignature)
+  starkPublicKey = dvf.stark.ledger.normaliseStarkKey(starkPublicKey)
 
   transport.close()
 

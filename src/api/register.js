@@ -5,6 +5,7 @@ module.exports = async (dvf, starkPublicKey) => {
   validateAssertions(dvf, { starkPublicKey })
 
   const ethAddress = dvf.get('account')
+  starkPublicKey = dvf.stark.ledger.normaliseStarkKey(starkPublicKey)
   const starkKey = starkPublicKey.x
   let url = dvf.config.api + '/v1/trading/w/preRegister'
   let data = {
@@ -23,6 +24,7 @@ module.exports = async (dvf, starkPublicKey) => {
 
   const nonce = Date.now() / 1000 + ''
   const signature = await dvf.sign(nonce.toString(16))
+
   url = dvf.config.api + '/v1/trading/w/register'
 
   data = {
