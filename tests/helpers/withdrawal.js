@@ -8,7 +8,7 @@ const withdraw = async (dvf, token, amount, starkPrivateKey, waitToBeReady) => {
             return withdrawalResponse
         }
 
-        await P.retry({ times: 120, interval: 30000 }, () => checkWithdrawalReady(dvf, token))
+        await P.retry({ times: 120, interval: 120000 }, () => checkWithdrawalReady(dvf, token))
         return withdrawalResponse
         
     } catch (err) {
