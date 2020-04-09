@@ -124,5 +124,6 @@ module.exports = () => {
     deposit: compose(require('../../api/ledger/deposit')),
     withdraw: compose(require('../../api/ledger/withdraw'))
   }
+  dvf.estimatedNextBatchTime = compose(require('../../api/estimatedNextBatchTime'))
   return dvf
 }
