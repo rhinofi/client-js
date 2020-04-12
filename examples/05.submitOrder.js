@@ -39,7 +39,7 @@ const dvfConfig = {
         price,
         starkPrivateKey: starkPrivKey,
         validFor,           // Optional
-        feeRate: 0.0025,    // Optional
+        feeRate,            // Optional
         gid: '1',           // Optional
         cid: '1',           // Optional
         partnerId: 'P1',    // Optional
