@@ -32,7 +32,7 @@ const dvfConfig = {
   const price = 250
   const validFor = '0'
   const feeRate = ''
-  const ledgerPath= `21323'/0`
+  const ledgerPath= `44'/60'/0'/0'/0`
 
   const submitOrderResponse = await dvf.submitOrder({
     symbol,
