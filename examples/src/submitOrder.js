@@ -1,4 +1,4 @@
-// Submit an order to sell 0.3 Eth for USDT ad 250 USDT per 1 Eth
+// Submit an order to sell 0.3 Eth for USDT at 250 USDT per 1 Eth
 const symbol = 'ETH:USDT'
 const amount = -0.3
 const price = 250
@@ -6,16 +6,16 @@ const validFor = '0'
 const feeRate = ''
 
 const submitOrderResponse = await dvf.submitOrder({
-  symbol,
-  amount,
-  price,
-  validFor,
-  feeRate,
-  starkPrivateKey: starkPrivKey,
-  gid: '1', // gid
-  cid: '1', // cid
-  partnerId: 'P1', // partnerId
-  dynamicFeeRate: '0'
-})
+      symbol,
+      amount,
+      price,
+      starkPrivateKey: starkPrivKey,
+      validFor,           // Optional
+      feeRate: 0.0025,    // Optional
+      gid: '1',           // Optional
+      cid: '1',           // Optional
+      partnerId: 'P1',    // Optional
+      dynamicFeeRate: '0' // Optional
+    })
 
 console.log('submitOrder response ->', submitOrderResponse)
