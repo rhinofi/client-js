@@ -42,17 +42,17 @@ const dvfConfig = {
     const feeRate = ''
 
     const submitOrderResponse = await dvf.submitOrder({
-          symbol,
-          amount,
-          price,
-          starkPrivateKey: starkPrivKey,
-          validFor,           // Optional
-          feeRate,            // Optional
-          gid: '1',           // Optional
-          cid: '1',           // Optional
-          partnerId: 'P1',    // Optional
-          dynamicFeeRate: '0' // Optional
-        })
+      symbol,
+      amount,
+      price,
+      starkPrivateKey: starkPrivKey,
+      validFor,           // Optional
+      feeRate,            // Optional
+      gid: '1',           // Optional
+      cid: '1',           // Optional
+      partnerId: 'P1',    // Optional
+      dynamicFeeRate: '0' // Optional
+    })
 
     console.log('submitOrder response ->', submitOrderResponse)
     orderId = submitOrderResponse.orderId
