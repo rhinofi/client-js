@@ -4,12 +4,13 @@ const amount = -0.3
 const price = 250
 const validFor = '0'
 const feeRate = ''
+const ledgerPath= `44'/60'/0'/0'/0`
 
 const submitOrderResponse = await dvf.submitOrder({
   symbol,
   amount,
   price,
-  starkPrivateKey: starkPrivKey,
+  ledgerPath,
   validFor,           // Optional
   feeRate,            // Optional
   gid: '1',           // Optional

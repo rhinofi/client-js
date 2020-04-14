@@ -16,15 +16,14 @@ module.exports = async (dvf, path, starkOrder) => {
   const sellCurrency = _.find(dvf.config.tokenRegistry, {
     starkTokenId: starkOrder.tokenSell
   })
-  console.log(buyCurrency, sellCurrency)
+
   const transport = await Transport.create()
   const eth = new Eth(transport)
   const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')
-  const starkPublicKey = {
+  let starkPublicKey = {
     x: tempKey.substr(2, 64),
     y: tempKey.substr(66)
   }
-  console.log(tempKey, starkPublicKey)
 
   // TODO Extract below code to a utility method
   // to be used for both buy as sell tokens and
@@ -38,7 +37,7 @@ module.exports = async (dvf, path, starkOrder) => {
     if (buyTokenInfo) {
       await eth.provideERC20TokenInformation(buyTokenInfo)
     } else {
-      if (process.env.NODE_ENV === 'test') {
+      if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
           `00${buyTokenAddress}0000000000000000`,
@@ -64,7 +63,7 @@ module.exports = async (dvf, path, starkOrder) => {
     if (sellTokenInfo) {
       await eth.provideERC20TokenInformation(sellTokenInfo)
     } else {
-      if (process.env.NODE_ENV === 'test') {
+      if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
           `00${sellTokenAddress}0000000000000000`,
@@ -82,18 +81,18 @@ module.exports = async (dvf, path, starkOrder) => {
   const starkSignature = await eth.starkSignOrder(
     starkPath,
     sellTokenAddress,
-    new BN(sellCurrency.tokenization),
+    new BN(sellCurrency.quantization),
     buyTokenAddress,
-    new BN(buyCurrency.tokenization),
-    starkOrder.vaultSell,
-    starkOrder.vaultBuy,
+    new BN(buyCurrency.quantization),
+    starkOrder.vaultIdSell,
+    starkOrder.vaultIdBuy,
     new BN(starkOrder.amountSell),
     new BN(starkOrder.amountBuy),
     starkOrder.nonce,
     starkOrder.expirationTimestamp
   )
 
-  console.log(starkOrder, starkPublicKey, starkSignature)
+  starkPublicKey = dvf.stark.ledger.normaliseStarkKey(starkPublicKey)
 
   transport.close()
 

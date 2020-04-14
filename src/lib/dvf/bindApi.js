@@ -34,6 +34,7 @@ module.exports = () => {
     ledger: {
       getPath: require('../stark/ledger/getPath'),
       getPublicKey: compose(require('../stark/ledger/getPublicKey')),
+      normaliseStarkKey: require('../stark/ledger/normaliseStarkKey'),
       createWithdrawalData: compose(
         require('../stark/ledger/createWithdrawalData')
       ),
@@ -123,5 +124,6 @@ module.exports = () => {
     deposit: compose(require('../../api/ledger/deposit')),
     withdraw: compose(require('../../api/ledger/withdraw'))
   }
+  dvf.estimatedNextBatchTime = compose(require('../../api/estimatedNextBatchTime'))
   return dvf
 }

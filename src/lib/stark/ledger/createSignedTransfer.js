@@ -24,22 +24,16 @@ module.exports = async (
   const expireTime =
     Math.floor(Date.now() / (1000 * 3600)) +
     parseInt(dvf.config.defaultStarkExpiry)
-
+  let starkPublicKey = await dvf.stark.ledger.getPublicKey(path)
   const transport = await Transport.create()
   const eth = new Eth(transport)
-  const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')
-  const starkPublicKey = {
-    x: tempKey.substr(2, 64),
-    y: tempKey.substr(66)
-  }
-
   if (transferTokenAddress) {
     const tokenInfo = byContractAddress(transferTokenAddress)
     transferTokenAddress = transferTokenAddress.substr(2)
     if (tokenInfo) {
       await eth.provideERC20TokenInformation(tokenInfo)
     } else {
-      if (process.env.NODE_ENV === 'test') {
+      if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
           `00${transferTokenAddress}0000000000000000`,
@@ -69,5 +63,6 @@ module.exports = async (
   // console.log({ starkSignature })
   transport.close()
 
+  starkPublicKey = dvf.stark.ledger.normaliseStarkKey(starkPublicKey)
   return { starkPublicKey, nonce, expireTime, starkSignature }
 }

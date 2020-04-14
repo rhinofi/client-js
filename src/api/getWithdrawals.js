@@ -16,9 +16,9 @@ module.exports = async (dvf, token, nonce, signature) => {
     const available = await dvf.contract.getWithdrawalBalance(key)
 
     if (parseInt(available) > 0) {
-      const amount = dvf.token.toBaseUnitAmount(
+      const amount = dvf.token.toQuantizedAmount(
         key,
-        dvf.token.fromQuantizedAmount(key, available)
+        dvf.token.fromBaseUnitAmount(key, available)
       )
 
       withdrawals.push({
@@ -28,6 +28,6 @@ module.exports = async (dvf, token, nonce, signature) => {
       })
     }
   }
-
+  
   return withdrawals
 }

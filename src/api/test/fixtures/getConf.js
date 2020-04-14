@@ -21,7 +21,7 @@ module.exports = () => {
         decimals: 6,
         quantization: 1,
         minOrderSize: 25,
-        settleSpread: -0.026,
+        settleSpread: 0,
         starkTokenId:
           '0x180bef8ae3462e919489763b84dc1dc700c45a249dec4d1136814a639f2dd7b',
         tokenAddress: '0x4c5f66596197a86fb30a2435e2ef4ddcb39342c9'
@@ -71,7 +71,7 @@ module.exports = () => {
         decimals: 6,
         quantization: 1,
         minOrderSize: 25,
-        settleSpread: -0.026,
+        settleSpread: 0,
         starkTokenId:
           '0x180bef8ae3462e919489763b84dc1dc700c45a249dec4d1136814a639f2dd7b',
         tokenAddress: '0x4c5f66596197a86fb30a2435e2ef4ddcb39342c9',

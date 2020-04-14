@@ -17,7 +17,8 @@ module.exports = Object.freeze([
   'getWithdrawals',
   'getWithdrawal',
   'getVaultId',
-  'ledgerDeposit'
+  'ledgerDeposit',
+  'ledgerSubmitOrder'
   // TODO
   // 'submitBuyOrder',
   // 'submitSellOrder',
