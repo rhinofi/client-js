@@ -95,7 +95,7 @@ module.exports = async (dvf, path, starkOrder) => {
 
   starkPublicKey = dvf.stark.ledger.normaliseStarkKey(starkPublicKey)
 
-  transport.close()
+  await transport.close()
 
   return { starkPublicKey, starkSignature }
 }
