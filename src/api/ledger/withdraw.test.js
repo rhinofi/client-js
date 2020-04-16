@@ -3,19 +3,24 @@ const instance = require('../test/helpers/instance')
 const mockGetConf = require('../test/fixtures/getConf')
 
 jest.mock('../../lib/ledger/selectTransport')
+const mockEth = require('@ledgerhq/hw-app-eth')
 const mockSelector = require('../../lib/ledger/selectTransport')
 const { createTransportReplayer } = require('@ledgerhq/hw-transport-mocker')
-const mockEth = require('@ledgerhq/hw-app-eth')
+
 jest.mock('@ledgerhq/hw-app-eth', () => {
   return {
     default: jest.fn(() => mockEth),
+
     getAddress: jest.fn(() => {
       return {
         address: '0x341e46a49f15785373ede443df0220dea6a41bbc'
       }
     }),
+
     starkGetPublicKey: jest.fn(() => '0401841559c5a886771644573dbb6dba210a1a7a0834afcf6bb3cbba1565ae7b3202f0f543d1b6666fa1e093b5d03feb90f0e68ab007baf587b6285d425d8a34dc'),
+
     provideERC20TokenInformation: jest.fn(() => true),
+
     starkSignTransfer: jest.fn(() => {
       return {
         r: '06519b47cc1c5a2731420d824cce3a1a42fcbe3a4b0614187603474255a7332c',
@@ -36,6 +41,7 @@ describe('dvf.deposit', () => {
 
   it('Withdrawas ETH to users vault', async () => {
     mockGetConf()
+
     const path = '44\'/60\'/0\'/0\'/0'
     const token = 'ETH'
     const amount = 1.117
@@ -43,6 +49,7 @@ describe('dvf.deposit', () => {
       x: '1841559c5a886771644573dbb6dba210a1a7a0834afcf6bb3cbba1565ae7b32',
       y: '02f0f543d1b6666fa1e093b5d03feb90f0e68ab007baf587b6285d425d8a34dc'
     }
+
     const apiResponse = {
       token,
       amount,
