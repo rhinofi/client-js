@@ -7,13 +7,13 @@ module.exports = (
   cid,
   signedOrder,
   validFor,
-  partner_id,
-  fee_rate,
+  partnerId,
+  feeRate,
   dynamicFeeRate,
   starkPrivateKey
 ) => {
   // force amount to be negative ( sell order )
-  amount = Math.abs(amount)
+  amount = Math.abs(amount) * -1
   return dvf.submitOrder(
     symbol,
     amount,
@@ -22,8 +22,8 @@ module.exports = (
     cid,
     signedOrder,
     validFor,
-    partner_id,
-    fee_rate,
+    partnerId,
+    feeRate,
     dynamicFeeRate,
     starkPrivateKey
   )

@@ -4,7 +4,7 @@ const _ = require('lodash')
 module.exports = async (dvf, endpoint, nonce, signature, data = {}) => {
   const url = dvf.config.api + endpoint
 
-  if(!nonce || !signature){
+  if (!nonce || !signature) {
     const newSignature = await dvf.sign.nonceSignature(nonce, signature)
 
     data = {
@@ -22,5 +22,5 @@ module.exports = async (dvf, endpoint, nonce, signature, data = {}) => {
   // removes null and undefined values
   data = _.omitBy(data, _.isNil)
 
-  return post(url, {json: data})
+  return post(url, { json: data })
 }

@@ -12,8 +12,27 @@ describe('dvf.getWithdrawals', () => {
     dvf = await instance()
   })
 
-  it(`Query for all withdrawals`, async () => {
-    const apiResponse = []
+  it(`Query withdrawals for all tokens`, async () => {
+    const apiResponse = [
+      {
+        token: 'ETH',
+        amount: 1000000
+      },
+      {
+        token: 'USDT',
+        amount: 2000000
+      },
+      {
+        token: 'USDT',
+        status: 'ready',
+        amount: 5000000
+      },
+      {
+        token: 'ZRX',
+        status: 'ready',
+        amount: 25000000
+      }
+    ]
 
     const payloadValidator = jest.fn(body => {
       expect(typeof body.nonce).toBe('number')
@@ -24,7 +43,7 @@ describe('dvf.getWithdrawals', () => {
     })
 
     nock(dvf.config.api)
-      .post('/v1/trading/r/getWithdrawals', payloadValidator)
+      .post('/v1/trading/r/getPendingWithdrawals', payloadValidator)
       .reply(200, apiResponse)
 
     const result = await dvf.getWithdrawals()
@@ -34,12 +53,26 @@ describe('dvf.getWithdrawals', () => {
     expect(result).toEqual(apiResponse)
   })
 
-  it(`Query for withdrawals for a given token`, async () => {
+  it(`Query withdrawals for a specified token`, async () => {
     const nonce = Date.now() / 1000 + ''
     const signature = await dvf.sign(nonce.toString(16))
     const token = 'ETH'
 
-    const apiResponse = []
+    const apiResponse = [
+      {
+        token: 'ETH',
+        amount: 1000000
+      },
+      {
+        token: 'ETH',
+        amount: 2000000
+      },
+      {
+        token: 'ETH',
+        status: 'ready',
+        amount: 5000000
+      }
+    ]
 
     const payloadValidator = jest.fn(body => {
       expect(body.nonce).toEqual(nonce)
@@ -50,7 +83,7 @@ describe('dvf.getWithdrawals', () => {
     })
 
     nock(dvf.config.api)
-      .post('/v1/trading/r/getWithdrawals', payloadValidator)
+      .post('/v1/trading/r/getPendingWithdrawals', payloadValidator)
       .reply(200, apiResponse)
 
     const result = await dvf.getWithdrawals(token, nonce, signature)
@@ -72,7 +105,7 @@ describe('dvf.getWithdrawals', () => {
     })
 
     nock(dvf.config.api)
-      .post('/v1/trading/r/getWithdrawals', payloadValidator)
+      .post('/v1/trading/r/getPendingWithdrawals', payloadValidator)
       .reply(200, apiResponse)
 
     const result = await dvf.getWithdrawals(token)
@@ -99,7 +132,7 @@ describe('dvf.getWithdrawals', () => {
     const payloadValidator = jest.fn(() => true)
 
     nock(dvf.config.api)
-      .post('/v1/trading/r/getWithdrawals', payloadValidator)
+      .post('/v1/trading/r/getPendingWithdrawals', payloadValidator)
       .reply(422, apiErrorResponse)
 
     try {

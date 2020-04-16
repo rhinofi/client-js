@@ -31,6 +31,7 @@ describe('dvf.withdraw', () => {
 
     const payloadValidator = jest.fn(body => {
       expect(body).toMatchObject(apiResponse)
+      expect(typeof body.nonce).toBe('number')
       expect(body.starkSignature.r).toMatch(/[\da-f]/i)
       expect(body.starkSignature.s).toMatch(/[\da-f]/i)
       expect(body.starkSignature.recoveryParam).toBeLessThan(5)
@@ -63,6 +64,7 @@ describe('dvf.withdraw', () => {
 
     const payloadValidator = jest.fn(body => {
       expect(body).toMatchObject(apiResponse)
+      expect(typeof body.nonce).toBe('number')
       expect(body.starkSignature.r).toMatch(/[\da-f]/i)
       expect(body.starkSignature.s).toMatch(/[\da-f]/i)
       expect(body.starkSignature.recoveryParam).toBeLessThan(5)

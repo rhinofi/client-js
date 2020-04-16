@@ -15,6 +15,7 @@ describe('dvf.deposit', () => {
   })
 
   it(`Deposits ERC20 token to user's vault`, async () => {
+    mockGetConf()
     const starkPrivateKey = '100'
     const amount = 1394
     const token = 'USDT'
@@ -31,12 +32,12 @@ describe('dvf.deposit', () => {
 
     const payloadValidator = jest.fn(body => {
       expect(body).toMatchObject(apiResponse)
+      expect(typeof body.nonce).toBe('number')
       expect(body.starkSignature.r).toMatch(/[\da-f]/i)
       expect(body.starkSignature.s).toMatch(/[\da-f]/i)
       expect(body.starkSignature.recoveryParam).toBeLessThan(5)
       expect(typeof body.starkVaultId).toBe('number')
       expect(typeof body.expireTime).toBe('number')
-      expect(body.ethTxHash).toMatch(/[\da-f]/i)
       return true
     })
 
@@ -50,6 +51,7 @@ describe('dvf.deposit', () => {
   })
 
   it('Deposits ETH to users vault', async () => {
+    mockGetConf()
     const starkPrivateKey = '100'
     const token = 'ETH'
     const amount = 1.117
@@ -64,12 +66,12 @@ describe('dvf.deposit', () => {
 
     const payloadValidator = jest.fn(body => {
       expect(body).toMatchObject(apiResponse)
+      expect(typeof body.nonce).toBe('number')
       expect(body.starkSignature.r).toMatch(/[\da-f]/i)
       expect(body.starkSignature.s).toMatch(/[\da-f]/i)
       expect(body.starkSignature.recoveryParam).toBeLessThan(5)
       expect(typeof body.starkVaultId).toBe('number')
       expect(typeof body.expireTime).toBe('number')
-      expect(body.ethTxHash).toMatch(/[\da-f]/i)
       return true
     })
 

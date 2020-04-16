@@ -39,7 +39,7 @@ module.exports = {
     No withdrawal id provided or the withdrawal id provided is not valid
   `,
   ERR_ONCHAIN_WITHDRAW: `
-    There was an error while processing the withdrawal request
+    There was an error while processing the withdrawal request onchain
   `,
   ERR_SYMBOL_DOES_NOT_MATCH: `
     The chosen symbol to trade is not available

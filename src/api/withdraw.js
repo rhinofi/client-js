@@ -10,7 +10,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   const quantisedAmount = dvf.token.toQuantizedAmount(token, amount)
 
   const tempVaultId = dvf.config.DVF.tempStarkVaultId
-  const nonce = dvf.config.DVF.depositNonce
+  const nonce = dvf.util.generateRandomNonce()
   const starkTokenId = currency.starkTokenId
   let starkVaultId = currency.starkVaultId
 
@@ -20,7 +20,8 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
 
   // This should be in hours
   expireTime =
-    Math.floor(Date.now() / (1000 * 3600)) + dvf.config.defaultStarkExpiry
+    Math.floor(Date.now() / (1000 * 3600)) +
+    parseInt(dvf.config.defaultStarkExpiry)
 
   const { starkMessage } = dvf.stark.createTransferMsg(
     quantisedAmount,
@@ -39,6 +40,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   const data = {
     token,
     amount,
+    nonce,
     starkPublicKey,
     starkSignature,
     starkVaultId,

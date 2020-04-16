@@ -16,10 +16,9 @@ describe('dvf.getUserConfig', () => {
       DVF: {
         exchangeSymbols: ['tETHUSD', 'tZRXUSD', 'tZRXETH'],
         exchangeAddress: '0xBd25cD867C304F079E696CBE44D958f3d3B683ba',
-        starkExContractAddress: '0x204eAF71D3f15CF6F9A024159228573EE4543bF9',
+        starkExContractAddress: '0x10cE5de6738671FF6cfF136f22f2EEa32837257f',
         tempStarkVaultId: 1,
-        depositExpiry: 720,
-        depositNonce: 1
+        defaultFeeRate: 0.0025
       },
       tokenRegistry: {
         ETH: {
@@ -34,7 +33,7 @@ describe('dvf.getUserConfig', () => {
           decimals: 6,
           quantization: 1,
           minOrderSize: 25,
-          settleSpread: -0.026,
+          settleSpread: 0,
           starkTokenId:
             '0x180bef8ae3462e919489763b84dc1dc700c45a249dec4d1136814a639f2dd7b',
           tokenAddress: '0x4c5f66596197a86fb30a2435e2ef4ddcb39342c9',

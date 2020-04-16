@@ -4,6 +4,12 @@
 
 A js client library for DeversiFi - StarkWare orders
 
+**Note:** This library is for the new DeversiFi 2.0 platform, scheduled to launch on Ethereum mainnet later in 2020. Currently a test version of it is live on the Ropsten test network at https://app.deversifi.dev // https://api.deversifi.dev
+
+For the current production version of DeversiFi use the [old client library](https://github.com/ethfinex/efx-api-node).
+
+## Contents
+
 - [Installation](#installation)
     - [NPM](#npm)
     - [Prebuild for browser](#prebuild-for-browser)
@@ -65,7 +71,7 @@ to be prepared separately.
 
 ### Pre Requisites
 
-  - An ethereum wallet
+  - An Ethereum wallet
   - A web3 provider with your account or a private key
     * Such as MetaMask, keystore file, hardware wallet or raw private key
 
@@ -74,7 +80,6 @@ to be prepared separately.
 #### Using MetaMask or a local node
 
 ```javascript
-
 // In case of MetaMask make sure you call ethereum.enable() before using it
 const DVF = require('dvf-client-js')
 const dvf = await DVF()
@@ -111,7 +116,7 @@ View the full example: [/examples/node_sell_eth_infura.js](/examples/node_sell_e
 
 It's possible to overwrite values on the configuration on a per instance basis.
 
-The [default configuration](./src/config.js) can be overwriten with an optional
+The [default configuration](./src/config.js) can be overwritten with an optional
 parameter `userConf` when calling the DVF function.
 
 For instance:
@@ -176,10 +181,10 @@ contracts. This allows for guaranteed execution and ensures Trustless orders
 can be added directly onto the centralised order book, and matched against
 trades from centralised users.
 
+
 ### Approving Tokens
 
-
-The first time locking an ERC20 Ethereum-based token from a specific account,
+When locking an ERC20 Ethereum-based token for the first time from a specific account,
 you are required to approve it to interact with the time-lock smart contracts.
 
 ```javascript
@@ -197,7 +202,7 @@ contract, ready to trade.
 ```javascript
 const token = 'ZRX'
 const amount = 15 // Number of tokens to lock
-const forTime = 48 // Time after which unlocking does not require permission
+const forTime = 48 // Time (in hours) after which unlocking does not require permission
 
 const response = await dvf.contract.lock(token, amount, forTime)
 ```
@@ -208,8 +213,8 @@ before this expires, you must request a signed permission from Deversifi.
 
 This is always returned if you have no orders open involving those tokens.
 
-### Submitting an order
 
+### Submitting an order
 
 ```javascript
 const symbol = 'ZRXETH'
@@ -234,7 +239,7 @@ should be specified to 5 s.f. maximum.
 
 **Warning:** Trustless orders will always be settled at the **exact price you specify**, and can never be adjusted by Deversifi, **even if it is at a worse price than the market**.
 
-For example, when placing a sell order, if the `price` specified is below the highest bid available on the order book, the order will be executed instantly at market. However, the amount you receive will reflect only the `price` that you entered, and not the market price at the time of execution.
+For example, when placing a sell order, if the `price` specified is below the highest bid available on the order book, the order will be executed instantly. However, the amount you receive will reflect only the `price` that you entered, and not the market price at the time of execution.
 
 The client library also provides methods for [submitBuyOrder](./src/api/submit_buy_order.js)
 and [submitSellOrder](./src/api/submit_sell_order.js).
@@ -377,70 +382,58 @@ const hash = ethUtils.hashPersonalMessage(ethUtils.toBuffer(nonce.toString(16)))
 const signature = ethUtils.ecsign(hash, privKey)
 
 const response = await dvf.contract.unlock(token, amount, nonce, signature)
-
 ```
 
-
-
-
 ```js
-
 const token = 'ZRX'
 const amount = 0.001
 
 const response = await dvf.contract.unlock(token, amount, forTime)
-
 ```
 
 ## More Examples
 
-  Aside from these examples, there are complete examples in the [examples folder](./src/examples)
+Aside from these examples, there are complete examples in the [examples folder](./examples)
+
 ### Submitting a buy order
 
 ```js
-
 const symbol = 'ETHUSD'
 const amount = 1
 const price = 100
 
 dvf.submitOrder(symbol, amount, price)
-
 ```
 
 ### Submitting a sell order
 
 ```js
-
 const symbol = 'ETHUSD'
 const amount = -1
 const price = 100
 
 const orderId = await dvf.submitOrder(symbol, amount, price)
-
 ```
 
 ### Fetching info about specific order
 
 ```js
-
 const id = 1
 
 const order = await dvf.getOrder(id)
-
 ```
 
 ## Troubleshooting
 
 A list of error codes returned by the API and reasons are available [here](./src/lib/error/reasons.js#L1).
-Some more detailed explanations can also be found in the [API Documentation](https://docs.Deversifi.com).
+Some more detailed explanations can also be found in the [API Documentation](https://docs.beta.Deversifi.com).
 
 If you have suggestions to improve this guide or any of the available
 documentation, please raise an issue on Github, or email [feedback@Deversifi.com](mailto:feedback@Deversifi.com).
 
 ## Links
 
- - [API documentation](https://docs.Deversifi.com)
- - [Deversifi trustless developer guide](https://blog.Deversifi.com/Deversifi-trustless-developer-guide/)
+ - [API documentation](https://docs.beta.Deversifi.com)
 
 ## Developing
 
@@ -511,7 +504,7 @@ $ npm run build:web:run
 
   - Open your browser on [http://localhost:2222](http://localhost:2222)
 
-### Building for browers
+### Building for browsers
 
   - This will build the whole library as one big ugly standalone js file ( uses browserify )
 

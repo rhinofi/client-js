@@ -1,11 +1,12 @@
 {
   "name": "dvf-client-js",
-  "version": "0.1.0",
+  "version": "0.1.7",
   "main": "src/dvf.js",
   "contributors": [
     "Henrique Matias <hems.inlet@gmail.com>",
     "Will Harborne <will@deversifi.com>",
-    "Meer Ali <meer.ali@deversifi.com>"
+    "Meer Ali <meer.ali@deversifi.com>",
+    "Thiago Kroger <thiago.kroger@deversifi.com>"
   ],
   "standard": {
     "ignore": [
@@ -21,7 +22,7 @@
     "build:web:minify": "node-minify --compressor uglify-es --input './dist/dvf.js' --output './dist/dvf.min.js'",
     "build:web:hash": "hash-filename ./dist/dvf*.js;del ./dist/{dvf.js,dvf.min.js}",
     "build:web:run": "browserify --debug ./src/dvf.js --standalone EFX | browser-run --port 2222",
-    "test": "env-cmd -f ./env/test jest --testTimeout 200000",
+    "test": "env-cmd -f ./env/test jest --testTimeout 20000000",
     "test:watch": "env-cmd -f ./env/test jest --watch --testTimeout 200000 --verbose true",
     "test:coverage": "env-cmd -f ./env/test jest --testTimeout 2000000 --coverage"
   },
@@ -36,19 +37,29 @@
     "ethereum",
     "trading"
   ],
-  "homepage": "https://github.com/ethfinex/dvf-client-js",
+  "homepage": "https://github.com/deversifi/dvf-client-js",
   "license": "MIT",
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "@ledgerhq/hw-app-eth": "^5.12.2",
+    "@ledgerhq/hw-transport-mocker": "^5.11.0",
+    "@ledgerhq/hw-transport-node-hid": "^5.11.0",
+    "@ledgerhq/hw-transport-node-hid-noevents": "^5.11.0",
+    "@ledgerhq/hw-transport-u2f": "^5.11.0",
+    "@ledgerhq/hw-transport-webhid": "^5.12.0",
+    "@ledgerhq/hw-transport-webusb": "^5.12.0",
+    "@ledgerhq/web3-subprovider": "^5.12.2",
+    "aigle": "^1.14.1",
     "aware": "^0.3.1",
     "bignumber.js": "^7.2.1",
-    "bluebird": "^3.5.1",
     "env-cmd": "^10.0.1",
     "ethereumjs-util": "^5.2.0",
     "lodash": "^4.17.10",
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
-    "starkware_crypto": "https://github.com/ethfinex/starkware-crypto",
-    "web3": "^1.2.4"
+    "starkware_crypto": "https://github.com/deversifi/starkware-crypto",
+    "web3": "^1.2.4",
+    "web3-provider-engine": "^15.0.6"
   },
   "devDependencies": {
     "browser-run": "^5.0.0",
@@ -59,11 +70,13 @@
     "hash-filename": "^1.0.4",
     "jest": "^24.9.0",
     "keccak": "^1.4.0",
+    "mustache": "^4.0.0",
     "nock": "^9.4.1",
     "node-minify": "^3.2.0",
     "solc": "^0.4.24",
     "standard": "^11.0.1",
     "supertest": "^4.0.2",
+    "tor-request": "^3.1.0",
     "truffle-hdwallet-provider": "^1.0.17"
   }
 }

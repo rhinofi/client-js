@@ -1,17 +1,8 @@
-# replace with your own infura key, this key isn't guaranteed to work forever
-# using private node url for stark ex blockchain
-// Eth Node to connect
+# Add Web3 url
 NODE_URL=https://ropsten.infura.io/v3/7bfab7398ae84af3b1b70c955cfd9491
 
-//http://0.0.0.0:8543
-//http://3.130.41.130:8545
-
-# Ethereum private key#prefixed with 0x
-PRIVATE_ETH_KEY=0x76c7913e63b72b81331342720b77a8944eff80cba23b264789c0eefd4169619c
-PUBLIC_ETH_ADDRESS=0x3dC34aE7Dbe7f99A66A5023E9D70e4EcCc0CA4D3
-PRIVATE_STARK_KEY=00bc470160426c8f097544a12d8d57e4cdfe24d9018d59ff20bd09542bda93
-
-# previous values:
-# INFURA_URL=https://mainnet.infura.io/v3/af1d9fbeceb44e76be1bb93738f00d19
-# generated using https://vanity-eth.tk
-# PRIVATE_KEY=0x49e4d1e2aa7d026188251392dd2d335c176d846d8a894a8092c835f3b345e2ad
+# Ethereum private key prefixed with 0x
+PRIVATE_ETH_KEY=0x49e4d1e2aa7d026188251392dd2d335c176d846d8a894a8092c835f3b345e2ad
+PUBLIC_ETH_ADDRESS=0x49e4d1e2aa7d026188251392dd2d335c176d846d8a894a8092c835f3b345e2ad
+PRIVATE_STARK_KEY=0x49e4d1e2aa7d026188251392dd2d335c176d846d8a894a8092c835f3b345e2ad
+INFURA_PROJECT_ID=af1d9fbeceb44e76be1bb93738f00d19
