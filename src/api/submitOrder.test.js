@@ -27,8 +27,8 @@ describe('dvf.submitOrder', () => {
       price,
       meta: {
         starkPublicKey: {
-          x: '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
-          y: '58f7ce5eb6eb5bd24f70394622b1f4d2c54ebca317a3e61bf9f349dccf166cf'
+          x: '7a83d131fe965ad7e70f259e3cf1e785dcfacf319a64115faeabb64a2fd8af0',
+          y: '4de195d61296b6ac602ab5db8d190b90cd1e767fe9d47d4c9d96ab62cf7ad41'
         }
       },
       protocol: 'stark',
@@ -75,8 +75,7 @@ describe('dvf.submitOrder', () => {
     const symbol = 'ZRX:ETH'
     const amount = -55
     const price = 100
-    validFor = '0'
-    feeRate = ''
+    const validFor = '0'
 
     const starkPrivateKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
@@ -127,7 +126,7 @@ describe('dvf.submitOrder', () => {
       cid: '', // cid
       partnerId: '', // partnerId
       dynamicFeeRate: ''
-      // ledgerPath: `21323'/0`
+      // ledgerPath: `44'/60'/0'/0'/0`
     })
     expect(payloadValidator).toBeCalled()
   })
@@ -145,7 +144,7 @@ describe('dvf.submitOrder', () => {
         cid: '', // cid
         partnerId: '', // partnerId
         dynamicFeeRate: ''
-        // ledgerPath: `21323'/0`
+        // ledgerPath: `44'/60'/0'/0'/0`
       })
 
       throw new Error('function should throw')
@@ -167,7 +166,7 @@ describe('dvf.submitOrder', () => {
         cid: '', // cid
         partnerId: '', // partnerId
         dynamicFeeRate: ''
-        // ledgerPath: `21323'/0`
+        // ledgerPath: `44'/60'/0'/0'/0`
       })
 
       throw new Error('function should throw')
@@ -189,7 +188,7 @@ describe('dvf.submitOrder', () => {
         cid: '', // cid
         partnerId: '', // partnerId
         dynamicFeeRate: ''
-        // ledgerPath: `21323'/0`
+        // ledgerPath: `44'/60'/0'/0'/0`
       })
 
       throw new Error('function should throw')
@@ -211,7 +210,7 @@ describe('dvf.submitOrder', () => {
         cid: '', // cid
         partnerId: '', // partnerId
         dynamicFeeRate: ''
-        // ledgerPath: `21323'/0`
+        // ledgerPath: `44'/60'/0'/0'/0`
       })
 
       throw new Error('function should throw')
@@ -232,7 +231,7 @@ describe('dvf.submitOrder', () => {
         cid: '', // cid
         partnerId: '', // partnerId
         dynamicFeeRate: ''
-        // ledgerPath: `21323'/0`
+        // ledgerPath: `44'/60'/0'/0'/0`
       })
 
       throw new Error('function should throw')
@@ -273,11 +272,68 @@ describe('dvf.submitOrder', () => {
         partnerId: 'P1', // partnerId
         dynamicFeeRate: '',
         starkPrivateKey: '100'
-        // ledgerPath: `21323'/0`
+        // ledgerPath: `44'/60'/0'/0'/0`
       })
     } catch (e) {
       expect(e.error).toEqual(apiErrorResponse)
       expect(payloadValidator).toBeCalled()
     }
+  })
+
+  it.skip('Submits buy order and receives response', async () => {
+    mockGetConf()
+    const symbol = 'ETH:USDT'
+    const amount = 0.137
+    const price = 250
+    const validFor = '0'
+
+    const expectedBody = {
+      cid: '1',
+      gid: '1',
+      type: 'EXCHANGE LIMIT',
+      symbol,
+      amount,
+      price,
+      meta: {
+        starkPublicKey: {
+          x: '67ab7280c36ba5c977a574c7c03525614ed7be5445ef261bd7b10e506c57119',
+          y: '00c3b334e8b109e0427fc88070154458f966ae9ff5a91a058d574a96c24adc23'
+        }
+      },
+      protocol: 'stark',
+      partnerId: 'P1',
+      feeRate: 0.0025,
+      dynamicFeeRate: '0'
+    }
+
+    const payloadValidator = jest.fn(body => {
+      expect(body).toMatchObject(expectedBody)
+      expect(body.meta.ethAddress).toMatch(/[\da-f]/i)
+      expect(body.meta.starkMessage).toMatch(/[\da-f]/i)
+      expect(body.meta.starkSignature.r).toMatch(/[\da-f]/i)
+      expect(body.meta.starkSignature.s).toMatch(/[\da-f]/i)
+      expect(typeof body.meta.starkOrder.expirationTimestamp).toBe('number')
+      expect(typeof body.meta.starkOrder.nonce).toBe('number')
+      return true
+    })
+
+    nock(dvf.config.api)
+      .post('/v1/trading/w/submitOrder', payloadValidator)
+      .reply(200)
+
+    await dvf.submitOrder({
+      symbol,
+      amount,
+      price,
+      validFor,
+      feeRate: 0.0025,
+      ledgerPath: `44'/60'/0'/0'/0`,
+      gid: '1', // gid
+      cid: '1', // cid
+      partnerId: 'P1', // partnerId
+      dynamicFeeRate: '0'
+    })
+
+    expect(payloadValidator).toBeCalled()
   })
 })

@@ -16,12 +16,12 @@ describe('dvf.deposit', () => {
 
   it('Deposits ETH to users vault', async () => {
     mockGetConf()
-    const path = `21323'/0`
+    const path = `44'/60'/0'/0'/0`
     const token = 'ETH'
     const amount = 1.2
     starkPublicKey = {
-      x: '615a13d3f18d240a1ad98ba9c12ac7b70361a547284b55a35c82f2c2d4515cd',
-      y: '052831a49dcf4bf235eacba2272d8c98bfbb97e61e297547dcccd84d0f241d79'
+      x: '67ab7280c36ba5c977a574c7c03525614ed7be5445ef261bd7b10e506c57119',
+      y: '00c3b334e8b109e0427fc88070154458f966ae9ff5a91a058d574a96c24adc23'
     }
     const apiResponse = {
       token,
@@ -55,11 +55,12 @@ describe('dvf.deposit', () => {
 
   it(`Deposits ERC20 token to user's vault`, async () => {
     mockGetConf()
-    const path = `21323'/0`
+    const path = `44'/60'/0'/0'/0`
     const amount = 193
     const token = 'USDT'
     const starkPublicKey = {
-      x: '615a13d3f18d240a1ad98ba9c12ac7b70361a547284b55a35c82f2c2d4515cd'
+      x: '67ab7280c36ba5c977a574c7c03525614ed7be5445ef261bd7b10e506c57119',
+      y: '00c3b334e8b109e0427fc88070154458f966ae9ff5a91a058d574a96c24adc23'
     }
 
     const apiResponse = {
