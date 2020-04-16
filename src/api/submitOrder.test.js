@@ -90,8 +90,8 @@ describe('dvf.submitOrder', () => {
       feeRate: 0.0025,
       meta: {
         starkPublicKey: {
-          x: '77a3b314db07c45076d11f62b6f9e748a39790441823307743cf00d6597ea43',
-          y: '54d7beec5ec728223671c627557efc5c9a6508425dc6c900b7741bf60afec06'
+          x: '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
+          y: '58f7ce5eb6eb5bd24f70394622b1f4d2c54ebca317a3e61bf9f349dccf166cf'
         }
       },
       protocol: 'stark',
@@ -327,7 +327,7 @@ describe('dvf.submitOrder', () => {
       price,
       validFor,
       feeRate: 0.0025,
-      ledgerPath: `44'/60'/0'/0'/0`,
+      ledgerPath: '44\'/60\'/0\'/0\'/0',
       gid: '1', // gid
       cid: '1', // cid
       partnerId: 'P1', // partnerId
