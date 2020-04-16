@@ -11,6 +11,6 @@ module.exports = async (dvf, path) => {
     x: tempKey.substr(2, 64),
     y: tempKey.substr(66)
   }
-  transport.close()
+  await transport.close()
   return starkPublicKey
 }
