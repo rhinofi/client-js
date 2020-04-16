@@ -13,7 +13,6 @@ module.exports = async (
   sourceVault,
   destinationVault
 ) => {
-  const starkPath = dvf.stark.ledger.getPath(path)
   const Transport = selectTransport(dvf.isBrowser)
   const currency = dvf.token.getTokenInfo(token)
   const nonce = dvf.util.generateRandomNonce()
@@ -27,6 +26,8 @@ module.exports = async (
   let starkPublicKey = await dvf.stark.ledger.getPublicKey(path)
   const transport = await Transport.create()
   const eth = new Eth(transport)
+  const { address } = await eth.getAddress(path)
+  const starkPath = dvf.stark.ledger.getPath(address)
   if (transferTokenAddress) {
     const tokenInfo = byContractAddress(transferTokenAddress)
     transferTokenAddress = transferTokenAddress.substr(2)
