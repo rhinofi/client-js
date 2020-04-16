@@ -8,14 +8,18 @@ This will require updates once values are finalised for purpose, plugin and appl
 
 module.exports = (address) => {
   console.log({ address })
+  // constants
   const m = 21323
-  const purpose = 0
   const plugin = 1106451151
   const application = 1681080391
+  const accountIndex = 0
 
+  // derived valaues
   const ethAddressA = getBits(address)
   const ethAddressB = getBits(address, 1)
-  const accountIndex = 0
+
+  // temperory value
+  const purpose = 0
 
   const starkPath = `${m}'/${purpose}'/${plugin}'/${application}'/${ethAddressA}'/${ethAddressB}'/${accountIndex}`
   console.log({ starkPath })
