@@ -1,3 +1,3 @@
-module.exports = (dvf, endpoint, nonce, signature, data = {}) => {
+module.exports = () => {
   return Math.ceil(Math.random() * 999999999)
 }
