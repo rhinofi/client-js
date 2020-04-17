@@ -30,6 +30,7 @@ module.exports = async (dvf, path, starkOrder) => {
   // to be used for both buy as sell tokens and
   // for transfer method as well as well
 
+  const chainId = await dvf.web3.eth.net.getId()
   let buyTokenAddress = buyCurrency.tokenAddress
 
   if (buyTokenAddress) {
@@ -38,7 +39,7 @@ module.exports = async (dvf, path, starkOrder) => {
     if (buyTokenInfo) {
       await eth.provideERC20TokenInformation(buyTokenInfo)
     } else {
-      if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
+      if (chainId!==1) {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
           `00${buyTokenAddress}0000000000000000`,
@@ -64,7 +65,7 @@ module.exports = async (dvf, path, starkOrder) => {
     if (sellTokenInfo) {
       await eth.provideERC20TokenInformation(sellTokenInfo)
     } else {
-      if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
+      if (chainId!==1) {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
           `00${sellTokenAddress}0000000000000000`,

@@ -28,13 +28,14 @@ module.exports = async (
   const eth = new Eth(transport)
   const { address } = await eth.getAddress(path)
   const starkPath = dvf.stark.ledger.getPath(address)
+  const chainId = await dvf.web3.eth.net.getId()
   if (transferTokenAddress) {
     const tokenInfo = byContractAddress(transferTokenAddress)
     transferTokenAddress = transferTokenAddress.substr(2)
     if (tokenInfo) {
       await eth.provideERC20TokenInformation(tokenInfo)
     } else {
-      if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
+      if (chainId!==1) {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
           `00${transferTokenAddress}0000000000000000`,
