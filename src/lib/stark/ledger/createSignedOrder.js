@@ -38,7 +38,7 @@ module.exports = async (dvf, path, starkOrder) => {
     if (buyTokenInfo) {
       await eth.provideERC20TokenInformation(buyTokenInfo)
     } else {
-      if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
+      if (dvf.chainId!==1) {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
           `00${buyTokenAddress}0000000000000000`,
@@ -64,7 +64,7 @@ module.exports = async (dvf, path, starkOrder) => {
     if (sellTokenInfo) {
       await eth.provideERC20TokenInformation(sellTokenInfo)
     } else {
-      if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
+      if (dvf.chainId!==1) {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
           `00${sellTokenAddress}0000000000000000`,

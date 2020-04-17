@@ -34,7 +34,7 @@ module.exports = async (
     if (tokenInfo) {
       await eth.provideERC20TokenInformation(tokenInfo)
     } else {
-      if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
+      if (dvf.chainId!==1) {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
           `00${transferTokenAddress}0000000000000000`,
