@@ -13,5 +13,5 @@ module.exports = async (dvf, path) => {
     y: tempKey.substr(66)
   }
   await transport.close()
-  return starkPublicKey
+  return dvf.stark.ledger.normaliseStarkKey(starkPublicKey)
 }
