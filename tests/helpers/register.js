@@ -2,7 +2,7 @@ const DVF = require('../../src/dvf')
 const Web3 = require('web3')
 const HDWalletProvider = require('truffle-hdwallet-provider')
 
-const register = async account => {
+const register = async (account, bypassRegister = false) => {
   try {
     console.log("generating dvf")
 
@@ -14,6 +14,11 @@ const register = async account => {
       api: 'https://api.deversifi.dev'
     }
     const dvf = await DVF(web3, dvfConfig)
+
+    if (bypassRegister) {
+      return dvf
+    }
+
     const keyPair = await dvf.stark.createKeyPair(ethPrivKey)
 
     console.log("registering account")
