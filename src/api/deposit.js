@@ -49,6 +49,9 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   // console.log({ data })
 
   const depositResponse = await post(url, { json: data })
+
+  await dvf.contract.approve(token, dvf.token.toBaseUnitAmount(token, amount))
+
   const { status, transactionHash } = await dvf.contract.deposit(tempVaultId, token, amount)
 
   if (!status) {
