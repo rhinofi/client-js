@@ -1,4 +1,3 @@
-const DVFError = require('../../lib/dvf/DVFError')
 /**
  * Approves a token for locking
  *
@@ -8,9 +7,9 @@ module.exports = async (dvf, token, deposit) => {
 
   const currency = dvf.token.getTokenInfo(token)
 
-  const amount = (2 ** 256 - 1).toString(16)
+  const maxAmount = (2 ** 256 - 1).toString(16)
 
-  if (!deposit) { deposit = amount }
+  if (!deposit) { deposit = maxAmount }
 
   const allowance = parseInt(await dvf.contract.isApproved(token))
 
@@ -28,12 +27,8 @@ module.exports = async (dvf, token, deposit) => {
 
   const args = [
     dvf.config.DVF.starkExContractAddress, // address _spender
-    amount // uint amount
+    maxAmount // uint amount
   ]
-
-  if (token === 'ETH') {
-    throw new DVFError('ERR_TRADING_ETHFX_APPROVE_ETH_NOT_REQUIRED')
-  }
 
   return dvf.eth.send(
     dvf.contract.abi.token,
