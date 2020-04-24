@@ -48,8 +48,15 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   }
   // console.log({ data })
 
+  await dvf.contract.approve(token, dvf.token.toBaseUnitAmount(token, amount))
+
   const depositResponse = await post(url, { json: data })
-  const { status, transactionHash } = await dvf.contract.deposit(tempVaultId, token, amount)
+
+  const { status, transactionHash } = await dvf.contract.deposit(
+    tempVaultId,
+    token,
+    amount
+  )
 
   if (!status) {
     throw new DVFError('ERR_ONCHAIN_DEPOSIT')
