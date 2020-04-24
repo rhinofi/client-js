@@ -38,19 +38,18 @@ const runOrderTests = async (dvf, privateKey, sellToken, buyToken, amount, price
 describe('00 - Complete Path', () => {
     it('Setup - Register - Deposit - Manage Orders - Withdraw - Token', async () => {
         const setupResponse = await setup()
-        const { ETH_PRIVATE_KEY, INFURA_PROJECT_ID, account } = setupResponse
+        const { INFURA_PROJECT_ID, account } = setupResponse
         const { address, privateKey } = account
         
         expect(INFURA_PROJECT_ID).toEqual(process.env.INFURA_PROJECT_ID)
-        expect(ETH_PRIVATE_KEY).toEqual(privateKey)
         expect(address).not.toBeNull()
         expect(privateKey).not.toBeNull()
         
         console.log('account ->', setupResponse)
         
-        const dvf = await register(setupResponse)
+        const dvf = await register(setupResponse, true)
         expect(dvf).not.toBeNull()
-        
+     
         expect((await dvf.getDeposits()).length).toEqual(0)
 
         let token = 'ETH'
@@ -95,7 +94,7 @@ describe('00 - Complete Path', () => {
         const tokenDepositResponse = await deposit(dvf, token, 100, privateKey)
         console.log('token deposit response ->', tokenDepositResponse)
 
-        await runOrderTests(dvf, privateKey, 'ETH', token, -250, 0.3)
+        await runOrderTests(dvf, privateKey, token, 'ETH', -100, 0.3)
 
         const tokenWithdrawal = await withdraw(dvf, token, 50, privateKey, waitWithdrawToBeReady)
         console.log("tokenWithdrawal", tokenWithdrawal)
