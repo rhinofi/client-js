@@ -12,9 +12,6 @@ const schema = Joi.object({
   ledgerPath: Joi.string(), // required when using Ledger wallet
   validFor: Joi.number().allow(''), // validation time in hours
   feeRate: Joi.number().allow(''), // feeRate if known
-  dynamicFeeRate: Joi.number()
-    .allow('')
-    .raw(),
   cid: Joi.string().allow(''),
   gid: Joi.string().allow(''),
   partnerId: Joi.string().allow(''),
@@ -25,6 +22,7 @@ const schema = Joi.object({
 
 module.exports = async (dvf, orderData) => {
   const { value } = schema.validate(orderData)
+  console.log(await dvf.createOrderPayload(value))
   return post(dvf.config.api + '/v1/trading/w/submitOrder', {
     json: await dvf.createOrderPayload(value)
   })

@@ -42,7 +42,6 @@ const dvfConfig = {
       0, // validFor
       'P1', // partnerId
       '', // feeRate
-      '', // dynamicFeeRate
       starkPrivKey
     )
   }

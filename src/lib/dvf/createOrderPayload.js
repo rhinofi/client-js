@@ -14,9 +14,6 @@ const schema = Joi.object({
   ledgerPath: Joi.string(), // required when using Ledger wallet
   validFor: Joi.number().allow(''), // validation time in hours
   feeRate: Joi.number().allow(''), // feeRate if known
-  dynamicFeeRate: Joi.number()
-    .allow('')
-    .prefs({ convert: false }),
   cid: Joi.string().allow(''),
   gid: Joi.string().allow(''),
   partnerId: Joi.string().allow(''),
@@ -35,7 +32,6 @@ module.exports = async (dvf, orderData) => {
       [
         'amount',
         'cid',
-        'dynamicFeeRate',
         'feeRate',
         'gid',
         'partnerId',
