@@ -22,7 +22,6 @@ const schema = Joi.object({
 
 module.exports = async (dvf, orderData) => {
   const { value } = schema.validate(orderData)
-  console.log(await dvf.createOrderPayload(value))
   return post(dvf.config.api + '/v1/trading/w/submitOrder', {
     json: await dvf.createOrderPayload(value)
   })
