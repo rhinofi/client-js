@@ -33,8 +33,7 @@ describe('dvf.submitOrder', () => {
       },
       protocol: 'stark',
       partnerId: 'P1',
-      feeRate: 0.0025,
-      dynamicFeeRate: '0'
+      feeRate: 0.0025
     }
     const starkPrivateKey = process.env.PRIVATE_STARK_KEY
 
@@ -63,8 +62,7 @@ describe('dvf.submitOrder', () => {
       starkPrivateKey,
       gid: '1', // gid
       cid: '1', // cid
-      partnerId: 'P1', // partnerId
-      dynamicFeeRate: '0'
+      partnerId: 'P1' // partnerId
     })
 
     expect(payloadValidator).toBeCalled()
@@ -88,21 +86,16 @@ describe('dvf.submitOrder', () => {
       amount,
       price,
       feeRate: 0.0025,
-      meta: {
-        starkPublicKey: {
-          x: '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
-          y: '58f7ce5eb6eb5bd24f70394622b1f4d2c54ebca317a3e61bf9f349dccf166cf'
-        }
-      },
       protocol: 'stark',
-      partnerId: '',
-      dynamicFeeRate: ''
+      partnerId: ''
     }
 
     const payloadValidator = jest.fn(body => {
       expect(body).toMatchObject(expectedBody)
       expect(body.meta.ethAddress).toMatch(/[\da-f]/i)
       expect(body.meta.starkMessage).toMatch(/[\da-f]/i)
+      expect(body.meta.starkPublicKey.x).toMatch(/[\da-f]/i)
+      expect(body.meta.starkPublicKey.y).toMatch(/[\da-f]/i)
       expect(body.meta.starkSignature.r).toMatch(/[\da-f]/i)
       expect(body.meta.starkSignature.s).toMatch(/[\da-f]/i)
       expect(body.meta.starkSignature.recoveryParam).toBeLessThan(5)
@@ -124,8 +117,7 @@ describe('dvf.submitOrder', () => {
       starkPrivateKey,
       gid: '', // gid
       cid: '', // cid
-      partnerId: '', // partnerId
-      dynamicFeeRate: ''
+      partnerId: '' // partnerId
       // ledgerPath: `44'/60'/0'/0'/0`
     })
     expect(payloadValidator).toBeCalled()
@@ -142,8 +134,7 @@ describe('dvf.submitOrder', () => {
         starkPrivateKey: '0x12345',
         gid: '', // gid
         cid: '', // cid
-        partnerId: '', // partnerId
-        dynamicFeeRate: ''
+        partnerId: ''
         // ledgerPath: `44'/60'/0'/0'/0`
       })
 
@@ -164,8 +155,7 @@ describe('dvf.submitOrder', () => {
         starkPrivateKey: '0x12345',
         gid: '', // gid
         cid: '', // cid
-        partnerId: '', // partnerId
-        dynamicFeeRate: ''
+        partnerId: ''
         // ledgerPath: `44'/60'/0'/0'/0`
       })
 
@@ -186,8 +176,7 @@ describe('dvf.submitOrder', () => {
         starkPrivateKey: '0x12345',
         gid: '', // gid
         cid: '', // cid
-        partnerId: '', // partnerId
-        dynamicFeeRate: ''
+        partnerId: ''
         // ledgerPath: `44'/60'/0'/0'/0`
       })
 
@@ -208,8 +197,7 @@ describe('dvf.submitOrder', () => {
         starkPrivateKey: '0x12345',
         gid: '', // gid
         cid: '', // cid
-        partnerId: '', // partnerId
-        dynamicFeeRate: ''
+        partnerId: '' // partnerId
         // ledgerPath: `44'/60'/0'/0'/0`
       })
 
@@ -229,8 +217,7 @@ describe('dvf.submitOrder', () => {
         feeRate: 0,
         gid: '', // gid
         cid: '', // cid
-        partnerId: '', // partnerId
-        dynamicFeeRate: ''
+        partnerId: '' // partnerId
         // ledgerPath: `44'/60'/0'/0'/0`
       })
 
@@ -270,7 +257,6 @@ describe('dvf.submitOrder', () => {
         gid: '', // gid
         cid: '', // cid
         partnerId: 'P1', // partnerId
-        dynamicFeeRate: '',
         starkPrivateKey: '100'
         // ledgerPath: `44'/60'/0'/0'/0`
       })
@@ -302,8 +288,7 @@ describe('dvf.submitOrder', () => {
       },
       protocol: 'stark',
       partnerId: 'P1',
-      feeRate: 0.0025,
-      dynamicFeeRate: '0'
+      feeRate: 0.0025
     }
 
     const payloadValidator = jest.fn(body => {
@@ -330,8 +315,7 @@ describe('dvf.submitOrder', () => {
       ledgerPath: '44\'/60\'/0\'/0\'/0',
       gid: '1', // gid
       cid: '1', // cid
-      partnerId: 'P1', // partnerId
-      dynamicFeeRate: '0'
+      partnerId: 'P1' // partnerId
     })
 
     expect(payloadValidator).toBeCalled()
