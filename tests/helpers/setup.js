@@ -111,12 +111,17 @@ const go = async () => {
   return { ETH_PRIVATE_KEY: account.privateKey, INFURA_PROJECT_ID, account }
 }
 
-const setup = async () => {
+const setup = async (existingAccount) => {
   if (!INFURA_PROJECT_ID) {
     console.error('Error: INFURA_PROJECT_ID not set')
     process.exit(1)
   }
-  return await go()
+
+  if (existingAccount) {
+    return {INFURA_PROJECT_ID, account: existingAccount}
+  }
+
+  return go()
 }
 
 exports.setup = setup

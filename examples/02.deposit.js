@@ -26,7 +26,7 @@ const dvfConfig = {
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
-  const depositResponse = await dvf.deposit('ETH', 0.95, starkPrivKey)
+  const depositResponse = await dvf.deposit('ETH', 0.23, starkPrivKey)
 
   console.log('deposit response ->', depositResponse)
 

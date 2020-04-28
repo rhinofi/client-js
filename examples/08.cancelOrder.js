@@ -50,8 +50,7 @@ const dvfConfig = {
       feeRate,            // Optional
       gid: '1',           // Optional
       cid: '1',           // Optional
-      partnerId: 'P1',    // Optional
-      dynamicFeeRate: '0' // Optional
+      partnerId: 'P1'    // Optional
     })
 
     console.log('submitOrder response ->', submitOrderResponse)

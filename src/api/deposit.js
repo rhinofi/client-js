@@ -19,7 +19,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   )
 
   // This should be in hours
-  expireTime =
+  const expireTime =
     Math.floor(Date.now() / (1000 * 3600)) +
     parseInt(dvf.config.defaultStarkExpiry)
 
@@ -46,14 +46,21 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     starkVaultId,
     expireTime
   }
-  //console.log({ data })
+  // console.log({ data })
+
+  await dvf.contract.approve(token, dvf.token.toBaseUnitAmount(token, amount))
 
   const depositResponse = await post(url, { json: data })
-  const { status } = await dvf.contract.deposit(tempVaultId, token, amount)
+
+  const { status, transactionHash } = await dvf.contract.deposit(
+    tempVaultId,
+    token,
+    amount
+  )
 
   if (!status) {
     throw new DVFError('ERR_ONCHAIN_DEPOSIT')
   }
 
-  return depositResponse
+  return { ...depositResponse, transactionHash }
 }

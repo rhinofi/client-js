@@ -30,7 +30,7 @@ describe('dvf.deposit', () => {
       starkPublicKey
     }
 
-    const payloadValidator = jest.fn(body => {
+    const payloadValidator = jest.fn((body) => {
       expect(body).toMatchObject(apiResponse)
       expect(typeof body.nonce).toBe('number')
       expect(body.starkSignature.r).toMatch(/[\da-f]/i)
@@ -64,7 +64,7 @@ describe('dvf.deposit', () => {
       }
     }
 
-    const payloadValidator = jest.fn(body => {
+    const payloadValidator = jest.fn((body) => {
       expect(body).toMatchObject(apiResponse)
       expect(typeof body.nonce).toBe('number')
       expect(body.starkSignature.r).toMatch(/[\da-f]/i)

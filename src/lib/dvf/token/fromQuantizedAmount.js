@@ -1,11 +1,15 @@
 const BN = require('bignumber.js')
 
-module.exports = (dvf, token, quantizedAmount) => {
+module.exports = (dvf, token, quantizedAmount, rounded = true) => {
   const tokenInfo = dvf.token.getTokenInfo(token)
 
-  return new BN(quantizedAmount)
+  let value = new BN(quantizedAmount)
     .times(tokenInfo.quantization)
     .shiftedBy(-1 * tokenInfo.decimals)
-    .decimalPlaces(3)
-    .toString()
+
+  if (rounded) {
+    value = value.decimalPlaces(3)
+  }
+
+  return value.toString()
 }
