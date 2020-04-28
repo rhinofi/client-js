@@ -18,13 +18,7 @@ module.exports = async (dvf, path, starkOrder) => {
 
   const transport = await Transport.create()
   const eth = new Eth(transport)
-  const { address } = await eth.getAddress(path)
-  const starkPath = dvf.stark.ledger.getPath(address)
-  const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')
-  let starkPublicKey = {
-    x: tempKey.substr(2, 64),
-    y: tempKey.substr(66)
-  }
+  let starkPublicKey = await dvf.stark.ledger.getPublicKey(path)
 
   // TODO Extract below code to a utility method
   // to be used for both buy as sell tokens and
