@@ -14,7 +14,7 @@ describe('dvf.withdraw', () => {
     dvf = await instance()
   })
 
-  it(`Withdrawas ERC20 token to user's vault`, async () => {
+  it(`Withdraws ERC20 token to user's vault`, async () => {
     const starkPrivateKey = '100'
     const amount = 12
     const token = 'USDT'

@@ -40,7 +40,7 @@ describe('dvf.deposit', () => {
     const token = 'ETH'
     const amount = 1.2
     const starkPublicKey = {
-      x: '1841559c5a886771644573dbb6dba210a1a7a0834afcf6bb3cbba1565ae7b32',
+      x: '01841559c5a886771644573dbb6dba210a1a7a0834afcf6bb3cbba1565ae7b32',
       y: '02f0f543d1b6666fa1e093b5d03feb90f0e68ab007baf587b6285d425d8a34dc'
     }
     const apiResponse = {
@@ -81,7 +81,7 @@ describe('dvf.deposit', () => {
     const amount = 193
     const token = 'USDT'
     const starkPublicKey = {
-      x: '1841559c5a886771644573dbb6dba210a1a7a0834afcf6bb3cbba1565ae7b32',
+      x: '01841559c5a886771644573dbb6dba210a1a7a0834afcf6bb3cbba1565ae7b32',
       y: '02f0f543d1b6666fa1e093b5d03feb90f0e68ab007baf587b6285d425d8a34dc'
     }
 

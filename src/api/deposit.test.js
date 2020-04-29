@@ -20,7 +20,7 @@ describe('dvf.deposit', () => {
     const amount = 1394
     const token = 'USDT'
     const starkPublicKey = {
-      x: '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
+      x: '06d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
       y: '58f7ce5eb6eb5bd24f70394622b1f4d2c54ebca317a3e61bf9f349dccf166cf'
     }
 
@@ -59,7 +59,7 @@ describe('dvf.deposit', () => {
       token,
       amount,
       starkPublicKey: {
-        x: '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
+        x: '06d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
         y: '58f7ce5eb6eb5bd24f70394622b1f4d2c54ebca317a3e61bf9f349dccf166cf'
       }
     }
