@@ -25,7 +25,7 @@ describe('dvf.preRegister', () => {
     )
 
     const tempKey = {
-      x: (fullPublicKey.pub.getX().toString('hex')),
+      x: fullPublicKey.pub.getX().toString('hex'),
       y: fullPublicKey.pub.getY().toString('hex')
     }
 

@@ -1,5 +1,5 @@
 /*
-ensure stark Key isis always 64 bits
+ensure stark Key is always 64 bits
 */
 module.exports = (starkPublicKey) => {
   return {
