@@ -1,7 +1,7 @@
 const sw = require('starkware_crypto')
 const createPrivateKey = require('./createPrivateKey')
 const errorReasons = require('../dvf/DVFError')
-const formatStarkKey = require('./formatStarkKey')
+const formatStarkPublicKey = require('./formatStarkPublicKey')
 
 module.exports = (starkPrivateKey) => {
   if (!starkPrivateKey) {
@@ -20,7 +20,7 @@ module.exports = (starkPrivateKey) => {
       y: fullPublicKey.pub.getY().toString('hex')
     }
 
-    const starkPublicKey = formatStarkKey(tempKey)
+    const starkPublicKey = formatStarkPublicKey(tempKey)
 
     return { starkPrivateKey, starkKeyPair, starkPublicKey }
   } catch (e) {

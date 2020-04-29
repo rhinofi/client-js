@@ -3,9 +3,6 @@ const instance = require('./test/helpers/instance')
 
 const mockGetConf = require('./test/fixtures/getConf')
 
-const sw = require('starkware_crypto')
-const _ = require('lodash')
-
 let dvf
 
 describe('dvf.deposit', () => {

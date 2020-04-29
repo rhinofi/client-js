@@ -31,7 +31,7 @@ module.exports = () => {
     createPrivateKey: require('../stark/createPrivateKey'),
     createKeyPair: require('../stark/createKeyPair'),
     register: require('../../api/contract/register'),
-    formatStarkKey: require('../stark/formatStarkKey'),
+    formatStarkPublicKey: require('../stark/formatStarkPublicKey'),
     ledger: {
       getPath: compose(require('../stark/ledger/getPath')),
       getPublicKey: compose(require('../stark/ledger/getPublicKey')),

@@ -29,7 +29,7 @@ describe('dvf.preRegister', () => {
       y: fullPublicKey.pub.getY().toString('hex')
     }
 
-    const starkPublicKey = dvf.stark.formatStarkKey(tempKey)
+    const starkPublicKey = dvf.stark.formatStarkPublicKey(tempKey)
 
     nock(dvf.config.api)
       .post('/v1/trading/w/preRegister', body => {
