@@ -93,8 +93,6 @@ module.exports = async (dvf, path, starkOrder) => {
     starkOrder.expirationTimestamp
   )
 
-  starkPublicKey = dvf.stark.ledger.normaliseStarkKey(starkPublicKey)
-
   await transport.close()
 
   return { starkPublicKey, starkSignature }
