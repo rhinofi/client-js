@@ -1,11 +1,9 @@
 /*
-remove leding zeros from x part of stark public key to
-accomodate public keys created by ledger wallet
+ensure x part of public is always 64 bits
 */
 module.exports = (starkPublicKey) => {
-  const regex = /^0+/
   return {
-    x: starkPublicKey.x.replace(regex, ''),
+    x: starkPublicKey.x.padStart(64, '0').substr(-64),
     y: starkPublicKey.y
   }
 }

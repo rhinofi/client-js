@@ -25,7 +25,7 @@ describe('dvf.preRegister', () => {
     )
 
     const starkPublicKey = {
-      x: fullPublicKey.pub.getX().toString('hex'),
+      x: formatStarkKey(fullPublicKey.pub.getX().toString('hex')),
       y: fullPublicKey.pub.getY().toString('hex')
     }
 
