@@ -33,20 +33,20 @@ jest.mock('@ledgerhq/hw-app-eth', () => {
 const Transport = createTransportReplayer()
 let dvf
 
-describe('dvf.deposit', () => {
+describe('dvf.withdraw', () => {
   beforeAll(async () => {
     mockGetConf()
     dvf = await instance()
   })
 
-  it('Withdrawas ETH to users vault', async () => {
+  it('Withdraws ETH to users vault', async () => {
     mockGetConf()
 
     const path = '44\'/60\'/0\'/0\'/0'
     const token = 'ETH'
     const amount = 1.117
     const starkPublicKey = {
-      x: '1841559c5a886771644573dbb6dba210a1a7a0834afcf6bb3cbba1565ae7b32',
+      x: '01841559c5a886771644573dbb6dba210a1a7a0834afcf6bb3cbba1565ae7b32',
       y: '02f0f543d1b6666fa1e093b5d03feb90f0e68ab007baf587b6285d425d8a34dc'
     }
 
@@ -82,13 +82,13 @@ describe('dvf.deposit', () => {
     expect(payloadValidator).toBeCalled()
   })
 
-  it('Withdrawas ERC20 token to user\'s vault', async () => {
+  it('Withdraws ERC20 token to user\'s vault', async () => {
     mockGetConf()
     const path = '44\'/60\'/0\'/0\'/0'
     const amount = 193
     const token = 'USDT'
     const starkPublicKey = {
-      x: '1841559c5a886771644573dbb6dba210a1a7a0834afcf6bb3cbba1565ae7b32',
+      x: '01841559c5a886771644573dbb6dba210a1a7a0834afcf6bb3cbba1565ae7b32',
       y: '02f0f543d1b6666fa1e093b5d03feb90f0e68ab007baf587b6285d425d8a34dc'
     }
 

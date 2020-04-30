@@ -27,7 +27,7 @@ describe('dvf.submitOrder', () => {
       price,
       meta: {
         starkPublicKey: {
-          x: '7a83d131fe965ad7e70f259e3cf1e785dcfacf319a64115faeabb64a2fd8af0',
+          x: '07a83d131fe965ad7e70f259e3cf1e785dcfacf319a64115faeabb64a2fd8af0',
           y: '4de195d61296b6ac602ab5db8d190b90cd1e767fe9d47d4c9d96ab62cf7ad41'
         }
       },

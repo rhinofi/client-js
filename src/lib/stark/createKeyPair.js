@@ -1,8 +1,8 @@
 const sw = require('starkware_crypto')
 const createPrivateKey = require('./createPrivateKey')
 const errorReasons = require('../dvf/DVFError')
+const formatStarkPublicKey = require('./formatStarkPublicKey')
 
-// QUESTION: remove async from function and make privateKey mandatory?
 module.exports = (starkPrivateKey) => {
   if (!starkPrivateKey) {
     starkPrivateKey = createPrivateKey()
@@ -15,12 +15,14 @@ module.exports = (starkPrivateKey) => {
       starkKeyPair.getPublic(true, 'hex'),
       'hex'
     )
-    const starkPublicKey = {
+    const tempKey = {
       x: fullPublicKey.pub.getX().toString('hex'),
       y: fullPublicKey.pub.getY().toString('hex')
     }
 
-    return {starkPrivateKey, starkKeyPair, starkPublicKey}
+    const starkPublicKey = formatStarkPublicKey(tempKey)
+
+    return { starkPrivateKey, starkKeyPair, starkPublicKey }
   } catch (e) {
     return {
       error: 'ERR_PUBLICKEY_CREATION',

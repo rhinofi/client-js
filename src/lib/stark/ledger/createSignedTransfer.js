@@ -64,6 +64,5 @@ module.exports = async (
   // console.log({ starkSignature })
   await transport.close()
 
-  starkPublicKey = dvf.stark.ledger.normaliseStarkKey(starkPublicKey)
   return { starkPublicKey, nonce, expireTime, starkSignature }
 }
