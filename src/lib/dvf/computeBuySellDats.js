@@ -24,7 +24,7 @@ module.exports = (dvf, { symbol, amount, price, feeRate }) => {
 
   const sellTokenReg = dvf.token.getTokenInfo(sell.token)
   const buyTokenReg = dvf.token.getTokenInfo(buy.token)
-  console.log({sellTokenReg, buyTokenReg})
+  // console.log({sellTokenReg, buyTokenReg})
   const amountBuy = BN(10)
     .pow(buyTokenReg.decimals)
     .times(buy.amount)

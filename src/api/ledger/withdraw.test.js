@@ -1,32 +1,62 @@
 const nock = require('nock')
 const instance = require('../test/helpers/instance')
 const mockGetConf = require('../test/fixtures/getConf')
-const Transport = require('@ledgerhq/hw-transport-node-hid').default
-const Eth = require('@ledgerhq/hw-app-eth').default
-const byContractAddress = require('@ledgerhq/hw-app-eth/erc20')
-  .byContractAddress
 
+jest.mock('../../lib/ledger/selectTransport')
+const mockEth = require('@ledgerhq/hw-app-eth')
+const mockSelector = require('../../lib/ledger/selectTransport')
+const { createTransportReplayer } = require('@ledgerhq/hw-transport-mocker')
+
+jest.mock('@ledgerhq/hw-app-eth', () => {
+  return {
+    default: jest.fn(() => mockEth),
+
+    getAddress: jest.fn(() => {
+      return {
+        address: '0x341e46a49f15785373ede443df0220dea6a41bbc'
+      }
+    }),
+
+    starkGetPublicKey: jest.fn(() => '0401841559c5a886771644573dbb6dba210a1a7a0834afcf6bb3cbba1565ae7b3202f0f543d1b6666fa1e093b5d03feb90f0e68ab007baf587b6285d425d8a34dc'),
+
+    provideERC20TokenInformation: jest.fn(() => true),
+
+    starkSignTransfer: jest.fn(() => {
+      return {
+        r: '06519b47cc1c5a2731420d824cce3a1a42fcbe3a4b0614187603474255a7332c',
+        s: '01f1ae85334d2a2aea2e3ec2e79f42c6397dd97fc72332a0b1e948cb82e2d3ef'
+      }
+    })
+  }
+})
+
+const Transport = createTransportReplayer()
 let dvf
 
-describe('dvf.deposit', () => {
+describe('dvf.withdraw', () => {
   beforeAll(async () => {
     mockGetConf()
     dvf = await instance()
   })
 
-  it('Withdrawas ETH to users vault', async () => {
+  it('Withdraws ETH to users vault', async () => {
     mockGetConf()
-    const path = `21323'/0`
+
+    const path = '44\'/60\'/0\'/0\'/0'
     const token = 'ETH'
     const amount = 1.117
-    starkPublicKey = {
-      x: '0615a13d3f18d240a1ad98ba9c12ac7b70361a547284b55a35c82f2c2d4515cd'
+    const starkPublicKey = {
+      x: '01841559c5a886771644573dbb6dba210a1a7a0834afcf6bb3cbba1565ae7b32',
+      y: '02f0f543d1b6666fa1e093b5d03feb90f0e68ab007baf587b6285d425d8a34dc'
     }
+
     const apiResponse = {
       token,
       amount,
       starkPublicKey
     }
+
+    mockSelector.mockImplementation(() => { return Transport })
 
     const payloadValidator = jest.fn(body => {
       expect(body).toMatchObject(apiResponse)
@@ -52,13 +82,14 @@ describe('dvf.deposit', () => {
     expect(payloadValidator).toBeCalled()
   })
 
-  it(`Withdrawas ERC20 token to user's vault`, async () => {
+  it('Withdraws ERC20 token to user\'s vault', async () => {
     mockGetConf()
-    const path = `21323'/0`
+    const path = '44\'/60\'/0\'/0\'/0'
     const amount = 193
     const token = 'USDT'
     const starkPublicKey = {
-      x: '0615a13d3f18d240a1ad98ba9c12ac7b70361a547284b55a35c82f2c2d4515cd'
+      x: '01841559c5a886771644573dbb6dba210a1a7a0834afcf6bb3cbba1565ae7b32',
+      y: '02f0f543d1b6666fa1e093b5d03feb90f0e68ab007baf587b6285d425d8a34dc'
     }
 
     const apiResponse = {
@@ -66,6 +97,8 @@ describe('dvf.deposit', () => {
       amount,
       starkPublicKey
     }
+
+    mockSelector.mockImplementation(() => { return Transport })
 
     const payloadValidator = jest.fn(body => {
       expect(body).toMatchObject(apiResponse)

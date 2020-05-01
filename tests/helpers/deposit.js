@@ -12,10 +12,15 @@ const deposit = async (dvf, token, amount, starkPrivKey) => {
     }
 }
 
-const checkBalance = async dvf => {
+const checkBalance = async (dvf, token) => {
     console.log('searching for balances...')
-    const balances = await dvf.getBalance()
+    let balances = await dvf.getBalance()
     console.log('balances', balances)
+
+    if (token) {
+        balances = balances.filter(balance => balance.token === token)
+    }
+    
     if (!balances.length) {
         throw new Error(
             `Unconfirmed balance`

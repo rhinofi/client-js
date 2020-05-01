@@ -10,5 +10,6 @@ module.exports = async (dvf, starkPublicKey) => {
     starkKey: starkPublicKey.x,
     ethAddress
   }
+
   return post(url, { json: data })
 }

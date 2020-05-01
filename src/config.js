@@ -20,6 +20,13 @@ module.exports = {
   // initialization
   autoSelectAccount: true,
 
+  // Ledger Stark Path Constants
+  m: 21323,
+  plugin: 1106451151,
+  application: 1681080391,
+  accountIndex: 0,
+  purpose: 0,
+
   // enables integrators to select if they want to fetch user config upon initialization
   autoLoadUserConf: true,
   autoLoadExchangeConf: true

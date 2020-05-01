@@ -7,7 +7,6 @@ const _ = require('lodash')
 const selectTransport = require('../../ledger/selectTransport')
 
 module.exports = async (dvf, path, starkOrder) => {
-  const starkPath = dvf.stark.ledger.getPath(path)
   const Transport = selectTransport(dvf.isBrowser)
 
   const buyCurrency = _.find(dvf.config.tokenRegistry, {
@@ -19,6 +18,8 @@ module.exports = async (dvf, path, starkOrder) => {
 
   const transport = await Transport.create()
   const eth = new Eth(transport)
+  const { address } = await eth.getAddress(path)
+  const starkPath = dvf.stark.ledger.getPath(address)
   const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')
   let starkPublicKey = {
     x: tempKey.substr(2, 64),
@@ -37,7 +38,7 @@ module.exports = async (dvf, path, starkOrder) => {
     if (buyTokenInfo) {
       await eth.provideERC20TokenInformation(buyTokenInfo)
     } else {
-      if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
+      if (dvf.chainId!==1) {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
           `00${buyTokenAddress}0000000000000000`,
@@ -63,7 +64,7 @@ module.exports = async (dvf, path, starkOrder) => {
     if (sellTokenInfo) {
       await eth.provideERC20TokenInformation(sellTokenInfo)
     } else {
-      if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
+      if (dvf.chainId!==1) {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
           `00${sellTokenAddress}0000000000000000`,
@@ -92,9 +93,7 @@ module.exports = async (dvf, path, starkOrder) => {
     starkOrder.expirationTimestamp
   )
 
-  starkPublicKey = dvf.stark.ledger.normaliseStarkKey(starkPublicKey)
-
-  transport.close()
+  await transport.close()
 
   return { starkPublicKey, starkSignature }
 }

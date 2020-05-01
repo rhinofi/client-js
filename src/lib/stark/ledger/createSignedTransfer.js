@@ -13,7 +13,6 @@ module.exports = async (
   sourceVault,
   destinationVault
 ) => {
-  const starkPath = dvf.stark.ledger.getPath(path)
   const Transport = selectTransport(dvf.isBrowser)
   const currency = dvf.token.getTokenInfo(token)
   const nonce = dvf.util.generateRandomNonce()
@@ -27,13 +26,15 @@ module.exports = async (
   let starkPublicKey = await dvf.stark.ledger.getPublicKey(path)
   const transport = await Transport.create()
   const eth = new Eth(transport)
+  const { address } = await eth.getAddress(path)
+  const starkPath = dvf.stark.ledger.getPath(address)
   if (transferTokenAddress) {
     const tokenInfo = byContractAddress(transferTokenAddress)
     transferTokenAddress = transferTokenAddress.substr(2)
     if (tokenInfo) {
       await eth.provideERC20TokenInformation(tokenInfo)
     } else {
-      if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
+      if (dvf.chainId!==1) {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
           `00${transferTokenAddress}0000000000000000`,
@@ -61,8 +62,7 @@ module.exports = async (
   )
 
   // console.log({ starkSignature })
-  transport.close()
+  await transport.close()
 
-  starkPublicKey = dvf.stark.ledger.normaliseStarkKey(starkPublicKey)
   return { starkPublicKey, nonce, expireTime, starkSignature }
 }

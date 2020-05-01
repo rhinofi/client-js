@@ -1,6 +1,6 @@
 {
   "name": "dvf-client-js",
-  "version": "0.1.7",
+  "version": "0.1.9",
   "main": "src/dvf.js",
   "contributors": [
     "Henrique Matias <hems.inlet@gmail.com>",
@@ -51,7 +51,7 @@
     "@ledgerhq/web3-subprovider": "^5.12.2",
     "aigle": "^1.14.1",
     "aware": "^0.3.1",
-    "bignumber.js": "^7.2.1",
+    "bignumber.js": "^9.0.0",
     "env-cmd": "^10.0.1",
     "ethereumjs-util": "^5.2.0",
     "lodash": "^4.17.10",
