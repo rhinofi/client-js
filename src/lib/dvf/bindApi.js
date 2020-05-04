@@ -99,6 +99,9 @@ module.exports = () => {
     require('../../lib/dvf/createOrderMetaData')
   )
 
+  // dvf trading volume data
+  dvf.get30DaysVolume = compose(require('../../api/get30DaysVolume'))
+
   // dvf main functions
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
   dvf.deposit = compose(require('../../api/deposit'))
