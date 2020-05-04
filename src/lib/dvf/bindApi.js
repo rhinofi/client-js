@@ -114,7 +114,6 @@ module.exports = () => {
   dvf.getUserConfig = compose(require('../../api/getUserConfig'))
   dvf.getVaultId = compose(require('../../api/getVaultId'))
   dvf.getVaultIdFromServer = compose(require('../../api/getVaultIdFromServer'))
-  dvf.preRegister = compose(require('../../api/preRegister'))
   dvf.register = compose(require('../../api/register'))
   dvf.submitBuyOrder = compose(require('../../api/submitBuyOrder'))
   dvf.submitOrder = compose(require('../../api/submitOrder'))
