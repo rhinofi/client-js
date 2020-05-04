@@ -1,5 +1,6 @@
 const nock = require('nock')
 const instance = require('./test/helpers/instance')
+const http = require('http')
 const url = require('url')
 
 const mockGetConf = require('./test/fixtures/getConf')
@@ -12,14 +13,17 @@ describe('getFeeRate', () => {
     dvf = await instance()
   })
 
-  it(`Query for fee rates`, async () => {
+  it(`Query for 30 user's 30 days trading  volume`, async () => {
     // TODO: record actual response with current version of the API
     // mock bfx response for currency value using nockBack
 
     const apiResponse = {
-      address: '0x65ceee596b2aba52acc09f7b6c81955c1db86404',
-      timestamp: 1588597769117,
-      fees: { maker: 15, taker: 20 }
+      totalUSDVolume: 199.7428219247271,
+      tokens: {
+        ETH: { tokenAmount: 0.51, USDVolume: 82.0539 },
+        ZRX: { tokenAmount: 178.53426171, USDVolume: 117.6889219247271 }
+      },
+      startDate: '2020-04-04T16:54:25.886Z'
     }
 
     const queryValidator = jest.fn((uri, body) => {
@@ -30,11 +34,11 @@ describe('getFeeRate', () => {
     })
 
     nock(dvf.config.api)
-      .get('/v1/trading/r/feeRate')
+      .get('/v1/trading/r/30DaysVolume')
       .query(true)
       .reply(queryValidator)
 
-    const response = await dvf.getFeeRate()
+    const response = await dvf.get30DaysVolume()
     expect(queryValidator).toBeCalled()
     expect(response).toMatchObject(apiResponse)
   })
