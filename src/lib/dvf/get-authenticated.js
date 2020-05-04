@@ -1,4 +1,4 @@
-const { get } = require('request-promise')
+const rp = require('request-promise')
 const _ = require('lodash')
 
 module.exports = async (dvf, endpoint, nonce, signature, data = {}) => {
@@ -22,5 +22,10 @@ module.exports = async (dvf, endpoint, nonce, signature, data = {}) => {
   // removes null and undefined values
   data = _.omitBy(data, _.isNil)
 
-  return get(url, { json: data })
+  var options = {
+    uri: url,
+    qs: data
+  }
+
+  return rp(options)
 }
