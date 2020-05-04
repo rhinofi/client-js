@@ -35,6 +35,6 @@ describe('getFeeRate', () => {
 
     const response = await dvf.getFeeRate()
 
-    expect(JSON.parse(response)).toMatchObject(apiResponse)
+    expect(response).toMatchObject(apiResponse)
   })
 })
