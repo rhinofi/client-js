@@ -24,7 +24,8 @@ module.exports = async (dvf, endpoint, nonce, signature, data = {}) => {
 
   var options = {
     uri: url,
-    qs: data
+    qs: data,
+    json: true
   }
 
   return rp(options)
