@@ -29,13 +29,12 @@ describe('getFeeRate', () => {
     })
 
     nock(dvf.config.api)
-      .post('/v1/trading/r/getFeeRates', payloadValidator)
+      .get('/v1/trading/r/feeRate')
+      .query(true)
       .reply(200, apiResponse)
 
     const response = await dvf.getFeeRate()
 
-    expect(payloadValidator).toBeCalled()
-
-    expect(response).toMatchObject(apiResponse)
+    expect(JSON.parse(response)).toMatchObject(apiResponse)
   })
 })
