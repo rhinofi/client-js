@@ -1,6 +1,5 @@
 const nock = require('nock')
 const instance = require('./test/helpers/instance')
-const http = require('http')
 const url = require('url')
 
 const mockGetConf = require('./test/fixtures/getConf')
@@ -13,7 +12,7 @@ describe('getFeeRate', () => {
     dvf = await instance()
   })
 
-  it(`Query for 30 user's 30 days trading  volume`, async () => {
+  it(`Query for user's 30 days trading  volume`, async () => {
     // TODO: record actual response with current version of the API
     // mock bfx response for currency value using nockBack
 
