@@ -10,7 +10,7 @@ const register = async ({INFURA_PROJECT_ID, account}, bypassRegister = false) =>
     const provider = new HDWalletProvider(account.privateKey, infuraURL)
     const web3 = new Web3(provider)
     const dvfConfig = {
-      api: 'https://api.deversifi.dev'
+      api: 'https://api.stg.deversifi.com'
     }
     const dvf = await DVF(web3, dvfConfig)
 

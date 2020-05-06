@@ -1,6 +1,6 @@
 module.exports = {
   // api: 'https://api.deversifi.com',
-  api: 'https://api.deversifi.dev',
+  api: 'https://api.stg.deversifi.com',
 
   // default transaction arguments
   defaultGasLimit: 200000,
