@@ -99,6 +99,9 @@ module.exports = () => {
     require('../../lib/dvf/createOrderMetaData')
   )
 
+  // dvf trading volume data
+  dvf.get30DaysVolume = compose(require('../../api/get30DaysVolume'))
+
   // dvf main functions
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
   dvf.deposit = compose(require('../../api/deposit'))
@@ -106,15 +109,13 @@ module.exports = () => {
   dvf.getBalance = compose(require('../../api/getBalance'))
   dvf.getConfig = compose(require('../../api/getConfig'))
   dvf.getDeposits = compose(require('../../api/getDeposits'))
-  dvf.getFeeRates = compose(require('../../api/getFeeRates'))
-  dvf.getFeeRate = compose(require('../../api/getFeeRates'))
+  dvf.getFeeRate = compose(require('../../api/getFeeRate'))
   dvf.getOrder = compose(require('../../api/getOrder'))
   dvf.getOrders = compose(require('../../api/getOrders'))
   dvf.getOrdersHist = compose(require('../../api/getOrdersHist'))
   dvf.getUserConfig = compose(require('../../api/getUserConfig'))
   dvf.getVaultId = compose(require('../../api/getVaultId'))
   dvf.getVaultIdFromServer = compose(require('../../api/getVaultIdFromServer'))
-  dvf.preRegister = compose(require('../../api/preRegister'))
   dvf.register = compose(require('../../api/register'))
   dvf.submitBuyOrder = compose(require('../../api/submitBuyOrder'))
   dvf.submitOrder = compose(require('../../api/submitOrder'))

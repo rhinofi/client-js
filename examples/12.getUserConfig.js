@@ -19,7 +19,7 @@ const web3 = new Web3(provider)
 
 const dvfConfig = {
   // Using dev API.
-  api: 'https://api.deversifi.dev'
+  api: 'https://api.stg.deversifi.com'
 }
 
 
