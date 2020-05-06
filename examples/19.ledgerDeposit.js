@@ -26,9 +26,23 @@ const dvfConfig = {
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
-  const getWithdrawalsResponse = await dvf.getWithdrawals()
+  const path = `44'/60'/0'/0'/0`
+  const token = 'ETH'
+  const amount = 0.95
 
-  console.log('getWithdrawals response ->', getWithdrawalsResponse)
+  const starkDepositData = await dvf.stark.ledger.createDepositData(
+    path,
+    token,
+    amount
+  )
+
+  const depositResponse = await dvf.ledger.deposit(
+    token,
+    amount,
+    starkDepositData
+  )
+
+  console.log('deposit response ->', 'depositResponse')
 
 })()
 // Stop provider to allow process to exit.

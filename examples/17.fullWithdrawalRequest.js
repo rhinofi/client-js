@@ -26,9 +26,11 @@ const dvfConfig = {
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
-  const getWithdrawalsResponse = await dvf.getWithdrawals()
+  const token = 'ETH'
 
-  console.log('getWithdrawals response ->', getWithdrawalsResponse)
+  const withdrawalResponse = await dvf.fullWithdrawalRequest(token)
+
+  console.log('Full withdrawal request response ->', withdrawalResponse)
 
 })()
 // Stop provider to allow process to exit.

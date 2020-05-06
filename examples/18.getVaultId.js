@@ -18,7 +18,7 @@ const provider = new HDWalletProvider(ethPrivKey, infuraURL)
 const web3 = new Web3(provider)
 
 const dvfConfig = {
-  // Using dev API.
+  // Using staging API.
   api: 'https://api.stg.deversifi.com'
 }
 
@@ -26,23 +26,11 @@ const dvfConfig = {
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
-  const path = `44'/60'/0'/0'/0`
   const token = 'ETH'
-  const amount = 0.95
 
-  const starkDepositData = await dvf.stark.ledger.createDepositData(
-    path,
-    token,
-    amount
-  )
+  const getVaultIdResponse = await dvf.getVaultId(token)
 
-  const depositResponse = await dvf.ledger.deposit(
-    token,
-    amount,
-    starkDepositData
-  )
-
-  console.log('deposit response ->', 'depositResponse')
+  console.log('getVaultId response ->', getVaultIdResponse)
 
 })()
 // Stop provider to allow process to exit.

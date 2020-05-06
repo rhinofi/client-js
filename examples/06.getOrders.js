@@ -18,7 +18,7 @@ const provider = new HDWalletProvider(ethPrivKey, infuraURL)
 const web3 = new Web3(provider)
 
 const dvfConfig = {
-  // Using dev API.
+  // Using staging API.
   api: 'https://api.stg.deversifi.com'
 }
 
