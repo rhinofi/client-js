@@ -4,6 +4,7 @@ module.exports = async (dvf, token) => {
   const { starkTokenId } = dvf.token.getTokenInfo(token)
 
   const args = [starkTokenId]
+
   const action = 'withdraw'
 
   try {
