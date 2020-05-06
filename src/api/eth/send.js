@@ -9,9 +9,14 @@ module.exports = async (dvf, abi, address, action, args, value) => {
   // console.log(...args)
   const method = contract.methods[action](...args)
 
+  const gasLimit =
+    action === 'fullWithdrawalRequest'
+      ? 10 * dvf.config.defaultGasLimit
+      : dvf.config.defaultGasLimit
+
   let options = {
     from: dvf.get('account'),
-    gasLimit: dvf.config.defaultGasLimit,
+    gasLimit: gasLimit,
     gasPrice: dvf.config.defaultGasPrice,
     ...(value && { value })
   }
