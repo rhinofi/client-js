@@ -1,7 +1,10 @@
 const DVFError = require('../../lib/dvf/DVFError')
 
-module.exports = async (dvf, vaultId) => {
-  const args = [vaultId]
+module.exports = async (dvf, token) => {
+  const { starkVaultId } = dvf.token.getTokenInfo(token)
+
+  const args = [starkVaultId]
+
   const action = 'fullWithdrawalRequest'
 
   try {
