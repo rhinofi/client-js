@@ -19,14 +19,14 @@ const web3 = new Web3(provider)
 
 const dvfConfig = {
   // Using dev API.
-  api: 'https://api.deversifi.dev'
+  api: 'https://api.stg.deversifi.com'
 }
 
 
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
-  const depositResponse = await dvf.deposit('ETH', 0.23, starkPrivKey)
+  const depositResponse = await dvf.deposit('ETH', 0.45, starkPrivKey)
 
   console.log('deposit response ->', depositResponse)
 
