@@ -6,7 +6,7 @@ console.log('orders', orders)
 if (orders.length == 0) {
   console.log('submitting new order')
   
-  // Submit an order to buy 0.5 Eth for USDT at 200 USDT for 1 Eth
+  // Submit an order to buy 0.5 Eth at a rate of 200 USDT for 1 Eth
   const symbol = 'ETH:USDT'
   const amount = 0.5
   const price = 200
@@ -27,7 +27,7 @@ if (orders.length == 0) {
 
   console.log('submitOrder response ->', submitOrderResponse)
 
-  orderId = submitOrderResponse.orderId
+  orderId = submitOrderResponse._id
 }
 else {
   orderId = orders[0]._id

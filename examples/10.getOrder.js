@@ -34,10 +34,10 @@ const dvfConfig = {
   if (orders.length == 0) {
     console.log('submitting new order')
 
-    // Submit an order to buy 150 ZRX for ETH at 0.07 ETH for 1 ZRX
-    const symbol = 'ZRX:ETH'
-    const amount = 150
-    const price = 0.07
+    // Submit an order to buy 0.3 ETH at a rate of 180 USDT per 1 ETH
+    const symbol = 'ETH:USDT'
+    const amount = 0.3
+    const price = 180
     const validFor = '0'
     const feeRate = ''
 
@@ -54,7 +54,7 @@ const dvfConfig = {
     })
 
     console.log('submitOrder response ->', submitOrderResponse)
-    orderId = submitOrderResponse.orderId
+    orderId = submitOrderResponse._id
   }
   else {
     orderId = orders[0]._id
