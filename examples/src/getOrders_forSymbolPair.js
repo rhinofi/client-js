@@ -1,23 +1,31 @@
-let orders = await dvf.getOrders('ETH:BTC')
+
+const symbol = 'BTC:USDT'
+
+let orders = await dvf.getOrders(symbol)
 
 if (orders.length == 0) {
 
-  console.log('no orders for ETH:BTC, submitting one')
+  console.log(`no orders for ${symbol}, submitting one`)
 
-  const submitedOrderResponse = await dvf.submitOrder(
-    'ETH:BTC', // symbol
-    -0.3, // amount
-    500, // price
-    '', // gid
-    '', // cid
-    '0', // signedOrder
-    0, // validFor
-    'P1', // partnerId
-    '', // feeRate
-    starkPrivKey
-  )
+  // Submit an order to buy 0.02 BTC at a rate of 7000 USDT for 1 BTC
+  const amount = 0.02
+  const price = 7000
+  const validFor = '0'
+  const feeRate = ''
+
+  const submitOrderResponse = await dvf.submitOrder({
+    symbol,
+    amount,
+    price,
+    starkPrivateKey: starkPrivKey,
+    validFor,           // Optional
+    feeRate,            // Optional
+    gid: '1',           // Optional
+    cid: '1',           // Optional
+    partnerId: 'P1'    // Optional
+  })
 }
 
-orders = await dvf.getOrders('ETH:BTC')
+orders = await dvf.getOrders(symbol)
 
-console.log("getOrders response ->", orders)
+console.log("getOrders(symbol) response ->", orders)

@@ -26,10 +26,10 @@ const dvfConfig = {
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
-  // Submit an order to sell 0.3 Eth for USDT at 250 USDT per 1 Eth
+  // Submit an order to sell 0.3 Eth for 200 USDT per 1 Eth
   const symbol = 'ETH:USDT'
   const amount = -0.3
-  const price = 250
+  const price = 200
   const validFor = '0'
   const feeRate = ''
 
