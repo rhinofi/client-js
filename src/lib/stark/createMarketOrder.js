@@ -2,18 +2,18 @@ const P = require('aigle')
 const DVFError = require('../dvf/DVFError')
 const computeBuySellData = require('../dvf/computeBuySellData')
 
-module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
+module.exports = async (dvf, { symbol, tokenToSell, amountToSell, worstCasePrice, validFor, feeRate }) => {
   feeRate = parseFloat(feeRate) || dvf.config.DVF.defaultFeeRate
-  // symbols are always 3 letters
+
   const baseSymbol = symbol.split(':')[0]
   const quoteSymbol = symbol.split(':')[1]
-  
-  const buySymbol = amount > 0 ? baseSymbol : quoteSymbol
-  const sellSymbol = amount > 0 ? quoteSymbol : baseSymbol
-  
+
+  const sellSymbol = tokenToSell
+  const buySymbol = sellSymbol === quoteSymbol ? baseSymbol : quoteSymbol
+
   const sellCurrency = dvf.token.getTokenInfo(sellSymbol)
   const buyCurrency = dvf.token.getTokenInfo(buySymbol)
-  
+
   const [vaultIdSell, vaultIdBuy] = await P.join(
     dvf.getVaultId(sellSymbol),
     dvf.getVaultId(buySymbol)
@@ -24,13 +24,12 @@ module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
     }
   }
 
+  // symbol is changed if necessary to avoid making changes to computeBuySellData
+  const flippedSymbol = `${sellSymbol}:${buySymbol}`
   const {
     amountSell,
     amountBuy
-  } = computeBuySellData(dvf,{ symbol, amount, price, feeRate })
-
-  // console.log('sell :', sellSymbol, sellCurrency)
-  // console.log('buy  :', buySymbol, buyCurrency)
+  } = computeBuySellData(dvf, { symbol: flippedSymbol, amount: -amountToSell, price: worstCasePrice, feeRate })
 
   let expiration // in hours
   expiration = Math.floor(Date.now() / (1000 * 3600))
@@ -51,7 +50,7 @@ module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
     nonce: dvf.util.generateRandomNonce(),
     expirationTimestamp: expiration
   }
-  //console.log('stark order: ', starkOrder)
+
   const starkMessage = dvf.stark.createOrderMessage(starkOrder)
 
   return {
