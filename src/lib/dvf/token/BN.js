@@ -1,10 +1,8 @@
 const BigNumber = require('bignumber.js')
 
-BigNumber.config({ 
+BigNumber.config({
   DECIMAL_PLACES: 50,
-  ROUNDING_MODE: BigNumber.ROUND_HALF_UP 
+  ROUNDING_MODE: BigNumber.ROUND_HALF_UP
 })
 
-module.exports = (number) => {
-  return new BigNumber(number)
-}
+module.exports = BigNumber
