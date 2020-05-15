@@ -39,7 +39,7 @@ module.exports = (dvf, { symbol, amount, price, feeRate }) => {
     .times(sell.amount)
     .dividedBy(sellTokenReg.quantization)
     .times(1 + (sellTokenReg.settleSpread || 0))
-    .integerValue()
+    .integerValue(BN.ROUND_DOWN)
     .toString()
 
   return {
