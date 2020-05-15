@@ -51,6 +51,46 @@ describe('dvf.register', () => {
     expect(result).toEqual(apiResponse)
   })
 
+  it('Register method accepts nonce and signature', async () => {
+    const apiResponse = {
+      isRegistered: true
+    }
+
+    mockGetConf()
+
+    const nonce = Date.now() / 1000 + ''
+    const signature = await dvf.sign(nonce.toString(16))
+  
+    const pvtKey = '100'
+    const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
+    const fullPublicKey = sw.ec.keyFromPublic(
+      starkKeyPair.getPublic(true, 'hex'),
+      'hex'
+    )
+    const tempKey = {
+      x: fullPublicKey.pub.getX().toString('hex'),
+      y: fullPublicKey.pub.getY().toString('hex')
+    }
+
+    const starkPublicKey = dvf.stark.formatStarkPublicKey(tempKey)
+
+    nock(dvf.config.api)
+      .post('/v1/trading/w/register', (body) => {
+        return (
+          _.isMatch(body, {
+            starkKey: starkPublicKey.x
+          }) &&
+          body.signature &&
+          body.nonce
+        )
+      })
+      .reply(200, apiResponse)
+
+    const result = await dvf.register(starkPublicKey, nonce, signature)
+
+    expect(result).toEqual(apiResponse)
+  })
+
   it('Register method checks for starkKey', async () => {
     const starkPublicKey = ''
 
