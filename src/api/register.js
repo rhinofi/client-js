@@ -1,15 +1,13 @@
-const { post } = require('request-promise')
+const post = require('../lib/dvf/post-authenticated')
+
 const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (dvf, starkPublicKey) => {
+module.exports = async (dvf, starkPublicKey, nonce, signature) => {
   validateAssertions(dvf, { starkPublicKey })
 
   const starkKey = starkPublicKey.x
 
-  const nonce = Date.now() / 1000 + ''
-  const signature = await dvf.sign(nonce.toString(16))
-
-  const url = dvf.config.api + '/v1/trading/w/register'
+  const endpoint = '/v1/trading/w/register'
 
   const data = {
     starkKey,
@@ -17,7 +15,7 @@ module.exports = async (dvf, starkPublicKey) => {
     signature
   }
 
-  const userRegistered = await post(url, { json: data })
+  const userRegistered = await post(dvf, endpoint, nonce, signature, data)
 
   if (userRegistered.isRegistered) {
     return userRegistered
@@ -31,7 +29,7 @@ module.exports = async (dvf, starkPublicKey) => {
     )
 
     if (onchainRegister) {
-      return dvf.getUserConfig()
+      return dvf.getUserConfig(nonce, signature)
     }
   }
 }
