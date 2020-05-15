@@ -10,7 +10,8 @@ by reading the schema
 const schema = Joi.object({
   symbol: Joi.string().required(), // trading symbol
   amountToSell: Joi.number().required(), // number or number string
-  price: Joi.number().required(), // number or number string
+  tokenToSell: Joi.number().required(), // token to sell
+  worstCasePrice: Joi.number().required(), // number or number string
   starkPrivateKey: Joi.string(), // required when using KeyStore wallet
   ledgerPath: Joi.string(), // required when using Ledger wallet
   validFor: Joi.number().allow(''), // validation time in hours
