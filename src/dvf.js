@@ -55,7 +55,7 @@ module.exports = async (web3, userConfig = {}) => {
   let chainId = 3
 
   try {
-    chainId = await web3.eth.net.getId()
+    chainId = dvf.config.chainId || (await web3.eth.net.getId())
   }
   catch(e)  {
     console.log('error getting chainId')
