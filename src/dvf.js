@@ -70,6 +70,9 @@ module.exports = async (web3, userConfig = {}) => {
       console.warn('Please specify a valid account or account index')
     }
   }
+  else if (dvf.config.address){
+    dvf.set('account', dvf.config.address.toLowerCase())
+  }
 
   // get user config once we get the Web3 provider and Eth Address
   if (dvf.config.autoLoadUserConf) {
