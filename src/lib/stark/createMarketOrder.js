@@ -1,9 +1,13 @@
 const P = require('aigle')
+const { preparePrice, prepareAmount } = require('bfx-api-node-util')
 const DVFError = require('../dvf/DVFError')
 const computeBuySellData = require('../dvf/computeBuySellData')
+const toBN = require('../util/toBN')
 
 module.exports = async (dvf, { symbol, tokenToSell, amountToSell, worstCasePrice, validFor, feeRate }) => {
   feeRate = parseFloat(feeRate) || dvf.config.DVF.defaultFeeRate
+  amountToSell = toBN(prepareAmount(amountToSell))
+  worstCasePrice = toBN(preparePrice(worstCasePrice))
 
   const baseSymbol = symbol.split(':')[0]
   const quoteSymbol = symbol.split(':')[1]
@@ -29,7 +33,7 @@ module.exports = async (dvf, { symbol, tokenToSell, amountToSell, worstCasePrice
   const {
     amountSell,
     amountBuy
-  } = computeBuySellData(dvf, { symbol: flippedSymbol, amount: -amountToSell, price: worstCasePrice, feeRate })
+  } = computeBuySellData(dvf, { symbol: flippedSymbol, amount: amountToSell.negated(), price: worstCasePrice, feeRate })
 
   let expiration // in hours
   expiration = Math.floor(Date.now() / (1000 * 3600))

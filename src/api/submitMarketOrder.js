@@ -1,5 +1,5 @@
 const { post } = require('request-promise')
-const Joi = require('@hapi/joi')
+const Joi = require('../lib/util/Joi')
 /*
 Keeping the schema visible and not in a seperate method
 for reference as required parameters can be checked by reading
@@ -7,8 +7,8 @@ for reference as required parameters can be checked by reading
 const schema = Joi.object({
   symbol: Joi.string().required(), // trading symbol
   tokenToSell: Joi.string().required(), // token to be sold
-  amountToSell: Joi.number().required(), // number or number string
-  worstCasePrice: Joi.number().required(), // number or number string
+  amountToSell: Joi.amount().required(), // number or number string
+  worstCasePrice: Joi.price().required(), // number or number string
   starkPrivateKey: Joi.string(), // required when using KeyStore wallet
   ledgerPath: Joi.string(), // required when using Ledger wallet
   validFor: Joi.number().allow(''), // validation time in hours
@@ -22,7 +22,8 @@ const schema = Joi.object({
 })
 
 module.exports = async (dvf, orderData) => {
-  const { value } = schema.validate(orderData)
+  const { value, error } = schema.validate(orderData)
+  // TODO handle error
   return post(dvf.config.api + '/v1/trading/w/submitOrder', {
     json: await dvf.createMarketOrderPayload(value)
   })
