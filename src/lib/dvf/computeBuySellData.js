@@ -1,12 +1,16 @@
-const BN = require('./token/BN')
+const BN = require('../util/BN')
+const toBN = require('../util/toBN')
 const splitSymbol = require('./token/splitSymbol')
 
 module.exports = (dvf, { symbol, amount, price, feeRate }) => {
-  if (amount == 0) throw new Error('amount cannot be 0')
-  if (price <= 0) throw new Error('price has to be greater than 0')
+  amount = toBN(amount)
+  price = toBN(price)
+
+  if (amount.isEqualTo(0)) throw new Error('amount cannot be 0')
+  if (price.isLessThan(0)) throw new Error('price has to be greater than 0')
 
   const [ baseToken, quoteToken ] = splitSymbol(symbol)
-  const absAmount = Math.abs(amount)
+  const absAmount = amount.absoluteValue()
 
   const base = {
     token: baseToken,
@@ -15,10 +19,10 @@ module.exports = (dvf, { symbol, amount, price, feeRate }) => {
 
   const quote = {
     token: quoteToken,
-    amount: absAmount * price
+    amount: absAmount.times(price)
   }
 
-  const [ buy, sell ] = amount > 0
+  const [ buy, sell ] = amount.isGreaterThan(0)
     ? [ base, quote ]
     : [ quote, base ]
 

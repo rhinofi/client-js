@@ -23,8 +23,8 @@ describe('dvf.submitOrder', () => {
     const expectedBody = {
       type: 'EXCHANGE MARKET',
       symbol,
-      amount: worstCaseAmountToRecieve,
-      price: worstCasePrice,
+      amount: '0.40000000',
+      price: '250.00',
       meta: {
         starkPublicKey: {
           x: '07a83d131fe965ad7e70f259e3cf1e785dcfacf319a64115faeabb64a2fd8af0',
@@ -74,8 +74,8 @@ describe('dvf.submitOrder', () => {
     const expectedBody = {
       type: 'EXCHANGE MARKET',
       symbol,
-      amount: -amountToSell,
-      price: worstCasePrice,
+      amount: '-2.00000000',
+      price: '125.00',
       meta: {
         starkPublicKey: {
           x: '07a83d131fe965ad7e70f259e3cf1e785dcfacf319a64115faeabb64a2fd8af0',

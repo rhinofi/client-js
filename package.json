@@ -51,6 +51,7 @@
     "@ledgerhq/web3-subprovider": "^5.12.2",
     "aigle": "^1.14.1",
     "aware": "^0.3.1",
+    "bfx-api-node-util": "^1.0.9",
     "bignumber.js": "^9.0.0",
     "env-cmd": "^10.0.1",
     "ethereumjs-util": "^5.2.0",
