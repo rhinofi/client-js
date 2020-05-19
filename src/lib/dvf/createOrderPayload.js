@@ -26,7 +26,7 @@ module.exports = async (dvf, orderData) => {
   const { value } = schema.validate(orderData)
   value.feeRate = value.feeRate || dvf.config.DVF.defaultFeeRate
   const ethAddress = orderData.ethAddress || dvf.get('account')
-
+  value.amount = +parseFloat(value.amount).toFixed(5)
   return {
     ...FP.pick(
       [

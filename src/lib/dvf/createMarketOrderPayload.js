@@ -32,7 +32,7 @@ module.exports = async (dvf, orderData) => {
   const baseSymbol = value.symbol.split(':')[0]
   value.amount = value.tokenToSell === baseSymbol
     ? -value.amountToSell
-    : BN(value.amountToSell).div(value.worstCasePrice).toNumber()
+    : BN(value.amountToSell).div(value.worstCasePrice).dp(5).toNumber()
 
   value.price = value.worstCasePrice
 
