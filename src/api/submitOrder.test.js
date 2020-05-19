@@ -23,8 +23,8 @@ describe('dvf.submitOrder', () => {
       gid: '1',
       type: 'EXCHANGE LIMIT',
       symbol,
-      amount: '0.13700000',
-      price: '250.00',
+      amount: '0.137',
+      price: '250',
       meta: {
         starkPublicKey: {
           x: '07a83d131fe965ad7e70f259e3cf1e785dcfacf319a64115faeabb64a2fd8af0',
@@ -83,8 +83,8 @@ describe('dvf.submitOrder', () => {
       gid: '',
       type: 'EXCHANGE LIMIT',
       symbol,
-      amount: '-55.00000000',
-      price: '100.00',
+      amount: '-55',
+      price: '100',
       feeRate: 0.0025,
       protocol: 'stark',
       partnerId: ''
@@ -138,7 +138,7 @@ describe('dvf.submitOrder', () => {
       gid: '',
       type: 'EXCHANGE LIMIT',
       symbol,
-      amount: '-55.00000000',
+      amount: '-55',
       price: '12.346',
       feeRate: 0.0025,
       protocol: 'stark',

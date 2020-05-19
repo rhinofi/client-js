@@ -3326,6 +3326,13 @@ duplexer@^0.1.1:
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.1.tgz#ace6ff808c1ce66b57d1ebf97977acb02334cfc1"
   integrity sha1-rOb/gIwc5mtX0ev5eXessCM0z8E=
 
+"dvf-utils@https://github.com/DeversiFi/dvf-utils.git#358904b5feca38c4cada021cadbaf81f240b3f60":
+  version "0.1.0"
+  resolved "https://github.com/DeversiFi/dvf-utils.git#358904b5feca38c4cada021cadbaf81f240b3f60"
+  dependencies:
+    "@hapi/joi" "^17.1.1"
+    bignumber.js "^9.0.0"
+
 ecc-jsbn@~0.1.1:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.2.tgz#3a83a904e54353287874c564b7549386849a98c9"

@@ -1,7 +1,5 @@
 const FP = require('lodash/fp')
-const { preparePrice, prepareAmount } = require('bfx-api-node-util')
-const Joi = require('../util/Joi')
-const toBN = require('../util/toBN')
+const { Joi, toBN, prepareAmountBN } = require('dvf-utils')
 
 /*
 repeating the schema here as this method can be called on its own
@@ -41,7 +39,7 @@ module.exports = async (dvf, orderData) => {
   const finalValue = {
     ...value,
     feeRate: value.feeRate || dvf.config.DVF.defaultFeeRate,
-    amount: prepareAmount(amountBN),
+    amount: prepareAmountBN(amountBN),
     price: value.worstCasePrice
   }
 

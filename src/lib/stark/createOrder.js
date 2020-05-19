@@ -1,19 +1,18 @@
 const P = require('aigle')
-const { preparePrice, prepareAmount } = require('bfx-api-node-util')
-const toBN = require('../util/toBN')
+const { preparePriceBN, prepareAmountBN, splitSymbol } = require('dvf-utils')
 const DVFError = require('../dvf/DVFError')
 const computeBuySellData = require('../dvf/computeBuySellData')
 
 
 module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
-  console.log('price', price)
-  price = toBN(preparePrice(price))
-  amount = toBN(prepareAmount(amount))
+  price = preparePriceBN(price)
+  amount = preparePriceBN(amount)
 
   feeRate = parseFloat(feeRate) || dvf.config.DVF.defaultFeeRate
-  // symbols are always 3 letters
-  const baseSymbol = symbol.split(':')[0]
-  const quoteSymbol = symbol.split(':')[1]
+
+  const symbolArray = splitSymbol(symbol)
+  const baseSymbol = symbolArray[0]
+  const quoteSymbol = symbolArray[1]
 
   const amountIsPositive = amount.isGreaterThan(0)
   const buySymbol = amountIsPositive ? baseSymbol : quoteSymbol
