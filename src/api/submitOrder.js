@@ -1,7 +1,6 @@
 const { post } = require('request-promise')
 const DVFError = require('../lib/dvf/DVFError')
-const Joi = require('../lib/util/Joi')
-const BN = require('../lib/util/BN')
+const { Joi } = require('dvf-utils')
 /*
 Keeping the schema visible and not in a seperate method
 for reference as required parameters can be checked by reading
