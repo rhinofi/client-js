@@ -4,7 +4,7 @@ const mockGetConf = require('./test/fixtures/getConf')
 
 let dvf
 
-describe('dvf.submitOrder', () => {
+describe('dvf.submitMarketOrder', () => {
   beforeAll(async () => {
     mockGetConf()
     dvf = await instance()
@@ -18,7 +18,7 @@ describe('dvf.submitOrder', () => {
     const tokenToSell = 'USDT'
     const worstCasePrice = 250
 
-    const worstCaseAmountToRecieve = amountToSell / worstCasePrice
+    const worstCaseAmountToRecieve = +parseFloat(amountToSell / worstCasePrice).toFixed(5)
 
     const expectedBody = {
       type: 'EXCHANGE MARKET',
