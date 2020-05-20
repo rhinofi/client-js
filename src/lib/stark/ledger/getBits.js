@@ -1,14 +1,13 @@
 /*
-Returns the 31 bits of a hash
-The first 31 bits are returns if n is 0 or not passed
-The nth 31 bits are returned if n is present and greater than 0
+Returns 2 least significant bit blocks of 31 bits each
 */
 
-module.exports = (h, n = 0) => {
-  // to Big Number
-  const hBigNumber = BigInt(h)
-  // n block of 31 bits
-  const hBits = hBigNumber.toString(2).substr(n * 31, 31)
-  // first 31 bits in decimal format
-  return parseInt(hBits, 2)
+module.exports = (address) => {
+  // address to bits
+  const hBits = BigInt(address).toString(2)
+  // last and second last 31 bit blocks
+  const first31Bits = parseInt(hBits.slice(-31),2)
+  const second31Bits = parseInt(hBits.slice(-62,-31),2)
+
+  return [first31Bits,second31Bits]
 }
