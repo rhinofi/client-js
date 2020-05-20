@@ -1,5 +1,5 @@
 const P = require('aigle')
-const { preparePriceBN, prepareAmountBN, splitSymbol } = require('dvf-utils')
+const { preparePriceBN, prepareAmountBN, splitSymbol, toBN } = require('dvf-utils')
 const DVFError = require('../dvf/DVFError')
 const computeBuySellData = require('../dvf/computeBuySellData')
 
@@ -30,10 +30,11 @@ module.exports = async (dvf, { symbol, tokenToSell, amountToSell, worstCasePrice
 
   // symbol is changed if necessary to avoid making changes to computeBuySellData
   const flippedSymbol = `${sellSymbol}:${buySymbol}`
+  const adjustedPrice = flippedSymbol === symbol ? worstCasePrice : toBN(1 / worstCasePrice)
   const {
     amountSell,
     amountBuy
-  } = computeBuySellData(dvf, { symbol: flippedSymbol, amount: amountToSell.negated(), price: worstCasePrice, feeRate })
+  } = computeBuySellData(dvf, { symbol: flippedSymbol, amount: amountToSell.negated(), price: adjustedPrice, feeRate })
 
   let expiration // in hours
   expiration = Math.floor(Date.now() / (1000 * 3600))
