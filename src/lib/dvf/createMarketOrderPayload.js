@@ -1,5 +1,6 @@
 const FP = require('lodash/fp')
-const { Joi } = require('dvf-utils')
+const { Joi, toBN, prepareAmountBN } = require('dvf-utils')
+
 /*
 repeating the schema here as this method can be called on its own
 and keeping the schema visible and not in a seperate method
@@ -8,8 +9,9 @@ by reading the schema
 */
 const schema = Joi.object({
   symbol: Joi.string().required(), // trading symbol
-  amount: Joi.amount().required(), // number or number string
-  price: Joi.price().required(), // number or number string
+  amountToSell: Joi.amount().required(), // number or number string
+  tokenToSell: Joi.string().required(), // token to sell
+  worstCasePrice: Joi.price().required(), // number or number string
   starkPrivateKey: Joi.string(), // required when using KeyStore wallet
   ledgerPath: Joi.string(), // required when using Ledger wallet
   validFor: Joi.number().allow(''), // validation time in hours
@@ -25,9 +27,21 @@ const schema = Joi.object({
 module.exports = async (dvf, orderData) => {
   const { value, error } = schema.validate(orderData)
   // TODO: handle error
-  // TODO: don't mutate
-  value.feeRate = value.feeRate || dvf.config.DVF.defaultFeeRate
+
   const ethAddress = orderData.ethAddress || dvf.get('account')
+
+  const amountToSellBN = toBN(value.amountToSell)
+  const baseSymbol = value.symbol.split(':')[0]
+  const amountBN = value.tokenToSell === baseSymbol
+    ? amountToSellBN.negated()
+    : amountToSellBN.div(value.worstCasePrice)
+
+  const finalValue = {
+    ...value,
+    feeRate: value.feeRate || dvf.config.DVF.defaultFeeRate,
+    amount: prepareAmountBN(amountBN),
+    price: value.worstCasePrice
+  }
 
   return {
     ...FP.pick(
@@ -42,11 +56,11 @@ module.exports = async (dvf, orderData) => {
         'type',
         'protocol'
       ],
-      value
+      finalValue
     ),
     meta: {
       ethAddress,
-      ...(await dvf.createOrderMetaData(value))
+      ...(await dvf.createMarketOrderMetaData(finalValue))
     }
   }
 }

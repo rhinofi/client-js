@@ -1,22 +1,19 @@
 const P = require('aigle')
-const { preparePriceBN, prepareAmountBN, splitSymbol } = require('dvf-utils')
+const { preparePriceBN, prepareAmountBN, splitSymbol, toBN } = require('dvf-utils')
 const DVFError = require('../dvf/DVFError')
 const computeBuySellData = require('../dvf/computeBuySellData')
 
-
-module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
-  price = preparePriceBN(price)
-  amount = preparePriceBN(amount)
-
+module.exports = async (dvf, { symbol, tokenToSell, amountToSell, worstCasePrice, validFor, feeRate }) => {
   feeRate = parseFloat(feeRate) || dvf.config.DVF.defaultFeeRate
+  amountToSell = prepareAmountBN(amountToSell)
+  worstCasePrice = preparePriceBN(worstCasePrice)
 
   const symbolArray = splitSymbol(symbol)
   const baseSymbol = symbolArray[0]
   const quoteSymbol = symbolArray[1]
 
-  const amountIsPositive = amount.isGreaterThan(0)
-  const buySymbol = amountIsPositive ? baseSymbol : quoteSymbol
-  const sellSymbol = amountIsPositive ? quoteSymbol : baseSymbol
+  const sellSymbol = tokenToSell
+  const buySymbol = sellSymbol === quoteSymbol ? baseSymbol : quoteSymbol
 
   const sellCurrency = dvf.token.getTokenInfo(sellSymbol)
   const buyCurrency = dvf.token.getTokenInfo(buySymbol)
@@ -31,13 +28,13 @@ module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
     }
   }
 
+  // symbol is changed if necessary to avoid making changes to computeBuySellData
+  const flippedSymbol = `${sellSymbol}:${buySymbol}`
+  const adjustedPrice = flippedSymbol === symbol ? worstCasePrice : toBN(1 / worstCasePrice)
   const {
     amountSell,
     amountBuy
-  } = computeBuySellData(dvf,{ symbol, amount, price, feeRate })
-
-  // console.log('sell :', sellSymbol, sellCurrency)
-  // console.log('buy  :', buySymbol, buyCurrency)
+  } = computeBuySellData(dvf, { symbol: flippedSymbol, amount: amountToSell.negated(), price: adjustedPrice, feeRate })
 
   let expiration // in hours
   expiration = Math.floor(Date.now() / (1000 * 3600))
@@ -58,7 +55,7 @@ module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
     nonce: dvf.util.generateRandomNonce(),
     expirationTimestamp: expiration
   }
-  //console.log('stark order: ', starkOrder)
+
   const starkMessage = dvf.stark.createOrderMessage(starkOrder)
 
   return {

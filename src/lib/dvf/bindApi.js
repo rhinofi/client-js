@@ -25,6 +25,7 @@ module.exports = () => {
 
   dvf.stark = {
     createOrder: compose(require('../stark/createOrder')),
+    createMarketOrder: compose(require('../stark/createMarketOrder')),
     createOrderMessage: require('../stark/createOrderMessage'),
     sign: require('../stark/starkSign'),
     createTransferMsg: require('../stark/createTransferMessage'),
@@ -95,8 +96,12 @@ module.exports = () => {
   dvf.postAuthenticated = compose(require('../../lib/dvf/post-authenticated'))
 
   dvf.createOrderPayload = compose(require('../../lib/dvf/createOrderPayload'))
+  dvf.createMarketOrderPayload = compose(require('../../lib/dvf/createMarketOrderPayload'))
   dvf.createOrderMetaData = compose(
     require('../../lib/dvf/createOrderMetaData')
+  )
+  dvf.createMarketOrderMetaData = compose(
+    require('../../lib/dvf/createMarketOrderMetaData')
   )
 
   // dvf trading volume data
@@ -119,6 +124,7 @@ module.exports = () => {
   dvf.register = compose(require('../../api/register'))
   dvf.submitBuyOrder = compose(require('../../api/submitBuyOrder'))
   dvf.submitOrder = compose(require('../../api/submitOrder'))
+  dvf.submitMarketOrder = compose(require('../../api/submitMarketOrder'))
   dvf.submitSellOrder = compose(require('../../api/submitSellOrder'))
   dvf.getWithdrawal = compose(require('../../api/getWithdrawal'))
   dvf.getWithdrawals = compose(require('../../api/getWithdrawals'))

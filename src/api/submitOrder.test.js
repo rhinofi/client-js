@@ -23,8 +23,8 @@ describe('dvf.submitOrder', () => {
       gid: '1',
       type: 'EXCHANGE LIMIT',
       symbol,
-      amount,
-      price,
+      amount: '0.137',
+      price: '250',
       meta: {
         starkPublicKey: {
           x: '07a83d131fe965ad7e70f259e3cf1e785dcfacf319a64115faeabb64a2fd8af0',
@@ -83,8 +83,8 @@ describe('dvf.submitOrder', () => {
       gid: '',
       type: 'EXCHANGE LIMIT',
       symbol,
-      amount,
-      price,
+      amount: '-55',
+      price: '100',
       feeRate: 0.0025,
       protocol: 'stark',
       partnerId: ''
@@ -101,6 +101,52 @@ describe('dvf.submitOrder', () => {
       expect(body.meta.starkSignature.recoveryParam).toBeLessThan(5)
       expect(typeof body.meta.starkOrder.expirationTimestamp).toBe('number')
       expect(typeof body.meta.starkOrder.nonce).toBe('number')
+      return true
+    })
+
+    nock(dvf.config.api)
+      .post('/v1/trading/w/submitOrder', payloadValidator)
+      .reply(200)
+
+    await dvf.submitOrder({
+      symbol,
+      amount,
+      price,
+      validFor,
+      feeRate: 0.0025,
+      starkPrivateKey,
+      gid: '', // gid
+      cid: '', // cid
+      partnerId: '' // partnerId
+      // ledgerPath: `44'/60'/0'/0'/0`
+    })
+    expect(payloadValidator).toBeCalled()
+  })
+
+  it('Forces 5 significant digits on price and 8 decimal places on amount', async () => {
+    mockGetConf()
+    const symbol = 'ZRX:ETH'
+    const amount = -55.000000001
+    const price = 12.3456
+    const validFor = '0'
+
+    const starkPrivateKey =
+      '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
+
+    const expectedBody = {
+      cid: '',
+      gid: '',
+      type: 'EXCHANGE LIMIT',
+      symbol,
+      amount: '-55',
+      price: '12.346',
+      feeRate: 0.0025,
+      protocol: 'stark',
+      partnerId: ''
+    }
+
+    const payloadValidator = jest.fn(body => {
+      expect(body).toMatchObject(expectedBody)
       return true
     })
 
@@ -182,6 +228,8 @@ describe('dvf.submitOrder', () => {
 
       throw new Error('function should throw')
     } catch (error) {
+      // TODO: shouldn't this be ERR_INVALID_AMOUNT?? since it's not missing
+      //   but set to 0
       expect(error.message).toEqual('ERR_AMOUNT_MISSING')
     }
   })
