@@ -1,9 +1,17 @@
 const { post } = require('request-promise')
 const DVFError = require('../lib/dvf/DVFError')
 const validateAssertions = require('../lib/validators/validateAssertions')
+const { Joi } = require('dvf-utils')
+
+const schema = Joi.object({
+  amount: Joi.amount().required(), // number or number string
+})
 
 module.exports = async (dvf, token, amount, starkPrivateKey) => {
   validateAssertions(dvf, { amount, token, starkPrivateKey })
+  const { value } = schema.validate({amount})
+  amount = value.amount
+  //TODO: assess and replace all validations with custom Joi
 
   const currency = dvf.token.getTokenInfo(token)
 
