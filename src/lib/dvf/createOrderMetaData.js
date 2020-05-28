@@ -19,7 +19,7 @@ const starkSignedOrder = async (dvf, starkPrivateKey, starkMessage) => {
 module.exports = async (dvf, orderData) => {
   validateProps(dvf, ['amount', 'symbol', 'price'], orderData)
 
-  const { settleSpreadBuy, settleSpreadSell, starkOrder, starkMessage } = await dvf.stark.createOrder(orderData)
+  const { starkOrder, starkMessage, settleSpreadBuy, settleSpreadSell } = await dvf.stark.createOrder(orderData)
 
   const { starkPublicKey, starkSignature } = await (orderData.ledgerPath
     ? dvf.stark.ledger.createSignedOrder(orderData.ledgerPath, starkOrder)

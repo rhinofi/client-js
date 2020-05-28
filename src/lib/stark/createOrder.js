@@ -3,7 +3,6 @@ const { preparePriceBN, prepareAmountBN, splitSymbol } = require('dvf-utils')
 const DVFError = require('../dvf/DVFError')
 const computeBuySellData = require('../dvf/computeBuySellData')
 
-
 module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
   price = preparePriceBN(price)
   amount = preparePriceBN(amount)
