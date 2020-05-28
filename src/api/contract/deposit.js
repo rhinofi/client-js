@@ -7,6 +7,7 @@ module.exports = async (dvf, vaultId, token, amount, ethAddress) => {
   }
 
   const args = [dvf.token.getTokenInfo(token).starkTokenId, vaultId, value]
+  
   const action = 'deposit'
   // In order to lock ETH we simply send ETH to the lockerAddress
   if (token === 'ETH') {
