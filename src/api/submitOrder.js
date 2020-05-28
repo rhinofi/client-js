@@ -6,7 +6,6 @@ Keeping the schema visible and not in a seperate method
 for reference as required parameters can be checked by reading
 */
 
-
 const schema = Joi.object({
   symbol: Joi.string().required(), // trading symbol
   amount: Joi.amount().required(), // number or number string
@@ -41,9 +40,7 @@ module.exports = async (dvf, orderData) => {
         throw new DVFError('UNEXPECTED', details)
     }
   }
-  console.log(post(dvf.config.api + '/v1/trading/w/submitOrder', {
-    json: await dvf.createOrderPayload(value)
-  }))
+
   return post(dvf.config.api + '/v1/trading/w/submitOrder', {
     json: await dvf.createOrderPayload(value)
   })
