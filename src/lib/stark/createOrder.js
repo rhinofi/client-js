@@ -31,11 +31,18 @@ module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
     }
   }
 
+  const settleSpreadBuy = buyCurrency.settleSpread
+  const settleSpreadSell = sellCurrency.settleSpread
+  
   const {
     amountSell,
     amountBuy
-  } = computeBuySellData(dvf,{ symbol, amount, price, feeRate })
-
+  } = computeBuySellData(dvf,{ symbol, amount, price, feeRate, settleSpreadBuy, settleSpreadSell })
+  console.log({ symbol, amount, price, feeRate, settleSpreadBuy, settleSpreadSell })
+  console.log({
+    amountSell,
+    amountBuy
+  })
   // console.log('sell :', sellSymbol, sellCurrency)
   // console.log('buy  :', buySymbol, buyCurrency)
 
