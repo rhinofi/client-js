@@ -4,10 +4,11 @@ const DVFError = require('../dvf/DVFError')
 const computeBuySellData = require('../dvf/computeBuySellData')
 
 module.exports = async (dvf, { symbol, tokenToSell, amountToSell, worstCasePrice, validFor, feeRate }) => {
-  feeRate = parseFloat(feeRate) || dvf.config.DVF.defaultFeeRate
   amountToSell = prepareAmountBN(amountToSell)
   worstCasePrice = preparePriceBN(worstCasePrice)
 
+  feeRate = parseFloat(feeRate) || dvf.config.DVF.defaultFeeRate
+  
   const symbolArray = splitSymbol(symbol)
   const baseSymbol = symbolArray[0]
   const quoteSymbol = symbolArray[1]
@@ -33,6 +34,7 @@ module.exports = async (dvf, { symbol, tokenToSell, amountToSell, worstCasePrice
   const adjustedPrice = flippedSymbol === symbol ? worstCasePrice : toBN(1 / worstCasePrice)
   const settleSpreadBuy = buyCurrency.settleSpread
   const settleSpreadSell = sellCurrency.settleSpread
+
   const {
     amountSell,
     amountBuy
@@ -62,6 +64,8 @@ module.exports = async (dvf, { symbol, tokenToSell, amountToSell, worstCasePrice
 
   return {
     starkOrder: starkOrder,
-    starkMessage: starkMessage
+    starkMessage: starkMessage,
+    settleSpreadBuy,
+    settleSpreadSell
   }
 }
