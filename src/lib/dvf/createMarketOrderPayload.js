@@ -61,6 +61,8 @@ module.exports = async (dvf, orderData) => {
       ],
       finalValue
     ),
+    settleSpreadBuy,
+    settleSpreadSell,
     meta: {
       ethAddress,
       ...FP.omit( ['settleSpreadBuy', 'settleSpreadSell'], orderMetaData )
