@@ -14,6 +14,7 @@ module.exports = () => {
         decimals: 18,
         quantization: 10000000000,
         minOrderSize: 0.1,
+        settleSpread: 0.001,
         starkTokenId:
           '0xb333e3142fe16b78628f19bb15afddaef437e72d6d7f5c6c20c6801a27fba6'
       },
@@ -21,7 +22,7 @@ module.exports = () => {
         decimals: 6,
         quantization: 1,
         minOrderSize: 25,
-        settleSpread: 0,
+        settleSpread: 0.009,
         starkTokenId:
           '0x180bef8ae3462e919489763b84dc1dc700c45a249dec4d1136814a639f2dd7b',
         tokenAddress: '0x4c5f66596197a86fb30a2435e2ef4ddcb39342c9'
@@ -30,6 +31,7 @@ module.exports = () => {
         decimals: 18,
         quantization: 10000000000,
         minOrderSize: 40,
+        settleSpread: 0.002,
         starkTokenId:
           '0x3901ee6a6c5ac0f6e284f4273b961b7e9f29d25367d31d90b75820473a202f7',
         tokenAddress: '0xcd077abedd831a3443ffbe24fb76661bbb17eb69'
@@ -38,6 +40,7 @@ module.exports = () => {
         decimals: 18,
         quantization: 10000000000,
         minOrderSize: 0.0001,
+        settleSpread: 0.003,
         starkTokenId:
           '0x21ef21d6b234cd669edd702dd3d1d017be888337010b950ae3679eb4194b4bc',
         tokenAddress: '0x40d8978500bf68324a51533cd6a21e3e59be324a'
@@ -65,13 +68,14 @@ module.exports = () => {
         minOrderSize: 0.1,
         starkTokenId:
           '0xb333e3142fe16b78628f19bb15afddaef437e72d6d7f5c6c20c6801a27fba6',
-        starkVaultId: 1000001
+        starkVaultId: 1000001,
+        settleSpread: 0.001
       },
       USDT: {
         decimals: 6,
         quantization: 1,
         minOrderSize: 25,
-        settleSpread: 0,
+        settleSpread: 0.009,
         starkTokenId:
           '0x180bef8ae3462e919489763b84dc1dc700c45a249dec4d1136814a639f2dd7b',
         tokenAddress: '0x4c5f66596197a86fb30a2435e2ef4ddcb39342c9',
@@ -84,7 +88,8 @@ module.exports = () => {
         starkTokenId:
           '0x3901ee6a6c5ac0f6e284f4273b961b7e9f29d25367d31d90b75820473a202f7',
         tokenAddress: '0xcd077abedd831a3443ffbe24fb76661bbb17eb69',
-        starkVaultId: 1000003
+        starkVaultId: 1000003,
+        settleSpread: 0.002
       },
       BTC: {
         decimals: 18,
@@ -93,7 +98,8 @@ module.exports = () => {
         starkTokenId:
           '0x21ef21d6b234cd669edd702dd3d1d017be888337010b950ae3679eb4194b4bc',
         tokenAddress: '0x40d8978500bf68324a51533cd6a21e3e59be324a',
-        starkVaultId: 1000004
+        starkVaultId: 1000004,
+        settleSpread: 0.003
       }
     },
     spareStarkVaultId: 2090569095,

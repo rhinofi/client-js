@@ -10,11 +10,11 @@ describe('dvf.submitOrder', () => {
     dvf = await instance()
   })
 
-  it('Submits buy order and receives response', async () => {
+  it.only('Submits buy order and receives response', async () => {
     mockGetConf()
     const symbol = 'ETH:USDT'
-    const amount = 0.137
-    const price = 250
+    const amount = 0.5
+    const price = 12345.6789
     const validFor = '0'
     const feeRate = '0'
 

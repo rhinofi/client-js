@@ -38,11 +38,6 @@ module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
     amountSell,
     amountBuy
   } = computeBuySellData(dvf,{ symbol, amount, price, feeRate, settleSpreadBuy, settleSpreadSell })
-  console.log({ symbol, amount, price, feeRate, settleSpreadBuy, settleSpreadSell })
-  console.log({
-    amountSell,
-    amountBuy
-  })
   // console.log('sell :', sellSymbol, sellCurrency)
   // console.log('buy  :', buySymbol, buyCurrency)
 
@@ -70,6 +65,8 @@ module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
 
   return {
     starkOrder: starkOrder,
-    starkMessage: starkMessage
+    starkMessage: starkMessage,
+    settleSpreadBuy,
+    settleSpreadSell
   }
 }

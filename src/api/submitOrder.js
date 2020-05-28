@@ -41,7 +41,9 @@ module.exports = async (dvf, orderData) => {
         throw new DVFError('UNEXPECTED', details)
     }
   }
-
+  console.log(post(dvf.config.api + '/v1/trading/w/submitOrder', {
+    json: await dvf.createOrderPayload(value)
+  }))
   return post(dvf.config.api + '/v1/trading/w/submitOrder', {
     json: await dvf.createOrderPayload(value)
   })
