@@ -43,6 +43,9 @@ module.exports = async (dvf, orderData) => {
     price: value.worstCasePrice
   }
 
+  const orderMetaData = await dvf.createMarketOrderMetaData(finalValue)
+  const { settleSpreadBuy, settleSpreadSell } = orderMetaData
+
   return {
     ...FP.pick(
       [
@@ -58,9 +61,11 @@ module.exports = async (dvf, orderData) => {
       ],
       finalValue
     ),
+    settleSpreadBuy,
+    settleSpreadSell,
     meta: {
       ethAddress,
-      ...(await dvf.createMarketOrderMetaData(finalValue))
+      ...FP.omit( ['settleSpreadBuy', 'settleSpreadSell'], orderMetaData )
     }
   }
 }

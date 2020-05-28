@@ -4,10 +4,11 @@ const DVFError = require('../dvf/DVFError')
 const computeBuySellData = require('../dvf/computeBuySellData')
 
 module.exports = async (dvf, { symbol, tokenToSell, amountToSell, worstCasePrice, validFor, feeRate }) => {
-  feeRate = parseFloat(feeRate) || dvf.config.DVF.defaultFeeRate
   amountToSell = prepareAmountBN(amountToSell)
   worstCasePrice = preparePriceBN(worstCasePrice)
 
+  feeRate = parseFloat(feeRate) || dvf.config.DVF.defaultFeeRate
+  
   const symbolArray = splitSymbol(symbol)
   const baseSymbol = symbolArray[0]
   const quoteSymbol = symbolArray[1]
@@ -31,10 +32,13 @@ module.exports = async (dvf, { symbol, tokenToSell, amountToSell, worstCasePrice
   // symbol is changed if necessary to avoid making changes to computeBuySellData
   const flippedSymbol = `${sellSymbol}:${buySymbol}`
   const adjustedPrice = flippedSymbol === symbol ? worstCasePrice : toBN(1 / worstCasePrice)
+  const settleSpreadBuy = buyCurrency.settleSpread
+  const settleSpreadSell = sellCurrency.settleSpread
+
   const {
     amountSell,
     amountBuy
-  } = computeBuySellData(dvf, { symbol: flippedSymbol, amount: amountToSell.negated(), price: adjustedPrice, feeRate })
+  } = computeBuySellData(dvf, { symbol: flippedSymbol, amount: amountToSell.negated(), price: adjustedPrice, feeRate, settleSpreadBuy, settleSpreadSell })
 
   let expiration // in hours
   expiration = Math.floor(Date.now() / (1000 * 3600))
@@ -60,6 +64,8 @@ module.exports = async (dvf, { symbol, tokenToSell, amountToSell, worstCasePrice
 
   return {
     starkOrder: starkOrder,
-    starkMessage: starkMessage
+    starkMessage: starkMessage,
+    settleSpreadBuy,
+    settleSpreadSell
   }
 }

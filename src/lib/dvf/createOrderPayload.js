@@ -28,6 +28,8 @@ module.exports = async (dvf, orderData) => {
   // TODO: don't mutate
   value.feeRate = value.feeRate || dvf.config.DVF.defaultFeeRate
   const ethAddress = orderData.ethAddress || dvf.get('account')
+  const orderMetaData = await dvf.createOrderMetaData(value)
+  const { settleSpreadBuy, settleSpreadSell } = orderMetaData
 
   return {
     ...FP.pick(
@@ -44,9 +46,11 @@ module.exports = async (dvf, orderData) => {
       ],
       value
     ),
+    settleSpreadBuy,
+    settleSpreadSell,
     meta: {
       ethAddress,
-      ...(await dvf.createOrderMetaData(value))
+      ...FP.omit(['settleSpreadBuy', 'settleSpreadSell'], orderMetaData)
     }
   }
 }

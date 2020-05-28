@@ -3,7 +3,6 @@ const { preparePriceBN, prepareAmountBN, splitSymbol } = require('dvf-utils')
 const DVFError = require('../dvf/DVFError')
 const computeBuySellData = require('../dvf/computeBuySellData')
 
-
 module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
   price = preparePriceBN(price)
   amount = preparePriceBN(amount)
@@ -31,11 +30,13 @@ module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
     }
   }
 
+  const settleSpreadBuy = buyCurrency.settleSpread
+  const settleSpreadSell = sellCurrency.settleSpread
+  
   const {
     amountSell,
     amountBuy
-  } = computeBuySellData(dvf,{ symbol, amount, price, feeRate })
-
+  } = computeBuySellData(dvf,{ symbol, amount, price, feeRate, settleSpreadBuy, settleSpreadSell })
   // console.log('sell :', sellSymbol, sellCurrency)
   // console.log('buy  :', buySymbol, buyCurrency)
 
@@ -63,6 +64,8 @@ module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
 
   return {
     starkOrder: starkOrder,
-    starkMessage: starkMessage
+    starkMessage: starkMessage,
+    settleSpreadBuy,
+    settleSpreadSell
   }
 }
