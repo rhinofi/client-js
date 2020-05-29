@@ -31,9 +31,8 @@ describe('dvf.submitOrder', () => {
           y: '4de195d61296b6ac602ab5db8d190b90cd1e767fe9d47d4c9d96ab62cf7ad41'
         }
       },
-      feeRate: 0.002,
-      settleSpreadBuy: 0,
-      settleSpreadSell: 0.009
+      protocol: 'stark',
+      feeRate: 0.002
     }
     const starkPrivateKey = process.env.PRIVATE_STARK_KEY
 
@@ -47,7 +46,7 @@ describe('dvf.submitOrder', () => {
       expect(typeof body.meta.starkOrder.expirationTimestamp).toBe('number')
       expect(typeof body.meta.starkOrder.nonce).toBe('number')
       expect(body.meta.starkOrder.amountBuy).toBe('39920000')
-      expect(body.meta.starkOrder.amountSell).toBe('100900000')
+      expect(body.meta.starkOrder.amountSell).toBe('100000000')
       return true
     })
 
@@ -86,9 +85,7 @@ describe('dvf.submitOrder', () => {
         }
       },
       protocol: 'stark',
-      feeRate: 0.002,
-      settleSpreadBuy: 0.009,
-      settleSpreadSell: 0,
+      feeRate: 0.002
     }
     const starkPrivateKey = process.env.PRIVATE_STARK_KEY
 
@@ -101,7 +98,7 @@ describe('dvf.submitOrder', () => {
       expect(body.meta.starkSignature.recoveryParam).toBeLessThan(5)
       expect(typeof body.meta.starkOrder.expirationTimestamp).toBe('number')
       expect(typeof body.meta.starkOrder.nonce).toBe('number')
-      expect(body.meta.starkOrder.amountBuy).toBe('251745500')
+      expect(body.meta.starkOrder.amountBuy).toBe('249500000')
       expect(body.meta.starkOrder.amountSell).toBe('200000000')
       return true
     })
@@ -159,7 +156,7 @@ describe('dvf.submitOrder', () => {
       expect(typeof body.meta.starkOrder.expirationTimestamp).toBe('number')
       expect(typeof body.meta.starkOrder.nonce).toBe('number')
       expect(body.meta.starkOrder.amountBuy).toBe('3326666667')
-      expect(body.meta.starkOrder.amountSell).toBe('100900000')
+      expect(body.meta.starkOrder.amountSell).toBe('100000000')
       return true
     })
 

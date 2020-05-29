@@ -33,9 +33,7 @@ describe('dvf.submitOrder', () => {
       },
       protocol: 'stark',
       partnerId: 'P1',
-      feeRate: 0.0025,
-      settleSpreadBuy: 0,
-      settleSpreadSell: 0.009
+      feeRate: 0.0025
     }
     const starkPrivateKey = process.env.PRIVATE_STARK_KEY
 
@@ -89,9 +87,7 @@ describe('dvf.submitOrder', () => {
       price: '100',
       feeRate: 0.0025,
       protocol: 'stark',
-      partnerId: '',
-      settleSpreadBuy: 0,
-      settleSpreadSell: 0
+      partnerId: ''
     }
 
     const payloadValidator = jest.fn(body => {
@@ -318,7 +314,6 @@ describe('dvf.submitOrder', () => {
     }
   })
 
-  // This test case is used for testing with ledger device
   it.skip('Submits buy order and receives response', async () => {
     mockGetConf()
     const symbol = 'ETH:USDT'

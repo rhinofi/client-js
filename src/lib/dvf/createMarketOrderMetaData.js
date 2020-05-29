@@ -19,7 +19,7 @@ const starkSignedOrder = async (dvf, starkPrivateKey, starkMessage) => {
 module.exports = async (dvf, orderData) => {
   validateProps(dvf, ['amountToSell', 'symbol', 'tokenToSell', 'worstCasePrice'], orderData)
 
-  const { starkOrder, starkMessage, settleSpreadBuy, settleSpreadSell } = await dvf.stark.createMarketOrder(orderData)
+  const { starkOrder, starkMessage } = await dvf.stark.createMarketOrder(orderData)
 
   const { starkPublicKey, starkSignature } = await (orderData.ledgerPath
     ? dvf.stark.ledger.createSignedOrder(orderData.ledgerPath, starkOrder)
@@ -29,8 +29,6 @@ module.exports = async (dvf, orderData) => {
     starkPublicKey,
     starkOrder,
     starkMessage,
-    starkSignature,
-    settleSpreadBuy,
-    settleSpreadSell
+    starkSignature
   }
 }
