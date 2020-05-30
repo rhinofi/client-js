@@ -6,6 +6,7 @@ Keeping the schema visible and not in a seperate method
 for reference as required parameters can be checked by reading
 */
 
+
 const schema = Joi.object({
   symbol: Joi.string().required(), // trading symbol
   amount: Joi.amount().required(), // number or number string
