@@ -1,5 +1,5 @@
 const FP = require('lodash/fp')
-const { Joi, toBN, prepareAmountBN } = require('dvf-utils')
+const { Joi, toBN, prepareAmount } = require('dvf-utils')
 
 /*
 repeating the schema here as this method can be called on its own
@@ -39,7 +39,7 @@ module.exports = async (dvf, orderData) => {
   const finalValue = {
     ...value,
     feeRate: value.feeRate || dvf.config.DVF.defaultFeeRate,
-    amount: prepareAmountBN(amountBN),
+    amount: prepareAmount(amountBN),
     price: value.worstCasePrice
   }
 
