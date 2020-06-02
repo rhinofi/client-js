@@ -52,7 +52,7 @@
     "aigle": "^1.14.1",
     "aware": "^0.3.1",
     "bignumber.js": "^9.0.0",
-    "dvf-utils": "https://github.com/DeversiFi/dvf-utils.git#ee433bf4014989a109a1869f51240116f2fa5dbe",
+    "dvf-utils": "https://github.com/DeversiFi/dvf-utils.git#b536084f856c7798fd8a289be70c6b9628e41d48",
     "env-cmd": "^10.0.1",
     "ethereumjs-util": "^5.2.0",
     "lodash": "^4.17.10",
