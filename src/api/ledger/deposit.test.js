@@ -34,7 +34,7 @@ describe('dvf.deposit', () => {
     dvf = await instance()
   })
 
-  it.only('Deposits ETH to users vault', async () => {
+  it('Deposits ETH to users vault', async () => {
     mockGetConf()
     const path = '44\'/60\'/0\'/0\'/0'
     const token = 'ETH'
