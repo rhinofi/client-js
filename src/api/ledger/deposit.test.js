@@ -34,11 +34,11 @@ describe('dvf.deposit', () => {
     dvf = await instance()
   })
 
-  it('Deposits ETH to users vault', async () => {
+  it.only('Deposits ETH to users vault', async () => {
     mockGetConf()
     const path = '44\'/60\'/0\'/0\'/0'
     const token = 'ETH'
-    const amount = 1.2
+    const amount = '1.2'
     const starkPublicKey = {
       x: '01841559c5a886771644573dbb6dba210a1a7a0834afcf6bb3cbba1565ae7b32',
       y: '02f0f543d1b6666fa1e093b5d03feb90f0e68ab007baf587b6285d425d8a34dc'
@@ -78,7 +78,7 @@ describe('dvf.deposit', () => {
   it('Deposits ERC20 token to user\'s vault', async () => {
     mockGetConf()
     const path = '44\'/60\'/0\'/0\'/0'
-    const amount = 193
+    const amount = '193.33'
     const token = 'USDT'
     const starkPublicKey = {
       x: '01841559c5a886771644573dbb6dba210a1a7a0834afcf6bb3cbba1565ae7b32',
@@ -117,10 +117,10 @@ describe('dvf.deposit', () => {
     expect(payloadValidator).toBeCalled()
   })
 
-  it.only('Deposit corrects decimals too many places to common standard', async () => {
+  it('Deposit corrects decimals to common standard', async () => {
     mockGetConf()
     const path = '44\'/60\'/0\'/0\'/0'
-    const amount = 1.1234567891
+    const amount = '1.1234567891'
     const token = 'ETH'
     const starkPublicKey = {
       x: '01841559c5a886771644573dbb6dba210a1a7a0834afcf6bb3cbba1565ae7b32',
