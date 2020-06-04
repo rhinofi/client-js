@@ -73,7 +73,8 @@ module.exports = () => {
     fromBaseUnitAmount: compose(require('./token/fromBaseUnitAmount')),
     fromQuantizedAmount: compose(require('./token/fromQuantizedAmount')),
     toBaseUnitAmount: compose(require('./token/toBaseUnitAmount')),
-    toQuantizedAmount: compose(require('./token/toQuantizedAmount'))
+    toQuantizedAmount: compose(require('./token/toQuantizedAmount')),
+    maxQuantizedDecimalPlaces: require('./token/maxQuantizedDecimalPlaces')
   }
 
   // dvf.eth functions
