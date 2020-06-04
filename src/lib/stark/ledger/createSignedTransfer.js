@@ -19,7 +19,7 @@ module.exports = async (
   let transferTokenAddress = currency.tokenAddress
   const transferQuantization = new BN(currency.quantization)
   const amountTransfer = new BN(dvf.token.toQuantizedAmount(token, amount))
-
+  
   const expireTime =
     Math.floor(Date.now() / (1000 * 3600)) +
     parseInt(dvf.config.defaultStarkExpiry)
@@ -31,6 +31,7 @@ module.exports = async (
   if (transferTokenAddress) {
     const tokenInfo = byContractAddress(transferTokenAddress)
     transferTokenAddress = transferTokenAddress.substr(2)
+    console.log('tokenInfo ', tokenInfo)
     if (tokenInfo) {
       await eth.provideERC20TokenInformation(tokenInfo)
     } else {
@@ -40,6 +41,7 @@ module.exports = async (
           `00${transferTokenAddress}0000000000000000`,
           'hex'
         )
+        console.log('tokenInfo ', tokenInfo)
         await eth.provideERC20TokenInformation(tokenInfo)
       } else {
         throw new DVFError('LEDGER_TOKENINFO_ERR')
@@ -48,6 +50,9 @@ module.exports = async (
   } else {
     transferTokenAddress = null
   }
+
+  console.log({transferTokenAddress, transferQuantization})
+  await eth.starkProvideQuantum(transferTokenAddress, transferQuantization)
 
   const starkSignature = await eth.starkSignTransfer(
     starkPath,
