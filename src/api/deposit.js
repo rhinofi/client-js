@@ -6,10 +6,10 @@ const maxQuantizedDecimalPlaces = require('../lib/dvf/token/maxQuantizedDecimalP
 
 module.exports = async (dvf, token, amount, starkPrivateKey) => {
   validateAssertions(dvf, { amount, token, starkPrivateKey })
-  
+
   amount = prepareAmount(
     amount,
-    Math.min(maxQuantizedDecimalPlaces(token), dvf.defaultDecimalPlaces)
+    Math.min(maxQuantizedDecimalPlaces(token), dvf.config.defaultDecimalPlaces)
   )
 
   const currency = dvf.token.getTokenInfo(token)
