@@ -1,21 +1,19 @@
 const { post } = require('request-promise')
 const DVFError = require('../lib/dvf/DVFError')
 const validateAssertions = require('../lib/validators/validateAssertions')
-const { Joi } = require('dvf-utils')
-
-const schema = Joi.object({
-  amount: Joi.amount().required(), // number or number string
-})
+const prepareAmount = require('dvf-utils').prepareAmount
+const maxQuantizedDecimalPlaces = require('../lib/dvf/token/maxQuantizedDecimalPlaces')
 
 module.exports = async (dvf, token, amount, starkPrivateKey) => {
   validateAssertions(dvf, { amount, token, starkPrivateKey })
-  const { value } = schema.validate({amount})
-  amount = value.amount
-  //TODO: assess and replace all validations with custom Joi
+  
+  amount = prepareAmount(
+    amount,
+    Math.min(maxQuantizedDecimalPlaces(token), dvf.defaultDecimalPlaces)
+  )
+
   const currency = dvf.token.getTokenInfo(token)
-
   const quantisedAmount = dvf.token.toQuantizedAmount(token, amount)
-
   const tempVaultId = dvf.config.DVF.tempStarkVaultId
   const nonce = dvf.util.generateRandomNonce()
   const starkTokenId = currency.starkTokenId
