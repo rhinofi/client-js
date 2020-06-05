@@ -1,12 +1,14 @@
 const instance = require('./test/helpers/instance')
 
 const mockGetConf = require('./test/fixtures/getConf')
+const mockGasPrice = require('./test/fixtures/getSafeGasPrice')
 
 let dvf
 
 describe('dvf.withdrawOnchain', () => {
   beforeAll(async () => {
     mockGetConf()
+    mockGasPrice()
     dvf = await instance()
   })
 
