@@ -2,8 +2,6 @@ module.exports = {
   // api: 'https://api.deversifi.com',
   api: 'https://api.stg.deversifi.com',
 
-  // default decimal place precision for amount
-  defaultDecimalPlaces: 8,
   // default transaction arguments
   defaultGasLimit: 200000,
   defaultGasPrice: 14000000000,

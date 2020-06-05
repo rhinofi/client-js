@@ -74,14 +74,15 @@ module.exports = () => {
     fromQuantizedAmount: compose(require('./token/fromQuantizedAmount')),
     toBaseUnitAmount: compose(require('./token/toBaseUnitAmount')),
     toQuantizedAmount: compose(require('./token/toQuantizedAmount')),
-    maxQuantizedDecimalPlaces: require('./token/maxQuantizedDecimalPlaces')
+    maxQuantizedDecimalPlaces: compose(require('./token/maxQuantizedDecimalPlaces'))
   }
 
   // dvf.eth functions
   dvf.eth = {
     call: compose(require('../../api/eth/call')),
     send: compose(require('../../api/eth/send')),
-    getNetwork: compose(require('../../api/eth/getNetwork'))
+    getNetwork: compose(require('../../api/eth/getNetwork')),
+    getSafeGasPrice: compose(require('../../api/eth/getSafeGasPrice'))
   }
 
   // dvf utility functions
