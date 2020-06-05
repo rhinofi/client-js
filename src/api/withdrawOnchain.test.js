@@ -1,7 +1,6 @@
 const instance = require('./test/helpers/instance')
-
-const mockGetConf = require('./test/fixtures/getConf')
 const mockGasPrice = require('./test/fixtures/getSafeGasPrice')
+const mockGetConf = require('./test/fixtures/getConf')
 
 let dvf
 
