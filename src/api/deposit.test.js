@@ -14,7 +14,7 @@ describe('dvf.deposit', () => {
   it(`Deposits ERC20 token to user's vault`, async () => {
     mockGetConf()
     const starkPrivateKey = '100'
-    const amount = 1394
+    const amount = '1394'
     const token = 'USDT'
     const starkPublicKey = {
       x: '06d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
@@ -51,7 +51,7 @@ describe('dvf.deposit', () => {
     mockGetConf()
     const starkPrivateKey = '100'
     const token = 'ETH'
-    const amount = 1.117
+    const amount = '1.117'
     const apiResponse = {
       token,
       amount,
@@ -99,7 +99,7 @@ describe('dvf.deposit', () => {
   it('Gives error if token is missing', async () => {
     const starkPrivateKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
-    const amount = 57
+    const amount = '57'
     const token = ''
 
     try {
@@ -114,7 +114,7 @@ describe('dvf.deposit', () => {
   it('Gives error if token is not supported', async () => {
     const starkPrivateKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
-    const amount = 57
+    const amount = '57'
     const token = 'NOT'
 
     try {
@@ -128,7 +128,7 @@ describe('dvf.deposit', () => {
 
   it('Gives error if starkPrivateKey is not provided', async () => {
     const starkPrivateKey = ''
-    const amount = 57
+    const amount = '57'
     const token = 'ZRX'
 
     try {
