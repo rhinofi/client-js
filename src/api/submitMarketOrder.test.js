@@ -133,7 +133,7 @@ describe('dvf.submitOrder', () => {
     const expectedBody = {
       type: 'EXCHANGE MARKET',
       symbol,
-      amount: worstCaseAmountToRecieve.toFixed(6),
+      amount: worstCaseAmountToRecieve.toFixed(8),
       price: worstCasePriceAdjusted.toString(),
       meta: {
         starkPublicKey: {
