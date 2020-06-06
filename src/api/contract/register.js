@@ -12,9 +12,9 @@ module.exports = async (dvf, starkKey, deFiSignature) => {
   const sendArguments = {
     from: ethAddress,
     gasLimit: dvf.config.defaultGasLimit,
-    gasPrice: dvf.config.defaultGasPrice
+    gasPrice: await dvf.eth.getSafeGasPrice()
   }
-
+  //TODO: reuse eth.send for register call
   let onchainResult = ''
   try {
     onchainResult = await starkInstance.methods
