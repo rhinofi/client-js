@@ -1,7 +1,5 @@
+const bfxTodvf = require('dvf-utils').BfxToDvfToken
+
 module.exports = (dvf, token) => {
-  if (token === 'USD') {
-    token = 'USDT'
-  }
-  
-  return dvf.config.tokenRegistry[token]
+  return dvf.config.tokenRegistry[bfxTodvf(token)]
 }

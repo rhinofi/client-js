@@ -16,7 +16,7 @@ describe('dvf.withdraw', () => {
 
   it(`Withdraws ERC20 token to user's vault`, async () => {
     const starkPrivateKey = '100'
-    const amount = 12
+    const amount = '12'
     const token = 'USDT'
     const starkPublicKey = {
       x: '06d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
@@ -52,7 +52,7 @@ describe('dvf.withdraw', () => {
   it('Withdraws ETH to users vault', async () => {
     const starkPrivateKey = '100'
     const token = 'ETH'
-    const amount = 1.117
+    const amount = '1.117'
     const apiResponse = {
       token,
       amount,

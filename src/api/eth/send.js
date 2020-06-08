@@ -13,11 +13,12 @@ module.exports = async (dvf, abi, address, action, args, value) => {
     action === 'fullWithdrawalRequest'
       ? 10 * dvf.config.defaultGasLimit
       : dvf.config.defaultGasLimit
+  const gasPrice = await dvf.eth.getSafeGasPrice()
 
   let options = {
     from: dvf.get('account'),
     gasLimit: gasLimit,
-    gasPrice: dvf.config.defaultGasPrice,
+    gasPrice: gasPrice,
     ...(value && { value })
   }
   // console.log({ options })
