@@ -41,7 +41,7 @@ module.exports = async (dvf, path, starkOrder) => {
       if (dvf.chainId!==1) {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
-          `00${buyTokenAddress}0000000000000000`,
+          `00${buyTokenAddress}0000000000000003`,
           'hex'
         )
         await eth.provideERC20TokenInformation(tokenInfo)
@@ -67,7 +67,7 @@ module.exports = async (dvf, path, starkOrder) => {
       if (dvf.chainId!==1) {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
-          `00${sellTokenAddress}0000000000000000`,
+          `00${sellTokenAddress}0000000000000003`,
           'hex'
         )
         await eth.provideERC20TokenInformation(tokenInfo)
