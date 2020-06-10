@@ -50,14 +50,7 @@ module.exports = async (
   } else {
     transferTokenAddress = null
   }
-
-  console.log(
-    'provideERC20TokenInformation called',
-    { transferTokenAddress, transferQuantization }, 
-    'about to call starkProvideQuantum'
-  )
   await eth.starkProvideQuantum(transferTokenAddress, transferQuantization)
-  console.log('starkProvideQuantum called, about to call starkSign')
   const starkSignature = await eth.starkSignTransfer(
     starkPath,
     transferTokenAddress,
