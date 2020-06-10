@@ -1,16 +1,12 @@
 const { post } = require('request-promise')
 const validateAssertions = require('../../lib/validators/validateAssertions')
-const { Joi } = require('dvf-utils')
-  const schema = Joi.object({
-    amount: Joi.amount().required(), // number or number string
-  })
+const prepareAmount = require('dvf-utils').prepareAmount
+
 
 module.exports = async (dvf, token, amount, starkDeposit) => {
-  validateAssertions(dvf, { token })
-  const { value } = schema.validate({amount})
-  amount = value.amount
-  //TODO: assess and replace all validations with custom Joi
+  validateAssertions(dvf, { amount, token })
 
+  amount = prepareAmount(amount, dvf.token.maxQuantizedDecimalPlaces(token))
   const nonce = starkDeposit.nonce
   const starkVaultId = starkDeposit.starkVaultId
   const expireTime = starkDeposit.expireTime
