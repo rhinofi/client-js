@@ -32,6 +32,7 @@ module.exports = async (
     const tokenInfo = byContractAddress(transferTokenAddress)
     transferTokenAddress = transferTokenAddress.substr(2)
     if (tokenInfo) {
+      console.log('tokenInfo ', tokenInfo)
       await eth.provideERC20TokenInformation(tokenInfo)
     } else {
       if (dvf.chainId!==1) {
@@ -40,6 +41,7 @@ module.exports = async (
           `00${transferTokenAddress}0000000000000003`,
           'hex'
         )
+        console.log('tokenInfo ', tokenInfo)
         await eth.provideERC20TokenInformation(tokenInfo)
       } else {
         throw new DVFError('LEDGER_TOKENINFO_ERR')
