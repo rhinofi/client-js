@@ -32,7 +32,6 @@ module.exports = async (
     const tokenInfo = byContractAddress(transferTokenAddress)
     transferTokenAddress = transferTokenAddress.substr(2)
     if (tokenInfo) {
-      console.log('tokenInfo ', tokenInfo)
       await eth.provideERC20TokenInformation(tokenInfo)
     } else {
       if (dvf.chainId!==1) {
@@ -41,7 +40,6 @@ module.exports = async (
           `00${transferTokenAddress}0000000000000003`,
           'hex'
         )
-        console.log('tokenInfo ', tokenInfo)
         await eth.provideERC20TokenInformation(tokenInfo)
       } else {
         throw new DVFError('LEDGER_TOKENINFO_ERR')
@@ -50,14 +48,7 @@ module.exports = async (
   } else {
     transferTokenAddress = null
   }
-
-  console.log(
-    'provideERC20TokenInformation called',
-    { transferTokenAddress, transferQuantization }, 
-    'about to call starkProvideQuantum'
-  )
   await eth.starkProvideQuantum(transferTokenAddress, transferQuantization)
-  console.log('starkProvideQuantum called, about to call starkSign')
   const starkSignature = await eth.starkSignTransfer(
     starkPath,
     transferTokenAddress,
