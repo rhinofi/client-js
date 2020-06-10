@@ -14,7 +14,7 @@ describe('dvf.stark.ledger.getPath', () => {
 
     const starkPath = await dvf.stark.ledger.getPath(address)
 
-    console.log({starkPath})
+    // console.log({starkPath})
     expect(starkPath).toMatch(derivedStarkPath)
 
   })

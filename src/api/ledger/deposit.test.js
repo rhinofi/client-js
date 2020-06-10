@@ -16,6 +16,7 @@ jest.mock('@ledgerhq/hw-app-eth', () => {
     }),
     starkGetPublicKey: jest.fn(() => '0401841559c5a886771644573dbb6dba210a1a7a0834afcf6bb3cbba1565ae7b3202f0f543d1b6666fa1e093b5d03feb90f0e68ab007baf587b6285d425d8a34dc'),
     provideERC20TokenInformation: jest.fn(() => true),
+    starkProvideQuantum: jest.fn(() => true),
     starkSignTransfer: jest.fn(() => {
       return {
         r: '06519b47cc1c5a2731420d824cce3a1a42fcbe3a4b0614187603474255a7332c',
