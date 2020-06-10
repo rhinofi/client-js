@@ -31,7 +31,7 @@ For the current production version of DeversiFi use the [old client library](htt
     - [Standard cancel](#standard-cancel)
     - [Signing externally](#signing-externally)
 - [Account History](#account-history)
-- [Unlocking Tokens](#unlocking-tokens)gd
+- [Unlocking Tokens](#unlocking-tokens)
 - [More examples](#more-examples)
     - [Submitting a buy order](#submitting-a-buy-order)
     - [Submitting a sell order](#submitting-a-sell-order)
