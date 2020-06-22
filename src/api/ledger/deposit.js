@@ -1,13 +1,12 @@
 const { post } = require('request-promise')
 const validateAssertions = require('../../lib/validators/validateAssertions')
+const prepareAmount = require('dvf-utils').prepareAmount
+
 
 module.exports = async (dvf, token, amount, starkDeposit) => {
-  validateAssertions(dvf, {
-    token,
-    amount
-  })
+  validateAssertions(dvf, { amount, token })
 
-  // console.log({ currency })
+  amount = prepareAmount(amount, dvf.token.maxQuantizedDecimalPlaces(token))
   const nonce = starkDeposit.nonce
   const starkVaultId = starkDeposit.starkVaultId
   const expireTime = starkDeposit.expireTime
