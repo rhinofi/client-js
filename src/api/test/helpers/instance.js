@@ -14,7 +14,9 @@ module.exports = async () => {
 
   const web3 = new Web3(provider)
 
-  let config = {}
+  const gasStationApiKey = process.env.ETH_GAS_STATION_KEY
+
+  let config = { gasStationApiKey }
 
   // It's possible to overwrite the API address with the testnet address
   // for example like this:
