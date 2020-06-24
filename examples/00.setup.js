@@ -17,6 +17,7 @@ const P = require('aigle')
 const spawnProcess = require('./helpers/spawnProcess')
 
 const INFURA_PROJECT_ID = process.argv[2]
+const ETH_GAS_STATION_KEY = process.argv[3]
 const useTor = (!!process.env.USE_TOR)
 const createNewAccount = (!!process.env.CREATE_NEW_ACCOUNT)
 const useExistingAccount = (!!process.env.USE_EXISTING_ACCOUNT)
@@ -24,12 +25,21 @@ const waitForBalance = (!!process.env.WAIT_FOR_BALANCE)
 
 if (!INFURA_PROJECT_ID) {
   console.error('Error: INFURA_PROJECT_ID not set')
-  console.error('\nusage: ./0.setup.js INFURA_PROJECT_ID')
+  console.error('\nusage: ./0.setup.js INFURA_PROJECT_ID ETH_GAS_STATION_KEY')
   console.error('\n  you can obtain an INFURA_PROJECT_ID by following instructions here: https://ethereumico.io/knowledge-base/infura-api-key-guide ')
   console.error('    NOTE: the `API KEY` mentioned in the instructions has been renamed to `PROJECT ID`.')
   console.error('\n  if you get an error when requesting Eth from a faucet, set USE_TOR=1 env var to make requests via a TOR (using https://www.npmjs.com/package/tor-request)')
   console.error('    NOTE: tor executable needs to be on your path for this to work (it will be started/stopped automatically)')
   console.error('    tor can be installed via brew on MacOS or using your distros package manager if you are using linux')
+  process.exit(1)
+}
+
+if (!ETH_GAS_STATION_KEY) {
+  console.error('Error: ETH_GAS_STATION_KEY not set')
+  console.error('\nusage: ./0.setup.js INFURA_PROJECT_ID ETH_GAS_STATION_KEY')
+  console.error('\n  you can obtain an ETH_GAS_STATION_KEY by signing up here: https://data.defipulse.com/ ')
+  console.error('    ETH_GAS_STATION_KEY is used to query https://ethgasstation.info API to get the current gas price range')
+  console.error('\n  and use a safe gas price to ensure transactions are successful')
   process.exit(1)
 }
 
@@ -171,6 +181,7 @@ const go = async (configPath) => {
       JSON.stringify({
         INFURA_PROJECT_ID,
         ETH_PRIVATE_KEY: account.privateKey,
+        ETH_GAS_STATION_KEY,
         account
       }, null, 2)
     )

@@ -36,6 +36,7 @@ module.exports = () => {
 
   return {
     INFURA_PROJECT_ID: getConfigVar('INFURA_PROJECT_ID', config),
-    ETH_PRIVATE_KEY: getConfigVar('ETH_PRIVATE_KEY', config)
+    ETH_PRIVATE_KEY: getConfigVar('ETH_PRIVATE_KEY', config),
+    ETH_GAS_STATION_KEY: getConfigVar('ETH_GAS_STATION_KEY', config)
   }
 }
