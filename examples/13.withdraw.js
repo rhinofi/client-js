@@ -16,6 +16,7 @@ const infuraURL = `https://ropsten.infura.io/v3/${envVars.INFURA_PROJECT_ID}`
 
 const provider = new HDWalletProvider(ethPrivKey, infuraURL)
 const web3 = new Web3(provider)
+provider.engine.stop()
 
 const dvfConfig = {
   // Using staging API.
@@ -38,11 +39,6 @@ const dvfConfig = {
   console.log('withdraw response ->', withdrawalResponse)
 
 })()
-// Stop provider to allow process to exit.
-.then(() => {
-  console.log('Stopping provider...')
-  provider.engine.stop()
-})
 .catch(error => {
   console.error(error)
   process.exit(1)
