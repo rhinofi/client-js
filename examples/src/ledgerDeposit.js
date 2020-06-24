@@ -14,4 +14,4 @@ const depositResponse = await dvf.ledger.deposit(
   starkDepositData
 )
 
-console.log('deposit response ->', 'depositResponse')
+console.log('deposit response ->', depositResponse)

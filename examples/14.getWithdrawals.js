@@ -18,11 +18,13 @@ const provider = new HDWalletProvider(ethPrivKey, infuraURL)
 const web3 = new Web3(provider)
 provider.engine.stop()
 
+const gasStationApiKey = envVars.ETH_GAS_STATION_KEY
+
 const dvfConfig = {
   // Using staging API.
-  api: 'https://api.stg.deversifi.com'
+  api: 'https://api.stg.deversifi.com',
+  gasStationApiKey: gasStationApiKey
 }
-
 
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
