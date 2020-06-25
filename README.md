@@ -31,7 +31,7 @@ For the current production version of DeversiFi use the [old client library](htt
     - [Standard cancel](#standard-cancel)
     - [Signing externally](#signing-externally)
 - [Account History](#account-history)
-- [Unlocking Tokens](#unlocking-tokens)gd
+- [Unlocking Tokens](#unlocking-tokens)
 - [More examples](#more-examples)
     - [Submitting a buy order](#submitting-a-buy-order)
     - [Submitting a sell order](#submitting-a-sell-order)
@@ -123,7 +123,8 @@ For instance:
 
 ```javascript
   dvf = await DVF(web3, {
-    api: 'https://your-custom-api-address'
+    api: 'https://your-custom-api-address',
+    gasStationApiKey: 'a1b2c3...
   })
 ```
 
@@ -140,7 +141,7 @@ to this:
           "wrapperAddress":"0x965808e7f815cfffd4c018ef2ba4c5a65eba087e",
           "minOrderSize":0.02
       },
-      "USD":{
+      "USDT":{
           "decimals":6,
           "wrapperAddress":"0x83e42e6d1ac009285376340ef64bac1c7d106c89",
           "tokenAddress":"0x0736d0c130b2ead47476cc262dbed90d7c4eeabd",
@@ -151,7 +152,7 @@ to this:
     "DeversifiAddress":"0x9faf5515f177f3a8a845d48c19032b33cc54c09c",
     "exchangeAddress":"0x67799a5e640bc64ca24d3e6813842754e546d7b1",
     "exchangeSymbols":[
-      "tETHUSD"
+      "tETHUST"
     ]
 }
 ```
@@ -166,11 +167,11 @@ const config = dvf.config
 
 #### Gas Price
 
-You can setup a custom gas price by setting up the 'gasPrice' property
+You can setup a default custom gas price by setting up the 'defaultGasPrice' property
 ```javascript
 const dvf = await DVF()
 
-dvf.set('gasPrice', web3.utils.toWei('2', 'gwei'))
+dvf.set('defaultGasPrice', web3.utils.toWei('2', 'gwei'))
 
 ```
 
@@ -261,7 +262,7 @@ direct 1:1 rate between USD and USDT, a shift must be applied to the order books
 The configuration for Trustless returns a `settleSpread` parameter:
 
 ```json
-      "USD":{
+      "USDT":{
           "decimals":6,
           "wrapperAddress":"0x83e42e6d1ac009285376340ef64bac1c7d106c89",
           "tokenAddress":"0x0736d0c130b2ead47476cc262dbed90d7c4eeabd",

@@ -21,8 +21,8 @@ provider.engine.stop()
 const dvfConfig = {
   // Using staging API.
   api: 'https://api.stg.deversifi.com'
+  // Add more variables to override default values
 }
-
 
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
