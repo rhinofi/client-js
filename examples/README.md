@@ -1,7 +1,6 @@
 To run the examples, you will need to set the following config variables:
 1. `INFURA_PROJECT_ID` : an PROJECT ID (formerly called API KEY) from https://infura.io
 2. `ETH_PRIVATE_KEY` : a private key of an Ethereum wallet with some ETH in it
-3. `ETH_GAS_STATION_KEY` : a API Key for from https://data.defipulse.com/ to be used for getting current gas price range from https://ethgasstation.info
 
 These can be sat as environment variables or in a config.json file placed in
 this directory.
@@ -12,24 +11,22 @@ obtain it by following the 3 easy steps here: https://ethereumico.io/knowledge-b
 
 NOTE: the `API KEY` mentioned in the instructions has been renamed to `PROJECT ID`.
 
-For getting `ETH_GAS_STATION_KEY` register on https://data.defipulse.com/ 
-
-Once you obtain the `INFURA_PROJECT_ID` and `ETH_GAS_STATION_KEY` you can then run:
+Once you obtain the `INFURA_PROJECT_ID` you can then run:
 
 ```sh
-node 00.setup.js YOUR_INFURA_PROJECT_ID ETH_GAS_STATION_KEY
+node 00.setup.js YOUR_INFURA_PROJECT_ID
 ```
 
 or simply
 
 ```sh
-./00.setup.js YOUR_INFURA_PROJECT_ID ETH_GAS_STATION_KEY
+./00.setup.js YOUR_INFURA_PROJECT_ID
 ```
 
 This will:
 1. generate a new Ethereum wallet on ropsten
 2. pre-load it with Eth (at least 1 Eth)
-3. save both the wallets private key and passed in `INFURA_PROJECT_ID` as well as `ETH_GAS_STATION_KEY` into
+3. save both the wallets private key and passed in `INFURA_PROJECT_ID` into
    `./config.json` file in this directory.
 
 NOTE:
