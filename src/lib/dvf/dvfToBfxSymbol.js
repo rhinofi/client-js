@@ -1,3 +1,3 @@
 const { dvfToBfxSymbol } = require('dvf-utils')
 
-module.exports = (dvf, dvfSymbol) => dvfToBfxSymbol(dvfSymbol)
+module.exports = (dvfSymbol) => dvfToBfxSymbol(dvfSymbol)

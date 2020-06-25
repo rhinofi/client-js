@@ -152,7 +152,7 @@ to this:
     "DeversifiAddress":"0x9faf5515f177f3a8a845d48c19032b33cc54c09c",
     "exchangeAddress":"0x67799a5e640bc64ca24d3e6813842754e546d7b1",
     "exchangeSymbols":[
-      "tETHUST"
+      "ETH:USDT"
     ]
 }
 ```
