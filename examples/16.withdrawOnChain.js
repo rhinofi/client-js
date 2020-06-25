@@ -22,8 +22,8 @@ const gasStationApiKey = envVars.ETH_GAS_STATION_KEY
 
 const dvfConfig = {
   // Using staging API.
-  api: 'https://api.stg.deversifi.com',
-  gasStationApiKey: gasStationApiKey
+  api: 'https://api.stg.deversifi.com'
+  // Add more variables to override default values
 }
 
 ;(async () => {
