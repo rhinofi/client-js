@@ -6,7 +6,7 @@
 module.exports = async (dvf, id) => {
   // check for ethereum accounts and select a default one
   const accounts = await dvf.web3.eth.getAccounts()
-
+  
   if (typeof id === 'number') {
     if (!accounts[id]) {
       console.error('Error: You have no account at index:', +id)

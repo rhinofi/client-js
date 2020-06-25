@@ -87,7 +87,8 @@ module.exports = () => {
 
   // dvf utility functions
   dvf.util = {
-    generateRandomNonce: require('./generateRandomNonce')
+    generateRandomNonce: require('./generateRandomNonce'),
+    dvfToBfxSymbol: require('../../lib/dvf/dvfToBfxSymbol')
   }
 
   // dvf.sign functions

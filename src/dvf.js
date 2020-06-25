@@ -75,7 +75,7 @@ module.exports = async (web3, userConfig = {}) => {
   }
 
   // get user config once we get the Web3 provider and Eth Address
-  if (dvf.config.autoLoadUserConf) {
+  if (dvf.config.autoLoadUserConf && dvf.config.address) {
     try {
       await dvf.getUserConfig()
     } catch (e) {
