@@ -57,5 +57,6 @@ module.exports = () => {
 
   nock('https://ethgasstation.info')
     .get('/json/ethgasAPI.json')
+    .query(true)
     .reply(200, ethGasStationResponse)
 }

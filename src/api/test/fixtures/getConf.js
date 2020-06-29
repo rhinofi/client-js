@@ -3,7 +3,7 @@ const nock = require('nock')
 module.exports = () => {
   const getConfResponse = {
     DVF: {
-      exchangeSymbols: ['tETHUSD', 'tZRXUSD', 'tZRXETH'],
+      exchangeSymbols: ['ETH:USDT', 'ZRX:USDT', 'ZRX:ETH'],
       exchangeAddress: '0xBd25cD867C304F079E696CBE44D958f3d3B683ba',
       starkExContractAddress: '0xA9F9cC1189b9d6051b26467b29629787C671905d',
       tempStarkVaultId: 1,
@@ -55,7 +55,7 @@ module.exports = () => {
 
   const getUserConfResponse = {
     DVF: {
-      exchangeSymbols: ['tETHUSD', 'tZRXUSD', 'tZRXETH'],
+      exchangeSymbols: ['ETH:USDT', 'ZRX:USDT', 'ZRX:ETH'],
       exchangeAddress: '0xBd25cD867C304F079E696CBE44D958f3d3B683ba',
       starkExContractAddress: '0xA9F9cC1189b9d6051b26467b29629787C671905d',
       tempStarkVaultId: 1,
