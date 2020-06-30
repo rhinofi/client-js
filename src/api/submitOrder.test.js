@@ -138,7 +138,7 @@ describe('dvf.submitOrder', () => {
       gid: '',
       type: 'EXCHANGE LIMIT',
       symbol,
-      amount: '-55',
+      amount: '-55.00000001',
       price: '12.346',
       feeRate: 0.0025,
       protocol: 'stark',
