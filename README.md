@@ -174,7 +174,9 @@ const dvf = await DVF()
 dvf.set('defaultGasPrice', web3.utils.toWei('2', 'gwei'))
 
 ```
-DVF Client calls https://ethgasstation.info API to get the current gas prices and calculate a safe gas price for Ethereum transactions. Access to the ETH Gas Station API is free, but rate limited if you are not using an API key. You can get an API Key from https://data.defipulse.com. To configure your api key with dvf client please pass this as a `userConf` parameter when initialising DVF:
+DVF Client calls https://ethgasstation.info API to get the current gas prices and calculate a safe gas price for Ethereum transactions. Access to the ETH Gas Station API is free, but rate limited without an API key. If a ETH Gas Station API key is not provided then a recomended gas price is used which is available in `dvf.recommendedGasPrice`.
+
+You can get an API Key from https://data.defipulse.com. To configure your api key with dvf client please pass this as a `userConf` parameter when initialising DVF:
 
 ```
 javascript
@@ -190,6 +192,7 @@ or by setting the 'gasStationApiKey' property:
 dvf.set('gasStationApiKey', 'a1b2c3...')
 
 ```
+
 ### Placing an Order
 
 Before placing an order, you are required to lock tokens into the Deversifi wrapper
