@@ -130,7 +130,7 @@ describe('dvf.deposit', () => {
 
     const apiResponse = {
       token,
-      amount: '1.12345679',
+      amount: '1.12345678',
       starkPublicKey
     }
 
