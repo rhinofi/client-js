@@ -193,7 +193,6 @@ dvf.set('gasStationApiKey', 'a1b2c3...')
 
 ```
 
-If no 
 ### Placing an Order
 
 Before placing an order, you are required to lock tokens into the Deversifi wrapper
