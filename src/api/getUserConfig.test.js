@@ -61,8 +61,9 @@ describe('dvf.getUserConfig', () => {
           starkVaultId: 1000004
         }
       },
-      spareStarkVaultId: 2090569095,
-      ethAddress: '0xf858c2f2ac6b96df8c801bce90a3124a52d1915a'
+      isRegistered: true,
+      ethAddress: '0xf858c2f2ac6b96df8c801bce90a3124a52d1915a',
+      recommendedGasPrice: 32500000000
     }
 
     const payloadValidator = jest.fn(body => {
