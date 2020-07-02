@@ -1,19 +1,26 @@
 const P = require('aigle')
+const { preparePriceBN, prepareAmountBN, splitSymbol } = require('dvf-utils')
 const DVFError = require('../dvf/DVFError')
-const computeBuySellData = require('../dvf/computeBuySellDats')
+const computeBuySellData = require('../dvf/computeBuySellData')
+
 
 module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
+  price = preparePriceBN(price)
+  amount = preparePriceBN(amount)
+
   feeRate = parseFloat(feeRate) || dvf.config.DVF.defaultFeeRate
-  // symbols are always 3 letters
-  const baseSymbol = symbol.split(':')[0]
-  const quoteSymbol = symbol.split(':')[1]
-  
-  const buySymbol = amount > 0 ? baseSymbol : quoteSymbol
-  const sellSymbol = amount > 0 ? quoteSymbol : baseSymbol
-  
+
+  const symbolArray = splitSymbol(symbol)
+  const baseSymbol = symbolArray[0]
+  const quoteSymbol = symbolArray[1]
+
+  const amountIsPositive = amount.isGreaterThan(0)
+  const buySymbol = amountIsPositive ? baseSymbol : quoteSymbol
+  const sellSymbol = amountIsPositive ? quoteSymbol : baseSymbol
+
   const sellCurrency = dvf.token.getTokenInfo(sellSymbol)
   const buyCurrency = dvf.token.getTokenInfo(buySymbol)
-  
+
   const [vaultIdSell, vaultIdBuy] = await P.join(
     dvf.getVaultId(sellSymbol),
     dvf.getVaultId(buySymbol)
@@ -24,10 +31,13 @@ module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
     }
   }
 
+  const settleSpreadBuy = buyCurrency.settleSpread
+  const settleSpreadSell = sellCurrency.settleSpread
+
   const {
     amountSell,
     amountBuy
-  } = computeBuySellData(dvf,{ symbol, amount, price, feeRate })
+  } = computeBuySellData(dvf,{ symbol, amount, price, feeRate, settleSpreadBuy, settleSpreadSell })
 
   // console.log('sell :', sellSymbol, sellCurrency)
   // console.log('buy  :', buySymbol, buyCurrency)

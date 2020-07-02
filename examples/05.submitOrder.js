@@ -16,20 +16,21 @@ const infuraURL = `https://ropsten.infura.io/v3/${envVars.INFURA_PROJECT_ID}`
 
 const provider = new HDWalletProvider(ethPrivKey, infuraURL)
 const web3 = new Web3(provider)
+provider.engine.stop()
 
 const dvfConfig = {
-  // Using dev API.
-  api: 'https://api.deversifi.dev'
+  // Using staging API.
+  api: 'https://api.stg.deversifi.com'
+  // Add more variables to override default values
 }
-
 
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
-  // Submit an order to sell 0.3 Eth for USDT at 250 USDT per 1 Eth
+  // Submit an order to sell 0.3 Eth for 200 USDT per 1 Eth
   const symbol = 'ETH:USDT'
   const amount = -0.3
-  const price = 250
+  const price = 200
   const validFor = '0'
   const feeRate = ''
 
@@ -48,11 +49,6 @@ const dvfConfig = {
   console.log('submitOrder response ->', submitOrderResponse)
 
 })()
-// Stop provider to allow process to exit.
-.then(() => {
-  console.log('Stopping provider...')
-  provider.engine.stop()
-})
 .catch(error => {
   console.error(error)
   process.exit(1)

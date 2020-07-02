@@ -1,14 +1,15 @@
 const { post } = require('request-promise')
 const DVFError = require('../lib/dvf/DVFError')
 const validateAssertions = require('../lib/validators/validateAssertions')
+const prepareAmount = require('dvf-utils').prepareAmount
 
 module.exports = async (dvf, token, amount, starkPrivateKey) => {
   validateAssertions(dvf, { amount, token, starkPrivateKey })
 
+  amount = prepareAmount(amount, dvf.token.maxQuantizedDecimalPlaces(token))
+
   const currency = dvf.token.getTokenInfo(token)
-
   const quantisedAmount = dvf.token.toQuantizedAmount(token, amount)
-
   const tempVaultId = dvf.config.DVF.tempStarkVaultId
   const nonce = dvf.util.generateRandomNonce()
   const starkTokenId = currency.starkTokenId
@@ -22,7 +23,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   const expireTime =
     Math.floor(Date.now() / (1000 * 3600)) +
     parseInt(dvf.config.defaultStarkExpiry)
-
+    
   const { starkMessage } = dvf.stark.createTransferMsg(
     quantisedAmount,
     nonce,
@@ -47,11 +48,11 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     expireTime
   }
   // console.log({ data })
-
+  
   await dvf.contract.approve(token, dvf.token.toBaseUnitAmount(token, amount))
 
   const depositResponse = await post(url, { json: data })
-
+  
   const { status, transactionHash } = await dvf.contract.deposit(
     tempVaultId,
     token,

@@ -4,7 +4,7 @@
 
 A js client library for DeversiFi - StarkWare orders
 
-**Note:** This library is for the new DeversiFi 2.0 platform, scheduled to launch on Ethereum mainnet later in 2020. Currently a test version of it is live on the Ropsten test network at https://app.deversifi.dev // https://api.deversifi.dev
+**Note:** This library is for the new DeversiFi 2.0 platform, scheduled to launch on Ethereum mainnet later in 2020. Currently a test version of it is live on the Ropsten test network at https://app.stg.deversifi.com // https://api.stg.deversifi.com
 
 For the current production version of DeversiFi use the [old client library](https://github.com/ethfinex/efx-api-node).
 
@@ -31,7 +31,7 @@ For the current production version of DeversiFi use the [old client library](htt
     - [Standard cancel](#standard-cancel)
     - [Signing externally](#signing-externally)
 - [Account History](#account-history)
-- [Unlocking Tokens](#unlocking-tokens)gd
+- [Unlocking Tokens](#unlocking-tokens)
 - [More examples](#more-examples)
     - [Submitting a buy order](#submitting-a-buy-order)
     - [Submitting a sell order](#submitting-a-sell-order)
@@ -123,7 +123,8 @@ For instance:
 
 ```javascript
   dvf = await DVF(web3, {
-    api: 'https://your-custom-api-address'
+    api: 'https://your-custom-api-address',
+    gasStationApiKey: 'a1b2c3...
   })
 ```
 
@@ -140,7 +141,7 @@ to this:
           "wrapperAddress":"0x965808e7f815cfffd4c018ef2ba4c5a65eba087e",
           "minOrderSize":0.02
       },
-      "USD":{
+      "USDT":{
           "decimals":6,
           "wrapperAddress":"0x83e42e6d1ac009285376340ef64bac1c7d106c89",
           "tokenAddress":"0x0736d0c130b2ead47476cc262dbed90d7c4eeabd",
@@ -151,7 +152,7 @@ to this:
     "DeversifiAddress":"0x9faf5515f177f3a8a845d48c19032b33cc54c09c",
     "exchangeAddress":"0x67799a5e640bc64ca24d3e6813842754e546d7b1",
     "exchangeSymbols":[
-      "tETHUSD"
+      "ETH:USDT"
     ]
 }
 ```
@@ -166,11 +167,29 @@ const config = dvf.config
 
 #### Gas Price
 
-You can setup a custom gas price by setting up the 'gasPrice' property
+You can setup a default custom gas price by setting up the 'defaultGasPrice' property
 ```javascript
 const dvf = await DVF()
 
-dvf.set('gasPrice', web3.utils.toWei('2', 'gwei'))
+dvf.set('defaultGasPrice', web3.utils.toWei('2', 'gwei'))
+
+```
+DVF Client calls https://ethgasstation.info API to get the current gas prices and calculate a safe gas price for Ethereum transactions. Access to the ETH Gas Station API is free, but rate limited without an API key. If a ETH Gas Station API key is not provided then a recomended gas price is used which is available in `dvf.recommendedGasPrice`.
+
+You can get an API Key from https://data.defipulse.com. To configure your api key with dvf client please pass this as a `userConf` parameter when initialising DVF:
+
+```
+javascript
+  dvf = await DVF(web3, {
+    api: 'https://your-custom-api-address',
+    gasStationApiKey: 'a1b2c3...'
+  })
+```
+or by setting the 'gasStationApiKey' property:
+
+```javascript
+
+dvf.set('gasStationApiKey', 'a1b2c3...')
 
 ```
 
@@ -261,7 +280,7 @@ direct 1:1 rate between USD and USDT, a shift must be applied to the order books
 The configuration for Trustless returns a `settleSpread` parameter:
 
 ```json
-      "USD":{
+      "USDT":{
           "decimals":6,
           "wrapperAddress":"0x83e42e6d1ac009285376340ef64bac1c7d106c89",
           "tokenAddress":"0x0736d0c130b2ead47476cc262dbed90d7c4eeabd",
@@ -425,7 +444,7 @@ const order = await dvf.getOrder(id)
 
 ## Troubleshooting
 
-A list of error codes returned by the API and reasons are available [here](./src/lib/error/reasons.js#L1).
+A list of error codes returned by the API and reasons are available [here](./src/lib/dvf/errorReasons.js#L1).
 Some more detailed explanations can also be found in the [API Documentation](https://docs.beta.Deversifi.com).
 
 If you have suggestions to improve this guide or any of the available

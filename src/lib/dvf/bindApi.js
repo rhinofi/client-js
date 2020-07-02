@@ -25,16 +25,17 @@ module.exports = () => {
 
   dvf.stark = {
     createOrder: compose(require('../stark/createOrder')),
+    createMarketOrder: compose(require('../stark/createMarketOrder')),
     createOrderMessage: require('../stark/createOrderMessage'),
     sign: require('../stark/starkSign'),
     createTransferMsg: require('../stark/createTransferMessage'),
     createPrivateKey: require('../stark/createPrivateKey'),
     createKeyPair: require('../stark/createKeyPair'),
     register: require('../../api/contract/register'),
+    formatStarkPublicKey: require('../stark/formatStarkPublicKey'),
     ledger: {
       getPath: compose(require('../stark/ledger/getPath')),
       getPublicKey: compose(require('../stark/ledger/getPublicKey')),
-      normaliseStarkKey: require('../stark/ledger/normaliseStarkKey'),
       createWithdrawalData: compose(
         require('../stark/ledger/createWithdrawalData')
       ),
@@ -53,6 +54,9 @@ module.exports = () => {
     approve: compose(require('../../api/contract/approve')),
     isApproved: compose(require('../../api/contract/isApproved')),
     deposit: compose(require('../../api/contract/deposit')),
+    depositCancel: compose(require('../../api/contract/depositCancel')),
+    depositReclaim: compose(require('../../api/contract/depositReclaim')),
+    fullWithdrawalRequest: compose(require('../../api/contract/fullWithdrawalRequest')),
     getStarkKey: compose(require('../../api/contract/getStarkKey')),
     getWithdrawalBalance: compose(
       require('../../api/contract/getWithdrawalBalance')
@@ -69,19 +73,23 @@ module.exports = () => {
     fromBaseUnitAmount: compose(require('./token/fromBaseUnitAmount')),
     fromQuantizedAmount: compose(require('./token/fromQuantizedAmount')),
     toBaseUnitAmount: compose(require('./token/toBaseUnitAmount')),
-    toQuantizedAmount: compose(require('./token/toQuantizedAmount'))
+    toQuantizedAmount: compose(require('./token/toQuantizedAmount')),
+    maxQuantizedDecimalPlaces: compose(require('./token/maxQuantizedDecimalPlaces'))
   }
 
   // dvf.eth functions
   dvf.eth = {
     call: compose(require('../../api/eth/call')),
     send: compose(require('../../api/eth/send')),
-    getNetwork: compose(require('../../api/eth/getNetwork'))
+    getNetwork: compose(require('../../api/eth/getNetwork')),
+    getSafeGasPrice: compose(require('../../api/eth/getSafeGasPrice'))
   }
 
   // dvf utility functions
   dvf.util = {
-    generateRandomNonce: require('./generateRandomNonce')
+    generateRandomNonce: require('./generateRandomNonce'),
+    dvfToBfxSymbol: require('../../lib/dvf/dvfToBfxSymbol'),
+    bfxToDvfSymbol: require('../../lib/dvf/bfxToDvfSymbol')
   }
 
   // dvf.sign functions
@@ -92,9 +100,16 @@ module.exports = () => {
   dvf.postAuthenticated = compose(require('../../lib/dvf/post-authenticated'))
 
   dvf.createOrderPayload = compose(require('../../lib/dvf/createOrderPayload'))
+  dvf.createMarketOrderPayload = compose(require('../../lib/dvf/createMarketOrderPayload'))
   dvf.createOrderMetaData = compose(
     require('../../lib/dvf/createOrderMetaData')
   )
+  dvf.createMarketOrderMetaData = compose(
+    require('../../lib/dvf/createMarketOrderMetaData')
+  )
+
+  // dvf trading volume data
+  dvf.get30DaysVolume = compose(require('../../api/get30DaysVolume'))
 
   // dvf main functions
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
@@ -103,23 +118,23 @@ module.exports = () => {
   dvf.getBalance = compose(require('../../api/getBalance'))
   dvf.getConfig = compose(require('../../api/getConfig'))
   dvf.getDeposits = compose(require('../../api/getDeposits'))
-  dvf.getFeeRates = compose(require('../../api/getFeeRates'))
-  dvf.getFeeRate = compose(require('../../api/getFeeRates'))
+  dvf.getFeeRate = compose(require('../../api/getFeeRate'))
   dvf.getOrder = compose(require('../../api/getOrder'))
   dvf.getOrders = compose(require('../../api/getOrders'))
   dvf.getOrdersHist = compose(require('../../api/getOrdersHist'))
   dvf.getUserConfig = compose(require('../../api/getUserConfig'))
   dvf.getVaultId = compose(require('../../api/getVaultId'))
   dvf.getVaultIdFromServer = compose(require('../../api/getVaultIdFromServer'))
-  dvf.preRegister = compose(require('../../api/preRegister'))
   dvf.register = compose(require('../../api/register'))
   dvf.submitBuyOrder = compose(require('../../api/submitBuyOrder'))
   dvf.submitOrder = compose(require('../../api/submitOrder'))
+  dvf.submitMarketOrder = compose(require('../../api/submitMarketOrder'))
   dvf.submitSellOrder = compose(require('../../api/submitSellOrder'))
   dvf.getWithdrawal = compose(require('../../api/getWithdrawal'))
   dvf.getWithdrawals = compose(require('../../api/getWithdrawals'))
   dvf.withdraw = compose(require('../../api/withdraw'))
   dvf.withdrawOnchain = compose(require('../../api/withdrawOnchain'))
+  dvf.fullWithdrawalRequest = compose(require('../../api/fullWithdrawalRequest'))
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),
     withdraw: compose(require('../../api/ledger/withdraw'))

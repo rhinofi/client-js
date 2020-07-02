@@ -14,12 +14,12 @@ describe('dvf.withdraw', () => {
     dvf = await instance()
   })
 
-  it(`Withdrawas ERC20 token to user's vault`, async () => {
+  it(`Withdraws ERC20 token to user's vault`, async () => {
     const starkPrivateKey = '100'
-    const amount = 12
+    const amount = '12'
     const token = 'USDT'
     const starkPublicKey = {
-      x: '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
+      x: '06d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
       y: '58f7ce5eb6eb5bd24f70394622b1f4d2c54ebca317a3e61bf9f349dccf166cf'
     }
 
@@ -52,12 +52,12 @@ describe('dvf.withdraw', () => {
   it('Withdraws ETH to users vault', async () => {
     const starkPrivateKey = '100'
     const token = 'ETH'
-    const amount = 1.117
+    const amount = '1.117'
     const apiResponse = {
       token,
       amount,
       starkPublicKey: {
-        x: '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
+        x: '06d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
         y: '58f7ce5eb6eb5bd24f70394622b1f4d2c54ebca317a3e61bf9f349dccf166cf'
       }
     }

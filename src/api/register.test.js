@@ -2,6 +2,7 @@ const nock = require('nock')
 const instance = require('./test/helpers/instance')
 
 const mockGetConf = require('./test/fixtures/getConf')
+const mockGasPrice = require('./test/fixtures/getSafeGasPrice')
 
 const sw = require('starkware_crypto')
 const _ = require('lodash')
@@ -15,12 +16,12 @@ describe('dvf.register', () => {
   })
 
   it('Registers user with Stark Ex', async () => {
-    const apiResponse = { register: 'success' }
-    const preRegisterResponse = {
-      deFiSignature:
-        '0xb5c3802c7cd4a6832c65b35f7011640ab4307f2109451f3db26f2ccf81639e756b109d63dade93ea7f879c735a11b4a0a6671e308a70b106639b15d43f001aac1c'
+    const apiResponse = {
+      isRegistered: true
     }
+
     mockGetConf()
+    mockGasPrice()
 
     const pvtKey = '100'
     const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
@@ -28,23 +29,15 @@ describe('dvf.register', () => {
       starkKeyPair.getPublic(true, 'hex'),
       'hex'
     )
-    const starkPublicKey = {
+    const tempKey = {
       x: fullPublicKey.pub.getX().toString('hex'),
       y: fullPublicKey.pub.getY().toString('hex')
     }
 
-    nock(dvf.config.api)
-      .post('/v1/trading/w/preRegister', body => {
-        return (
-          _.isMatch(body, {
-            starkKey: starkPublicKey.x
-          }) && body.ethAddress
-        )
-      })
-      .reply(200, preRegisterResponse)
+    const starkPublicKey = dvf.stark.formatStarkPublicKey(tempKey)
 
     nock(dvf.config.api)
-      .post('/v1/trading/w/register', body => {
+      .post('/v1/trading/w/register', (body) => {
         return (
           _.isMatch(body, {
             starkKey: starkPublicKey.x
@@ -56,12 +49,53 @@ describe('dvf.register', () => {
       .reply(200, apiResponse)
 
     const result = await dvf.register(starkPublicKey)
+
+    expect(result).toEqual(apiResponse)
+  })
+
+  it('Register method accepts nonce and signature', async () => {
+    const apiResponse = {
+      isRegistered: true
+    }
+
+    mockGetConf()
+    mockGasPrice()
+
+    const nonce = Date.now() / 1000 + ''
+    const signature = await dvf.sign(nonce.toString(16))
+  
+    const pvtKey = '100'
+    const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
+    const fullPublicKey = sw.ec.keyFromPublic(
+      starkKeyPair.getPublic(true, 'hex'),
+      'hex'
+    )
+    const tempKey = {
+      x: fullPublicKey.pub.getX().toString('hex'),
+      y: fullPublicKey.pub.getY().toString('hex')
+    }
+
+    const starkPublicKey = dvf.stark.formatStarkPublicKey(tempKey)
+
+    nock(dvf.config.api)
+      .post('/v1/trading/w/register', (body) => {
+        return (
+          _.isMatch(body, {
+            starkKey: starkPublicKey.x
+          }) &&
+          body.signature &&
+          body.nonce
+        )
+      })
+      .reply(200, apiResponse)
+
+    const result = await dvf.register(starkPublicKey, nonce, signature)
+
     expect(result).toEqual(apiResponse)
   })
 
   it('Register method checks for starkKey', async () => {
     const starkPublicKey = ''
-    const deFiSignature = '0xa1b2c3'
 
     try {
       await dvf.register(starkPublicKey)
@@ -91,21 +125,6 @@ describe('dvf.register', () => {
     }
 
     const payloadValidator = jest.fn(() => true)
-
-    const preRegisterResponse = {
-      deFiSignature:
-        '0xd22fde0d6b71845dea3476bcc3e1806f9278b4c586d894ee8e2653b74946ee367912412d176bb78382658ac3762ba7fa59640efc45ca3bc34c55955f00b5061c1c'
-    }
-
-    nock(dvf.config.api)
-      .post('/v1/trading/w/preRegister', body => {
-        return (
-          _.isMatch(body, {
-            starkKey: starkPublicKey.x
-          }) && body.ethAddress
-        )
-      })
-      .reply(200, apiErrorResponse)
 
     nock(dvf.config.api)
       .post('/v1/trading/w/register', payloadValidator)

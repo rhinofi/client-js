@@ -1,10 +1,7 @@
 const nock = require('nock')
 const instance = require('./test/helpers/instance')
-
+const mockGasPrice = require('./test/fixtures/getSafeGasPrice')
 const mockGetConf = require('./test/fixtures/getConf')
-
-const sw = require('starkware_crypto')
-const _ = require('lodash')
 
 let dvf
 
@@ -16,11 +13,12 @@ describe('dvf.deposit', () => {
 
   it(`Deposits ERC20 token to user's vault`, async () => {
     mockGetConf()
+    mockGasPrice()
     const starkPrivateKey = '100'
-    const amount = 1394
+    const amount = '1394'
     const token = 'USDT'
     const starkPublicKey = {
-      x: '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
+      x: '06d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
       y: '58f7ce5eb6eb5bd24f70394622b1f4d2c54ebca317a3e61bf9f349dccf166cf'
     }
 
@@ -52,14 +50,16 @@ describe('dvf.deposit', () => {
 
   it('Deposits ETH to users vault', async () => {
     mockGetConf()
+    mockGasPrice()
+    mockGasPrice
     const starkPrivateKey = '100'
     const token = 'ETH'
-    const amount = 1.117
+    const amount = '1.117'
     const apiResponse = {
       token,
       amount,
       starkPublicKey: {
-        x: '6d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
+        x: '06d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
         y: '58f7ce5eb6eb5bd24f70394622b1f4d2c54ebca317a3e61bf9f349dccf166cf'
       }
     }
@@ -102,7 +102,7 @@ describe('dvf.deposit', () => {
   it('Gives error if token is missing', async () => {
     const starkPrivateKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
-    const amount = 57
+    const amount = '57'
     const token = ''
 
     try {
@@ -117,7 +117,7 @@ describe('dvf.deposit', () => {
   it('Gives error if token is not supported', async () => {
     const starkPrivateKey =
       '3c1e9550e66958296d11b60f8e8e7a7ad990d07fa65d5f7652c4a6c87d4e3cc'
-    const amount = 57
+    const amount = '57'
     const token = 'NOT'
 
     try {
@@ -131,7 +131,7 @@ describe('dvf.deposit', () => {
 
   it('Gives error if starkPrivateKey is not provided', async () => {
     const starkPrivateKey = ''
-    const amount = 57
+    const amount = '57'
     const token = 'ZRX'
 
     try {

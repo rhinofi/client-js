@@ -51,9 +51,17 @@ module.exports = async (web3, userConfig = {}) => {
 
   // save web3 instance int it
   dvf.web3 = web3
-  dvf.chainId = await web3.eth.net.getId()
-  // REVIEW: should we actually use web3.eth.defaultAccount ?
-  // see: https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md#raising_hand-account-list-reflects-user-preference
+  
+  let chainId = 3
+
+  try {
+    chainId = chainId || (await web3.eth.net.getId())
+  }
+  catch(e)  {
+    console.log('error getting chainId')
+  }
+
+  dvf.chainId = chainId
 
   if (dvf.config.autoSelectAccount) {
     await dvf.account.select(dvf.config.account)
@@ -61,6 +69,9 @@ module.exports = async (web3, userConfig = {}) => {
     if (!dvf.get('account')) {
       console.warn('Please specify a valid account or account index')
     }
+  }
+  else if (dvf.config.address){
+    dvf.set('account', dvf.config.address.toLowerCase())
   }
 
   // get user config once we get the Web3 provider and Eth Address

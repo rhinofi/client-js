@@ -9,19 +9,18 @@ module.exports = async (dvf, starkKey, deFiSignature) => {
     dvf.config.DVF.starkExContractAddress
   )
 
-  const sendArguments = {
-    from: ethAddress,
-    gasLimit: dvf.config.defaultGasLimit,
-    gasPrice: dvf.config.defaultGasPrice
-  }
-
   let onchainResult = ''
+  const action = 'register'
+  const args = [`0x${starkKey}`, deFiSignature]
   try {
-    onchainResult = await starkInstance.methods
-      .register(`0x${starkKey}`, deFiSignature)
-      .send(sendArguments)
+    onchainResult = await dvf.eth.send(
+      dvf.contract.abi.StarkEx,
+      dvf.config.DVF.starkExContractAddress,
+      action,
+      args
+    )
   } catch (e) {
-    console.log('lib/stark/register error is: ', e)
+    console.log('api/contract/register error is: ', e)
     throw new DVFError('ERR_STARK_REGISTRATION')
   }
 

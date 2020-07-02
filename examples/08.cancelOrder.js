@@ -16,12 +16,13 @@ const infuraURL = `https://ropsten.infura.io/v3/${envVars.INFURA_PROJECT_ID}`
 
 const provider = new HDWalletProvider(ethPrivKey, infuraURL)
 const web3 = new Web3(provider)
+provider.engine.stop()
 
 const dvfConfig = {
-  // Using dev API.
-  api: 'https://api.deversifi.dev'
+  // Using staging API.
+  api: 'https://api.stg.deversifi.com'
+  // Add more variables to override default values
 }
-
 
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
@@ -34,7 +35,7 @@ const dvfConfig = {
   if (orders.length == 0) {
     console.log('submitting new order')
     
-    // Submit an order to buy 0.5 Eth for USDT at 200 USDT for 1 Eth
+    // Submit an order to buy 0.5 Eth at a rate of 200 USDT for 1 Eth
     const symbol = 'ETH:USDT'
     const amount = 0.5
     const price = 200
@@ -55,7 +56,7 @@ const dvfConfig = {
 
     console.log('submitOrder response ->', submitOrderResponse)
 
-    orderId = submitOrderResponse.orderId
+    orderId = submitOrderResponse._id
   }
   else {
     orderId = orders[0]._id
@@ -68,11 +69,6 @@ const dvfConfig = {
   console.log("cancelOrder response ->", response)
 
 })()
-// Stop provider to allow process to exit.
-.then(() => {
-  console.log('Stopping provider...')
-  provider.engine.stop()
-})
 .catch(error => {
   console.error(error)
   process.exit(1)

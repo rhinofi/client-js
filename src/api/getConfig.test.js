@@ -17,21 +17,22 @@ describe('dvf.getConfig', () => {
         defaultFeeRate: 0.0025,
         exchangeAddress: '0xBd25cD867C304F079E696CBE44D958f3d3B683ba',
         starkExContractAddress: '0xA9F9cC1189b9d6051b26467b29629787C671905d',
-        exchangeSymbols: ['tETHUSD', 'tZRXUSD', 'tZRXETH'],
+        exchangeSymbols: ['ETH:USDT', 'ZRX:USDT', 'ZRX:ETH'],
         tempStarkVaultId: 1
       },
       tokenRegistry: {
         ETH: {
           decimals: 18,
           quantization: 10000000000,
-          minOrderSize: 0.1,
+          minOrderSize: 0.05,
+          settleSpread: 0,
           starkTokenId:
             '0xb333e3142fe16b78628f19bb15afddaef437e72d6d7f5c6c20c6801a27fba6'
         },
         USDT: {
           decimals: 6,
           quantization: 1,
-          minOrderSize: 25,
+          minOrderSize: 10,
           settleSpread: 0,
           starkTokenId:
             '0x180bef8ae3462e919489763b84dc1dc700c45a249dec4d1136814a639f2dd7b',
@@ -40,7 +41,8 @@ describe('dvf.getConfig', () => {
         ZRX: {
           decimals: 18,
           quantization: 10000000000,
-          minOrderSize: 40,
+          minOrderSize: 20,
+          settleSpread: 0,
           starkTokenId:
             '0x3901ee6a6c5ac0f6e284f4273b961b7e9f29d25367d31d90b75820473a202f7',
           tokenAddress: '0xcd077abedd831a3443ffbe24fb76661bbb17eb69'
@@ -48,7 +50,8 @@ describe('dvf.getConfig', () => {
         BTC: {
           decimals: 18,
           quantization: 10000000000,
-          minOrderSize: 0.0001,
+          minOrderSize: 0.0004,
+          settleSpread: 0,
           starkTokenId:
             '0x21ef21d6b234cd669edd702dd3d1d017be888337010b950ae3679eb4194b4bc',
           tokenAddress: '0x40d8978500bf68324a51533cd6a21e3e59be324a'

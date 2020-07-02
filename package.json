@@ -1,6 +1,6 @@
 {
   "name": "dvf-client-js",
-  "version": "0.1.8",
+  "version": "1.0.4",
   "main": "src/dvf.js",
   "contributors": [
     "Henrique Matias <hems.inlet@gmail.com>",
@@ -52,6 +52,7 @@
     "aigle": "^1.14.1",
     "aware": "^0.3.1",
     "bignumber.js": "^9.0.0",
+    "dvf-utils": "https://github.com/DeversiFi/dvf-utils.git#6ccb9f2404e8412a1daf5eaf7033bdbe8797cf02",
     "env-cmd": "^10.0.1",
     "ethereumjs-util": "^5.2.0",
     "lodash": "^4.17.10",
