@@ -3,7 +3,7 @@ const DVFError = require('../lib/dvf/DVFError')
 const validateAssertions = require('../lib/validators/validateAssertions')
 const prepareAmount = require('dvf-utils').prepareAmount
 
-module.exports = async (dvf, token, amount, starkPrivateKey) => {
+module.exports = async (dvf, token, amount, starkPrivateKey, txMeta) => {
   validateAssertions(dvf, { amount, token, starkPrivateKey })
 
   amount = prepareAmount(amount, dvf.token.maxQuantizedDecimalPlaces(token))
@@ -49,14 +49,15 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   }
   // console.log({ data })
   
-  await dvf.contract.approve(token, dvf.token.toBaseUnitAmount(token, amount))
+  await dvf.contract.approve(token, dvf.token.toBaseUnitAmount(token, amount), txMeta)
 
   const depositResponse = await post(url, { json: data })
   
   const { status, transactionHash } = await dvf.contract.deposit(
     tempVaultId,
     token,
-    amount
+    amount,
+    txMeta
   )
 
   if (!status) {

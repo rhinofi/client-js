@@ -1,4 +1,4 @@
-module.exports = async (dvf, vaultId, token, amount, ethAddress) => {
+module.exports = async (dvf, vaultId, token, amount, txMeta) => {
   let value
   if (token === 'ETH') {
     value = dvf.token.toBaseUnitAmount(token, amount)
@@ -17,7 +17,8 @@ module.exports = async (dvf, vaultId, token, amount, ethAddress) => {
       dvf.config.DVF.starkExContractAddress,
       action,
       args,
-      value // send ETH to the contract
+      value, // send ETH to the contract,
+      txMeta
     )
   }
 
@@ -26,7 +27,9 @@ module.exports = async (dvf, vaultId, token, amount, ethAddress) => {
       dvf.contract.abi.StarkEx,
       dvf.config.DVF.starkExContractAddress,
       action,
-      args
+      args,
+      null,
+      txMeta
     )
   } catch (e) {
     if (!dvf.contract.isApproved(token)) {

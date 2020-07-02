@@ -1,7 +1,7 @@
 const DVFError = require('../../lib/dvf/DVFError')
 const BN = require('bignumber.js')
 
-module.exports = async (dvf, starkKey, deFiSignature) => {
+module.exports = async (dvf, starkKey, deFiSignature, txMeta) => {
   const ethAddress = dvf.get('account')
   const { web3 } = dvf
   const starkInstance = new web3.eth.Contract(
@@ -17,7 +17,9 @@ module.exports = async (dvf, starkKey, deFiSignature) => {
       dvf.contract.abi.StarkEx,
       dvf.config.DVF.starkExContractAddress,
       action,
-      args
+      args,
+      null,
+      txMeta
     )
   } catch (e) {
     console.log('api/contract/register error is: ', e)

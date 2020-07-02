@@ -1,6 +1,6 @@
-module.exports = async (dvf, abi, address, action, args, value) => {
+module.exports = async (dvf, abi, address, action, args, value, txMeta) => {
   if (dvf.config.send) {
-    return dvf.config.send(dvf, abi, address, action, args, value)
+    return dvf.config.send(dvf, abi, address, action, args, value, txMeta)
   }
 
   const { web3 } = dvf

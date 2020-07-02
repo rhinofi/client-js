@@ -1,6 +1,6 @@
 const DVFError = require('../../lib/dvf/DVFError')
 
-module.exports = async (dvf, token) => {
+module.exports = async (dvf, token, txMeta) => {
   const { starkTokenId } = dvf.token.getTokenInfo(token)
 
   const args = [starkTokenId]
@@ -12,7 +12,9 @@ module.exports = async (dvf, token) => {
       dvf.contract.abi.StarkEx,
       dvf.config.DVF.starkExContractAddress,
       action,
-      args
+      args,
+      null,
+      txMeta
     )
   } catch (e) {
     console.log(e)

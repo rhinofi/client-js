@@ -2,7 +2,7 @@ const post = require('../lib/dvf/post-authenticated')
 
 const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (dvf, starkPublicKey, nonce, signature) => {
+module.exports = async (dvf, starkPublicKey, nonce, signature, txMeta) => {
   validateAssertions(dvf, { starkPublicKey })
 
   const starkKey = starkPublicKey.x
@@ -25,7 +25,8 @@ module.exports = async (dvf, starkPublicKey, nonce, signature) => {
     const onchainRegister = await dvf.stark.register(
       dvf,
       starkKey,
-      userRegistered.deFiSignature
+      userRegistered.deFiSignature,
+      txMeta
     )
 
     if (onchainRegister) {
