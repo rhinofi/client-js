@@ -5,7 +5,7 @@ module.exports = {
 
   // default transaction arguments
   defaultGasLimit: 200000,
-  defaultGasPrice: 30000000000,
+  defaultGasPrice: 50000000000,
 
   // default stark related constants
   // default expiration time for transfers and orders in hours
