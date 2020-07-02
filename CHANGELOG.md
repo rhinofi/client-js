@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 1.0.4 - 2020-07-01
 ### Added
+- Use dvf pub api to get range of gas prices
+
+## 1.0.4 - 2020-07-01
+### Added
 - gas Station API optional
 - Use recommended gas price from config
 
