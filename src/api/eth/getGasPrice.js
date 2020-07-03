@@ -1,5 +1,3 @@
-const { get } = require('request-promise')
-
 /**
  * Provides a gas price
  */
