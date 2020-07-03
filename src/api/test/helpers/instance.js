@@ -14,6 +14,8 @@ module.exports = async () => {
 
   const web3 = new Web3(provider)
 
+  provider.engine.stop()
+  
   const gasStationApiKey = process.env.ETH_GAS_STATION_KEY || ''
 
   let config = { gasStationApiKey }

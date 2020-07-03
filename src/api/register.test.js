@@ -2,7 +2,6 @@ const nock = require('nock')
 const instance = require('./test/helpers/instance')
 
 const mockGetConf = require('./test/fixtures/getConf')
-const mockGasPrice = require('./test/fixtures/getSafeGasPrice')
 
 const sw = require('starkware_crypto')
 const _ = require('lodash')
@@ -21,7 +20,6 @@ describe('dvf.register', () => {
     }
 
     mockGetConf()
-    mockGasPrice()
 
     const pvtKey = '100'
     const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
@@ -59,7 +57,6 @@ describe('dvf.register', () => {
     }
 
     mockGetConf()
-    mockGasPrice()
 
     const nonce = Date.now() / 1000 + ''
     const signature = await dvf.sign(nonce.toString(16))

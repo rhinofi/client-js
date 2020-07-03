@@ -7,8 +7,13 @@ let dvf
 
 describe('dvf.estimatedNextBatchTime', () => {
   beforeAll(async () => {
+    nock.cleanAll()
     mockGetConf()
     dvf = await instance()
+  })
+
+  beforeEach(() => {
+    nock.cleanAll()
   })
 
   it('Returns the config recieved from the API', async () => {

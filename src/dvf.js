@@ -85,5 +85,7 @@ module.exports = async (web3, userConfig = {}) => {
     }
   }
 
+  dvf.recommendedGasPrices = await dvf.getGasPrice()
+
   return dvf
 }

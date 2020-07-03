@@ -82,7 +82,8 @@ module.exports = () => {
     call: compose(require('../../api/eth/call')),
     send: compose(require('../../api/eth/send')),
     getNetwork: compose(require('../../api/eth/getNetwork')),
-    getSafeGasPrice: compose(require('../../api/eth/getSafeGasPrice'))
+    getGasPrice: compose(require('../../api/eth/getGasPrice')),
+    getGasStationPrice: compose(require('../../api/eth/getGasStationPrice'))
   }
 
   // dvf utility functions
@@ -119,6 +120,7 @@ module.exports = () => {
   dvf.getConfig = compose(require('../../api/getConfig'))
   dvf.getDeposits = compose(require('../../api/getDeposits'))
   dvf.getFeeRate = compose(require('../../api/getFeeRate'))
+  dvf.getGasPrice = compose(require('../../api/getGasPrice'))
   dvf.getOrder = compose(require('../../api/getOrder'))
   dvf.getOrders = compose(require('../../api/getOrders'))
   dvf.getOrdersHist = compose(require('../../api/getOrdersHist'))

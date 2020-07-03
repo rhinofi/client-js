@@ -1,19 +1,22 @@
 const nock = require('nock')
 const instance = require('./test/helpers/instance')
-const mockGasPrice = require('./test/fixtures/getSafeGasPrice')
 const mockGetConf = require('./test/fixtures/getConf')
 
 let dvf
 
 describe('dvf.deposit', () => {
   beforeAll(async () => {
+    nock.cleanAll()
     mockGetConf()
     dvf = await instance()
   })
 
+  beforeEach(() => {
+    nock.cleanAll()
+  })
+
   it(`Deposits ERC20 token to user's vault`, async () => {
     mockGetConf()
-    mockGasPrice()
     const starkPrivateKey = '100'
     const amount = '1394'
     const token = 'USDT'
@@ -50,8 +53,6 @@ describe('dvf.deposit', () => {
 
   it('Deposits ETH to users vault', async () => {
     mockGetConf()
-    mockGasPrice()
-    mockGasPrice
     const starkPrivateKey = '100'
     const token = 'ETH'
     const amount = '1.117'
