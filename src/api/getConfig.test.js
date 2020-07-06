@@ -7,8 +7,13 @@ let dvf
 
 describe('dvf.getConfig', () => {
   beforeAll(async () => {
+    nock.cleanAll()
     mockGetConf()
     dvf = await instance()
+  })
+
+  beforeEach(() => {
+    nock.cleanAll()
   })
 
   it('Returns the config recieved from the API', async () => {
@@ -56,8 +61,7 @@ describe('dvf.getConfig', () => {
             '0x21ef21d6b234cd669edd702dd3d1d017be888337010b950ae3679eb4194b4bc',
           tokenAddress: '0x40d8978500bf68324a51533cd6a21e3e59be324a'
         }
-      },
-      spareStarkVaultId: 866076352
+      }
     }
 
     nock(dvf.config.api)
@@ -68,7 +72,7 @@ describe('dvf.getConfig', () => {
     expect(config).toEqual(apiResponse)
   })
 
-  it('Posts to config API and gets error response', async () => {
+  it.skip('Posts to config API and gets error response', async () => {
     const apiErrorResponse = {
       statusCode: 422,
       error: 'Unprocessable Entity',

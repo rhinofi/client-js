@@ -7,11 +7,17 @@ let dvf
 
 describe('dvf.getUserConfig', () => {
   beforeAll(async () => {
+    nock.cleanAll()
     mockGetConf()
     dvf = await instance()
   })
 
-  it('Returns the user config recieved from the API', async () => {
+  beforeEach(() => {
+    nock.cleanAll()
+  })
+
+  it.only('Returns the user config recieved from the API', async () => {
+
     const apiResponse = {
       DVF: {
         exchangeSymbols: ['ETH:USDT', 'ZRX:USDT', 'ZRX:ETH'],
@@ -61,7 +67,7 @@ describe('dvf.getUserConfig', () => {
           starkVaultId: 1000004
         }
       },
-      spareStarkVaultId: 2090569095,
+      isRegistered: true,
       ethAddress: '0xf858c2f2ac6b96df8c801bce90a3124a52d1915a'
     }
 

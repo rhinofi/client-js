@@ -53,6 +53,20 @@ module.exports = () => {
     .post('/v1/trading/r/getConf', {})
     .reply(200, getConfResponse)
 
+
+    const mockGasResponse = {
+      cheap: 700000000,
+      average: 600000000,
+      fast: 500000000
+    }
+    
+    
+    nock('https://api.stg.deversifi.com')
+    .post('/v1/trading/r/getGasPrice', body => {
+      return true
+    })
+    .reply(200, mockGasResponse)
+
   const getUserConfResponse = {
     DVF: {
       exchangeSymbols: ['ETH:USDT', 'ZRX:USDT', 'ZRX:ETH'],
@@ -99,8 +113,9 @@ module.exports = () => {
         starkVaultId: 1000004
       }
     },
-    spareStarkVaultId: 2090569095,
-    ethAddress: '0xf858c2f2ac6b96df8c801bce90a3124a52d1915a'
+    isRegistered: true,
+    ethAddress: '0xf858c2f2ac6b96df8c801bce90a3124a52d1915a',
+    recommendedGasPrice: 32500000000
   }
 
   nock('https://api.stg.deversifi.com')
