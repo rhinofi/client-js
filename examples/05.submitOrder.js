@@ -6,7 +6,7 @@ const Web3 = require('web3')
 
 const DVF = require('../src/dvf')
 const envVars = require('./helpers/loadFromEnvOrConfig')()
-
+const getPriceFromOrderBook = require('./helpers/getPriceFromOrderBook')
 
 const ethPrivKey = envVars.ETH_PRIVATE_KEY
 // NOTE: you can also generate a new key using:`
@@ -30,9 +30,12 @@ const dvfConfig = {
   // Submit an order to sell 0.3 Eth for 200 USDT per 1 Eth
   const symbol = 'ETH:USDT'
   const amount = -0.3
-  const price = 200
   const validFor = '0'
   const feeRate = ''
+
+  // Gets the price from the order book api and cuts 5% to make sure the order will be settled
+  const orderBookPrice = await getPriceFromOrderBook();
+  const price = orderBookPrice - orderBookPrice * 0.05;
 
   const submitOrderResponse = await dvf.submitOrder({
     symbol,

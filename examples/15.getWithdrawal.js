@@ -46,12 +46,8 @@ const dvfConfig = {
     withdrawalId = withdrawalResponse._id
   }
   else {
-    withdrawalId = withdrawals[0]._id
+    console.log('getWithdrawal response ->', withdrawals[0])
   }
-
-  const getWithdrawalResponse = await dvf.getWithdrawal(withdrawalId)
-
-  console.log('getWithdrawal response ->', getWithdrawalResponse)
 
 })()
 .catch(error => {
