@@ -95,7 +95,7 @@ describe('dvf.getConfig', () => {
     }
   })
 
-  it('Handles error in getting config during intialisation', async () => {
+  it('Handles error in getting config during initialisation', async () => {
     const apiErrorResponse = {
       statusCode: 404,
       error:
