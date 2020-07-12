@@ -445,7 +445,7 @@ const order = await dvf.getOrder(id)
 ## Troubleshooting
 
 A list of error codes returned by the API and reasons are available [here](./src/lib/dvf/errorReasons.js#L1).
-Some more detailed explanations can also be found in the [API Documentation](https://docs.beta.Deversifi.com).
+Some more detailed explanations can also be found in the [API Documentation](https://docs.Deversifi.com).
 
 If you have suggestions to improve this guide or any of the available
 documentation, please raise an issue on Github, or email [feedback@Deversifi.com](mailto:feedback@Deversifi.com).
