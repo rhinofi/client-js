@@ -58,7 +58,7 @@
     "lodash": "^4.17.10",
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
-    "starkware_crypto": "git+https://github.com/adrian-gierakowski/starkware-crypto#9e3784db5381c54705bf47066ba0ac0ad5cf0e0d",
+    "starkware_crypto": "git+https://github.com/DeversiFi/starkware-crypto#13a765c46884e79e153f64d34a60d77c205b2982",
     "web3": "^1.2.4",
     "web3-provider-engine": "^15.0.6"
   },
