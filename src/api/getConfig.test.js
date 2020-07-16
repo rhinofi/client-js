@@ -124,7 +124,7 @@ describe('dvf.getConfig', () => {
       defaultGasLimit: 200000,
       defaultGasPrice: 500000000,
       defaultStarkExpiry: 720,
-      defaultNonceAge: 10800,
+      defaultNonceAge: 43200,
       defaultProvider: 'http://localhost:8545',
       account: 0,
       autoSelectAccount: true,

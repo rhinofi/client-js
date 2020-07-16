@@ -350,7 +350,7 @@ private key for the address who's orders you wish to view.
 const ethUtils = require('ethereumjs-utils')
 
 const privKey = /* Your Private Key */
-const nonce = ((Date.now() / 1000) + 10800) + ''
+const nonce = ((Date.now() / 1000) + 43200) + ''
 
 const hash = ethUtils.hashPersonalMessage(ethUtils.toBuffer(nonce.toString(16)))
 const signature = ethUtils.ecsign(hash, privKey)
