@@ -11,7 +11,7 @@ module.exports = {
   // default expiration time for transfers and orders in hours
   defaultStarkExpiry: 720,
   // default nonce age in seconds
-  defaultNonceAge: 10800,
+  defaultNonceAge: 43200,
   // in case no provider is provided we will try connecting to the this default
 
   // address
