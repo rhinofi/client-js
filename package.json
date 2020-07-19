@@ -55,7 +55,7 @@
     "dvf-utils": "https://github.com/DeversiFi/dvf-utils.git#6ccb9f2404e8412a1daf5eaf7033bdbe8797cf02",
     "env-cmd": "^10.0.1",
     "ethereumjs-util": "^5.2.0",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.19",
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
     "starkware_crypto": "https://github.com/deversifi/starkware-crypto",
