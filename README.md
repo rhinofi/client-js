@@ -260,8 +260,8 @@ should be specified to 5 s.f. maximum.
 
 For example, when placing a sell order, if the `price` specified is below the highest bid available on the order book, the order will be executed instantly. However, the amount you receive will reflect only the `price` that you entered, and not the market price at the time of execution.
 
-The client library also provides methods for [submitBuyOrder](./src/api/submit_buy_order.js)
-and [submitSellOrder](./src/api/submit_sell_order.js).
+The client library also provides methods for [submitBuyOrder](./src/api/submitBuyOrder.js)
+and [submitSellOrder](./src/api/submitSellOrder.js).
 
 You can additionally provide
 
