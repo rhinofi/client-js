@@ -16,7 +16,7 @@ module.exports = (dvf, starkKeyPair, starkMessage) => {
 
   try {
     starkSignature = sigKeysToString(
-      (dvf.swCpp || sw).sign(starkKeyPair, starkMessage)
+      (dvf.sw || sw).sign(starkKeyPair, starkMessage)
     )
   } catch (e) {
     console.log('/starkSign ', e)
