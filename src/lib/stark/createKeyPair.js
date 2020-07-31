@@ -28,12 +28,12 @@ module.exports = (dvf, starkPrivateKey) => {
     let starkKeyPair
     let starkPublicKey
 
-    if (dvf.swCpp) {
+    if (dvf.sw) {
       // This is really only used as a private key to pass to stark.sign
-      // which accepts private key as string if swCpp is defined
+      // which accepts private key as string if sw is defined
       starkKeyPair = starkPrivateKey
       starkPublicKey = pubKeysToString(
-        dvf.swCpp.raw.getPublicKey(castHexStringToBigInt(starkPrivateKey))
+        dvf.sw.raw.getPublicKey(castHexStringToBigInt(starkPrivateKey))
       )
     } else {
       console.log('sw')
