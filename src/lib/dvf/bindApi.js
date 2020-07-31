@@ -26,11 +26,11 @@ module.exports = () => {
   dvf.stark = {
     createOrder: compose(require('../stark/createOrder')),
     createMarketOrder: compose(require('../stark/createMarketOrder')),
-    createOrderMessage: require('../stark/createOrderMessage'),
-    sign: require('../stark/starkSign'),
+    createOrderMessage: compose(require('../stark/createOrderMessage')),
+    sign: compose(require('../stark/starkSign')),
     createTransferMsg: require('../stark/createTransferMessage'),
     createPrivateKey: require('../stark/createPrivateKey'),
-    createKeyPair: require('../stark/createKeyPair'),
+    createKeyPair: compose(require('../stark/createKeyPair')),
     register: require('../../api/contract/register'),
     formatStarkPublicKey: require('../stark/formatStarkPublicKey'),
     ledger: {
