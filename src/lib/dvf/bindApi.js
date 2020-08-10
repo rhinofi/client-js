@@ -28,7 +28,7 @@ module.exports = () => {
     createMarketOrder: compose(require('../stark/createMarketOrder')),
     createOrderMessage: compose(require('../stark/createOrderMessage')),
     sign: compose(require('../stark/starkSign')),
-    createTransferMsg: require('../stark/createTransferMessage'),
+    createTransferMsg: compose(require('../stark/createTransferMessage')),
     createPrivateKey: require('../stark/createPrivateKey'),
     createKeyPair: compose(require('../stark/createKeyPair')),
     register: require('../../api/contract/register'),
