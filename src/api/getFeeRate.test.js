@@ -8,8 +8,13 @@ let dvf
 
 describe('getFeeRate', () => {
   beforeAll(async () => {
+    nock.cleanAll()
     mockGetConf()
     dvf = await instance()
+  })
+
+  beforeEach(() => {
+    nock.cleanAll()
   })
 
   it(`Query for fee rates`, async () => {

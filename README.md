@@ -174,7 +174,7 @@ const dvf = await DVF()
 dvf.set('defaultGasPrice', web3.utils.toWei('2', 'gwei'))
 
 ```
-DVF Client calls https://ethgasstation.info API to get the current gas prices and calculate a safe gas price for Ethereum transactions. Access to the ETH Gas Station API is free, but rate limited without an API key. If a ETH Gas Station API key is not provided then a recomended gas price is used which is available in `dvf.recommendedGasPrice`.
+DVF Client calls https://ethgasstation.info API to get the current gas prices and calculate a safe gas price for Ethereum transactions. Access to the ETH Gas Station API is free, but rate limited if you are not using an API key. If a ETH Gas Station API key is not provided then a recommended gas price is used which is available in `dvf.recommendedGasPrices`.
 
 You can get an API Key from https://data.defipulse.com. To configure your api key with dvf client please pass this as a `userConf` parameter when initialising DVF:
 
@@ -260,8 +260,8 @@ should be specified to 5 s.f. maximum.
 
 For example, when placing a sell order, if the `price` specified is below the highest bid available on the order book, the order will be executed instantly. However, the amount you receive will reflect only the `price` that you entered, and not the market price at the time of execution.
 
-The client library also provides methods for [submitBuyOrder](./src/api/submit_buy_order.js)
-and [submitSellOrder](./src/api/submit_sell_order.js).
+The client library also provides methods for [submitBuyOrder](./src/api/submitBuyOrder.js)
+and [submitSellOrder](./src/api/submitSellOrder.js).
 
 You can additionally provide
 
@@ -350,7 +350,7 @@ private key for the address who's orders you wish to view.
 const ethUtils = require('ethereumjs-utils')
 
 const privKey = /* Your Private Key */
-const nonce = ((Date.now() / 1000) + 10800) + ''
+const nonce = ((Date.now() / 1000) + 43200) + ''
 
 const hash = ethUtils.hashPersonalMessage(ethUtils.toBuffer(nonce.toString(16)))
 const signature = ethUtils.ecsign(hash, privKey)
@@ -445,7 +445,7 @@ const order = await dvf.getOrder(id)
 ## Troubleshooting
 
 A list of error codes returned by the API and reasons are available [here](./src/lib/dvf/errorReasons.js#L1).
-Some more detailed explanations can also be found in the [API Documentation](https://docs.beta.Deversifi.com).
+Some more detailed explanations can also be found in the [API Documentation](https://docs.Deversifi.com).
 
 If you have suggestions to improve this guide or any of the available
 documentation, please raise an issue on Github, or email [feedback@Deversifi.com](mailto:feedback@Deversifi.com).

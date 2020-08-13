@@ -7,8 +7,13 @@ let dvf
 
 describe('dvf.getConfig', () => {
   beforeAll(async () => {
+    nock.cleanAll()
     mockGetConf()
     dvf = await instance()
+  })
+
+  beforeEach(() => {
+    nock.cleanAll()
   })
 
   it('Returns the config recieved from the API', async () => {
@@ -56,8 +61,7 @@ describe('dvf.getConfig', () => {
             '0x21ef21d6b234cd669edd702dd3d1d017be888337010b950ae3679eb4194b4bc',
           tokenAddress: '0x40d8978500bf68324a51533cd6a21e3e59be324a'
         }
-      },
-      spareStarkVaultId: 866076352
+      }
     }
 
     nock(dvf.config.api)
@@ -82,12 +86,54 @@ describe('dvf.getConfig', () => {
 
     nock(dvf.config.api)
       .post('/v1/trading/r/getConf')
-      .reply(422, apiErrorResponse)
+      .reply(5000, apiErrorResponse)
 
     try {
       await dvf.getConfig()
     } catch (e) {
       expect(e.error).toEqual(apiErrorResponse)
     }
+  })
+
+  it('Handles error in getting config during initialisation', async () => {
+    const apiErrorResponse = {
+      statusCode: 404,
+      error:
+        'response 404 (backend NotFound), service rules for [ /v1/trading/r/getConf ] non-existent',
+      message:
+        '404 - "response 404 (backend NotFound), service rules for [ /v1/trading/r/getConf ] non-existent"',
+      details: {
+        name: 'StatusCodeError',
+        statusCode: 404,
+        message:
+          '404 - "response 404 (backend NotFound), service rules for [ /v1/trading/r/getConf ] non-existent"',
+        error:
+          'response 404 (backend NotFound), service rules for [ /v1/trading/r/getConf ] non-existent'
+      }
+    }
+
+    nock(dvf.config.api)
+      .post('/v1/trading/r/getConf')
+      .reply(404, apiErrorResponse)
+
+    const response = await dvf.getConfig()
+
+    expect(response).toMatchObject({
+      api: 'https://api.stg.deversifi.com',
+      gasApi: 'https://ethgasstation.info',
+      defaultGasLimit: 200000,
+      defaultGasPrice: 500000000,
+      defaultStarkExpiry: 720,
+      defaultNonceAge: 43200,
+      defaultProvider: 'http://localhost:8545',
+      account: 0,
+      autoSelectAccount: true,
+      purpose: 2645,
+      plugin: 579218131,
+      application: 1393043894,
+      accountIndex: 0,
+      autoLoadUserConf: true,
+      autoLoadExchangeConf: true
+    })
   })
 })

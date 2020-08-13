@@ -7,8 +7,13 @@ let dvf
 
 describe('dvf.cancelOrder', () => {
   beforeAll(async () => {
+    nock.cleanAll()
     mockGetConf()
     dvf = await instance()
+  })
+
+  beforeEach(() => {
+    nock.cleanAll()
   })
 
   it('Posts to cancel order API and gets response', async () => {

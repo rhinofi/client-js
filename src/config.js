@@ -5,13 +5,13 @@ module.exports = {
 
   // default transaction arguments
   defaultGasLimit: 200000,
-  defaultGasPrice: 30000000000,
+  defaultGasPrice: 50000000000,
 
   // default stark related constants
   // default expiration time for transfers and orders in hours
   defaultStarkExpiry: 720,
   // default nonce age in seconds
-  defaultNonceAge: 10800,
+  defaultNonceAge: 43200,
   // in case no provider is provided we will try connecting to the this default
 
   // address

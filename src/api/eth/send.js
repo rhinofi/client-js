@@ -14,9 +14,7 @@ module.exports = async (dvf, abi, address, action, args, value, txMeta) => {
       ? 10 * dvf.config.defaultGasLimit
       : dvf.config.defaultGasLimit
 
-  const gasPrice = dvf.config.gasStationApiKey 
-      ? await dvf.eth.getSafeGasPrice()
-      : dvf.config.recommendedGasPrice || dvf.config.defaultGasPrice
+  const gasPrice = await dvf.eth.getGasPrice()
 
   let options = {
     from: dvf.get('account'),

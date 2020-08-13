@@ -10,11 +10,10 @@ const _ = require('lodash')
 const fs = require('fs')
 const readline = require('readline');
 const Web3 = require('web3')
-const rq = require('request')
-const tr = require('tor-request')
 const P = require('aigle')
 
 const spawnProcess = require('./helpers/spawnProcess')
+const request = require('./helpers/request')
 
 const INFURA_PROJECT_ID = process.argv[2]
 const useTor = (!!process.env.USE_TOR)
@@ -36,18 +35,6 @@ if (!INFURA_PROJECT_ID) {
 const configFileName = process.env.CONFIG_FILE_NAME || 'config.json'
 const configFilePath = `${__dirname}/${configFileName}`
 
-const request = (arg) => new Promise((resolve, reject) => {
-  const request = useTor ? tr.request.bind(tr) : rq
-
-  return request(arg, (error, response, body) => {
-    if (error || response.statusCode >= 400) {
-      reject({error, response, body})
-    }
-    else {
-      resolve({response, body})
-    }
-  })
-})
 
 const ethRequestOptsForUrl = {
   'https://faucet.ropsten.be': ( address ) => `https://faucet.ropsten.be/donate/${address}`,
@@ -89,7 +76,7 @@ const checkBalance = async (web3, account, requiredBalance) => {
 const requestEth = (serviceUrl, address) => {
   console.log(`Requesting Eth from: ${serviceUrl}`)
 
-  return request(ethRequestOptsForUrl[serviceUrl](address))
+  return request(useTor, ethRequestOptsForUrl[serviceUrl](address))
   .then(({ response, body }) => {
 
     // ropsten.faucet.b9lab.com still responds with 200 if rate limiting kicks
