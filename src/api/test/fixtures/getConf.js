@@ -45,8 +45,7 @@ module.exports = () => {
           '0x21ef21d6b234cd669edd702dd3d1d017be888337010b950ae3679eb4194b4bc',
         tokenAddress: '0x40d8978500bf68324a51533cd6a21e3e59be324a'
       }
-    },
-    spareStarkVaultId: 2090569095
+    }
   }
 
   nock('https://api.stg.deversifi.com')
@@ -114,8 +113,7 @@ module.exports = () => {
       }
     },
     isRegistered: true,
-    ethAddress: '0xf858c2f2ac6b96df8c801bce90a3124a52d1915a',
-    recommendedGasPrice: 32500000000
+    ethAddress: '0xf858c2f2ac6b96df8c801bce90a3124a52d1915a'
   }
 
   nock('https://api.stg.deversifi.com')
