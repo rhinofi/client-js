@@ -6,6 +6,7 @@ const Web3 = require('web3')
 
 const DVF = require('../src/dvf')
 const envVars = require('./helpers/loadFromEnvOrConfig')()
+const api = envVars.API
 
 
 const ethPrivKey = envVars.ETH_PRIVATE_KEY
@@ -20,7 +21,7 @@ provider.engine.stop()
 
 const dvfConfig = {
   // Using staging API.
-  api: 'https://api.stg.deversifi.com'
+  api: api
   // Add more variables to override default values
 }
 
