@@ -13,6 +13,7 @@ const ethPrivKey = envVars.ETH_PRIVATE_KEY
 // const starkPrivKey = dvf.stark.createPrivateKey()
 const starkPrivKey = ethPrivKey
 const infuraURL = `https://ropsten.infura.io/v3/${envVars.INFURA_PROJECT_ID}`
+const api = envVars.API
 
 const provider = new HDWalletProvider(ethPrivKey, infuraURL)
 const web3 = new Web3(provider)
@@ -20,7 +21,7 @@ provider.engine.stop()
 
 const dvfConfig = {
   // Using staging API.
-  api: 'https://api.stg.deversifi.com'
+  api: api
   // Add more variables to override default values
 }
 
