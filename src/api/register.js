@@ -2,7 +2,7 @@ const post = require('../lib/dvf/post-authenticated')
 
 const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (dvf, starkPublicKey, nonce, signature) => {
+module.exports = async (dvf, starkPublicKey, nonce, signature, walletType) => {
   validateAssertions(dvf, { starkPublicKey })
 
   const starkKey = starkPublicKey.x
@@ -12,7 +12,8 @@ module.exports = async (dvf, starkPublicKey, nonce, signature) => {
   const data = {
     starkKey,
     nonce,
-    signature
+    signature, 
+    walletType
   }
 
   const userRegistered = await post(dvf, endpoint, nonce, signature, data)
