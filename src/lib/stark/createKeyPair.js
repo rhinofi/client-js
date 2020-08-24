@@ -36,7 +36,6 @@ module.exports = (dvf, starkPrivateKey) => {
         dvf.sw.raw.getPublicKey(castHexStringToBigInt(starkPrivateKey))
       )
     } else {
-      console.log('sw')
       starkKeyPair = sw.ec.keyFromPrivate(starkPrivateKey, 'hex')
 
       const fullPublicKey = sw.ec.keyFromPublic(
