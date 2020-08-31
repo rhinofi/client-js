@@ -44,21 +44,24 @@ module.exports = async (dvf, token, nonce, signature) => {
   const tokenMap = dvf.config.tokenRegistry;
   const tokenMapKeys = Object.keys(dvf.config.tokenRegistry);
   const starkTokenIds = tokenMapKeys.map(key => tokenMap[key].starkTokenId)
+  
   const balances = await dvf.contract.getAllWithdrawalBalances(starkTokenIds)
 
-  balances.forEach((balance, index) => {
+  return balances.reduce((all, balance, index) => {
     const key = tokenMapKeys[index]
+
     if (parseInt(balance) > 0) {
       const amount = dvf.token.toQuantizedAmount(
         key,
         dvf.token.fromBaseUnitAmount(key, balance)
       )
 
-      withdrawals.push({
+      all.push({
         token: key,
         status: 'ready',
         amount
       })
     }
-  })
+    return all
+  }, withdrawals)
 }
