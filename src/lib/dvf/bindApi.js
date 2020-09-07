@@ -114,6 +114,7 @@ module.exports = () => {
 
   // dvf main functions
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
+  dvf.cancelWithdrawal = compose(require('../../api/cancelWithdrawal'))
   dvf.deposit = compose(require('../../api/deposit'))
   dvf.getDeposits = compose(require('../../api/getDeposits'))
   dvf.getBalance = compose(require('../../api/getBalance'))
