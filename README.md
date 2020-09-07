@@ -6,8 +6,6 @@ A js client library for DeversiFi - StarkWare orders
 
 **Note:** This library is for the new DeversiFi 2.0 platform, scheduled to launch on Ethereum mainnet later in 2020. Currently a test version of it is live on the Ropsten test network at https://app.stg.deversifi.com // https://api.stg.deversifi.com
 
-For the current production version of DeversiFi use the [old client library](https://github.com/ethfinex/efx-api-node).
-
 ## Contents
 
 - [Installation](#installation)
