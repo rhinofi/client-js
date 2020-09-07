@@ -9,15 +9,10 @@ module.exports = async (dvf, token, deposit) => {
 
   const currency = dvf.token.getTokenInfo(token)
 
-  const maxAmount = (2 ** 256 - 1).toString(16)
+  const maxAmount = token === 'COMP' ? (2 ** 96 - 1).toString(16) : (2 ** 256 - 1).toString(16)
 
   if (!deposit) {
     deposit = maxAmount
-  }
-
-  if (token === 'COMP') {
-    const compMaxAmount = (2 ** 96 - 1).toString(16)
-    deposit = parseInt(deposit, 10) < parseInt(compMaxAmount, 10) ? deposit : compMaxAmount
   }
 
   const allowance = parseInt(await dvf.contract.isApproved(token))
