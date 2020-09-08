@@ -1,7 +1,10 @@
 const { get } = require('request-promise')
 
 module.exports = async dvf => {
-  const url = dvf.config.api + '/v1/trading/r/estimatedNextBatchTime'
+  // avoid browser cache with timestamp as querystring
+  const t = Date.now()
+
+  const url = `${dvf.config.api}/v1/trading/r/estimatedNextBatchTime?t=${t}`
   try {
     const data = await get(url)
     return JSON.parse(data)

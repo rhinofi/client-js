@@ -34,7 +34,8 @@ const dvfConfig = {
   const feeRate = ''
 
   // Gets the price from the order book api and cuts 5% to make sure the order will be settled
-  const orderBookPrice = await getPriceFromOrderBook();
+  const tickersData = await dvf.getTickers('ETH:USDT');
+  const orderBookPrice = getPriceFromOrderBook(tickersData);
   const price = orderBookPrice - orderBookPrice * 0.05;
 
   const submitOrderResponse = await dvf.submitOrder({
@@ -56,4 +57,3 @@ const dvfConfig = {
   console.error(error)
   process.exit(1)
 })
-

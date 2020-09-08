@@ -23,10 +23,11 @@ describe('dvf.estimatedNextBatchTime', () => {
 
     nock(dvf.config.api)
       .get('/v1/trading/r/estimatedNextBatchTime')
+      .query(true)
       .reply(200, apiResponse)
 
     const response = await dvf.estimatedNextBatchTime()
-    expect(JSON.parse(response)).toEqual(apiResponse)
+    expect(response).toEqual(apiResponse)
   })
 
   it('Posts to config API and gets error response', async () => {
@@ -43,6 +44,7 @@ describe('dvf.estimatedNextBatchTime', () => {
 
     nock(dvf.config.api)
       .get('/v1/trading/r/estimatedNextBatchTime')
+      .query(true)
       .reply(422, apiErrorResponse)
 
     try {

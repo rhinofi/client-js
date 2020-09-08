@@ -61,10 +61,14 @@ module.exports = () => {
     getWithdrawalBalance: compose(
       require('../../api/contract/getWithdrawalBalance')
     ),
+    getAllWithdrawalBalances: compose(
+      require('../../api/contract/getAllWithdrawalBalances')
+    ),    
     withdraw: compose(require('../../api/contract/withdraw')),
     abi: {
       token: require('../../api/contract/abi/token.abi'),
-      StarkEx: require('../../api/contract/abi/StarkEx.abi')
+      StarkEx: require('../../api/contract/abi/StarkEx.abi'),
+      WithdrawalBalanceReader: require('../../api/contract/abi/WithdrawalBalanceReader.abi')
     }
   }
   // dvf.token functions
@@ -111,6 +115,9 @@ module.exports = () => {
 
   // dvf trading volume data
   dvf.get30DaysVolume = compose(require('../../api/get30DaysVolume'))
+
+  // bfx data
+  dvf.getTickers = compose(require('../../lib/bfx/getTickers'))
 
   // dvf main functions
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
