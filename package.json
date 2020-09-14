@@ -68,7 +68,7 @@
     "env-cmd": "^10.1.0",
     "ganache-cli": "^6.1.4",
     "hash-filename": "^1.0.4",
-    "jest": "^24.9.0",
+    "jest": "^26.4.2",
     "keccak": "^1.4.0",
     "mustache": "^4.0.0",
     "nock": "^9.4.1",
