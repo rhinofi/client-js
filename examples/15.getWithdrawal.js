@@ -19,8 +19,7 @@ const web3 = new Web3(provider)
 provider.engine.stop()
 
 const dvfConfig = {
-  // Using staging API.
-  api: 'https://api.stg.deversifi.com'
+  api: envVars.API_URL
   // Add more variables to override default values
 }
 
@@ -46,8 +45,12 @@ const dvfConfig = {
     withdrawalId = withdrawalResponse._id
   }
   else {
-    console.log('getWithdrawal response ->', withdrawals[0])
+    withdrawalId = withdrawals[0]._id
   }
+
+  const getWithdrawalResponse = await dvf.getWithdrawal(withdrawalId)
+
+  console.log('getWithdrawal response ->', getWithdrawalResponse)
 
 })()
 .catch(error => {

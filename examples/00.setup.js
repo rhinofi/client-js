@@ -158,6 +158,7 @@ const go = async (configPath) => {
       JSON.stringify({
         INFURA_PROJECT_ID,
         ETH_PRIVATE_KEY: account.privateKey,
+        API_URL: 'https://api.stg.deversifi.com',
         account
       }, null, 2)
     )
