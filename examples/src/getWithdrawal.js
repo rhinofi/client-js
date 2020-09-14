@@ -5,7 +5,7 @@ if (withdrawals.length == 0) {
   console.log('creating a new withdrawal')
 
   const token = 'ETH'
-  const amount = 0.05
+  const amount = 0.1
 
   const withdrawalResponse = await dvf.withdraw(
     token,
