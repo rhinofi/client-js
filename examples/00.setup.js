@@ -12,6 +12,7 @@ const readline = require('readline');
 const Web3 = require('web3')
 const P = require('aigle')
 
+const logMyIP = require('./helpers/logMyIP')
 const spawnProcess = require('./helpers/spawnProcess')
 const request = require('./helpers/request')
 const saveAsJson = require('./helpers/saveAsJson')
@@ -100,16 +101,19 @@ const requestEth = (serviceUrl, address) => {
   })
 }
 
-const maybeSpawnTor = () => {
+const maybeSpawnTor = async () => {
   if (!useTor) return
 
   console.log('Starting TOR...')
 
-  return spawnProcess({
+  const torProcess = spawnProcess({
     command: [ 'tor' ],
     waitForLogOnInit: /.*Bootstrapped 100% \(done\): Done.*/,
     log: false
   })
+
+  await logMyIP(true)
+  return torProcess
 }
 
 const maybeKillTor = async (torProcess) => {
@@ -167,16 +171,23 @@ const go = async (configPath) => {
     console.log(`Created ./${configFileName}`)
   }
 
-  const gotEth = await getEth(account)
+  const hasSufficientBalanceOrThrow = () => checkBalance(web3, account, 1)
 
-  if (!gotEth) {
-    console.error('attempts to get Eth failed!')
-    process.exit(1)
-  }
+  await hasSufficientBalanceOrThrow()
+    // If not enough balance, try to get some.
+    .catch(async () => {
+      const gotEth = await getEth(account)
+
+      if (!gotEth) {
+        console.error('attempts to get Eth failed!')
+        process.exit(1)
+      }
+    })
+
   if (waitForBalance) {
     await P.retry(
       { times: 120, interval: 1000 },
-      () => checkBalance(web3, account, 1)
+      hasSufficientBalanceOrThrow
     )
   }
 
