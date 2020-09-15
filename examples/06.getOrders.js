@@ -8,6 +8,7 @@ const DVF = require('../src/dvf')
 const envVars = require('./helpers/loadFromEnvOrConfig')(
   process.env.CONFIG_FILE_NAME
 )
+const logExampleResult = require('./helpers/logExampleResult')(__filename)
 
 const ethPrivKey = envVars.ETH_PRIVATE_KEY
 // NOTE: you can also generate a new key using:`
@@ -29,7 +30,7 @@ const dvfConfig = {
 
   const getOrdersResponse = await dvf.getOrders()
 
-  console.log('getOrders response ->', getOrdersResponse)
+  logExampleResult(getOrdersResponse)
 
 })()
 .catch(error => {

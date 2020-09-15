@@ -25,7 +25,7 @@ const testExample = async (fileName) => {
   const timeout = 60000
 
   return Promise.all([
-    waitForLog({match:/.*response ->*/, timeout}),
+    waitForLog({ match: new RegExp(`${fileName} response ->`), timeout }),
     waitForCleanExit(timeout)
   ])
 }

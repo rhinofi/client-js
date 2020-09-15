@@ -14,6 +14,7 @@ const P = require('aigle')
 
 const spawnProcess = require('./helpers/spawnProcess')
 const request = require('./helpers/request')
+const saveAsJson = require('./helpers/saveAsJson')
 
 const INFURA_PROJECT_ID = process.argv[2]
 const useTor = (!!process.env.USE_TOR)
@@ -154,15 +155,12 @@ const go = async (configPath) => {
 
     console.log('Created new Ethereum account:', account.address)
 
-    fs.writeFileSync(
-      configFilePath,
-      JSON.stringify({
-        INFURA_PROJECT_ID,
-        ETH_PRIVATE_KEY: account.privateKey,
-        API_URL: apiUrl,
-        account
-      }, null, 2)
-    )
+    saveAsJson(configFilePath, {
+      INFURA_PROJECT_ID,
+      ETH_PRIVATE_KEY: account.privateKey,
+      API_URL: apiUrl,
+      account
+    })
 
     console.log(`Created ./${configFileName}`)
   }

@@ -36,4 +36,4 @@ console.log('fetching orderId', orderId)
 
 const response = await dvf.getOrder(orderId)
 
-console.log("getOrder response ->", response)
+logExampleResult(response)

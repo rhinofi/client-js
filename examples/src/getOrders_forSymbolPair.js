@@ -1,4 +1,3 @@
-
 const symbol = 'BTC:USDT'
 
 let orders = await dvf.getOrders(symbol)
@@ -28,4 +27,4 @@ if (orders.length == 0) {
 
 orders = await dvf.getOrders(symbol)
 
-console.log("getOrders(symbol) response ->", orders)
+logExampleResult(orders)

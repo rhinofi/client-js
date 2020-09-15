@@ -14,4 +14,4 @@ const withdrawResponse = await dvf.ledger.withdraw(
   starkWithdrawalData
 )
 
-console.log('withdraw response ->', withdrawResponse)
+logExampleResult(withdrawResponse)
