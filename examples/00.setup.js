@@ -186,7 +186,7 @@ const go = async (configPath) => {
 
   if (waitForBalance) {
     await P.retry(
-      { times: 120, interval: 1000 },
+      { times: 360, interval: 1000 },
       hasSufficientBalanceOrThrow
     )
   }
