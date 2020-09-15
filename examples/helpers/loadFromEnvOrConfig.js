@@ -37,9 +37,12 @@ module.exports = (configFileName = 'config.json') => {
 
   const getConfigVar = getConfigVar_(config, configFilePath)
 
+  const apiUrl = getConfigVar('API_URL', 'https://api.stg.deversifi.com')
+
   return {
     INFURA_PROJECT_ID: getConfigVar('INFURA_PROJECT_ID'),
     ETH_PRIVATE_KEY: getConfigVar('ETH_PRIVATE_KEY'),
-    API_URL: getConfigVar('API_URL', 'https://api.stg.deversifi.com')
+    API_URL: apiUrl,
+    DATA_API_URL: getConfigVar('DATA_API_URL', apiUrl)
   }
 }
