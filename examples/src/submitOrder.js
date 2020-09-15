@@ -23,4 +23,4 @@ const submitOrderResponse = await dvf.submitOrder({
   partnerId: 'P1'    // Optional
 })
 
-console.log('submitOrder response ->', submitOrderResponse)
+logExampleResult(submitOrderResponse)

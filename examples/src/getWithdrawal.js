@@ -22,4 +22,4 @@ else {
 
 const getWithdrawalResponse = await dvf.getWithdrawal(withdrawalId)
 
-console.log('getWithdrawal response ->', getWithdrawalResponse)
+logExampleResult(getWithdrawalResponse)

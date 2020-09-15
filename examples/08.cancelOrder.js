@@ -8,6 +8,7 @@ const DVF = require('../src/dvf')
 const envVars = require('./helpers/loadFromEnvOrConfig')(
   process.env.CONFIG_FILE_NAME
 )
+const logExampleResult = require('./helpers/logExampleResult')(__filename)
 
 const ethPrivKey = envVars.ETH_PRIVATE_KEY
 // NOTE: you can also generate a new key using:`
@@ -34,7 +35,7 @@ const dvfConfig = {
 
   if (orders.length == 0) {
     console.log('submitting new order')
-    
+
     // Submit an order to buy 0.5 Eth at a rate of 200 USDT for 1 Eth
     const symbol = 'ETH:USDT'
     const amount = 0.5
@@ -66,7 +67,7 @@ const dvfConfig = {
 
   const response = await dvf.cancelOrder(orderId)
 
-  console.log("cancelOrder response ->", response)
+  logExampleResult("cancelOrder response ->", response)
 
 })()
 .catch(error => {
