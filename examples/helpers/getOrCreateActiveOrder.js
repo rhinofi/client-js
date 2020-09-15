@@ -1,0 +1,31 @@
+const P = require('aigle')
+
+const defaultOrderProps = Object.freeze({
+  // Order to sell 0.1 ETH at a the price of 100000 USDT per ETH.
+  symbol: 'ETH:USDT',
+  amount: -0.1,
+  // We are asking a hight price to ensure that the order stays on the book
+  price: 100000
+})
+
+module.exports = async (dvf, starkPrivateKey, orderProps = defaultOrderProps) => {
+  const orders = await dvf.getOrders(orderProps.symbol)
+
+  if (orders.length > 0) {
+    return orders[0]
+  }
+
+  console.log('submitting new order')
+
+  const order = await dvf.submitOrder({ ...orderProps, starkPrivateKey })
+
+  console.log('waiting until order appears on the book...')
+  while (true) {
+    // TODD:
+    if ((await dvf.getOrder(order._id)).active === true) break
+    await P.delay(1000)
+    console.log('still waiting...')
+  }
+
+  return order
+}

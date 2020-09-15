@@ -17,10 +17,10 @@ const request = require('./helpers/request')
 const saveAsJson = require('./helpers/saveAsJson')
 
 const INFURA_PROJECT_ID = process.argv[2]
-const useTor = (!!process.env.USE_TOR)
-const createNewAccount = (!!process.env.CREATE_NEW_ACCOUNT)
-const useExistingAccount = (!!process.env.USE_EXISTING_ACCOUNT)
-const waitForBalance = (!!process.env.WAIT_FOR_BALANCE)
+const useTor = process.env.USE_TOR === 'true'
+const createNewAccount = process.env.CREATE_NEW_ACCOUNT === 'true'
+const useExistingAccount = process.env.USE_EXISTING_ACCOUNT === 'true'
+const waitForBalance = process.env.WAIT_FOR_BALANCE === 'true'
 const apiUrl = process.env.API_URL || 'https://api.stg.deversifi.com'
 
 if (!INFURA_PROJECT_ID) {
@@ -28,7 +28,7 @@ if (!INFURA_PROJECT_ID) {
   console.error('\nusage: ./0.setup.js INFURA_PROJECT_ID')
   console.error('\n  you can obtain an INFURA_PROJECT_ID by following instructions here: https://ethereumico.io/knowledge-base/infura-api-key-guide ')
   console.error('    NOTE: the `API KEY` mentioned in the instructions has been renamed to `PROJECT ID`.')
-  console.error('\n  if you get an error when requesting Eth from a faucet, set USE_TOR=1 env var to make requests via a TOR (using https://www.npmjs.com/package/tor-request)')
+  console.error('\n  if you get an error when requesting Eth from a faucet, set USE_TOR=true env var to make requests via a TOR (using https://www.npmjs.com/package/tor-request)')
   console.error('    NOTE: tor executable needs to be on your path for this to work (it will be started/stopped automatically)')
   console.error('    tor can be installed via brew on MacOS or using your distros package manager if you are using linux')
   process.exit(1)

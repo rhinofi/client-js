@@ -1,14 +1,27 @@
 fp = require('lodash/fp');
 
+const { Joi } = require('dvf-utils')
+
 const examples = require('./examplesList')
 const makeExampleFileName = require('./makeExampleFileName')
 const spawnProcess = require('./spawnProcess')
 
-const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID
+const configSchema = Joi.object().keys({
+  INFURA_PROJECT_ID: Joi.string().required(),
+  SETUP_TIMEOUT: Joi.number().integer().default(5 * 60000),
+  TEST_TIMEOUT: Joi.number().integer().default(5 * 60000),
+  CONFIG_FILE_NAME: Joi.string().default(`config-test-${new Date().toISOString()}.js`),
+  WAIT_FOR_DEPOSIT_READY: Joi.boolean().default(true),
+  WAIT_FOR_BALANCE: Joi.boolean().default(true),
+  CREATE_NEW_ACCOUNT: Joi.boolean().default(true)
+})
 
-if (!INFURA_PROJECT_ID) {
-  throw new Error('INFURA_PROJECT_ID env var needs to be set to run the tests')
-}
+const parsedEnv = Joi.attempt(
+  process.env,
+  configSchema,
+  'error while parsing config from process.env',
+  { allowUnknown: true, stripUnknown: false }
+)
 
 const examplesDir = `${__dirname}/..`
 
@@ -19,10 +32,11 @@ const testExample = async (fileName) => {
     command: [ `${examplesDir}/${fileName}` ],
     cwd: examplesDir,
     log: true,
+    env: parsedEnv
     // debug: true
   })
 
-  const timeout = 60000
+  const timeout = parsedEnv.TEST_TIMEOUT
 
   return Promise.all([
     waitForLog({ match: new RegExp(`${fileName} response ->`), timeout }),
@@ -32,26 +46,24 @@ const testExample = async (fileName) => {
 
 // List of examples to skip when running tests.
 const examplesToSkip = [
-  // 'register'
+  'ledgerDeposit',
+  'ledgerSubmitOrder',
+  'ledgerSubmitOrder',
+  'ledgerWithdraw',
+  'fullWithdrawalRequest'
 ]
 
 ;(async () => {
 
   const { waitForCleanExit } = await spawnProcess({
-    command: [ `${examplesDir}/00.setup.js`, INFURA_PROJECT_ID ],
+    command: [ `${examplesDir}/00.setup.js`, parsedEnv.INFURA_PROJECT_ID ],
     cwd: examplesDir,
     log: true,
-    env: Object.assign(
-      {
-        CREATE_NEW_ACCOUNT: 'true',
-        WAIT_FOR_BALANCE: 'true'
-      },
-      { ...process.env }
-    )
+    env: parsedEnv
     // debug: true
   })
 
-  await waitForCleanExit(4 * 60000)
+  await waitForCleanExit(parsedEnv.SETUP_TIMEOUT)
 
   const exampleFileNames = examples.map(makeExampleFileName)
   const someExampleFileNames = fp.reject(
@@ -62,8 +74,7 @@ const examplesToSkip = [
     exampleFileNames
   )
 
-  console.log('exampleFileNames', exampleFileNames)
-  console.log('someExampleFileNames', someExampleFileNames)
+  console.log('examples to test:', someExampleFileNames)
 
   for (const exampleName of someExampleFileNames) {
     await testExample(exampleName)
@@ -73,7 +84,3 @@ const examplesToSkip = [
   console.error(error)
   process.exit(1)
 })
-
-// files.forEach((fileName) => {
-//   renderAndSave(fs.readFileSync(`${examplesSrcDir}/${fileName}`).toString())
-// })
