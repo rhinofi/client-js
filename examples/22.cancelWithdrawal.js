@@ -21,7 +21,8 @@ const web3 = new Web3(provider)
 provider.engine.stop()
 
 const dvfConfig = {
-  api: envVars.API_URL
+  api: envVars.API_URL,
+  dataApi: envVars.DATA_API_URL
   // Add more variables to override default values
 }
 

@@ -21,7 +21,8 @@ const useTor = process.env.USE_TOR === 'true'
 const createNewAccount = process.env.CREATE_NEW_ACCOUNT === 'true'
 const useExistingAccount = process.env.USE_EXISTING_ACCOUNT === 'true'
 const waitForBalance = process.env.WAIT_FOR_BALANCE === 'true'
-const apiUrl = process.env.API_URL || 'https://api.stg.deversifi.com'
+const API_URL = process.env.API_URL || 'https://api.stg.deversifi.com'
+const DATA_API_URL = process.env.DATA_API_URL || API_URL
 
 if (!INFURA_PROJECT_ID) {
   console.error('Error: INFURA_PROJECT_ID not set')
@@ -158,7 +159,8 @@ const go = async (configPath) => {
     saveAsJson(configFilePath, {
       INFURA_PROJECT_ID,
       ETH_PRIVATE_KEY: account.privateKey,
-      API_URL: apiUrl,
+      API_URL,
+      DATA_API_URL,
       account
     })
 
