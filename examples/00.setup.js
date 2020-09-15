@@ -195,34 +195,47 @@ const go = async (configPath) => {
   process.exit()
 }
 
+const ask = question => {
+  return new P((resolve, reject) => {
+    try {
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+      })
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-if (fs.existsSync(configFilePath)) {
-  if (useExistingAccount) {
-    go(configFilePath)
-  } else if (createNewAccount) {
-    go()
-  } else {
-    rl.question(
-      `The ./${configFileName} file exits, do you want to use this config?
-      If you choose 'yes', existing ./${configFileName} will not be modified and Eth will be added to the account found in this config.
-      If you chooce 'no', a new account will be created, Eth added to it and the ./${configFileName} file overwritten (yes/no): `,
-      (answer) => {
+      rl.question(question, answer => {
         rl.close()
-        if (answer == 'yes') {
-          go(configFilePath)
-        }
-        else {
-          go()
-        }
-      }
-    )
+        resolve(answer)
+      })
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+
+
+;(async () => {
+  if (fs.existsSync(configFilePath)) {
+    if (useExistingAccount) {
+      await go(configFilePath)
+    } else if (createNewAccount) {
+      await go()
+    } else {
+      await ask(
+        `The ./${configFileName} file exits, do you want to use this config?
+        If you choose 'yes', existing ./${configFileName} will not be modified and Eth will be added to the account found in this config.
+        If you chooce 'no', a new account will be created, Eth added to it and the ./${configFileName} file overwritten (yes/no): `,
+        answer => answer === 'yes'
+          ? go(configFilePath)
+          : go()
+      )
+    }
   }
-}
-else {
-  go()
-}
+  else {
+    await go()
+  }
+})().catch(error => {
+  console.error(error)
+  process.exit(1)
+})
