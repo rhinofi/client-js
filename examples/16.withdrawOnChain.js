@@ -5,8 +5,9 @@ const sw = require('starkware_crypto')
 const Web3 = require('web3')
 
 const DVF = require('../src/dvf')
-const envVars = require('./helpers/loadFromEnvOrConfig')()
-
+const envVars = require('./helpers/loadFromEnvOrConfig')(
+  process.env.CONFIG_FILE_NAME
+)
 
 const ethPrivKey = envVars.ETH_PRIVATE_KEY
 // NOTE: you can also generate a new key using:`
