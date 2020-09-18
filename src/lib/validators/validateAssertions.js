@@ -1,4 +1,5 @@
 const validators = {
+  id: require('./id'),
   orderId: require('./orderId'),
   symbol: require('./symbol'),
   token: require('./token'),
@@ -23,10 +24,10 @@ module.exports = (dvf, parameters) => {
 
     const result = validators[key](dvf, value)
 
-    if(result) { 
-      return result 
+    if (result) {
+      return result
     }
   }
-  
+
   return false
 }

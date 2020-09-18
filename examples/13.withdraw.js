@@ -19,8 +19,7 @@ const web3 = new Web3(provider)
 provider.engine.stop()
 
 const dvfConfig = {
-  // Using staging API.
-  api: 'https://api.stg.deversifi.com'
+  api: envVars.API_URL
   // Add more variables to override default values
 }
 
@@ -28,7 +27,7 @@ const dvfConfig = {
   const dvf = await DVF(web3, dvfConfig)
 
   const token = 'ETH'
-  const amount = 0.05
+  const amount = 0.1
 
   const withdrawalResponse = await dvf.withdraw(
     token,

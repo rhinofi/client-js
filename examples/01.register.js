@@ -19,8 +19,7 @@ const web3 = new Web3(provider)
 provider.engine.stop()
 
 const dvfConfig = {
-  // Using staging API.
-  api: 'https://api.stg.deversifi.com'
+  api: envVars.API_URL
   // Add more variables to override default values
 }
 

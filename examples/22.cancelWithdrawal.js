@@ -26,23 +26,31 @@ const dvfConfig = {
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
-  const path = `44'/60'/0'/0'/0`
-  const token = 'ETH'
-  const amount = 0.70
+  let withdrawalId
+  const withdrawals = await dvf.getWithdrawals()
 
-  const starkDepositData = await dvf.stark.ledger.createDepositData(
-    path,
-    token,
-    amount
-  )
+  if (withdrawals.length == 0) {
+    console.log('creating a new withdrawal')
 
-  const depositResponse = await dvf.ledger.deposit(
-    token,
-    amount,
-    starkDepositData
-  )
+    const token = 'ETH'
+    const amount = 0.1
 
-  console.log('deposit response ->', depositResponse)
+    const withdrawalResponse = await dvf.withdraw(
+      token,
+      amount,
+      starkPrivKey
+    )
+
+    console.log('withdrawalResponse', withdrawalResponse)
+    withdrawalId = withdrawalResponse._id
+  }
+  else {
+    withdrawalId = withdrawals[0]._id
+  }
+
+  const canceledWithdrawal = await dvf.cancelWithdrawal(withdrawalId)
+
+  console.log('cancelWithdrawal response ->', canceledWithdrawal)
 
 })()
 .catch(error => {

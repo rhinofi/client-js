@@ -6,7 +6,7 @@ const Web3 = require('web3')
 
 const DVF = require('../src/dvf')
 const envVars = require('./helpers/loadFromEnvOrConfig')()
-const getPriceFromOrderBook = require('./helpers/getPriceFromOrderBook')
+
 
 const ethPrivKey = envVars.ETH_PRIVATE_KEY
 // NOTE: you can also generate a new key using:`
@@ -19,13 +19,14 @@ const web3 = new Web3(provider)
 provider.engine.stop()
 
 const dvfConfig = {
-  // Using staging API.
-  api: 'https://api.stg.deversifi.com'
+  api: envVars.API_URL
   // Add more variables to override default values
 }
 
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
+
+  const getPriceFromOrderBook = require('./helpers/getPriceFromOrderBook')
 
   // Submit an order to sell 0.3 Eth for 200 USDT per 1 Eth
   const symbol = 'ETH:USDT'
@@ -57,3 +58,4 @@ const dvfConfig = {
   console.error(error)
   process.exit(1)
 })
+
