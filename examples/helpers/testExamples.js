@@ -8,8 +8,8 @@ const spawnProcess = require('./spawnProcess')
 
 const configSchema = Joi.object().keys({
   INFURA_PROJECT_ID: Joi.string().required(),
-  SETUP_TIMEOUT: Joi.number().integer().default(5 * 60000),
-  TEST_TIMEOUT: Joi.number().integer().default(5 * 60000),
+  SETUP_TIMEOUT: Joi.number().integer().default(10 * 60000),
+  TEST_TIMEOUT: Joi.number().integer().default(10 * 60000),
   CONFIG_FILE_NAME: Joi.string().default(`config-test-${new Date().toISOString()}.js`),
   WAIT_FOR_DEPOSIT_READY: Joi.boolean().default(true),
   WAIT_FOR_BALANCE: Joi.boolean().default(true),
