@@ -97,7 +97,7 @@ const dvf = await DVF(web3)
 
 
 ````javascript
-const HDWalletProvider = require("truffle-hdwallet-provider");
+const HDWalletProvider = require("@truffle/hdwallet-provider");
 const Web3 = require("Web3")
 
 const privateKey = '8F085...' // Account's private key

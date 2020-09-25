@@ -1,7 +1,7 @@
 /**
  * Creats a client instance for testing
  **/
-const HDWalletProvider = require('truffle-hdwallet-provider')
+const HDWalletProvider = require('@truffle/hdwallet-provider')
 const Web3 = require('web3')
 
 const DVF = require('../../../dvf')
@@ -15,7 +15,7 @@ module.exports = async () => {
   const web3 = new Web3(provider)
 
   provider.engine.stop()
-  
+
   const gasStationApiKey = process.env.ETH_GAS_STATION_KEY || ''
 
   let config = { gasStationApiKey }

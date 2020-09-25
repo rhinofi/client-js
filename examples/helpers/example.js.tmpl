@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const HDWalletProvider = require('truffle-hdwallet-provider')
+const HDWalletProvider = require('@truffle/hdwallet-provider')
 const sw = require('starkware_crypto')
 const Web3 = require('web3')
 

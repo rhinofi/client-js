@@ -61,6 +61,7 @@
     "web3-provider-engine": "^15.0.6"
   },
   "devDependencies": {
+    "@truffle/hdwallet-provider": "^1.1.0",
     "browser-run": "^5.0.0",
     "browserify": "^16.2.2",
     "del": "^3.0.0",
@@ -76,7 +77,6 @@
     "solc": "^0.4.24",
     "standard": "^11.0.1",
     "supertest": "^4.0.2",
-    "tor-request": "^3.1.0",
-    "truffle-hdwallet-provider": "^1.0.17"
+    "tor-request": "^3.1.0"
   }
 }
