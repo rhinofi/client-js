@@ -69,7 +69,7 @@
     "hash-filename": "^1.0.4",
     "jest": "^26.4.2",
     "mustache": "^4.0.0",
-    "nock": "^9.4.1",
+    "nock": "^13.0.4",
     "node-minify": "^3.2.0",
     "solc": "^0.4.24",
     "standard": "^11.0.1",
