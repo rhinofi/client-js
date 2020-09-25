@@ -57,7 +57,7 @@
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
     "starkware_crypto": "git+https://github.com/DeversiFi/starkware-crypto#13a765c46884e79e153f64d34a60d77c205b2982",
-    "web3": "^1.2.4",
+    "web3": "^1.3.0",
     "web3-provider-engine": "^15.0.6"
   },
   "devDependencies": {
