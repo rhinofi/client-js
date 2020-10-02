@@ -13,7 +13,7 @@ module.exports = async (dvf, starkPublicKey, nonce, signature, contractWalletAdd
     starkKey,
     nonce,
     signature, 
-    contractWalletAddress
+    ...(contractWalletAddress && { contractWalletAddress })
   }
 
   const userRegistered = await post(dvf, endpoint, nonce, signature, data)
