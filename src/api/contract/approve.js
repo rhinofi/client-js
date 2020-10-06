@@ -9,7 +9,7 @@ module.exports = async (dvf, token, deposit) => {
 
   const currency = dvf.token.getTokenInfo(token)
 
-  const maxAmount = token === 'COMP' ? (2 ** 96 - 1).toString(16) : (2 ** 256 - 1).toString(16)
+  const maxAmount = (2 ** 96 - 1).toString(16)
 
   if (!deposit) {
     deposit = maxAmount
