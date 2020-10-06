@@ -7,4 +7,4 @@ const withdrawalResponse = await dvf.withdraw(
   starkPrivKey
 )
 
-console.log('withdraw response ->', withdrawalResponse)
+logExampleResult(withdrawalResponse)

@@ -12,22 +12,25 @@ const readline = require('readline');
 const Web3 = require('web3')
 const P = require('aigle')
 
+const logMyIP = require('./helpers/logMyIP')
 const spawnProcess = require('./helpers/spawnProcess')
 const request = require('./helpers/request')
+const saveAsJson = require('./helpers/saveAsJson')
 
 const INFURA_PROJECT_ID = process.argv[2]
-const useTor = (!!process.env.USE_TOR)
-const createNewAccount = (!!process.env.CREATE_NEW_ACCOUNT)
-const useExistingAccount = (!!process.env.USE_EXISTING_ACCOUNT)
-const waitForBalance = (!!process.env.WAIT_FOR_BALANCE)
-const apiUrl = process.env.API_URL || 'https://api.stg.deversifi.com'
+const useTor = process.env.USE_TOR === 'true'
+const createNewAccount = process.env.CREATE_NEW_ACCOUNT === 'true'
+const useExistingAccount = process.env.USE_EXISTING_ACCOUNT === 'true'
+const waitForBalance = process.env.WAIT_FOR_BALANCE === 'true'
+const API_URL = process.env.API_URL || 'https://api.stg.deversifi.com'
+const DATA_API_URL = process.env.DATA_API_URL || API_URL
 
 if (!INFURA_PROJECT_ID) {
   console.error('Error: INFURA_PROJECT_ID not set')
   console.error('\nusage: ./0.setup.js INFURA_PROJECT_ID')
   console.error('\n  you can obtain an INFURA_PROJECT_ID by following instructions here: https://ethereumico.io/knowledge-base/infura-api-key-guide ')
   console.error('    NOTE: the `API KEY` mentioned in the instructions has been renamed to `PROJECT ID`.')
-  console.error('\n  if you get an error when requesting Eth from a faucet, set USE_TOR=1 env var to make requests via a TOR (using https://www.npmjs.com/package/tor-request)')
+  console.error('\n  if you get an error when requesting Eth from a faucet, set USE_TOR=true env var to make requests via a TOR (using https://www.npmjs.com/package/tor-request)')
   console.error('    NOTE: tor executable needs to be on your path for this to work (it will be started/stopped automatically)')
   console.error('    tor can be installed via brew on MacOS or using your distros package manager if you are using linux')
   process.exit(1)
@@ -98,16 +101,19 @@ const requestEth = (serviceUrl, address) => {
   })
 }
 
-const maybeSpawnTor = () => {
+const maybeSpawnTor = async () => {
   if (!useTor) return
 
   console.log('Starting TOR...')
 
-  return spawnProcess({
+  const torProcess = spawnProcess({
     command: [ 'tor' ],
     waitForLogOnInit: /.*Bootstrapped 100% \(done\): Done.*/,
     log: false
   })
+
+  await logMyIP(true)
+  return torProcess
 }
 
 const maybeKillTor = async (torProcess) => {
@@ -154,29 +160,34 @@ const go = async (configPath) => {
 
     console.log('Created new Ethereum account:', account.address)
 
-    fs.writeFileSync(
-      configFilePath,
-      JSON.stringify({
-        INFURA_PROJECT_ID,
-        ETH_PRIVATE_KEY: account.privateKey,
-        API_URL: apiUrl,
-        account
-      }, null, 2)
-    )
+    saveAsJson(configFilePath, {
+      INFURA_PROJECT_ID,
+      ETH_PRIVATE_KEY: account.privateKey,
+      API_URL,
+      DATA_API_URL,
+      account
+    })
 
     console.log(`Created ./${configFileName}`)
   }
 
-  const gotEth = await getEth(account)
+  const hasSufficientBalanceOrThrow = () => checkBalance(web3, account, 1)
 
-  if (!gotEth) {
-    console.error('attempts to get Eth failed!')
-    process.exit(1)
-  }
+  await hasSufficientBalanceOrThrow()
+    // If not enough balance, try to get some.
+    .catch(async () => {
+      const gotEth = await getEth(account)
+
+      if (!gotEth) {
+        console.error('attempts to get Eth failed!')
+        process.exit(1)
+      }
+    })
+
   if (waitForBalance) {
     await P.retry(
-      { times: 120, interval: 1000 },
-      () => checkBalance(web3, account, 1)
+      { times: 360, interval: 1000 },
+      hasSufficientBalanceOrThrow
     )
   }
 
@@ -184,34 +195,47 @@ const go = async (configPath) => {
   process.exit()
 }
 
+const ask = question => {
+  return new P((resolve, reject) => {
+    try {
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+      })
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-if (fs.existsSync(configFilePath)) {
-  if (useExistingAccount) {
-    go(configFilePath)
-  } else if (createNewAccount) {
-    go()
-  } else {
-    rl.question(
-      `The ./${configFileName} file exits, do you want to use this config?
-      If you choose 'yes', existing ./${configFileName} will not be modified and Eth will be added to the account found in this config.
-      If you chooce 'no', a new account will be created, Eth added to it and the ./${configFileName} file overwritten (yes/no): `,
-      (answer) => {
+      rl.question(question, answer => {
         rl.close()
-        if (answer == 'yes') {
-          go(configFilePath)
-        }
-        else {
-          go()
-        }
-      }
-    )
+        resolve(answer)
+      })
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+
+
+;(async () => {
+  if (fs.existsSync(configFilePath)) {
+    if (useExistingAccount) {
+      await go(configFilePath)
+    } else if (createNewAccount) {
+      await go()
+    } else {
+      await ask(
+        `The ./${configFileName} file exits, do you want to use this config?
+        If you choose 'yes', existing ./${configFileName} will not be modified and Eth will be added to the account found in this config.
+        If you chooce 'no', a new account will be created, Eth added to it and the ./${configFileName} file overwritten (yes/no): `,
+        answer => answer === 'yes'
+          ? go(configFilePath)
+          : go()
+      )
+    }
   }
-}
-else {
-  go()
-}
+  else {
+    await go()
+  }
+})().catch(error => {
+  console.error(error)
+  process.exit(1)
+})

@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
-const HDWalletProvider = require('truffle-hdwallet-provider')
+const HDWalletProvider = require('@truffle/hdwallet-provider')
 const sw = require('starkware_crypto')
 const Web3 = require('web3')
 
 const DVF = require('../src/dvf')
-const envVars = require('./helpers/loadFromEnvOrConfig')()
-
+const envVars = require('./helpers/loadFromEnvOrConfig')(
+  process.env.CONFIG_FILE_NAME
+)
+const logExampleResult = require('./helpers/logExampleResult')(__filename)
 
 const ethPrivKey = envVars.ETH_PRIVATE_KEY
 // NOTE: you can also generate a new key using:`
@@ -19,7 +21,8 @@ const web3 = new Web3(provider)
 provider.engine.stop()
 
 const dvfConfig = {
-  api: envVars.API_URL
+  api: envVars.API_URL,
+  dataApi: envVars.DATA_API_URL
   // Add more variables to override default values
 }
 
@@ -28,9 +31,9 @@ const dvfConfig = {
 
   const getPriceFromOrderBook = require('./helpers/getPriceFromOrderBook')
 
-  // Submit an order to sell 0.3 Eth for 200 USDT per 1 Eth
+  // Submit an order to sell 0.1 Eth for USDT
   const symbol = 'ETH:USDT'
-  const amount = -0.3
+  const amount = -0.1
   const validFor = '0'
   const feeRate = ''
 
@@ -51,7 +54,7 @@ const dvfConfig = {
     partnerId: 'P1'    // Optional
   })
 
-  console.log('submitOrder response ->', submitOrderResponse)
+  logExampleResult(submitOrderResponse)
 
 })()
 .catch(error => {

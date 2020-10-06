@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
-const HDWalletProvider = require('truffle-hdwallet-provider')
+const HDWalletProvider = require('@truffle/hdwallet-provider')
 const sw = require('starkware_crypto')
 const Web3 = require('web3')
 
 const DVF = require('../src/dvf')
-const envVars = require('./helpers/loadFromEnvOrConfig')()
-
+const envVars = require('./helpers/loadFromEnvOrConfig')(
+  process.env.CONFIG_FILE_NAME
+)
+const logExampleResult = require('./helpers/logExampleResult')(__filename)
 
 const ethPrivKey = envVars.ETH_PRIVATE_KEY
 // NOTE: you can also generate a new key using:`
@@ -19,25 +21,27 @@ const web3 = new Web3(provider)
 provider.engine.stop()
 
 const dvfConfig = {
-  api: envVars.API_URL
+  api: envVars.API_URL,
+  dataApi: envVars.DATA_API_URL
   // Add more variables to override default values
 }
 
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
+  const P = require('aigle')
   let orderId
-  const orders = await dvf.getOrders('ETH:USDT')
+  const orders = await dvf.getOrders()
 
   console.log('orders', orders)
 
   if (orders.length == 0) {
     console.log('submitting new order')
-    
-    // Submit an order to buy 0.5 Eth at a rate of 200 USDT for 1 Eth
+
+    // Submit an order to sell 0.1 ETH at a the price of 5000 USDT per ETH
     const symbol = 'ETH:USDT'
-    const amount = 0.5
-    const price = 200
+    const amount = -0.1
+    const price = 5000
     const validFor = '0'
     const feeRate = ''
 
@@ -56,6 +60,12 @@ const dvfConfig = {
     console.log('submitOrder response ->', submitOrderResponse)
 
     orderId = submitOrderResponse._id
+
+    while (true) {
+      console.log('checking if order appears on the book...')
+      if ((await dvf.getOrders()).find(o => o._id === orderId)) break
+      await P.delay(1000)
+    }
   }
   else {
     orderId = orders[0]._id
@@ -65,7 +75,7 @@ const dvfConfig = {
 
   const response = await dvf.cancelOrder(orderId)
 
-  console.log("cancelOrder response ->", response)
+  logExampleResult(response)
 
 })()
 .catch(error => {

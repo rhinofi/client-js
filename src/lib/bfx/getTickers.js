@@ -8,6 +8,6 @@ module.exports = async (dvf, symbols) => {
 
   symbols = symbols.map(dvfToBfxSymbol).join(',')
 
-  const response = await get(dvf.config.api + `/bfx/v2/tickers?symbols=${symbols}`)
+  const response = await get((dvf.config.dataApi || dvf.config.api) + `/bfx/v2/tickers?symbols=${symbols}`)
   return JSON.parse(response)
 }

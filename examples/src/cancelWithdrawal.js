@@ -20,6 +20,6 @@ else {
   withdrawalId = withdrawals[0]._id
 }
 
-const getWithdrawalResponse = await dvf.getWithdrawal(withdrawalId)
+const canceledWithdrawal = await dvf.cancelWithdrawal(withdrawalId)
 
-logExampleResult(getWithdrawalResponse)
+logExampleResult(canceledWithdrawal)

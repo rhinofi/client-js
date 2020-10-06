@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
-const HDWalletProvider = require('truffle-hdwallet-provider')
+const HDWalletProvider = require('@truffle/hdwallet-provider')
 const sw = require('starkware_crypto')
 const Web3 = require('web3')
 
 const DVF = require('../src/dvf')
-const envVars = require('./helpers/loadFromEnvOrConfig')()
-
+const envVars = require('./helpers/loadFromEnvOrConfig')(
+  process.env.CONFIG_FILE_NAME
+)
+const logExampleResult = require('./helpers/logExampleResult')(__filename)
 
 const ethPrivKey = envVars.ETH_PRIVATE_KEY
 // NOTE: you can also generate a new key using:`
@@ -19,7 +21,8 @@ const web3 = new Web3(provider)
 provider.engine.stop()
 
 const dvfConfig = {
-  api: envVars.API_URL
+  api: envVars.API_URL,
+  dataApi: envVars.DATA_API_URL
   // Add more variables to override default values
 }
 
@@ -30,7 +33,7 @@ const dvfConfig = {
 
   const withdrawalResponse = await dvf.withdrawOnchain(token)
 
-  console.log('withdraw onchain response ->', withdrawalResponse)
+  logExampleResult(withdrawalResponse)
 
 })()
 .catch(error => {

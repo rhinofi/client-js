@@ -1,6 +1,6 @@
 const DVF = require('../../src/dvf')
 const Web3 = require('web3')
-const HDWalletProvider = require('truffle-hdwallet-provider')
+const HDWalletProvider = require('@truffle/hdwallet-provider')
 
 const register = async ({INFURA_PROJECT_ID, account}, bypassRegister = false) => {
   try {
