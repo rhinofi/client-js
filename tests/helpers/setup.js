@@ -124,4 +124,4 @@ const setup = async (existingAccount) => {
   return go()
 }
 
-exports.setup = setup
+module.exports = setup

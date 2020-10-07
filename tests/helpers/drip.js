@@ -32,6 +32,4 @@ const getContract = (dvf, abi, tokenAddress) => {
     return new web3.eth.Contract(abi, tokenAddress)
 }
 
-module.exports = {
-    drip
-}
+module.exports = drip

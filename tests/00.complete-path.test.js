@@ -1,64 +1,71 @@
-const { setup } = require('./helpers/setup')
-const { register } = require("./helpers/register")
-const { deposit } = require('./helpers/deposit')
-const { withdraw } = require('./helpers/withdrawal')
-const { drip } = require('./helpers/drip')
-
-const sleep = async time => new Promise(resolve => setTimeout(resolve, time * 1000 || 10000));
-
-const runOrderTests = async (dvf, privateKey, sellToken, buyToken, amount, price) => {
-    const submitOrderResponse = await dvf.submitOrder({
-        symbol: `${sellToken}:${buyToken}`,
-        amount,
-        price,
-        starkPrivateKey: privateKey
-    })
-    console.log('submitOrder response ->', submitOrderResponse)
-
-    expect(submitOrderResponse.type).toEqual('EXCHANGE LIMIT')
-    expect(submitOrderResponse.tokenSell).toEqual(sellToken)
-    expect(submitOrderResponse.tokenBuy).toEqual(buyToken)
-
-    await sleep(20)
-    
-    const orders = await dvf.getOrders()
-    console.log('getOrders response ->', orders)
-    expect(orders.length).toEqual(1)
-    
-    const createdOrder = orders.find(order => order.meta.orderId === submitOrderResponse._id)
-    expect(createdOrder.status).toEqual('ACTIVE')
-    expect(createdOrder.price).toEqual(price)
-
-    const cancelOrderResponse = await dvf.cancelOrder(submitOrderResponse._id)
-    console.log('cancelOrder response ->', cancelOrderResponse)
-
-    expect((await dvf.getOrders()).length).toEqual(0)
-} 
+const sw = require('starkware_crypto')
+const { setup, register, deposit, withdraw, drip, testOrders, sleep } = require('./helpers')
 
 describe('00 - Complete Path', () => {
-    it('Setup - Register - Deposit - Manage Orders - Withdraw - Token', async () => {
-        const setupResponse = await setup()
-        const { INFURA_PROJECT_ID, account } = setupResponse
-        const { address, privateKey } = account
-        
-        expect(INFURA_PROJECT_ID).toEqual(process.env.INFURA_PROJECT_ID)
+
+    let dvf, address, privateKey, setupData, starkSignature, nonce
+
+    beforeAll(async () => {
+        setupData = await setup()
+        address = setupData.account.address
+        privateKey = setupData.account.privateKey
+        nonce = Date.now() / 1000
+    })
+
+    it('should register', async () => {
         expect(address).not.toBeNull()
         expect(privateKey).not.toBeNull()
-        
-        console.log('account ->', setupResponse)
-        
-        const dvf = await register(setupResponse, true)
+        console.log('account ->', setupData)
+        const bypassRegister = false
+        const useTradingKey = true
+        dvf = await register(setupData, bypassRegister, useTradingKey)
+        const keyPair = sw.ec.keyFromPrivate(privateKey, 'hex')
+        starkSignature = dvf.stark.sign(keyPair, nonce)
         expect(dvf).not.toBeNull()
-     
+    })
+
+    it('should make a ETH deposit', async () => {
         expect((await dvf.getDeposits()).length).toEqual(0)
-
-        let token = 'ETH'
-
+        const token = 'ETH'
         const depositResponse = await deposit(dvf, token, 0.95, privateKey)
         console.log('deposit response ->', depositResponse)
+        expect(depositResponse).not.toBeNull()
+    })
 
-        await runOrderTests(dvf, privateKey, token, 'USDT', -0.3, 250)
+    it('should make a token deposit', async () => {
+        const token = 'USDT'
 
+        // get some tokens from the faucet
+        await drip(dvf, dvf.config.tokenRegistry[token].tokenAddress, address)
+
+        await dvf.contract.approve(token)
+        const tokenDepositResponse = await deposit(dvf, token, 100, privateKey)
+        console.log('token deposit response ->', tokenDepositResponse)
+        expect(tokenDepositResponse).not.toBeNull()
+    })
+
+    it('should check the deposits and the balance using the trading key', async () => {
+        const deposits = await dvf.getDeposits(null, nonce, starkSignature)
+        expect(deposits.length).toEqual(2)
+
+        const balances = await dvf.getBalance(null, nonce, starkSignature)
+        expect(balances.length).toEqual(2)
+    })    
+
+    it('should test ETH order creation and cancelation', async () => {
+        await testOrders(dvf, privateKey, 'ETH', 'USDT', -0.3, 2500)
+        const orders = await dvf.getOrders()
+        expect(orders.length).toEqual(0)
+    })
+    
+    it('should test token order creation and cancelation', async () => {
+        await testOrders(dvf, privateKey, 'USDT', 'ETH', -100, 0.3)
+        const orders = await dvf.getOrders()
+        expect(orders.length).toEqual(0)
+    })
+
+    it('should withdraw ETH', async () => {
+        let token = 'ETH'
         expect((await dvf.getWithdrawals()).length).toEqual(0)
 
         const waitWithdrawToBeReady = true
@@ -68,7 +75,8 @@ describe('00 - Complete Path', () => {
         const getBalanceResponse = await dvf.getBalance()
         console.log('getBalance response ->', getBalanceResponse)
         expect(getBalanceResponse[0].balance).toEqual('45000000')
-        expect(getBalanceResponse[0].available).toEqual('45000000')
+        expect(getBalanceResponse[0].available).toEqual('45000000') 
+        
 
         // for a short period the withdrawals will be duplicated on the db until our server finish sync
         await sleep(50)
@@ -79,23 +87,19 @@ describe('00 - Complete Path', () => {
         const withdrawOnchainResponse = await dvf.withdrawOnchain(token)
         console.log('withdrawOnchain response ', withdrawOnchainResponse)
         expect(withdrawOnchainResponse.transactionHash).toMatch('0x')
+    })
 
+    it('should check ETH withdrawal completion using trading key', async () => {
         await sleep(10)
-        const emptyWithdrawals = await dvf.getWithdrawals()
+        
+        const emptyWithdrawals = await dvf.getWithdrawals(null, nonce, starkSignature)
         expect(emptyWithdrawals.length).toEqual(0)
+    })
 
-        // testing same path for a token
-        token = 'USDT'
+    it('should withdraw a token', async () => {
+        const token = 'USDT'
 
-        // get some tokens from the faucet
-        await drip(dvf, dvf.config.tokenRegistry[token].tokenAddress, address)
-
-        await dvf.contract.approve(token)
-        const tokenDepositResponse = await deposit(dvf, token, 100, privateKey)
-        console.log('token deposit response ->', tokenDepositResponse)
-
-        await runOrderTests(dvf, privateKey, token, 'ETH', -100, 0.3)
-
+        const waitWithdrawToBeReady = true
         const tokenWithdrawal = await withdraw(dvf, token, 50, privateKey, waitWithdrawToBeReady)
         console.log("tokenWithdrawal", tokenWithdrawal)
 
@@ -103,10 +107,16 @@ describe('00 - Complete Path', () => {
         await sleep(50)
 
         const tokenWithdrawOnchainResponse = await dvf.withdrawOnchain(token)
-        console.log('tokenWithdrawOnchain response ', withdrawOnchainResponse)
+        console.log('tokenWithdrawOnchain response ', tokenWithdrawOnchainResponse)
         expect(tokenWithdrawOnchainResponse.transactionHash).toMatch('0x')
 
         await sleep(10)
-        expect((await dvf.getWithdrawals()).length).toEqual(0)        
+        expect((await dvf.getWithdrawals()).length).toEqual(0)     
     })
+
+    it('should check token withdrawal completion using trading key', async () => {
+        await sleep(10)
+        const emptyWithdrawals = await dvf.getWithdrawals(null, nonce, starkSignature)
+        expect(emptyWithdrawals.length).toEqual(0)
+    })    
 })

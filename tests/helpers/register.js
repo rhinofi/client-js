@@ -2,7 +2,7 @@ const DVF = require('../../src/dvf')
 const Web3 = require('web3')
 const HDWalletProvider = require('@truffle/hdwallet-provider')
 
-const register = async ({INFURA_PROJECT_ID, account}, bypassRegister = false) => {
+const register = async ({INFURA_PROJECT_ID, account}, bypassRegister = false, useTradingKey = false) => {
   try {
     console.log("generating dvf")
 
@@ -10,7 +10,8 @@ const register = async ({INFURA_PROJECT_ID, account}, bypassRegister = false) =>
     const provider = new HDWalletProvider(account.privateKey, infuraURL)
     const web3 = new Web3(provider)
     const dvfConfig = {
-      api: 'https://api.stg.deversifi.com'
+      api: 'https://api.deversifi.dev',
+      useTradingKey
     }
     const dvf = await DVF(web3, dvfConfig)
 
@@ -31,4 +32,4 @@ const register = async ({INFURA_PROJECT_ID, account}, bypassRegister = false) =>
   }
 }
 
-exports.register = register
+module.exports = register

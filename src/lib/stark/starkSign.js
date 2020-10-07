@@ -12,7 +12,7 @@ module.exports = (starkKeyPair, starkMessage) => {
     starkSignature = sw.sign(starkKeyPair, starkMessage)
     //console.log('starkSignature ', starkSignature)
   } catch (e) {
-    cossole.log('/starkSign ', e)
+    console.log('/starkSign ', e)
     throw new DVFError('ERR_CREATING_STARK_SIGNATURE')
   }
 
