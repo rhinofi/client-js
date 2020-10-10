@@ -26,4 +26,4 @@ const checkWithdrawalReady = async (dvf, token) => {
     }
   }
 
-module.exports = { withdraw }
+module.exports = withdraw
