@@ -222,13 +222,14 @@ const ask = question => {
     } else if (createNewAccount) {
       await go()
     } else {
-      await ask(
+      const answer = await ask(
         `The ./${configFileName} file exits, do you want to use this config?
         If you choose 'yes', existing ./${configFileName} will not be modified and Eth will be added to the account found in this config.
         If you chooce 'no', a new account will be created, Eth added to it and the ./${configFileName} file overwritten (yes/no): `,
-        answer => answer === 'yes'
-          ? go(configFilePath)
-          : go()
+      )
+      await (answer === 'yes'
+        ? go(configFilePath)
+        : go()
       )
     }
   }
