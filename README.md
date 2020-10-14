@@ -4,7 +4,7 @@
 
 A js client library for DeversiFi - StarkWare orders
 
-**Note:** This library is for the new DeversiFi 2.0 platform, scheduled to launch on Ethereum mainnet later in 2020. Currently a test version of it is live on the Ropsten test network at https://app.stg.deversifi.com // https://api.stg.deversifi.com
+**Note:** This library is for DeversiFi. A test version of the platform to use during integrations is connected to the Ropsten test network at https://app.stg.deversifi.com // https://api.stg.deversifi.com
 
 ## Contents
 
@@ -62,7 +62,7 @@ Alternatively on the browser you can use the standalone build
 ### Authentication
 
 Authentication to make all the following requests is done by signing using an
-Ethereum private key. Signing is handled by the Deversifi Trustless client
+Ethereum private key. Signing is handled by the Deversifi client
 library if the account is available and unlocked. However if signing using
 a hardware wallet, or using a raw private key, the message and signature need
 to be prepared separately.
@@ -127,31 +127,39 @@ For instance:
 ```
 
 The configuration is also merged with the configuration provided by the exchange
-on the HTTP endpoint `/trustless/v1/r/get/conf` which at the moment looks similar
+on the HTTP endpoint `/v1/trading/r/getConf` which at the moment looks similar
 to this:
 
 ```json
-"0x":{
-    "minOrderTime":300,
-    "tokenRegistry":{
+{
+   "DVF":{
+      "defaultFeeRate":0.002,
+      "deversifiAddress":"0xaf8ae6955d07776ab690e565ba6fbc79b8de3a5d",
+      "starkExContractAddress":"0x5d22045DAcEAB03B158031eCB7D9d06Fad24609b",
+      "withdrawalBalanceReaderContractAddress":"0x650ca2dca7e2e2c8be3bb84e0a39dd77891d4d1e",
+      "exchangeSymbols":[
+         "ETH:USDT",
+         "MKR:ETH",
+         "MKR:USDT"
+      ],
+      "tempStarkVaultId":1,
+      "minDepositUSDT":1
+   },
+   "tokenRegistry":{
       "ETH":{
-          "decimals":18,
-          "wrapperAddress":"0x965808e7f815cfffd4c018ef2ba4c5a65eba087e",
-          "minOrderSize":0.02
+         "decimals":18,
+         "quantization":10000000000,
+         "minOrderSize":0.05,
+         "starkTokenId":"0xb333e3142fe16b78628f19bb15afddaef437e72d6d7f5c6c20c6801a27fba6"
       },
-      "USDT":{
-          "decimals":6,
-          "wrapperAddress":"0x83e42e6d1ac009285376340ef64bac1c7d106c89",
-          "tokenAddress":"0x0736d0c130b2ead47476cc262dbed90d7c4eeabd",
-          "minOrderSize":10,
-          "settleSpread": 0.002
+      "MKR":{
+         "decimals":18,
+         "quantization":10000000000,
+         "minOrderSize":0.025,
+         "tokenAddress":"0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2",
+         "starkTokenId":"0x1a4af39d27ce2e3445ed084809e5bc36d03918df04b7e2b6ee3c769a9892600"
       }
-    },
-    "DeversifiAddress":"0x9faf5515f177f3a8a845d48c19032b33cc54c09c",
-    "exchangeAddress":"0x67799a5e640bc64ca24d3e6813842754e546d7b1",
-    "exchangeSymbols":[
-      "ETH:USDT"
-    ]
+   }
 }
 ```
 
@@ -191,17 +199,10 @@ dvf.set('gasStationApiKey', 'a1b2c3...')
 
 ```
 
-### Placing an Order
-
-Before placing an order, you are required to lock tokens into the Deversifi wrapper
-contracts. This allows for guaranteed execution and ensures Trustless orders
-can be added directly onto the centralised order book, and matched against
-trades from centralised users.
-
 
 ### Approving Tokens
 
-When locking an ERC20 Ethereum-based token for the first time from a specific account,
+When depositing an ERC20 Ethereum-based token for the first time from a specific account,
 you are required to approve it to interact with the time-lock smart contracts.
 
 ```javascript
@@ -214,27 +215,10 @@ only to call the lock function. This transfers tokens into the wrapper token
 contract, ready to trade.
 
 
-### Locking tokens
-
-```javascript
-const token = 'ZRX'
-const amount = 15 // Number of tokens to lock
-const forTime = 48 // Time (in hours) after which unlocking does not require permission
-
-const response = await dvf.contract.lock(token, amount, forTime)
-```
-
-The time limit specified when locking is a maximum - tokens can always be
-unlocked after this time limit (in hours) expires. In order to unlock tokens
-before this expires, you must request a signed permission from Deversifi.
-
-This is always returned if you have no orders open involving those tokens.
-
-
 ### Submitting an order
 
 ```javascript
-const symbol = 'ZRXETH'
+const symbol = 'ZRX:ETH'
 const amount = -15
 const price = 0.0025
 
@@ -242,7 +226,7 @@ const orderId = await dvf.submitOrder(symbol, amount, price)
 ```
 
 Orders are generated and submitted, returning either an `orderId` or error. A
-full list of possible errors and their associated explanation is available [here](https://docs.Deversifi.com/?version=latest#troubleshooting).
+full list of possible errors and their associated explanation is available [here](https://docs.deversifi.com/?version=latest#troubleshooting).
 
 When submitting this order we use the 3 first parameters:
 
@@ -254,52 +238,8 @@ fewer than 8.
  - `price` is specified in the second currency in the symbol (i.e. ZRXETH). Prices
 should be specified to 5 s.f. maximum.
 
-**Warning:** Trustless orders will always be settled at the **exact price you specify**, and can never be adjusted by Deversifi, **even if it is at a worse price than the market**.
-
-For example, when placing a sell order, if the `price` specified is below the highest bid available on the order book, the order will be executed instantly. However, the amount you receive will reflect only the `price` that you entered, and not the market price at the time of execution.
-
 The client library also provides methods for [submitBuyOrder](./src/api/submitBuyOrder.js)
 and [submitSellOrder](./src/api/submitSellOrder.js).
-
-You can additionally provide
-
- - `gid` - Group ID for your order
- - `cid` - Client order ID
- - `signedOrder` - A previously signed order, in case you're handling signing
- - `validFor` - optional amount of hours this order will be valid for, default
- to 3600 seconds as specified [on the default configuration](./src/config.js#L5)
-
-### Tether market shift
-
-The XXX/**USDT** markets on Trustless build on the liquidity of XXX/**USD** markets on the
-centralised exchanges of Bitfinex and Deversifi. However since there is often not a
-direct 1:1 rate between USD and USDT, a shift must be applied to the order books.
-
-The configuration for Trustless returns a `settleSpread` parameter:
-
-```json
-      "USDT":{
-          "decimals":6,
-          "wrapperAddress":"0x83e42e6d1ac009285376340ef64bac1c7d106c89",
-          "tokenAddress":"0x0736d0c130b2ead47476cc262dbed90d7c4eeabd",
-          "minOrderSize":10,
-          "settleSpread": 0.02
-      }
-```
-
-This `settleSpread` is indicative of the current USDT/USD exchange rate. When orders are placed
-on USDT markets, the settlement price in the signed order must be shifted by the `settleSpread`
-parameter before the order is accepted.
-
-For example, if placing a buy order on the ETH/USD(T) market at a price of 100 USD relative to the centralised exchange the order will be settled on Trustless at a price of 102 USDT.
-Equally a sell order at 100 USD would receive 102 USDT when settled on Trustless.
-
-```javascript
-dvf.submitOrder(symbol, amount, price) // => settlementPrice = price * (1 + settleSpread)
-```
-The `settleSpread` parameter is set dynamically as a 30 minute rolling mean of the USDT/USD
-market exchange rate. When placing orders using `submitOrder` or generating them with
-`createOrder` the shift is applied for you.
 
 
 ### Cancelling Orders
@@ -360,54 +300,6 @@ const openOrders = await dvf.getOrders(null, null, nonce, signature)
 const historicalOrders = await dvf.getOrdersHist(null, null, nonce, signature)
 ```
 
-### Unlocking tokens
-
-If tokens are not used in active orders they can always be unlocked. If
-unlocking after the time specified when locking has expired, no permission is
-required. When unlocking before this, Deversifi must sign a release permission,
-after verifying that you have no orders currently active which require that token.
-
-If you need permission the library will [automatically call the expected endpoint](./src/api/contract/unlock.js#L24)
-on Deversifi API to ask for such permission.
-
-```javascript
-const token = 'ZRX'
-const amount = 15
-const response = await dvf.contract.unlock(token, amount)
-```
-
-When a particular token's lock time has not yet expired, permission is required
-from Deversifi to unlock early. This permission can be requested directly from
-Deversifi using an API call.
-
-The request must be authenticated using a nonce and signature, and the response
-contains a signed permission from Deversifi. This permission will always be
-granted if Deversifi is online and your address has no open orders involving
-those tokens. In case you're signing the requests yourself you could use the
-following code:
-
-```javascript
-// This example shows how to generate the signature from a raw private key
-// Signing using hardware wallets such as Ledger or Trezor can be done using their documentation
-
-const ethUtils = require('ethereumjs-utils')
-
-const privKey = /* Your Private Key */
-const nonce = ((Date.now() / 1000) + 350) + ''
-
-const hash = ethUtils.hashPersonalMessage(ethUtils.toBuffer(nonce.toString(16)))
-const signature = ethUtils.ecsign(hash, privKey)
-
-const response = await dvf.contract.unlock(token, amount, nonce, signature)
-```
-
-```js
-const token = 'ZRX'
-const amount = 0.001
-
-const response = await dvf.contract.unlock(token, amount, forTime)
-```
-
 ## More Examples
 
 Aside from these examples, there are complete examples in the [examples folder](./examples)
@@ -415,7 +307,7 @@ Aside from these examples, there are complete examples in the [examples folder](
 ### Submitting a buy order
 
 ```js
-const symbol = 'ETHUSD'
+const symbol = 'ETH:USDT'
 const amount = 1
 const price = 100
 
@@ -425,7 +317,7 @@ dvf.submitOrder(symbol, amount, price)
 ### Submitting a sell order
 
 ```js
-const symbol = 'ETHUSD'
+const symbol = 'ETH:USDT'
 const amount = -1
 const price = 100
 
@@ -443,14 +335,14 @@ const order = await dvf.getOrder(id)
 ## Troubleshooting
 
 A list of error codes returned by the API and reasons are available [here](./src/lib/dvf/errorReasons.js#L1).
-Some more detailed explanations can also be found in the [API Documentation](https://docs.Deversifi.com).
+Some more detailed explanations can also be found in the [API Documentation](https://docs.deversifi.com).
 
 If you have suggestions to improve this guide or any of the available
 documentation, please raise an issue on Github, or email [feedback@Deversifi.com](mailto:feedback@Deversifi.com).
 
 ## Links
 
- - [API documentation](https://docs.beta.Deversifi.com)
+ - [API documentation](https://docs.deversifi.com)
 
 ## Developing
 
@@ -528,15 +420,6 @@ $ npm run build:web:run
 ```bash
 $ npm run build
 ```
-
-
-## TODO
-
- - Allow blockchain tests without relying on a local testnet node by using
- npm run test:rpc ( ganache ) and deploying mocked contracts at the beginning
- of the test.
-
- - Setup Travis-ci to test node.js, browser and standalone build. [see this page](https://blog.travis-ci.com/2017-09-12-build-stages-order-and-conditions)
 
 ## License
 

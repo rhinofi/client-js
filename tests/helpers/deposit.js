@@ -28,6 +28,4 @@ const checkBalance = async (dvf, token) => {
     }
 }
 
-module.exports = {
-    deposit
-}
+module.exports = deposit
