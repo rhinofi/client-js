@@ -24,7 +24,7 @@ const getWithdrawalBalancesDeprecated = async (dvf, withdrawals, starkKey) => {
 }
 
 
-module.exports = async (dvf, token, nonce, signature, starkKey) => {
+module.exports = async (dvf, starkKey, token, nonce, signature) => {
   if (token) {
     validateAssertions(dvf, { token })
   }
