@@ -63,11 +63,13 @@ module.exports = () => {
     ),
     getAllWithdrawalBalances: compose(
       require('../../api/contract/getAllWithdrawalBalances')
-    ),    
+    ),
     withdraw: compose(require('../../api/contract/withdraw')),
     abi: {
       token: require('../../api/contract/abi/token.abi'),
       StarkEx: require('../../api/contract/abi/StarkEx.abi'),
+      StarkExV2: require('../../api/contract/abi/StarkExV2.abi'),
+      getStarkEx: () => dvf.config.starkExUseV2 === true ? dvf.abi.StarkExV2 : dvf.abi.StarkEx,
       WithdrawalBalanceReader: require('../../api/contract/abi/WithdrawalBalanceReader.abi')
     }
   }
