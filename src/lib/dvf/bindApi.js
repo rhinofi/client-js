@@ -69,7 +69,7 @@ module.exports = () => {
       token: require('../../api/contract/abi/token.abi'),
       StarkEx: require('../../api/contract/abi/StarkEx.abi'),
       StarkExV2: require('../../api/contract/abi/StarkExV2.abi'),
-      getStarkEx: () => dvf.contract.abi[dvf.config.starkExUseV2 === true ? 'StarkExV2' : 'StarkEx']
+      getStarkEx: () => dvf.contract.abi[dvf.config.starkExUseV2 === true ? 'StarkExV2' : 'StarkEx'],
       WithdrawalBalanceReader: require('../../api/contract/abi/WithdrawalBalanceReader.abi')
     }
   }
