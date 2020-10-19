@@ -1,14 +1,21 @@
 const DVFError = require('../../lib/dvf/DVFError')
 const BN = require('bignumber.js')
 
-module.exports = async (dvf, token) => {
-  const starkKey = await dvf.contract.getStarkKey()
+module.exports = async (dvf, token, starkKey) => {
+  const starkKey = dvf.config.starkExUseV2
+    ? starkKey
+    : '0x' + await dvf.contract.getStarkKey()
+
+  if (!starkKey) {
+    throw new Error('getWithdrawalBalance: starkKey is required')
+  }
+
   const starkTokenId = dvf.config.tokenRegistry[token].starkTokenId
-  const args = ['0x' + starkKey, starkTokenId]
+  const args = [starkKey, starkTokenId]
 
   try {
     return (withdrawalBalance = await dvf.eth.call(
-      dvf.contract.abi.StarkEx,
+      dvf.contract.abi.getStarkEx(),
       dvf.config.DVF.starkExContractAddress,
       'getWithdrawalBalance',
       args

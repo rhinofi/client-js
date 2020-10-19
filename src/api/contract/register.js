@@ -5,16 +5,24 @@ module.exports = async (dvf, starkKey, deFiSignature) => {
   const ethAddress = dvf.get('account')
   const { web3 } = dvf
   const starkInstance = new web3.eth.Contract(
-    dvf.contract.abi.StarkEx,
+    dvf.contract.abi.getStarkEx(),
     dvf.config.DVF.starkExContractAddress
   )
 
   let onchainResult = ''
-  const action = 'register'
+  const action = dvf.config.starkExUseV2
+    ? 'registerUser'
+    : 'register'
+
   const args = [`0x${starkKey}`, deFiSignature]
+
+  if (dvf.config.starkExUseV2) {
+    args.unshift(ethAddress)
+  }
+
   try {
     onchainResult = await dvf.eth.send(
-      dvf.contract.abi.StarkEx,
+      dvf.contract.abi.getStarkEx(),
       dvf.config.DVF.starkExContractAddress,
       action,
       args
@@ -22,6 +30,11 @@ module.exports = async (dvf, starkKey, deFiSignature) => {
   } catch (e) {
     console.log('api/contract/register error is: ', e)
     throw new DVFError('ERR_STARK_REGISTRATION')
+  }
+
+  if (dvf.config.starkExUseV2) {
+    // TODO: StarkExV2: do we need to do any extra validation here?
+    return true
   }
 
   if (onchainResult || onchainResult.status === true) {

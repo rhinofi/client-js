@@ -1,15 +1,19 @@
 const DVFError = require('../../lib/dvf/DVFError')
 
-module.exports = async (dvf, token) => {
+module.exports = async (dvf, token, starkKey) => {
   const { starkVaultId } = dvf.token.getTokenInfo(token)
 
   const args = [starkVaultId]
+
+  if (dvf.config.starkExUseV2) {
+    args.unshift(starkKey)
+  }
 
   const action = 'fullWithdrawalRequest'
 
   try {
     return dvf.eth.send(
-      dvf.contract.abi.StarkEx,
+      dvf.contract.abi.getStarkEx(),
       dvf.config.DVF.starkExContractAddress,
       action,
       args

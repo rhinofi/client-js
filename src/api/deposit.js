@@ -23,14 +23,15 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   const expireTime =
     Math.floor(Date.now() / (1000 * 3600)) +
     parseInt(dvf.config.defaultStarkExpiry)
-    
+
+  const starkKey = `0x${starkPublicKey.x}`
   const { starkMessage } = dvf.stark.createTransferMsg(
     quantisedAmount,
     nonce,
     tempVaultId,
     starkTokenId,
     starkVaultId,
-    `0x${starkPublicKey.x}`,
+    starkKey,
     expireTime
   )
 
@@ -48,15 +49,16 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     expireTime
   }
   // console.log({ data })
-  
+
   await dvf.contract.approve(token, dvf.token.toBaseUnitAmount(token, amount))
 
   const depositResponse = await post(url, { json: data })
-  
+
   const { status, transactionHash } = await dvf.contract.deposit(
     tempVaultId,
     token,
-    amount
+    amount,
+    starkKey
   )
 
   if (!status) {
