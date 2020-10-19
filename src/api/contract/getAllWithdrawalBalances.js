@@ -1,8 +1,8 @@
 const DVFError = require('../../lib/dvf/DVFError')
 const BN = require('bignumber.js')
 
-module.exports = async (dvf, starkTokenIds) => {
-  const starkKey = dvf.config.starkExUseV2
+module.exports = async (dvf, starkTokenIds, starkKey) => {
+  starkKey = dvf.config.starkExUseV2
     ? starkKey
     : '0x' + await dvf.contract.getStarkKey()
 
