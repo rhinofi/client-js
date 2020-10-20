@@ -18,7 +18,7 @@ describe('dvf.deposit', () => {
   it(`Deposits ERC20 token to user's vault`, async () => {
     mockGetConf()
     const starkPrivateKey = '100'
-    const amount = '1394'
+    const amount = '1394.0000051'
     const token = 'USDT'
     const starkPublicKey = {
       x: '06d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
@@ -27,11 +27,13 @@ describe('dvf.deposit', () => {
 
     const apiResponse = {
       token,
-      amount,
+      // Amount for USDT is quantised to 6 decimals, rounded down
+      amount: '1394.000005',
       starkPublicKey
     }
 
     const payloadValidator = jest.fn((body) => {
+      console.log('body', body)
       expect(body).toMatchObject(apiResponse)
       expect(typeof body.nonce).toBe('number')
       expect(body.starkSignature.r).toMatch(/[\da-f]/i)
@@ -50,14 +52,16 @@ describe('dvf.deposit', () => {
     expect(payloadValidator).toBeCalled()
   })
 
-  it('Deposits ETH to users vault', async () => {
+  it.only('Deposits ETH to users vault', async () => {
     mockGetConf()
     const starkPrivateKey = '100'
     const token = 'ETH'
-    const amount = '1.117'
+
+    const amount = '1.1177777777'
     const apiResponse = {
       token,
-      amount,
+      // Amount for ETH is quantised to 8 decimals, rounded down
+      amount: '1.11777777',
       starkPublicKey: {
         x: '06d840e6d0ecfcbcfa83c0f704439e16c69383d93f51427feb9a4f2d21fbe075',
         y: '58f7ce5eb6eb5bd24f70394622b1f4d2c54ebca317a3e61bf9f349dccf166cf'
