@@ -34,7 +34,6 @@ describe('dvf.withdraw', () => {
       expect(typeof body.nonce).toBe('number')
       expect(body.starkSignature.r).toMatch(/[\da-f]/i)
       expect(body.starkSignature.s).toMatch(/[\da-f]/i)
-      expect(body.starkSignature.recoveryParam).toBeLessThan(5)
       expect(typeof body.starkVaultId).toBe('number')
       expect(typeof body.expireTime).toBe('number')
       return true
@@ -67,7 +66,6 @@ describe('dvf.withdraw', () => {
       expect(typeof body.nonce).toBe('number')
       expect(body.starkSignature.r).toMatch(/[\da-f]/i)
       expect(body.starkSignature.s).toMatch(/[\da-f]/i)
-      expect(body.starkSignature.recoveryParam).toBeLessThan(5)
       expect(typeof body.starkVaultId).toBe('number')
       expect(typeof body.expireTime).toBe('number')
       return true
