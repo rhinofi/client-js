@@ -24,7 +24,7 @@ const getWithdrawalBalancesDeprecated = async (dvf, withdrawals, starkKey) => {
 }
 
 
-module.exports = async (dvf, starkKey, token, nonce, signature) => {
+module.exports = async (dvf, token, nonce, signature) => {
   if (token) {
     validateAssertions(dvf, { token })
   }
@@ -35,17 +35,19 @@ module.exports = async (dvf, starkKey, token, nonce, signature) => {
 
   const withdrawals = await post(dvf, endpoint, nonce, signature, data)
 
+  const { starkKeyHex } = dvf.config
+
   if (!dvf.config.DVF.withdrawalBalanceReaderContractAddress) {
     // Use the deprecated way of getting balances in case the
     // WithdrawalBalanceReaderContractAddress was not set
-    return getWithdrawalBalancesDeprecated(dvf, withdrawals, starkKey)
+    return getWithdrawalBalancesDeprecated(dvf, withdrawals, starkKeyHex)
   }
 
   const tokenMap = dvf.config.tokenRegistry;
   const tokenMapKeys = Object.keys(dvf.config.tokenRegistry);
   const starkTokenIds = tokenMapKeys.map(key => tokenMap[key].starkTokenId)
 
-  const balances = await dvf.contract.getAllWithdrawalBalances(starkTokenIds, starkKey)
+  const balances = await dvf.contract.getAllWithdrawalBalances(starkTokenIds, starkKeyHex)
 
   return balances.reduce((all, balance, index) => {
     const key = tokenMapKeys[index]

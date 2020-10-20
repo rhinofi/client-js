@@ -1,5 +1,7 @@
 module.exports = async (dvf, vaultId, token, amount, starkKey) => {
   let value
+  starkKey = starkKey || dvf.config.starkKeyHex
+
   if (token === 'ETH') {
     value = dvf.token.toBaseUnitAmount(token, amount)
   } else {

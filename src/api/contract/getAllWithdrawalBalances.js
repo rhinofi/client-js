@@ -3,7 +3,7 @@ const BN = require('bignumber.js')
 
 module.exports = async (dvf, starkTokenIds, starkKey) => {
   starkKey = dvf.config.starkExUseV2
-    ? starkKey
+    ? starkKey || dvf.config.starkKeyHex
     : '0x' + await dvf.contract.getStarkKey()
 
   if (!starkKey) {
