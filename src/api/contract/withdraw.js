@@ -2,6 +2,7 @@ const DVFError = require('../../lib/dvf/DVFError')
 
 module.exports = async (dvf, token, starkKey) => {
   const { starkTokenId } = dvf.token.getTokenInfo(token)
+  starkKey = starkKey || dvf.config.starkKeyHex
 
   const args = [starkTokenId]
 

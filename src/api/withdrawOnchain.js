@@ -1,10 +1,11 @@
 const DVFError = require('../lib/dvf/DVFError')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (dvf, token, starkKey) => {
+module.exports = async (dvf, token) => {
   validateAssertions(dvf, { token })
 
-  const { status, transactionHash } = await dvf.contract.withdraw(token, starkKey)
+  const { starkKeyHex } = dvf.config
+  const { status, transactionHash } = await dvf.contract.withdraw(token, starkKeyHex)
 
   if (!status) {
     throw new DVFError('ERR_ONCHAIN_WITHDRAW')
