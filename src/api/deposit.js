@@ -1,12 +1,11 @@
 const { post } = require('request-promise')
 const DVFError = require('../lib/dvf/DVFError')
 const validateAssertions = require('../lib/validators/validateAssertions')
-const prepareAmount = require('dvf-utils').prepareAmount
 
 module.exports = async (dvf, token, amount, starkPrivateKey) => {
   validateAssertions(dvf, { amount, token, starkPrivateKey })
 
-  amount = prepareAmount(amount, dvf.token.maxQuantizedDecimalPlaces(token))
+  amount = dvf.util.prepareDepositAmount(amount, token)
 
   const currency = dvf.token.getTokenInfo(token)
   const quantisedAmount = dvf.token.toQuantizedAmount(token, amount)
