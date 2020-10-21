@@ -18,9 +18,8 @@ module.exports = (dvf, starkKeyPair, starkMessage) => {
     starkSignature = sigKeysToString(
       (dvf.sw || sw).sign(starkKeyPair, starkMessage)
     )
-  } catch (e) {
-    console.log('/starkSign ', e)
-    throw new DVFError('ERR_CREATING_STARK_SIGNATURE')
+  } catch (error) {
+    throw new DVFError('ERR_CREATING_STARK_SIGNATURE', { error })
   }
 
   return starkSignature
