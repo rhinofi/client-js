@@ -3,7 +3,7 @@ const DVFError = require('../dvf/DVFError')
 
 module.exports = (dvf, starkOrder) => {
   try {
-    const message = (dvf.sw || sw).get_limit_order_msg(
+    const message = (dvf.sw || sw).getLimitOrderMsgHash(
       starkOrder.vaultIdSell,
       starkOrder.vaultIdBuy,
       starkOrder.amountSell,

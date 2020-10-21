@@ -1,7 +1,7 @@
 const sw = require('starkware_crypto')
 
 module.exports = (dvf, ...args) => {
-  const message = (dvf.sw || sw).get_transfer_msg(
+  const message = (dvf.sw || sw).getTransferMsgHash(
     args[0], // amount (uint63 decimal str)
     args[1], // nonce (uint31)
     args[2], // temp vault id or sender_vault_id (uint31)
