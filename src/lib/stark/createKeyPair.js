@@ -32,9 +32,9 @@ module.exports = (dvf, starkPrivateKey) => {
       // This is really only used as a private key to pass to stark.sign
       // which accepts private key as string if sw is defined
       starkKeyPair = starkPrivateKey
-      starkPublicKey = pubKeysToString(
+      starkPublicKey = formatStarkPublicKey(pubKeysToString(
         dvf.sw.raw.getPublicKey(castHexStringToBigInt(starkPrivateKey))
-      )
+      ))
     } else {
       starkKeyPair = sw.ec.keyFromPrivate(starkPrivateKey, 'hex')
 
