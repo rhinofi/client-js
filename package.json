@@ -46,12 +46,13 @@
     "aigle": "git+https://github.com/suguru03/aigle#8739846ba9d4cfc116e1546da1181c73564cae0b",
     "aware": "^0.3.1",
     "bignumber.js": "^9.0.0",
-    "dvf-utils": "git+https://github.com/DeversiFi/dvf-utils#74157ccea37885512328d2bf62d624f1ce6ea66b",
+    "dvf-utils": "git+https://github.com/DeversiFi/dvf-utils#cb2aadea8dc1c244b748fb114d00c2e28219a47d",
     "lodash": "^4.17.20",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
     "starkware_crypto": "git+https://github.com/DeversiFi/starkware-crypto#3d5028d9febbe99aa88b01ab31542c2fcda4c64a",
-    "web3": "^1.3.0"
+    "web3": "^1.3.0",
+    "web3-utils": "^1.3.0"
   },
   "devDependencies": {
     "@ledgerhq/hw-transport-mocker": "^5.25.0",

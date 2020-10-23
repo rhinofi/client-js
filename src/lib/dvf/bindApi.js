@@ -75,7 +75,9 @@ module.exports = () => {
   }
   // dvf.token functions
   dvf.token = {
+    // TODO: deprecate getTokenInfo
     getTokenInfo: compose(require('./token/getTokenInfo')),
+    getTokenInfoOrThrow: compose(require('./token/getTokenInfoOrThrow')),
     fromBaseUnitAmount: compose(require('./token/fromBaseUnitAmount')),
     fromQuantizedAmount: compose(require('./token/fromQuantizedAmount')),
     toBaseUnitAmount: compose(require('./token/toBaseUnitAmount')),
@@ -115,6 +117,9 @@ module.exports = () => {
   dvf.createMarketOrderMetaData = compose(
     require('../../lib/dvf/createMarketOrderMetaData')
   )
+  dvf.createFastWithdrawalPayload = compose(
+    require('./createFastWithdrawalPayload')
+  )
 
   // dvf trading volume data
   dvf.get30DaysVolume = compose(require('../../api/get30DaysVolume'))
@@ -126,6 +131,7 @@ module.exports = () => {
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
   dvf.cancelWithdrawal = compose(require('../../api/cancelWithdrawal'))
   dvf.deposit = compose(require('../../api/deposit'))
+  dvf.fastWithdrawal = compose(require('../../api/fastWithdrawal'))
   dvf.getDeposits = compose(require('../../api/getDeposits'))
   dvf.getBalance = compose(require('../../api/getBalance'))
   dvf.getConfig = compose(require('../../api/getConfig'))
