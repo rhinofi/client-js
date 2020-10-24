@@ -3234,18 +3234,6 @@ elliptic@6.5.3, elliptic@^6.4.0, elliptic@^6.5.2, elliptic@^6.5.3:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.0"
 
-"elliptic@git+https://github.com/indutny/elliptic.git#v6.5.0":
-  version "6.5.0"
-  resolved "git+https://github.com/indutny/elliptic.git#475f066aebd14681591f0f0f18a2abc0ded8c390"
-  dependencies:
-    bn.js "^4.4.0"
-    brorand "^1.0.1"
-    hash.js "^1.0.0"
-    hmac-drbg "^1.0.0"
-    inherits "^2.0.1"
-    minimalistic-assert "^1.0.0"
-    minimalistic-crypto-utils "^1.0.0"
-
 emittery@^0.7.1:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/emittery/-/emittery-0.7.1.tgz#c02375a927a40948c0345cc903072597f5270451"
@@ -8394,13 +8382,13 @@ standard@^11.0.1:
     eslint-plugin-standard "~3.0.1"
     standard-engine "~8.0.0"
 
-"starkware_crypto@git+https://github.com/DeversiFi/starkware-crypto#3d5028d9febbe99aa88b01ab31542c2fcda4c64a":
+"starkware_crypto@git+https://github.com/adrian-gierakowski/starkware-crypto#dad2599ac73f56bdef4900c5dd56df2b03ea4574":
   version "0.1.4"
-  resolved "git+https://github.com/DeversiFi/starkware-crypto#3d5028d9febbe99aa88b01ab31542c2fcda4c64a"
+  resolved "git+https://github.com/adrian-gierakowski/starkware-crypto#dad2599ac73f56bdef4900c5dd56df2b03ea4574"
   dependencies:
     bn.js "^4.4.0"
     brorand "^1.0.1"
-    elliptic "git+https://github.com/indutny/elliptic.git#v6.5.0"
+    elliptic "^6.5.3"
     hash.js "^1.0.0"
     hmac-drbg "^1.0.0"
     inherits "^2.0.1"
