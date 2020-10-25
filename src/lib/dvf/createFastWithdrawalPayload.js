@@ -42,7 +42,9 @@ const schema = Joi.object({
   // NOTE: we are not specifying allowed tokens here since these can change
   // dynamically. However a call to `getTokenInfoOrThrow` will ensure that
   // the token in valid.
-  token: Joi.string().required()
+  token: Joi.string().required(),
+  // TODO: create Joi.ethAddress
+  recipientEthAddress: Joi.string().optional()
 })
 
 const errorProps = { context: 'fastWithdrawal' }
@@ -60,7 +62,11 @@ module.exports = async (dvf, withdrawalData, starkPrivateKey) => {
     )
   }
 
-  const { amount, token } = validateArg0(withdrawalData)
+  const {
+    amount,
+    token,
+    recipientEthAddress = dvf.config.ethAddress
+  } = validateArg0(withdrawalData)
 
   const tokenInfo = getValidTokenInfo(dvf)(token)
 
@@ -75,7 +81,6 @@ module.exports = async (dvf, withdrawalData, starkPrivateKey) => {
     Math.ceil(Date.now() / (1000 * 3600)) +
     parseInt(dvf.config.defaultStarkExpiry)
 
-  const usersEthAddress = dvf.config.ethAddress
   const tokenContractAddress = token === 'ETH'
     ? address0
     : tokenInfo.tokenAddress
@@ -85,7 +90,7 @@ module.exports = async (dvf, withdrawalData, starkPrivateKey) => {
   const nonce = dvf.util.generateRandomNonce()
   // On chain transfer will be for the amount without fee
   const fact = calculateFact(
-    usersEthAddress, baseUnitsAmount.toString(), tokenContractAddress, nonce
+    recipientEthAddress, baseUnitsAmount.toString(), tokenContractAddress, nonce
   )
 
   const { DVF } = dvf.config
@@ -113,6 +118,7 @@ module.exports = async (dvf, withdrawalData, starkPrivateKey) => {
   )
 
   return {
+    recipientEthAddress,
     transactionFee,
     tx: { ...tx, signature },
     starkPublicKey
