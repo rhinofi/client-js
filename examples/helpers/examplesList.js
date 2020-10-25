@@ -14,6 +14,7 @@ module.exports = Object.freeze([
   'getOrdersHist',
   'getUserConfig',
   'withdraw',
+  'fastWithdrawal',
   'getWithdrawals',
   'getWithdrawal',
   'withdrawOnChain',
