@@ -5,3 +5,6 @@ yarn-error.log
 test/contracts/*.json
 .coverage
 examples/config.json
+*.sublime-project
+*.sublime-workspace
+examples/config*.json
