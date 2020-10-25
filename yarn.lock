@@ -8382,9 +8382,9 @@ standard@^11.0.1:
     eslint-plugin-standard "~3.0.1"
     standard-engine "~8.0.0"
 
-"starkware_crypto@git+https://github.com/adrian-gierakowski/starkware-crypto#dad2599ac73f56bdef4900c5dd56df2b03ea4574":
+"starkware_crypto@git+https://github.com/DeversiFi/starkware-crypto#bf94bde1f6bbb4156ded52171cd70d3e02cd5919":
   version "0.1.4"
-  resolved "git+https://github.com/adrian-gierakowski/starkware-crypto#dad2599ac73f56bdef4900c5dd56df2b03ea4574"
+  resolved "git+https://github.com/DeversiFi/starkware-crypto#bf94bde1f6bbb4156ded52171cd70d3e02cd5919"
   dependencies:
     bn.js "^4.4.0"
     brorand "^1.0.1"
