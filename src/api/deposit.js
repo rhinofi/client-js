@@ -2,7 +2,7 @@ const { post } = require('request-promise')
 const DVFError = require('../lib/dvf/DVFError')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (dvf, token, amount, starkPrivateKey) => {
+module.exports = async (dvf, token, amount, starkPrivateKey, txMeta) => {
   validateAssertions(dvf, { amount, token, starkPrivateKey })
 
   amount = dvf.util.prepareDepositAmount(amount, token)
