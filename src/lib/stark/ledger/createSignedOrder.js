@@ -18,7 +18,7 @@ module.exports = async (dvf, path, starkOrder) => {
 
   const transport = await Transport.create()
   const eth = new Eth(transport)
-  const { address } = await eth.getAddress(path)
+  const {address} = await eth.getAddress(path)
   const starkPath = dvf.stark.ledger.getPath(address)
   const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')
   let starkPublicKey = {
@@ -38,7 +38,7 @@ module.exports = async (dvf, path, starkOrder) => {
     if (buyTokenInfo) {
       await eth.provideERC20TokenInformation(buyTokenInfo)
     } else {
-      if (dvf.chainId!==1) {
+      if (dvf.chainId !== 1) {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
           `00${buyTokenAddress}0000000000000003`,
@@ -64,7 +64,7 @@ module.exports = async (dvf, path, starkOrder) => {
     if (sellTokenInfo) {
       await eth.provideERC20TokenInformation(sellTokenInfo)
     } else {
-      if (dvf.chainId!==1) {
+      if (dvf.chainId !== 1) {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
           `00${sellTokenAddress}0000000000000003`,
@@ -79,21 +79,39 @@ module.exports = async (dvf, path, starkOrder) => {
     sellTokenAddress = null
   }
 
-  const starkSignature = await eth.starkSignOrder(
-    starkPath,
-    sellTokenAddress,
-    new BN(sellCurrency.quantization),
-    buyTokenAddress,
-    new BN(buyCurrency.quantization),
-    starkOrder.vaultIdSell,
-    starkOrder.vaultIdBuy,
-    new BN(starkOrder.amountSell),
-    new BN(starkOrder.amountBuy),
-    starkOrder.nonce,
-    starkOrder.expirationTimestamp
-  )
+  const starkSignature = dvf.config.starkExUseV2
+    ? await eth.starkSignOrder_v2(
+      starkPath,
+      sellTokenAddress,
+      'eth',
+      new BN(sellCurrency.quantization),
+      null,
+      buyTokenAddress,
+      'eth',
+      new BN(buyCurrency.quantization),
+      null,
+      starkOrder.vaultIdSell,
+      starkOrder.vaultIdBuy,
+      new BN(starkOrder.amountSell),
+      new BN(starkOrder.amountBuy),
+      starkOrder.nonce,
+      starkOrder.expirationTimestamp
+    )
+    : await eth.starkSignOrder(
+      starkPath,
+      sellTokenAddress,
+      new BN(sellCurrency.quantization),
+      buyTokenAddress,
+      new BN(buyCurrency.quantization),
+      starkOrder.vaultIdSell,
+      starkOrder.vaultIdBuy,
+      new BN(starkOrder.amountSell),
+      new BN(starkOrder.amountBuy),
+      starkOrder.nonce,
+      starkOrder.expirationTimestamp
+    )
 
   await transport.close()
 
-  return { starkPublicKey, starkSignature }
+  return {starkPublicKey, starkSignature}
 }
