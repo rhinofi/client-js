@@ -19,14 +19,14 @@ module.exports = async (
   let transferTokenAddress = currency.tokenAddress
   const transferQuantization = new BN(currency.quantization)
   const amountTransfer = new BN(dvf.token.toQuantizedAmount(token, amount))
-  
+
   const expireTime =
     Math.floor(Date.now() / (1000 * 3600)) +
     parseInt(dvf.config.defaultStarkExpiry)
   let starkPublicKey = await dvf.stark.ledger.getPublicKey(path)
   const transport = await Transport.create()
   const eth = new Eth(transport)
-  const { address } = await eth.getAddress(path)
+  const {address} = await eth.getAddress(path)
   const starkPath = dvf.stark.ledger.getPath(address)
   if (transferTokenAddress) {
     const tokenInfo = byContractAddress(transferTokenAddress)
@@ -35,7 +35,7 @@ module.exports = async (
       // console.log('tokenInfo ', tokenInfo)
       await eth.provideERC20TokenInformation(tokenInfo)
     } else {
-      if (dvf.chainId!==1) {
+      if (dvf.chainId !== 1) {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
           `00${transferTokenAddress}0000000000000003`,
@@ -50,21 +50,40 @@ module.exports = async (
   } else {
     transferTokenAddress = null
   }
-  await eth.starkProvideQuantum(transferTokenAddress, transferQuantization)
-  const starkSignature = await eth.starkSignTransfer(
-    starkPath,
-    transferTokenAddress,
-    transferQuantization,
-    starkPublicKey.x,
-    sourceVault,
-    destinationVault,
-    amountTransfer,
-    nonce,
-    expireTime
-  )
+  dvf.config.starkExUseV2
+    ? await eth.starkProvideQuantum_v2(transferTokenAddress, token === 'ETH' ? 'eth' : 'erc20', transferQuantization, token === 'ETH' ? 'eth' : 'erc20')
+    : await eth.starkProvideQuantum(transferTokenAddress, transferQuantization)
+
+  const starkSignature = dvf.config.starkExUseV2
+    ? await eth.starkSignTransfer_v2(
+      starkPath,
+      transferTokenAddress,
+      token === 'ETH' ? 'eth' : 'erc20', // transferQuantizationType
+      transferQuantization,
+      null, // transferMintableBlobOrTokenId
+      starkPublicKey.x,
+      sourceVault,
+      destinationVault,
+      amountTransfer,
+      nonce,
+      expireTime,
+      null,
+      null
+    )
+    : await eth.starkSignTransfer(
+      starkPath,
+      transferTokenAddress,
+      transferQuantization,
+      starkPublicKey.x,
+      sourceVault,
+      destinationVault,
+      amountTransfer,
+      nonce,
+      expireTime
+    )
 
   // console.log({ starkSignature })
   await transport.close()
 
-  return { starkPublicKey, nonce, expireTime, starkSignature }
+  return {starkPublicKey, nonce, expireTime, starkSignature}
 }
