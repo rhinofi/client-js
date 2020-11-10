@@ -1,7 +1,7 @@
 const DVFError = require('../../lib/dvf/DVFError')
 const BN = require('bignumber.js')
 
-module.exports = async (dvf, starkKey, deFiSignature, ethAddress) => {
+module.exports = async (dvf, tradingKey, deFiSignature, ethAddress) => {
   ethAddress = ethAddress || dvf.get('account')
 
   const { web3 } = dvf
@@ -15,7 +15,7 @@ module.exports = async (dvf, starkKey, deFiSignature, ethAddress) => {
     ? 'registerUser'
     : 'register'
 
-  const args = [`0x${starkKey}`, deFiSignature]
+  const args = [`0x${tradingKey}`, deFiSignature]
 
   if (dvf.config.starkExUseV2) {
     args.unshift(ethAddress)
@@ -44,7 +44,7 @@ module.exports = async (dvf, starkKey, deFiSignature, ethAddress) => {
         .getStarkKey(ethAddress)
         .call()
 
-      if (new BN(fromStark).eq(new BN(starkKey, 16))) {
+      if (new BN(fromStark).eq(new BN(tradingKey, 16))) {
         return true
       } else {
         throw new DVFError('ERR_STARK_REGISTRATION_MISMATCH')

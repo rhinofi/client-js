@@ -2,9 +2,9 @@ const post = require('../lib/dvf/post-authenticated')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
 // TO DO: Remove this when we are confident to use the WithdrawalBalanceReader contract
-const getWithdrawalBalancesDeprecated = async (dvf, withdrawals, starkKey) => {
+const getWithdrawalBalancesDeprecated = async (dvf, withdrawals, tradingKey) => {
   for (const key in dvf.config.tokenRegistry) {
-    const available = await dvf.contract.getWithdrawalBalance(key, starkKey)
+    const available = await dvf.contract.getWithdrawalBalance(key, tradingKey)
 
     if (parseInt(available) > 0) {
       const amount = dvf.token.toQuantizedAmount(

@@ -5,12 +5,12 @@ const validateAssertions = require('../lib/validators/validateAssertions')
 module.exports = async (dvf, starkPublicKey, nonce, signature, contractWalletAddress) => {
   validateAssertions(dvf, { starkPublicKey })
 
-  const starkKey = starkPublicKey.x
+  const tradingKey = starkPublicKey.x
 
   const endpoint = '/v1/trading/w/register'
 
   const data = {
-    starkKey,
+    tradingKey,
     nonce,
     signature, 
     ...(contractWalletAddress && { contractWalletAddress })
@@ -25,7 +25,7 @@ module.exports = async (dvf, starkPublicKey, nonce, signature, contractWalletAdd
   if (userRegistered.deFiSignature) {
     const onchainRegister = await dvf.stark.register(
       dvf,
-      starkKey,
+      tradingKey,
       userRegistered.deFiSignature
     )
 

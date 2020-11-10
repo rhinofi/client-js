@@ -1,11 +1,11 @@
 const DVFError = require('../../lib/dvf/DVFError')
 
-module.exports = async (dvf, vaultId, token, starkKey) => {
+module.exports = async (dvf, vaultId, token, tradingKey) => {
   const args = [dvf.token.getTokenInfo(token).starkTokenId, vaultId]
-  starkKey = starkKey || dvf.config.starkKeyHex
+  tradingKey = tradingKey || dvf.config.starkKeyHex
 
   if (dvf.config.starkExUseV2) {
-    args.unshift(starkKey)
+    args.unshift(tradingKey)
   }
 
   const action = 'depositCancel'
