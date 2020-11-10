@@ -15,7 +15,10 @@ describe('dvf.register', () => {
   })
 
   it('Registers user with Stark Ex', async () => {
-    const apiResponse = { register: 'success' }
+    const apiResponse = {
+      isRegistered: true
+    }
+
     mockGetConf()
 
     const pvtKey = '100'
@@ -24,18 +27,18 @@ describe('dvf.register', () => {
       starkKeyPair.getPublic(true, 'hex'),
       'hex'
     )
-    const starkPublicKey = {
+    const tempKey = {
       x: fullPublicKey.pub.getX().toString('hex'),
       y: fullPublicKey.pub.getY().toString('hex')
     }
 
-    const deFiSignature =
-      '0xb5c3802c7cd4a6832c65b35f7011640ab4307f2109451f3db26f2ccf81639e756b109d63dade93ea7f879c735a11b4a0a6671e308a70b106639b15d43f001aac1c'
+    const starkPublicKey = dvf.stark.formatStarkPublicKey(tempKey)
+
     nock(dvf.config.api)
-      .post('/v1/trading/w/register', body => {
+      .post('/v1/trading/w/register', (body) => {
         return (
           _.isMatch(body, {
-            starkKey: starkPublicKey.x
+            tradingKey: starkPublicKey.x
           }) &&
           body.signature &&
           body.nonce
@@ -43,24 +46,69 @@ describe('dvf.register', () => {
       })
       .reply(200, apiResponse)
 
-    const result = await dvf.register(starkPublicKey, deFiSignature)
+    const result = await dvf.register(starkPublicKey)
+
     expect(result).toEqual(apiResponse)
   })
 
-  it('Register method checks for starkKey', async () => {
+  it('Register method accepts nonce and signature', async () => {
+    const apiResponse = {
+      isRegistered: true
+    }
+
+    mockGetConf()
+
+    const nonce = Date.now() / 1000 + ''
+    const signature = await dvf.sign(nonce.toString(16))
+  
+    const pvtKey = '100'
+    const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
+    const fullPublicKey = sw.ec.keyFromPublic(
+      starkKeyPair.getPublic(true, 'hex'),
+      'hex'
+    )
+    const tempKey = {
+      x: fullPublicKey.pub.getX().toString('hex'),
+      y: fullPublicKey.pub.getY().toString('hex')
+    }
+
+    const starkPublicKey = dvf.stark.formatStarkPublicKey(tempKey)
+
+    nock(dvf.config.api)
+      .post('/v1/trading/w/register', (body) => {
+        return (
+          _.isMatch(body, {
+            tradingKey: starkPublicKey.x
+          }) &&
+          body.signature &&
+          body.nonce
+        )
+      })
+      .reply(200, apiResponse)
+
+    const result = await dvf.register(starkPublicKey, nonce, signature)
+
+    expect(result).toEqual(apiResponse)
+  })
+
+  it('Register method checks for tradingKey', async () => {
     const starkPublicKey = ''
-    const deFiSignature = '0xa1b2c3'
 
     try {
-      await dvf.register(starkPublicKey, deFiSignature)
+      await dvf.register(starkPublicKey)
 
       throw new Error('function should throw')
     } catch (error) {
       expect(error.message).toEqual('ERR_STARK_KEY_MISSING')
+      expect(error.reason).toEqual('Trading key not provided')
     }
   })
 
-  it('Posts to pre register config API and gets error response', async () => {
+  it('Posts to register config API and gets error response', async () => {
+    const starkPublicKey = {
+      x: 'a1b2345',
+      y: 'b1c2345'
+    }
     const apiErrorResponse = {
       statusCode: 422,
       error: 'Unprocessable Entity',
@@ -81,7 +129,7 @@ describe('dvf.register', () => {
       .reply(422, apiErrorResponse)
 
     try {
-      await dvf.register('0x', '0xdefi01')
+      await dvf.register(starkPublicKey)
     } catch (e) {
       expect(e.error).toEqual(apiErrorResponse)
       expect(payloadValidator).toBeCalled()

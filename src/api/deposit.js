@@ -2,49 +2,35 @@ const { post } = require('request-promise')
 const DVFError = require('../lib/dvf/DVFError')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (dvf, token, amount, starkPrivateKey) => {
+module.exports = async (dvf, token, amount, starkPrivateKey, nonce, signature) => {
   validateAssertions(dvf, { amount, token, starkPrivateKey })
 
+  amount = dvf.util.prepareDepositAmount(amount, token)
+
   const currency = dvf.token.getTokenInfo(token)
-
   const quantisedAmount = dvf.token.toQuantizedAmount(token, amount)
-
   const tempVaultId = dvf.config.DVF.tempStarkVaultId
-  const nonce = dvf.util.generateRandomNonce()
+  const _nonce = dvf.util.generateRandomNonce()
   const starkTokenId = currency.starkTokenId
-  let starkVaultId = currency.starkVaultId
-  if (!starkVaultId) {
-    starkVaultId = dvf.config.spareStarkVaultId
-  }
+  const starkVaultId = await dvf.getVaultId(token, nonce, signature)
+
   const { starkPublicKey, starkKeyPair } = await dvf.stark.createKeyPair(
     starkPrivateKey
   )
 
   // This should be in hours
-  expireTime =
+  const expireTime =
     Math.floor(Date.now() / (1000 * 3600)) +
     parseInt(dvf.config.defaultStarkExpiry)
 
-  const { status, transactionHash } = await dvf.contract.deposit(
-    tempVaultId,
-    token,
-    amount
-  )
-
-  // used for testing without making onchain contract call
-  // const { status, transactionHash } = { status: true, transactionHash: '0xabc' }
-
-  if (!status) {
-    throw new DVFError('ERR_ONCHAIN_DEPOSIT')
-  }
-
+  const tradingKey = `0x${starkPublicKey.x}`
   const { starkMessage } = dvf.stark.createTransferMsg(
     quantisedAmount,
-    nonce,
+    _nonce,
     tempVaultId,
     starkTokenId,
     starkVaultId,
-    `0x${starkPublicKey.x}`,
+    tradingKey,
     expireTime
   )
 
@@ -55,18 +41,28 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   const data = {
     token,
     amount,
-    nonce,
+    nonce: _nonce,
     starkPublicKey,
     starkSignature,
     starkVaultId,
-    expireTime,
-    ethTxHash: transactionHash
+    expireTime
   }
-  //console.log({ data })
+  // console.log({ data })
+
+  await dvf.contract.approve(token, dvf.token.toBaseUnitAmount(token, amount))
 
   const depositResponse = await post(url, { json: data })
 
-  await dvf.getUserConfig()
+  const { status, transactionHash } = await dvf.contract.deposit(
+    tempVaultId,
+    token,
+    amount,
+    tradingKey
+  )
 
-  return depositResponse
+  if (!status) {
+    throw new DVFError('ERR_ONCHAIN_DEPOSIT')
+  }
+
+  return { ...depositResponse, transactionHash }
 }

@@ -1,7 +1,7 @@
 /**
  * Creats a client instance for testing
  **/
-const HDWalletProvider = require('truffle-hdwallet-provider')
+const HDWalletProvider = require('@truffle/hdwallet-provider')
 const Web3 = require('web3')
 
 const DVF = require('../../../dvf')
@@ -14,11 +14,15 @@ module.exports = async () => {
 
   const web3 = new Web3(provider)
 
-  let config = {}
+  provider.engine.stop()
+
+  const gasStationApiKey = process.env.ETH_GAS_STATION_KEY || ''
+
+  let config = { gasStationApiKey }
 
   // It's possible to overwrite the API address with the testnet address
   // for example like this:
-  config.api = 'https://api.deversifi.dev'
+  //config.api = 'https://api.stg.deversifi.com'
   // config.api = 'http://localhost:7777/v1/trading'
   return DVF(web3, config)
 }

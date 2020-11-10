@@ -1,28 +1,41 @@
 const DVFError = require('../../lib/dvf/DVFError')
 const BN = require('bignumber.js')
 
-module.exports = async (dvf, starkKey, deFiSignature) => {
-  const ethAddress = dvf.get('account')
+module.exports = async (dvf, tradingKey, deFiSignature, ethAddress) => {
+  ethAddress = ethAddress || dvf.get('account')
+
   const { web3 } = dvf
   const starkInstance = new web3.eth.Contract(
-    dvf.contract.abi.StarkEx,
+    dvf.contract.abi.getStarkEx(),
     dvf.config.DVF.starkExContractAddress
   )
 
-  const sendArguments = {
-    from: ethAddress,
-    gasLimit: dvf.config.defaultGasLimit,
-    gasPrice: dvf.config.defaultGasPrice
+  let onchainResult = ''
+  const action = dvf.config.starkExUseV2
+    ? 'registerUser'
+    : 'register'
+
+  const args = [`0x${tradingKey}`, deFiSignature]
+
+  if (dvf.config.starkExUseV2) {
+    args.unshift(ethAddress)
   }
 
-  let onchainResult = ''
   try {
-    onchainResult = await starkInstance.methods
-      .register(`0x${starkKey}`, deFiSignature)
-      .send(sendArguments)
+    onchainResult = await dvf.eth.send(
+      dvf.contract.abi.getStarkEx(),
+      dvf.config.DVF.starkExContractAddress,
+      action,
+      args
+    )
   } catch (e) {
-    console.log('lib/stark/register error is: ', e)
+    console.log('api/contract/register error is: ', e)
     throw new DVFError('ERR_STARK_REGISTRATION')
+  }
+
+  if (dvf.config.starkExUseV2) {
+    // TODO: StarkExV2: do we need to do any extra validation here?
+    return true
   }
 
   if (onchainResult || onchainResult.status === true) {
@@ -31,14 +44,7 @@ module.exports = async (dvf, starkKey, deFiSignature) => {
         .getStarkKey(ethAddress)
         .call()
 
-      const fromStarkHex = new BN(fromStark).toString(16)
-
-      console.log(
-        'key retrieved registered with stark: ',
-        fromStark,
-        fromStarkHex
-      )
-      if (fromStarkHex === starkKey) {
+      if (new BN(fromStark).eq(new BN(tradingKey, 16))) {
         return true
       } else {
         throw new DVFError('ERR_STARK_REGISTRATION_MISMATCH')

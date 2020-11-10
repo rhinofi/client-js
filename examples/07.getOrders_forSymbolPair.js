@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
-const HDWalletProvider = require('truffle-hdwallet-provider')
+const HDWalletProvider = require('@truffle/hdwallet-provider')
 const sw = require('starkware_crypto')
 const Web3 = require('web3')
 
 const DVF = require('../src/dvf')
-const envVars = require('./helpers/loadFromEnvOrConfig')()
-
+const envVars = require('./helpers/loadFromEnvOrConfig')(
+  process.env.CONFIG_FILE_NAME
+)
+const logExampleResult = require('./helpers/logExampleResult')(__filename)
 
 const ethPrivKey = envVars.ETH_PRIVATE_KEY
 // NOTE: you can also generate a new key using:`
@@ -16,47 +18,29 @@ const infuraURL = `https://ropsten.infura.io/v3/${envVars.INFURA_PROJECT_ID}`
 
 const provider = new HDWalletProvider(ethPrivKey, infuraURL)
 const web3 = new Web3(provider)
+provider.engine.stop()
 
 const dvfConfig = {
-  // Using dev API.
-  api: 'https://api.deversifi.dev'
+  api: envVars.API_URL,
+  dataApi: envVars.DATA_API_URL
+  // Add more variables to override default values
 }
-
 
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
-  let orders = await dvf.getOrders('ETH:BTC')
+  const getOrCreateActiveOrder = require('./helpers/getOrCreateActiveOrder')
 
-  if (orders.length == 0) {
+  const symbol = 'ETH:USDT'
 
-    console.log('no orders for ETH:BTC, submitting one')
+  // Ensure that there is at least one order to get.
+  await getOrCreateActiveOrder(dvf, starkPrivKey, { symbol })
 
-    const submitedOrderResponse = await dvf.submitOrder(
-      'ETH:BTC', // symbol
-      -0.3, // amount
-      500, // price
-      '', // gid
-      '', // cid
-      '0', // signedOrder
-      0, // validFor
-      'P1', // partnerId
-      '', // feeRate
-      '', // dynamicFeeRate
-      starkPrivKey
-    )
-  }
+  const getOrdersResponse = await dvf.getOrders(symbol)
 
-  orders = await dvf.getOrders('ETH:BTC')
-
-  console.log("getOrders response ->", orders)
+  logExampleResult(getOrdersResponse)
 
 })()
-// Stop provider to allow process to exit.
-.then(() => {
-  console.log('Stopping provider...')
-  provider.engine.stop()
-})
 .catch(error => {
   console.error(error)
   process.exit(1)

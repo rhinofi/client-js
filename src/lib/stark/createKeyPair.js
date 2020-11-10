@@ -1,27 +1,57 @@
 const sw = require('starkware_crypto')
 const createPrivateKey = require('./createPrivateKey')
 const errorReasons = require('../dvf/DVFError')
+const formatStarkPublicKey = require('./formatStarkPublicKey')
 
-// QUESTION: remove async from function and make privateKey mandatory?
-module.exports = (privateKey) => {
-  if (!privateKey) {
-    privateKey = createPrivateKey()
+const pubKeysToString = pubKey => ({
+  x: pubKey.x.toString(16),
+  y: pubKey.y.toString(16)
+})
+
+// TODO: copied from starkware-crypto-cpp-node
+const hexStringToBigInt = string => string.slice(0, 2) === '0x'
+  ? BigInt(string)
+  : BigInt('0x' + string)
+
+const castToBigInt = cast => value => typeof value === 'bigint'
+  ? value
+  : cast(value)
+
+const castHexStringToBigInt = castToBigInt(hexStringToBigInt)
+
+module.exports = (dvf, starkPrivateKey) => {
+  if (!starkPrivateKey) {
+    starkPrivateKey = createPrivateKey()
   }
 
   try {
-    const starkKeyPair = sw.ec.keyFromPrivate(privateKey, 'hex')
+    let starkKeyPair
+    let starkPublicKey
 
-    const fullPublicKey = sw.ec.keyFromPublic(
-      starkKeyPair.getPublic(true, 'hex'),
-      'hex'
-    )
-    const starkPublicKey = {
-      x: fullPublicKey.pub.getX().toString('hex'),
-      y: fullPublicKey.pub.getY().toString('hex')
+    if (dvf.sw) {
+      // This is really only used as a private key to pass to stark.sign
+      // which accepts private key as string if sw is defined
+      starkKeyPair = starkPrivateKey
+      starkPublicKey = formatStarkPublicKey(pubKeysToString(
+        dvf.sw.raw.getPublicKey(castHexStringToBigInt(starkPrivateKey))
+      ))
+    } else {
+      starkKeyPair = sw.ec.keyFromPrivate(starkPrivateKey, 'hex')
+
+      const fullPublicKey = sw.ec.keyFromPublic(
+        starkKeyPair.getPublic(true, 'hex'),
+        'hex'
+      )
+      const tempKey = {
+        x: fullPublicKey.pub.getX().toString('hex'),
+        y: fullPublicKey.pub.getY().toString('hex')
+      }
+
+      starkPublicKey = formatStarkPublicKey(tempKey)
     }
-
-    return {privateKey, starkKeyPair, starkPublicKey}
+    return { starkPrivateKey, starkKeyPair, starkPublicKey }
   } catch (e) {
+    // TODO: use dvf.logger to log the actual error
     return {
       error: 'ERR_PUBLICKEY_CREATION',
       reason: errorReasons.ERR_PUBLICKEY_CREATION

@@ -7,9 +7,8 @@ module.exports = (
   cid,
   signedOrder,
   validFor,
-  partner_id,
-  fee_rate,
-  dynamicFeeRate,
+  partnerId,
+  feeRate,
   starkPrivateKey
 ) => {
   // force amount to be negative ( sell order )
@@ -22,9 +21,8 @@ module.exports = (
     cid,
     signedOrder,
     validFor,
-    partner_id,
-    fee_rate,
-    dynamicFeeRate,
+    partnerId,
+    feeRate,
     starkPrivateKey
   )
 }

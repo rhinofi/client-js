@@ -9,9 +9,10 @@ BigNumber.config({ EXPONENTIAL_AT: 1e9 })
  * web3 - web3 object
  * config - config to be merged with defaultConfig
  */
-module.exports = async (web3, userConfig = {}) => {
+module.exports = async (web3, userConfig = {}, sw) => {
   // binds all ./api methods into a fresh object, similar to creating an instance
   let dvf = bind()
+  dvf.sw = sw
 
   // adds key-value storage and event emitting capabilities
   aware(dvf)
@@ -20,13 +21,16 @@ module.exports = async (web3, userConfig = {}) => {
   dvf.config = Object.assign({}, defaultConfig, userConfig)
 
   // ethfinex exchange config
-  const exchangeConf = await dvf.getConfig()
+  const exchangeConf = dvf.config.autoLoadExchangeConf ?
+    await dvf.getConfig()
+    :
+    {}
 
   // user config has priority
   dvf.config = Object.assign({}, defaultConfig, exchangeConf, userConfig)
 
   // working towards being as compatible as possible
-  dvf.isBrowser = typeof window !== 'undefined'
+  dvf.isBrowser = !process.versions.node
 
   dvf.isMetaMask = false
 
@@ -49,23 +53,40 @@ module.exports = async (web3, userConfig = {}) => {
   // save web3 instance int it
   dvf.web3 = web3
 
-  // REVIEW: should we actually use web3.eth.defaultAccount ?
-  // see: https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md#raising_hand-account-list-reflects-user-preference
-  await dvf.account.select(dvf.config.account)
+  let chainId = 3
 
-  if (!dvf.get('account')) {
-    console.warn('Please specify a valid account or account index')
+  try {
+    chainId = chainId || (await web3.eth.net.getId())
+  }
+  catch(e)  {
+    console.log('error getting chainId')
+  }
+
+  dvf.chainId = chainId
+
+  if (dvf.config.autoSelectAccount) {
+    await dvf.account.select(dvf.config.account)
+
+    if (!dvf.get('account')) {
+      console.warn('Please specify a valid account or account index')
+    }
+  }
+  else if (dvf.config.address){
+    dvf.set('account', dvf.config.address.toLowerCase())
   }
 
   // get user config once we get the Web3 provider and Eth Address
   if (dvf.config.autoLoadUserConf) {
-    try{
+    try {
       await dvf.getUserConfig()
-    }
-    catch(e){
-      console.log('Could not retrieve user configuration. Did the user register?')
+    } catch (e) {
+      console.log(
+        'Could not retrieve user configuration. Did the user register?'
+      )
     }
   }
+
+  dvf.recommendedGasPrices = await dvf.getGasPrice()
 
   return dvf
 }

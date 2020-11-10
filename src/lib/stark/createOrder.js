@@ -1,81 +1,46 @@
-const BigNumber = require('bignumber.js')
+const P = require('aigle')
+const { preparePriceBN, prepareAmountBN, splitSymbol } = require('dvf-utils')
 const DVFError = require('../dvf/DVFError')
+const computeBuySellData = require('../dvf/computeBuySellData')
 
-module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
-  // symbols are always 3 letters
-  const baseSymbol = symbol.split(':')[0]
-  const quoteSymbol = symbol.split(':')[1]
 
-  const buySymbol = amount > 0 ? baseSymbol : quoteSymbol
-  const sellSymbol = amount > 0 ? quoteSymbol : baseSymbol
+module.exports = async (dvf, { symbol, amount, price, validFor, feeRate, nonce, signature }) => {
+  price = preparePriceBN(price)
+  amount = preparePriceBN(amount)
+
+  feeRate = parseFloat(feeRate) || dvf.config.DVF.defaultFeeRate
+
+  const symbolArray = splitSymbol(symbol)
+  const baseSymbol = symbolArray[0]
+  const quoteSymbol = symbolArray[1]
+
+  const amountIsPositive = amount.isGreaterThan(0)
+  const buySymbol = amountIsPositive ? baseSymbol : quoteSymbol
+  const sellSymbol = amountIsPositive ? quoteSymbol : baseSymbol
 
   const sellCurrency = dvf.token.getTokenInfo(sellSymbol)
   const buyCurrency = dvf.token.getTokenInfo(buySymbol)
-  const vaultIdSell = sellCurrency.starkVaultId
 
-  // console.log("sell :", sellSymbol, sellCurrency)
-  // console.log("buy  :", buySymbol, buyCurrency)
-
-  if (!vaultIdSell) {
-    console.error('No token vault for :', sellSymbol)
-
-    throw new DVFError('ERR_NO_TOKEN_VAULT')
-  }
-
-  let vaultIdBuy = buyCurrency.starkVaultId
-  if (!vaultIdBuy) {
-    vaultIdBuy = dvf.config.spareStarkVaultId
-  }
-
+  const [vaultIdSell, vaultIdBuy] = await P.join(
+    dvf.getVaultId(sellSymbol, nonce, signature),
+    dvf.getVaultId(buySymbol, nonce, signature)
+  )
   if (!(sellCurrency && buyCurrency)) {
     if (!vaultIdSell) {
       throw new DVFError('ERR_SYMBOL_DOES_NOT_MATCH')
     }
   }
 
-  let buyAmount, sellAmount
+  const settleSpreadBuy = buyCurrency.settleSpread
+  const settleSpreadSell = sellCurrency.settleSpread
 
-  if (amount > 0) {
-    buyAmount = new BigNumber(10)
-      .pow(buyCurrency.decimals)
-      .times(amount)
-      .dividedBy(buyCurrency.quantization)
-      .times(1 + (buyCurrency.settleSpread || 0))
-      .times(1 - feeRate)
-      .integerValue(BigNumber.ROUND_CIEL)
-      .abs()
-      .toString()
-    sellAmount = new BigNumber(10)
-      .pow(sellCurrency.decimals)
-      .times(amount)
-      .dividedBy(sellCurrency.quantization)
-      .times(price)
-      .times(1 + (sellCurrency.settleSpread || 0))
-      .integerValue(BigNumber.ROUND_FLOOR)
-      .abs()
-      .toString()
-  }
+  const {
+    amountSell,
+    amountBuy
+  } = computeBuySellData(dvf,{ symbol, amount, price, feeRate, settleSpreadBuy, settleSpreadSell })
 
-  if (amount < 0) {
-    buyAmount = new BigNumber(10)
-      .pow(buyCurrency.decimals)
-      .dividedBy(buyCurrency.quantization)
-      .times(amount)
-      .times(price)
-      .times(1 + (buyCurrency.settleSpread || 0))
-      .times(1 - feeRate)
-      .integerValue(BigNumber.ROUND_CIEL)
-      .abs()
-      .toString()
-    sellAmount = new BigNumber(10)
-      .pow(sellCurrency.decimals)
-      .dividedBy(sellCurrency.quantization)
-      .times(amount)
-      .times(1 + (sellCurrency.settleSpread || 0))
-      .integerValue(BigNumber.ROUND_FLOOR)
-      .abs()
-      .toString()
-  }
+  // console.log('sell :', sellSymbol, sellCurrency)
+  // console.log('buy  :', buySymbol, buyCurrency)
 
   let expiration // in hours
   expiration = Math.floor(Date.now() / (1000 * 3600))
@@ -89,8 +54,8 @@ module.exports = (dvf, symbol, amount, price, validFor, feeRate = 0.0025) => {
   const starkOrder = {
     vaultIdSell: vaultIdSell,
     vaultIdBuy: vaultIdBuy,
-    amountSell: sellAmount,
-    amountBuy: buyAmount,
+    amountSell,
+    amountBuy,
     tokenSell: sellCurrency.starkTokenId,
     tokenBuy: buyCurrency.starkTokenId,
     nonce: dvf.util.generateRandomNonce(),

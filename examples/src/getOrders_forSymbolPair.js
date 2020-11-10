@@ -1,24 +1,10 @@
-let orders = await dvf.getOrders('ETH:BTC')
+const getOrCreateActiveOrder = require('./helpers/getOrCreateActiveOrder')
 
-if (orders.length == 0) {
+const symbol = 'ETH:USDT'
 
-  console.log('no orders for ETH:BTC, submitting one')
+// Ensure that there is at least one order to get.
+await getOrCreateActiveOrder(dvf, starkPrivKey, { symbol })
 
-  const submitedOrderResponse = await dvf.submitOrder(
-    'ETH:BTC', // symbol
-    -0.3, // amount
-    500, // price
-    '', // gid
-    '', // cid
-    '0', // signedOrder
-    0, // validFor
-    'P1', // partnerId
-    '', // feeRate
-    '', // dynamicFeeRate
-    starkPrivKey
-  )
-}
+const getOrdersResponse = await dvf.getOrders(symbol)
 
-orders = await dvf.getOrders('ETH:BTC')
-
-console.log("getOrders response ->", orders)
+logExampleResult(getOrdersResponse)
