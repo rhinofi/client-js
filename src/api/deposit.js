@@ -2,7 +2,7 @@ const { post } = require('request-promise')
 const DVFError = require('../lib/dvf/DVFError')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (dvf, token, amount, starkPrivateKey) => {
+module.exports = async (dvf, token, amount, starkPrivateKey, nonce, signature) => {
   validateAssertions(dvf, { amount, token, starkPrivateKey })
 
   amount = dvf.util.prepareDepositAmount(amount, token)
@@ -12,7 +12,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   const tempVaultId = dvf.config.DVF.tempStarkVaultId
   const nonce = dvf.util.generateRandomNonce()
   const starkTokenId = currency.starkTokenId
-  const starkVaultId = await dvf.getVaultId(token)
+  const starkVaultId = await dvf.getVaultId(token, nonce, signature)
 
   const { starkPublicKey, starkKeyPair } = await dvf.stark.createKeyPair(
     starkPrivateKey

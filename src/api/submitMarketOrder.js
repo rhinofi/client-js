@@ -20,7 +20,9 @@ const schema = Joi.object({
   type: Joi.string().default('EXCHANGE MARKET'),
   protocol: Joi.any().default('stark'),
   isPostOnly: Joi.bool().description('Flag to indicate if the order is post-only.'),
-  isHidden: Joi.bool().description('Flag to indicate if the order is hidden.')
+  isHidden: Joi.bool().description('Flag to indicate if the order is hidden.'),
+  nonce: Joi.string().allow(''),
+  signature: Joi.string().allow('')
 })
 
 module.exports = async (dvf, orderData) => {

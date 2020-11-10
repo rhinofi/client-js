@@ -4,7 +4,7 @@ const DVFError = require('../dvf/DVFError')
 const computeBuySellData = require('../dvf/computeBuySellData')
 
 
-module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
+module.exports = async (dvf, { symbol, amount, price, validFor, feeRate, nonce, signature }) => {
   price = preparePriceBN(price)
   amount = preparePriceBN(amount)
 
@@ -22,8 +22,8 @@ module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
   const buyCurrency = dvf.token.getTokenInfo(buySymbol)
 
   const [vaultIdSell, vaultIdBuy] = await P.join(
-    dvf.getVaultId(sellSymbol),
-    dvf.getVaultId(buySymbol)
+    dvf.getVaultId(sellSymbol, nonce, signature),
+    dvf.getVaultId(buySymbol, nonce, signature)
   )
   if (!(sellCurrency && buyCurrency)) {
     if (!vaultIdSell) {
