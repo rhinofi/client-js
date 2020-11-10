@@ -2,7 +2,7 @@
  * Approves a token for locking
  *
  */
-module.exports = async (dvf, token, deposit) => {
+module.exports = async (dvf, token, deposit, txMeta) => {
   if (token === 'ETH') {
     return true
   }
@@ -32,7 +32,9 @@ module.exports = async (dvf, token, deposit) => {
       dvf.contract.abi.token,
       currency.tokenAddress,
       action,
-      args
+      args,
+      null,
+      txMeta
     )
   }
 
@@ -45,6 +47,8 @@ module.exports = async (dvf, token, deposit) => {
     dvf.contract.abi.token,
     currency.tokenAddress,
     action,
-    args
+    args,
+    null,
+    txMeta
   )
 }
