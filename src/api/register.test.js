@@ -38,7 +38,7 @@ describe('dvf.register', () => {
       .post('/v1/trading/w/register', (body) => {
         return (
           _.isMatch(body, {
-            starkKey: starkPublicKey.x
+            tradingKey: starkPublicKey.x
           }) &&
           body.signature &&
           body.nonce
@@ -78,7 +78,7 @@ describe('dvf.register', () => {
       .post('/v1/trading/w/register', (body) => {
         return (
           _.isMatch(body, {
-            starkKey: starkPublicKey.x
+            tradingKey: starkPublicKey.x
           }) &&
           body.signature &&
           body.nonce
@@ -91,7 +91,7 @@ describe('dvf.register', () => {
     expect(result).toEqual(apiResponse)
   })
 
-  it('Register method checks for starkKey', async () => {
+  it('Register method checks for tradingKey', async () => {
     const starkPublicKey = ''
 
     try {
@@ -100,6 +100,7 @@ describe('dvf.register', () => {
       throw new Error('function should throw')
     } catch (error) {
       expect(error.message).toEqual('ERR_STARK_KEY_MISSING')
+      expect(error.reason).toEqual('Trading key not provided')
     }
   })
 
