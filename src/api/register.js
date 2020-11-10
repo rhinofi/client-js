@@ -17,7 +17,7 @@ module.exports = async (dvf, starkPublicKey, deFiSignature) => {
   const url = dvf.config.api + '/v1/trading/w/register'
 
   const data = {
-    starkKey,
+    starkKey: tradingKey,
     nonce,
     signature
   }
