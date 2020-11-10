@@ -10,7 +10,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey, nonce, signature) =
   const currency = dvf.token.getTokenInfo(token)
   const quantisedAmount = dvf.token.toQuantizedAmount(token, amount)
   const tempVaultId = dvf.config.DVF.tempStarkVaultId
-  const nonce = dvf.util.generateRandomNonce()
+  const _nonce = dvf.util.generateRandomNonce()
   const starkTokenId = currency.starkTokenId
   const starkVaultId = await dvf.getVaultId(token, nonce, signature)
 
@@ -26,7 +26,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey, nonce, signature) =
   const tradingKey = `0x${starkPublicKey.x}`
   const { starkMessage } = dvf.stark.createTransferMsg(
     quantisedAmount,
-    nonce,
+    _nonce,
     tempVaultId,
     starkTokenId,
     starkVaultId,
@@ -41,7 +41,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey, nonce, signature) =
   const data = {
     token,
     amount,
-    nonce,
+    nonce: _nonce,
     starkPublicKey,
     starkSignature,
     starkVaultId,
