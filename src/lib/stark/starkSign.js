@@ -4,7 +4,8 @@ const FP = require('lodash/fp')
 
 const sigKeysToString = sig => ({
   r: sig.r.toString(16),
-  s: sig.s.toString(16)
+  s: sig.s.toString(16),
+  recoveryParam: sig.recoveryParam
 })
 
 module.exports = (dvf, starkKeyPair, starkMessage) => {
