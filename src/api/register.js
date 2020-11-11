@@ -10,7 +10,7 @@ module.exports = async (dvf, starkPublicKey, nonce, signature, contractWalletAdd
   const endpoint = '/v1/trading/w/register'
 
   const data = {
-    tradingKey,
+    starkKey: tradingKey,
     nonce,
     signature, 
     ...(contractWalletAddress && { contractWalletAddress })
