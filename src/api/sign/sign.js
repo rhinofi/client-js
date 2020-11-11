@@ -1,3 +1,4 @@
+const sw = require('starkware_crypto')
 /**
  * Signs toSign assyncronously
  *
@@ -11,7 +12,8 @@ module.exports = async (dvf, toSign) => {
     return dvf.web3.eth.personal.sign(toSign, dvf.get('account'))
   } else if (dvf.config.useTradingKey) {
     const starkKey = await dvf.config.starkProvider.getStarkKey()
-    return dvf.stark.sign(starkKey, toSign)
+    const keyPair = sw.ec.keyFromPrivate(starkKey.substr(2), 'hex')
+    return dvf.stark.sign(keyPair, toSign)
   } else {
     return dvf.web3.eth.sign(toSign, dvf.get('account'))
   }
