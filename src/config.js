@@ -33,5 +33,8 @@ module.exports = {
 
   // enables integrators to select if they want to fetch user config upon initialization
   autoLoadUserConf: true,
-  autoLoadExchangeConf: true
+  autoLoadExchangeConf: true,
+
+  // enables integrations exposing starkProvider
+  starkProvider: null
 }
