@@ -1,6 +1,6 @@
-module.exports = async (dvf, vaultId, token, amount, starkKey) => {
+module.exports = async (dvf, vaultId, token, amount, tradingKey) => {
   let value
-  starkKey = starkKey || dvf.config.starkKeyHex
+  tradingKey = tradingKey || dvf.config.starkKeyHex
 
   if (token === 'ETH') {
     value = dvf.token.toBaseUnitAmount(token, amount)
@@ -11,7 +11,7 @@ module.exports = async (dvf, vaultId, token, amount, starkKey) => {
   const args = [dvf.token.getTokenInfo(token).starkTokenId, vaultId, value]
 
   if (dvf.config.starkExUseV2) {
-    args.unshift(starkKey)
+    args.unshift(tradingKey)
   }
 
   const action = 'deposit'

@@ -1,14 +1,14 @@
 const DVFError = require('../../lib/dvf/DVFError')
 
-module.exports = async (dvf, token, starkKey) => {
+module.exports = async (dvf, token, tradingKey) => {
   const { starkVaultId } = dvf.token.getTokenInfo(token)
 
-  starkKey = starkKey || dvf.config.starkKeyHex
+  tradingKey = tradingKey || dvf.config.starkKeyHex
 
   const args = [starkVaultId]
 
   if (dvf.config.starkExUseV2) {
-    args.unshift(starkKey)
+    args.unshift(tradingKey)
   }
 
   const action = 'fullWithdrawalRequest'

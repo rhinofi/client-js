@@ -2,7 +2,7 @@ const { post } = require('request-promise')
 const DVFError = require('../lib/dvf/DVFError')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (dvf, token, amount, starkPrivateKey) => {
+module.exports = async (dvf, token, amount, starkPrivateKey, nonce, signature) => {
   validateAssertions(dvf, { amount, token, starkPrivateKey })
 
   amount = dvf.util.prepareDepositAmount(amount, token)
@@ -10,9 +10,9 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   const currency = dvf.token.getTokenInfo(token)
   const quantisedAmount = dvf.token.toQuantizedAmount(token, amount)
   const tempVaultId = dvf.config.DVF.tempStarkVaultId
-  const nonce = dvf.util.generateRandomNonce()
+  const _nonce = dvf.util.generateRandomNonce()
   const starkTokenId = currency.starkTokenId
-  const starkVaultId = await dvf.getVaultId(token)
+  const starkVaultId = await dvf.getVaultId(token, nonce, signature)
 
   const { starkPublicKey, starkKeyPair } = await dvf.stark.createKeyPair(
     starkPrivateKey
@@ -23,14 +23,14 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     Math.floor(Date.now() / (1000 * 3600)) +
     parseInt(dvf.config.defaultStarkExpiry)
 
-  const starkKey = `0x${starkPublicKey.x}`
+  const tradingKey = `0x${starkPublicKey.x}`
   const { starkMessage } = dvf.stark.createTransferMsg(
     quantisedAmount,
-    nonce,
+    _nonce,
     tempVaultId,
     starkTokenId,
     starkVaultId,
-    starkKey,
+    tradingKey,
     expireTime
   )
 
@@ -41,7 +41,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   const data = {
     token,
     amount,
-    nonce,
+    nonce: _nonce,
     starkPublicKey,
     starkSignature,
     starkVaultId,
@@ -57,7 +57,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     tempVaultId,
     token,
     amount,
-    starkKey
+    tradingKey
   )
 
   if (!status) {
