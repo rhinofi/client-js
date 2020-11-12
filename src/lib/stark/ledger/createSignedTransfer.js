@@ -51,7 +51,7 @@ module.exports = async (
     transferTokenAddress = null
   }
   dvf.config.starkExUseV2
-    ? await eth.starkProvideQuantum_v2(transferTokenAddress, token === 'ETH' ? 'eth' : 'erc20', transferQuantization, token === 'ETH' ? 'eth' : 'erc20')
+    ? await eth.starkProvideQuantum_v2(transferTokenAddress, token === 'ETH' ? 'eth' : 'erc20', transferQuantization, null)
     : await eth.starkProvideQuantum(transferTokenAddress, transferQuantization)
 
   const starkSignature = dvf.config.starkExUseV2
