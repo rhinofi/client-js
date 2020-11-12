@@ -9,12 +9,16 @@ const selectTransport = require('../../ledger/selectTransport')
 module.exports = async (dvf, path, starkOrder) => {
   const Transport = selectTransport(dvf.isBrowser)
 
-  const buyCurrency = _.find(dvf.config.tokenRegistry, {
+  const buySymbol = _.findKey(dvf.config.tokenRegistry, {
     starkTokenId: starkOrder.tokenBuy
   })
-  const sellCurrency = _.find(dvf.config.tokenRegistry, {
+
+  const sellSymbol = _.findKey(dvf.config.tokenRegistry, {
     starkTokenId: starkOrder.tokenSell
   })
+
+  const buyCurrency = dvf.config.tokenRegistry[buySymbol]
+  const sellCurrency = dvf.config.tokenRegistry[sellSymbol]
 
   const transport = await Transport.create()
   const eth = new Eth(transport)
@@ -83,11 +87,11 @@ module.exports = async (dvf, path, starkOrder) => {
     ? await eth.starkSignOrder_v2(
       starkPath,
       sellTokenAddress,
-      'eth',
+      sellSymbol === 'ETH' ? 'eth' : 'erc20',
       new BN(sellCurrency.quantization),
       null,
       buyTokenAddress,
-      'eth',
+      buySymbol === 'ETH' ? 'eth' : 'erc20',
       new BN(buyCurrency.quantization),
       null,
       starkOrder.vaultIdSell,
