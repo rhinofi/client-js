@@ -40,8 +40,8 @@
   "homepage": "https://github.com/deversifi/dvf-client-js",
   "license": "MIT",
   "dependencies": {
-    "@ledgerhq/hw-app-eth": "https://gitpkg.now.sh/btchip/ledgerjs/packages/hw-app-eth?starkexv2",
-    "@ledgerhq/hw-transport-webusb": "https://gitpkg.now.sh/btchip/ledgerjs/packages/hw-transport-webusb?starkexv2",
+    "@ledgerhq/hw-app-eth": "5.26.1-alpha.2",
+    "@ledgerhq/hw-transport-webusb": "5.28.0",
     "aigle": "git+https://github.com/suguru03/aigle#8739846ba9d4cfc116e1546da1181c73564cae0b",
     "aware": "^0.3.1",
     "bignumber.js": "^9.0.0",
