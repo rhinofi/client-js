@@ -1,5 +1,5 @@
 const byContractAddress = require('@ledgerhq/hw-app-eth/erc20').byContractAddress
-const DVFError = require('../../dvf/DVFError')
+const DVFError = require('../dvf/DVFError')
 
 module.exports = async (dvf, transport, token, tokenAddress = '', transferQuantization) => {
   let transferTokenAddress = tokenAddress.slice(0, 2) === '0x' ? tokenAddress.substr(2) : tokenAddress
