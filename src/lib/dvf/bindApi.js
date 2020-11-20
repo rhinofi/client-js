@@ -76,6 +76,7 @@ module.exports = () => {
   // dvf.token functions
   dvf.token = {
     // TODO: deprecate getTokenInfo
+    provideContractData: compose(require('../ledger/provideContractData')),
     getTokenInfo: compose(require('./token/getTokenInfo')),
     getTokenInfoOrThrow: compose(require('./token/getTokenInfoOrThrow')),
     fromBaseUnitAmount: compose(require('./token/fromBaseUnitAmount')),
