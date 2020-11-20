@@ -1,7 +1,7 @@
 const {post} = require('request-promise')
 const validateAssertions = require('../../lib/validators/validateAssertions')
 
-module.exports = async (dvf, path, token, amount, nonce, signature) => {
+module.exports = async (dvf, token, amount, path, nonce, signature) => {
   validateAssertions(dvf, {amount, token})
   const tempVaultId = dvf.config.DVF.tempStarkVaultId || '1'
   const depositAmount = dvf.util.prepareDepositAmount(amount, token)
