@@ -11,7 +11,7 @@ module.exports = async (dvf, toSign, signWithTradingKey) => {
   if (dvf.web3.currentProvider.isMetaMask) {
     return dvf.web3.eth.personal.sign(toSign, dvf.get('account'))
   } else if (signWithTradingKey) {
-    const signature = await dvf.config.starkProvider.signNonce(toSign)
+    const signature = await dvf.config.starkProvider.starkSignMessage(toSign)
     return dvf.config.starkProvider.deserializeSignature(signature)
   } else {
     return dvf.web3.eth.sign(toSign, dvf.get('account'))
