@@ -39,6 +39,7 @@ module.exports = () => {
       createWithdrawalData: compose(
         require('../stark/ledger/createWithdrawalData')
       ),
+      createFastWithdrawalPayload: compose(require('../stark/ledger/createFastWithdrawalPayload')),
       createDepositData: compose(require('../stark/ledger/createDepositData')),
       createSignedTransfer: compose(
         require('../stark/ledger/createSignedTransfer')
@@ -158,7 +159,8 @@ module.exports = () => {
   dvf.fullWithdrawalRequest = compose(require('../../api/fullWithdrawalRequest'))
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),
-    withdraw: compose(require('../../api/ledger/withdraw'))
+    withdraw: compose(require('../../api/ledger/withdraw')),
+    fastWithdrawal: compose(require('../../api/ledger/fastWithdrawal'))
   }
   dvf.estimatedNextBatchTime = compose(require('../../api/estimatedNextBatchTime'))
   return dvf
