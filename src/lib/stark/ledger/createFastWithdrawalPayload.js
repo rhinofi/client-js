@@ -60,9 +60,9 @@ module.exports = async (dvf, withdrawalData, path) => {
     recipientEthAddress = dvf.config.ethAddress
   } = validateArg0(withdrawalData)
   const Transport = selectTransport(dvf.isBrowser)
+  const starkPublicKey = await dvf.stark.ledger.getPublicKey(path)
   const transport = await Transport.create()
   const eth = new Eth(transport)
-  const starkPublicKey = await dvf.stark.ledger.getPublicKey(path)
   const {address} = await eth.getAddress(path)
   const starkPath = dvf.stark.ledger.getPath(address)
   const tokenInfo = getValidTokenInfo(dvf)(token)
@@ -118,6 +118,7 @@ module.exports = async (dvf, withdrawalData, path) => {
     DVF.starkExTransferRegistryContractAddress,
     fact
   )
+  await transport.close()
   return {
     recipientEthAddress,
     transactionFee,
