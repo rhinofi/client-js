@@ -10,10 +10,10 @@ const swJs = require('starkware_crypto')
 const Eth = require('@ledgerhq/hw-app-eth').default
 const selectTransport = require('../../ledger/selectTransport')
 
-const calculateFact = require('../stark/calculateFact')
-const validateWithJoi = require('../validators/validateWithJoi')
+const calculateFact = require('../calculateFact')
+const validateWithJoi = require('../../validators/validateWithJoi')
 
-const DVFError = require('./DVFError')
+const DVFError = require('../../dvf/DVFError')
 
 // TODO
 const calculateFee = amount => 0
