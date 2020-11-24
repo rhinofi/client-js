@@ -9,9 +9,10 @@ BigNumber.config({ EXPONENTIAL_AT: 1e9 })
  * web3 - web3 object
  * config - config to be merged with defaultConfig
  */
-module.exports = async (web3, userConfig = {}) => {
+module.exports = async (web3, userConfig = {}, sw) => {
   // binds all ./api methods into a fresh object, similar to creating an instance
   let dvf = bind()
+  dvf.sw = sw
 
   // adds key-value storage and event emitting capabilities
   aware(dvf)
@@ -51,7 +52,7 @@ module.exports = async (web3, userConfig = {}) => {
 
   // save web3 instance int it
   dvf.web3 = web3
-  
+
   let chainId = 3
 
   try {

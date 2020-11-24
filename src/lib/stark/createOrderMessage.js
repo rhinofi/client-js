@@ -1,9 +1,9 @@
 const sw = require('starkware_crypto')
 const DVFError = require('../dvf/DVFError')
 
-module.exports = starkOrder => {
+module.exports = (dvf, starkOrder) => {
   try {
-    const message = sw.get_limit_order_msg(
+    const message = (dvf.sw || sw).getLimitOrderMsgHash(
       starkOrder.vaultIdSell,
       starkOrder.vaultIdBuy,
       starkOrder.amountSell,
@@ -13,7 +13,7 @@ module.exports = starkOrder => {
       starkOrder.nonce,
       starkOrder.expirationTimestamp
     )
-    return message
+    return dvf.sw ? message.toString(16) : message
   } catch (err) {
     console.error('ERR_CREATING_STARK_ORDER_MESSAGE: error', err)
     throw new DVFError('ERR_CREATING_STARK_ORDER_MESSAGE')

@@ -1,19 +1,18 @@
 const { post } = require('request-promise')
 const DVFError = require('../lib/dvf/DVFError')
 const validateAssertions = require('../lib/validators/validateAssertions')
-const prepareAmount = require('dvf-utils').prepareAmount
 
-module.exports = async (dvf, token, amount, starkPrivateKey) => {
+module.exports = async (dvf, token, amount, starkPrivateKey, nonce, signature) => {
   validateAssertions(dvf, { amount, token, starkPrivateKey })
 
-  amount = prepareAmount(amount, dvf.token.maxQuantizedDecimalPlaces(token))
+  amount = dvf.util.prepareDepositAmount(amount, token)
 
   const currency = dvf.token.getTokenInfo(token)
   const quantisedAmount = dvf.token.toQuantizedAmount(token, amount)
   const tempVaultId = dvf.config.DVF.tempStarkVaultId
-  const nonce = dvf.util.generateRandomNonce()
+  const _nonce = dvf.util.generateRandomNonce()
   const starkTokenId = currency.starkTokenId
-  const starkVaultId = await dvf.getVaultId(token)
+  const starkVaultId = await dvf.getVaultId(token, nonce, signature)
 
   const { starkPublicKey, starkKeyPair } = await dvf.stark.createKeyPair(
     starkPrivateKey
@@ -23,14 +22,15 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   const expireTime =
     Math.floor(Date.now() / (1000 * 3600)) +
     parseInt(dvf.config.defaultStarkExpiry)
-    
+
+  const tradingKey = `0x${starkPublicKey.x}`
   const { starkMessage } = dvf.stark.createTransferMsg(
     quantisedAmount,
-    nonce,
+    _nonce,
     tempVaultId,
     starkTokenId,
     starkVaultId,
-    `0x${starkPublicKey.x}`,
+    tradingKey,
     expireTime
   )
 
@@ -41,22 +41,23 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
   const data = {
     token,
     amount,
-    nonce,
+    nonce: _nonce,
     starkPublicKey,
     starkSignature,
     starkVaultId,
     expireTime
   }
   // console.log({ data })
-  
+
   await dvf.contract.approve(token, dvf.token.toBaseUnitAmount(token, amount))
 
   const depositResponse = await post(url, { json: data })
-  
+
   const { status, transactionHash } = await dvf.contract.deposit(
     tempVaultId,
     token,
-    amount
+    amount,
+    tradingKey
   )
 
   if (!status) {

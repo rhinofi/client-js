@@ -1,6 +1,6 @@
 {
   "name": "dvf-client-js",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "main": "src/dvf.js",
   "contributors": [
     "Henrique Matias <hems.inlet@gmail.com>",
@@ -46,12 +46,13 @@
     "aigle": "git+https://github.com/suguru03/aigle#8739846ba9d4cfc116e1546da1181c73564cae0b",
     "aware": "^0.3.1",
     "bignumber.js": "^9.0.0",
-    "dvf-utils": "git+https://github.com/DeversiFi/dvf-utils#ba8ad1e77004f477c38d6029cd8ee181c229d9d0",
+    "dvf-utils": "git+https://github.com/DeversiFi/dvf-utils#c9be9e9b818863a05fac396e1af5c2d536dd90d1",
     "lodash": "^4.17.20",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
-    "starkware_crypto": "git+https://github.com/DeversiFi/starkware-crypto#13a765c46884e79e153f64d34a60d77c205b2982",
-    "web3": "^1.3.0"
+    "starkware_crypto": "git+https://github.com/DeversiFi/starkware-crypto#bf94bde1f6bbb4156ded52171cd70d3e02cd5919",
+    "web3": "^1.3.0",
+    "web3-utils": "^1.3.0"
   },
   "devDependencies": {
     "@ledgerhq/hw-transport-mocker": "^5.25.0",
