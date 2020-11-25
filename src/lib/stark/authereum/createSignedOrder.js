@@ -15,15 +15,28 @@ module.exports = async (dvf, starkOrder) => {
     starkTokenId: starkOrder.tokenSell
   })
 
-  const tokenSellAssetType = await starkProvider.getAssetType({assetStandard: sellSymbol === 'ETH' ? 'ETH' : 'ERC20'})
-  const tokenBuyAssetType = await starkProvider.getAssetType({assetStandard: buySymbol === 'ETH' ? 'ETH' : 'ERC20'})
+  const buyCurrency = dvf.config.tokenRegistry[buySymbol]
+  const sellCurrency = dvf.config.tokenRegistry[sellSymbol]
+
   const starkSignature = await starkProvider.createOrder({
-    vaultSell: starkOrder.vaultIdSell,
-    vaultBuy: starkOrder.vaultIdBuy,
-    amountSell: starkOrder.amountSell,
-    amountBuy: starkOrder.amountBuy,
-    tokenSellAssetType,
-    tokenBuyAssetType,
+    sell: {
+      type: sellSymbol === 'ETH' ? 'ETH' : 'ERC20',
+      data: {
+        quantum: sellCurrency.quantization,
+        tokenAddress: sellCurrency.tokenAddress
+      },
+      amount: starkOrder.amountSell,
+      vaultId: starkOrder.vaultIdSell
+    },
+    buy: {
+      type: buySymbol === 'ETH' ? 'ETH' : 'ERC20',
+      data: {
+        quantum: buyCurrency.quantization,
+        tokenAddress: buyCurrency.tokenAddress
+      },
+      amount: starkOrder.amountBuy,
+      vaultId: starkOrder.vaultIdBuy
+    },
     nonce: starkOrder.nonce,
     expirationTimestamp: starkOrder.expirationTimestamp
   })
