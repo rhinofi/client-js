@@ -9,7 +9,7 @@ module.exports = {
 
   // default stark related constants
   // default expiration time for transfers and orders in hours
-  defaultStarkExpiry: 720,
+  defaultStarkExpiry: 4320,
   // default nonce age in seconds
   defaultNonceAge: 43200,
   // in case no provider is provided we will try connecting to the this default

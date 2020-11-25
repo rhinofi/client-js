@@ -1,6 +1,6 @@
 <img src="https://avatars1.githubusercontent.com/u/56512535?s=200&v=4" align="right" />
 
-# Deversifi Trading API for Node.JS
+# Deversifi Javascript Trading API
 
 A js client library for DeversiFi - StarkWare orders
 
@@ -12,32 +12,26 @@ A js client library for DeversiFi - StarkWare orders
     - [NPM](#npm)
     - [Prebuild for browser](#prebuild-for-browser)
 - [Setup](#setup)
-    - [Authentication](#authentication)
     - [Pre Requisites](#pre-requisites)
     - [Instancing](#instancing)
         - [Using MetaMask or a local node](#using-metamask-or-a-local-node)
-        - [Using a remote node](#using-a-remote-node)
-        - [Using Infura](#using-infura)
+        - [Using a private key](#using-a-private-key)
         - [Configuration](#configuration)
-        - [Gas Price](#gas-price)
-- [Placing an Order](#placing-an-order)
-    - [Approving tokens](#approving-tokens)
-    - [Locking tokens](#locking-tokens)
-    - [Submitting an order](#submitting-an-order)
-    - [Tether market shift](#tether-market-shift)
+- [API Authentication](#api-authentication)
+- [Registering](#registering)
+- [Approving tokens](#approving-tokens)
+- [Depositing tokens](#depositing-tokens)
+- [Placing an order](#placing-an-order)
+- [Withdrawing tokens](#withdrawing-tokens)
+    - [Requesting a withdrawal](#requesting-a-withdrawal)
+    - [Withdraw on chain](#withdraw-on-chain)
 - [Cancelling Orders](#cancelling-orders)
-    - [Standard cancel](#standard-cancel)
-    - [Signing externally](#signing-externally)
-- [Account History](#account-history)
-- [Unlocking Tokens](#unlocking-tokens)
+- [Authenticated data endpoints](#authenticated-data-endpoints)
 - [More examples](#more-examples)
-    - [Submitting a buy order](#submitting-a-buy-order)
-    - [Submitting a sell order](#submitting-a-sell-order)
-    - [Fetching info about specific order](#fetchin-info-about-specific-order)
+- [Gas Price](#gas-price)
 - [Troubleshooting](#troubleshooting)
 - [Developing](#developing)
     - [Setup](#setup-1)
-    - [Run a node](#run-a-node)
     - [Implementing-a-new-future](#implementing-a-new-feature)
 - [Useful Links](#links)
 - [Developing](#developing)
@@ -59,14 +53,6 @@ Alternatively on the browser you can use the standalone build
 
 ## Setup
 
-### Authentication
-
-Authentication to make all the following requests is done by signing using an
-Ethereum private key. Signing is handled by the Deversifi client
-library if the account is available and unlocked. However if signing using
-a hardware wallet, or using a raw private key, the message and signature need
-to be prepared separately.
-
 ### Pre Requisites
 
   - An Ethereum wallet
@@ -83,16 +69,7 @@ const DVF = require('dvf-client-js')
 const dvf = await DVF()
 ```
 
-#### Using a remote node
-
-```javascript
-const DVF = require('dvf-client-js')
-const web3 = new DVF.Web3("https://your-web3-provider")
-const dvf = await DVF(web3)
-```
-
-#### Using Infura
-
+#### Using a private key
 
 ````javascript
 const HDWalletProvider = require("@truffle/hdwallet-provider");
@@ -116,6 +93,18 @@ It's possible to overwrite values on the configuration on a per instance basis.
 
 The [default configuration](./src/config.js) can be overwritten with an optional
 parameter `userConf` when calling the DVF function.
+
+##### Parameters
+
+- `api` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? (default `https://api.stg.deversifi.com`) API endpoint you are connecting to Staging (ropsten): https://api.stg.deversifi.com, Production (mainnet): https://api.deversifi.com)
+- `gasApi` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? (default `https://ethgasstation.info`)
+- `defaultGasLimit` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)**? (default `200000`)
+- `defaultGasPrice` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)**? (default `50000000000`)
+- `defaultStarkExpiry` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)**? (default `720`) Expiration time for transfers and orders in hours
+- `defaultNonceAge` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)**? (default `43200`) Nonce age in seconds
+- `defaultProvider` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? (default `http://localhost:8545`) In case no web3 provider is provided we will try connecting to this default
+- `autoLoadUserConf` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**? - Enables integrators to select if they want to call `getUserConfig` upon initialization
+- `autoLoadExchangeConf` **[boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**? - Enables integrators to select if they want to call `getConfig` upon initialization
 
 For instance:
 
@@ -171,7 +160,190 @@ const dvf = await DVF()
 const config = dvf.config
 ```
 
-#### Gas Price
+### API Authentication
+
+Authentication to make all authenticated requests is done by signing a `nonce` using an
+Ethereum private key. Signing is handled by the Deversifi client
+library if the account is available and unlocked or if the web3 provider supports it.
+Otherwise the message and signature need to be prepared separately.
+
+##### Parameters
+- `nonce` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Nonce which is used to provide the time until which this nonce is valid. It is presented as seconds since epoch.
+- `signature` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The signature obtained by signing the nonce with your private ethereum key.
+
+```javascript
+const nonce = (Date.now() / 1000).toString()
+const signature = await dvf.sign(nonce)
+```
+
+### Registering
+This method is used to register a stark public key that corresponds to an Ethereum public address or a trading key.
+
+
+##### Parameters
+- `starkPublicKey` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+    - `x` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** - First 32 bits of stark public key
+- `nonce` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Nonce which is used to provide the time until which this nonce is valid. It is presented as seconds since epoch.
+- `signature` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The signature obtained by signing the nonce with your private ethereum key.
+- `contractWalletAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Address of the deployed contract wallet (only for contract wallet integrations)
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[UserConfigResponse](https://docs.deversifi.com/docs#postV1TradingRGetuserconf)>**  
+
+### Approving Tokens
+
+When depositing an ERC20 Ethereum-based token for the first time from a specific account,
+you are required to approve it to interact with the smart contracts, this is not required for ETH.
+
+##### Parameters
+- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol that's available in `dvf.config.tokenRegistry`
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[PromiEvent](https://web3js.readthedocs.io/en/v1.2.11/callbacks-promises-events.html#promievent)>** 
+
+```javascript
+const token = 'NEC'
+await dvf.contract.approve(token)
+```
+
+This step does not need to be repeated again, and subsequently you are required
+only to call the deposit function.
+
+### Depositing tokens
+This method is used to deposit the tokens to the smart contract and submit a signed notification of a new deposit made to the API.
+                                                                    
+##### Parameters
+- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol available in `dvf.config.tokenRegistry` to be deposited
+- `amount` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** || **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Amount of tokens to be deposited
+- `starkPrivateKey` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Trading key
+- `nonce` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Nonce which is used to provide the time until which this nonce is valid. It is presented as seconds since epoch.
+- `signature` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? The signature obtained by signing the nonce with your private ethereum key.
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;{...[PromiEvent](https://web3js.readthedocs.io/en/v1.2.11/callbacks-promises-events.html#promievent), ...[DepositResponse](https://docs.deversifi.com/docs#postV1TradingWDeposit)}>**
+
+```javascript
+const token = 'NEC'
+const amount = 100
+
+const deposit = await dvf.deposit(token, amount, tradingKey)
+```
+
+### Placing an order
+
+This authenticated endpoint is used to place an order.
+
+##### Parameters
+- `symbol` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Pair which you wish to trade
+- `amount` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** || **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Order amount specified in the first currency in the symbol (i.e. ZRXETH). For a sell, amount is negative. Amount accepts either maximum 8 d.p, or as many decimals as are available on the relevant token's smart contract if it is fewer than 8.
+- `price` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** || **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Order price  specified in the second currency in the symbol (i.e. ZRXETH). Prices should be specified to 5 s.f. maximum.
+- `nonce` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Nonce which is used to provide the time until which this nonce is valid. It is presented as seconds since epoch.
+- `signature` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? The signature obtained by signing the nonce with your private ethereum key.
+- `starkPrivateKey` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Trading key (for keystore etc.)
+- `ledgerPath` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Ledger derivation path if using ledger
+- `isPostOnly` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** Flag to indicate if the order is post-only.      
+- `isHidden` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** Flag to indicate if the order is hidden.      
+- `validFor` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)**? Validation time in hours
+- `feeRate` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)**? Fee rate if known
+- `cid` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**?      
+- `gid` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**?      
+- `partnerId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**?      
+- `ethAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**?      
+- `type` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Order type (`EXCHANGE LIMIT`, `EXCHANGE MARKET`)
+- `protocol` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? (default `stark`)
+
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[SubmitOrderResponse](https://docs.deversifi.com/docs#postV1TradingWSubmitorder)>**
+
+```javascript
+const symbol = 'NEC:ETH'
+const amount = -15
+const price = 0.0025
+
+const orderId = await dvf.submitOrder(symbol, amount, price)
+```
+
+
+### Cancelling Orders
+This method allows you to cancel a specific order.
+
+##### Parameters
+- `orderId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** ID of the order
+- `nonce` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Nonce which is used to provide the time until which this nonce is valid. It is presented as seconds since epoch.
+- `signature` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? The signature obtained by signing the nonce with your private ethereum key.
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[CancelOrderResponse](https://docs.deversifi.com/docs#postV1TradingWCancelorder)>**
+
+```javascript
+const orderId = '123'
+const response = await dvf.cancelOrder(orderId)
+```
+
+### Withdrawing tokens
+#### Requesting a withdrawal
+This method submits a request for a new withdrawal.
+##### Parameters
+- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol available in `dvf.config.tokenRegistry` to be withdrawn
+- `amount` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** || **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Amount of tokens to be withdrawn
+- `starkPrivateKey` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Trading key
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[WithdrawResponse](https://docs.deversifi.com/docs#postV1TradingWWithdraw)>**
+
+```javascript
+const token = 'NEC'
+const amount = 100
+const withdrawal = await dvf.withdraw(token, amount, tradingKey)
+```
+
+#### Withdraw on chain
+This method calls the contract and withdraws the tokens to your wallet
+##### Parameters
+- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol available in `dvf.config.tokenRegistry` to be withdrawn
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;{ transactionHash: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** }>**             
+
+```javascript
+const token = 'NEC'
+const txHash = await dvf.withdrawOnchain(token)
+```
+
+### Authenticated data endpoints
+
+If you already have an unlocked wallet available to web3 to use for signing,
+you can simply get data from the API as follows:
+
+Note: You should reuse the `nonce` and `signature` and pass them to these methods while they are valid to avoid unnecessary signing
+
+##### Parameters
+- `nonce` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Nonce which is used to provide the time until which this nonce is valid. It is presented as seconds since epoch.
+- `signature` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? The signature obtained by signing the nonce with your private ethereum key.
+
+```javascript
+// Get all open orders
+const openOrders = await dvf.getOrders()
+
+// Get all historical orders
+const historicalOrders = await dvf.getOrdersHist()
+
+// Get specific order 
+const id = "123"
+const order = await dvf.getOrder(id)
+
+// Get exchange balances
+const balance = await dvf.getBalance()
+
+// Get deposits
+const deposits = await dvf.getDeposits()
+
+// Get withdrawals 
+const withdrawals = await dvf.getWithdrawals()
+
+// Get user config
+const userConfig = await dvf.getUserConfig()
+```
+
+## More Examples
+
+Aside from these examples, there are complete examples in the [examples folder](./examples)
+
+### Gas Price
 
 You can setup a default custom gas price by setting up the 'defaultGasPrice' property
 ```javascript
@@ -182,12 +354,11 @@ dvf.set('defaultGasPrice', web3.utils.toWei('2', 'gwei'))
 ```
 DVF Client calls https://ethgasstation.info API to get the current gas prices and calculate a safe gas price for Ethereum transactions. Access to the ETH Gas Station API is free, but rate limited if you are not using an API key. If a ETH Gas Station API key is not provided then a recommended gas price is used which is available in `dvf.recommendedGasPrices`.
 
-You can get an API Key from https://data.defipulse.com. To configure your api key with dvf client please pass this as a `userConf` parameter when initialising DVF:
+To configure your api key with dvf client please pass this as a `userConf` parameter when initialising DVF:
 
 ```
 javascript
   dvf = await DVF(web3, {
-    api: 'https://your-custom-api-address',
     gasStationApiKey: 'a1b2c3...'
   })
 ```
@@ -197,139 +368,6 @@ or by setting the 'gasStationApiKey' property:
 
 dvf.set('gasStationApiKey', 'a1b2c3...')
 
-```
-
-
-### Approving Tokens
-
-When depositing an ERC20 Ethereum-based token for the first time from a specific account,
-you are required to approve it to interact with the time-lock smart contracts.
-
-```javascript
-const token = 'ZRX'
-dvf.contract.approve(token)
-```
-
-This step does not need to be repeated again, and subsequently you are required
-only to call the lock function. This transfers tokens into the wrapper token
-contract, ready to trade.
-
-
-### Submitting an order
-
-```javascript
-const symbol = 'ZRX:ETH'
-const amount = -15
-const price = 0.0025
-
-const orderId = await dvf.submitOrder(symbol, amount, price)
-```
-
-Orders are generated and submitted, returning either an `orderId` or error. A
-full list of possible errors and their associated explanation is available [here](https://docs.deversifi.com/?version=latest#troubleshooting).
-
-When submitting this order we use the 3 first parameters:
-
- - `symbol` is the pair which you wish to trade
- - `amount` is specified in the first currency in the symbol (i.e. ZRXETH). For a
-sell, amount is negative. Amount accepts either maximum 8 d.p, or as many
-decimals as are available on the relevant token's smart contract if it is
-fewer than 8.
- - `price` is specified in the second currency in the symbol (i.e. ZRXETH). Prices
-should be specified to 5 s.f. maximum.
-
-The client library also provides methods for [submitBuyOrder](./src/api/submitBuyOrder.js)
-and [submitSellOrder](./src/api/submitSellOrder.js).
-
-
-### Cancelling Orders
-Cancelling orders requires the `orderId` you wish to cancel to be signed by the
-address which created and placed the order.
-
-#### Standard Cancel
-
-In case you're not signing the requests yourself
-
-```javascript
-await dvf.cancelOrder(orderId)
-```
-
-#### Signing Externally
-
-In case you're signing the requests yourself:
-
-```javascript
-const sig = await dvf.sign(parseInt(orderId).toString(16))
-const sigConcat = ethUtils.toRpcSig(sig.v, ethUtils.toBuffer(sig.r), ethUtils.toBuffer(sig.s))
-
-await dvf.cancelOrder(parseInt(orderId), sigConcat)
-```
-
-### Account History
-
-If you already have an unlocked wallet available to web3 to use for signing,
-you can simply get open orders and order history from the API as follows:
-
-```javascript
-// Get all open orders
-const openOrders = await dvf.getOrders()
-
-// Get all historical orders
-const historicalOrders = await dvf.getOrdersHist()
-```
-
-If an unlocked account is not available to sign with, for example when using a
-raw private key or hardware wallet, authentication `nonce` and `signature` must be
-pre-signed and passed into the calls. `nonce` is required to be a timestamp less
-than 3 hours in the future. `signature` is the `nonce` signed using the relevant
-private key for the address who's orders you wish to view.
-
-```javascript
-const ethUtils = require('ethereumjs-utils')
-
-const privKey = /* Your Private Key */
-const nonce = ((Date.now() / 1000) + 43200) + ''
-
-const hash = ethUtils.hashPersonalMessage(ethUtils.toBuffer(nonce.toString(16)))
-const signature = ethUtils.ecsign(hash, privKey)
-
-// Get all open orders
-const openOrders = await dvf.getOrders(null, null, nonce, signature)
-
-// Get all historical orders
-const historicalOrders = await dvf.getOrdersHist(null, null, nonce, signature)
-```
-
-## More Examples
-
-Aside from these examples, there are complete examples in the [examples folder](./examples)
-
-### Submitting a buy order
-
-```js
-const symbol = 'ETH:USDT'
-const amount = 1
-const price = 100
-
-dvf.submitOrder(symbol, amount, price)
-```
-
-### Submitting a sell order
-
-```js
-const symbol = 'ETH:USDT'
-const amount = -1
-const price = 100
-
-const orderId = await dvf.submitOrder(symbol, amount, price)
-```
-
-### Fetching info about specific order
-
-```js
-const id = 1
-
-const order = await dvf.getOrder(id)
 ```
 
 ## Troubleshooting
@@ -350,29 +388,6 @@ documentation, please raise an issue on Github, or email [feedback@Deversifi.com
 
  - `git clone`
  - `npm install`
- - `bash <(curl https://get.parity.io -L) # install parity`
-
-### Run a node
-
-On kovan:
-
-```bash
-parity --chain kovan --jsonrpc-apis=all --geth
-```
-* note the jsonrpc set to all
-* note the `--geth` in order to be compatible with `geth`'s unlock 'duration' parameter
-
-On ropsten:
-```bash
-geth --testnet --fast --bootnodes "enode://20c9ad97c081d63397d7b685a412227a40e23c8bdc6688c6f37e97cfbc22d2b4d1db1510d8f61e6a8866ad7f0e17c02b14182d37ea7c3c8b9c2683aeb6b733a1@52.169.14.227:30303,enode://6ce05930c72abc632c58e2e4324f7c7ea478cec0ed4fa2528982cf34483094e9cbc9216e7aa349691242576d552a2a56aaeae426c5303ded677ce455ba1acd9d@13.84.180.240:30303" --rpc --rpccorsdomain "*" --rpcapi "eth,web3,personal,net"
-```
-
-Alternatively, thanks to [ganache-cli](https://github.com/trufflesuite/ganache-cli) we can
-easily run an eth rpc node emulator. (NOTE: currently tests will fail using ganache)
-
-```bash
-npm test:rpc
-```
 
 ### Implementing a new feature
 
