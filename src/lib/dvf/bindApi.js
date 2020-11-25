@@ -166,6 +166,10 @@ module.exports = () => {
     withdraw: compose(require('../../api/ledger/withdraw')),
     fastWithdrawal: compose(require('../../api/ledger/fastWithdrawal'))
   }
+  dvf.authereum = {
+    deposit: compose(require('../../api/authereum/deposit')),
+    withdraw: compose(require(('../../api/authereum/withdraw')))
+  }
   dvf.estimatedNextBatchTime = compose(require('../../api/estimatedNextBatchTime'))
   return dvf
 }
