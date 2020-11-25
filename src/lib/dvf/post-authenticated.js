@@ -1,4 +1,4 @@
-const { post } = require('request-promise')
+const {post} = require('request-promise')
 const _ = require('lodash')
 
 module.exports = async (dvf, endpoint, nonce, signature, data = {}) => {
@@ -6,14 +6,19 @@ module.exports = async (dvf, endpoint, nonce, signature, data = {}) => {
 
   const headers = {}
   if (nonce && signature && dvf.config.useTradingKey) {
-    const bufferStarkAuthData = Buffer.from(JSON.stringify({signature, nonce}));
+    const bufferStarkAuthData = Buffer.from(JSON.stringify({signature, nonce}))
     const ecRecoverHeader = 'EcRecover ' + bufferStarkAuthData.toString('base64')
     headers.Authorization = ecRecoverHeader
-  }
-  else if (!nonce || !signature) {
-
+  } else if (nonce && signature && dvf.config.useSignature) {
+    const bufferStarkAuthData = Buffer.from(JSON.stringify({
+      signature,
+      nonce,
+      ethAddress: dvf.get('account')
+    }))
+    const ecRecoverHeader = 'EcRecover ' + bufferStarkAuthData.toString('base64')
+    headers.Authorization = ecRecoverHeader
+  } else if (!nonce || !signature) {
     const newSignature = await dvf.sign.nonceSignature(nonce, signature)
-
     data = {
       ...data,
       ...newSignature
@@ -29,5 +34,5 @@ module.exports = async (dvf, endpoint, nonce, signature, data = {}) => {
   // removes null and undefined values
   data = _.omitBy(data, _.isNil)
 
-  return post(url, { json: data, headers })
+  return post(url, {json: data, headers})
 }

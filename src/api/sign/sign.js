@@ -6,12 +6,12 @@ const sw = require('starkware_crypto')
  * https://web3js.readthedocs.io/en/1.0/web3-eth.html#sign
  */
 
-module.exports = async (dvf, toSign, signWithTradingKey) => {
+module.exports = async (dvf, toSign, signWithStarkProvider) => {
   // metamask will take care of the 3rd parameter, "password"
   if (dvf.web3.currentProvider.isMetaMask) {
     return dvf.web3.eth.personal.sign(toSign, dvf.get('account'))
-  } else if (signWithTradingKey) {
-    const signature = await dvf.config.starkProvider.starkSignMessage(toSign)
+  } else if (signWithStarkProvider) {
+    const signature = await dvf.config.starkProvider.signNonce(toSign)
     return dvf.config.starkProvider.deserializeSignature(signature)
   } else {
     return dvf.web3.eth.sign(toSign, dvf.get('account'))
