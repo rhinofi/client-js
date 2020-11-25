@@ -14,29 +14,31 @@ module.exports = async (
   }
   const {tokenAddress, quantization} = dvf.token.getTokenInfo(token)
   const nonce = dvf.util.generateRandomNonce()
-  const amountTransfer = new BN(dvf.token.toQuantizedAmount(token, amount))
+  const amountTransfer = dvf.token.toBaseUnitAmount(token, amount)
   const starkPublicKey = await starkProvider.getStarkKey()
   const expireTime = Math.floor(Date.now() / (1000 * 3600)) + parseInt(dvf.config.defaultStarkExpiry)
 
-  const starkSignature = await starkProvider.transfer({
+  const transferSignature = await starkProvider.transfer({
     from: {
-      vaultId: sourceVault
+      vaultId: sourceVault.toString()
     },
     to: {
-      vaultId: destinationVault,
+      vaultId: destinationVault.toString(),
       starkKey: starkPublicKey
     },
     asset: {
       type: token === 'ETH' ? 'ETH' : 'ERC20',
       data: {
-        quantum: quantization,
+        quantum: quantization.toString(),
         tokenAddress
       }
     },
-    amount,
-    nonce,
-    expirationTimestamp: expireTime,
+    amount: amountTransfer,
+    nonce: nonce.toString(),
+    expirationTimestamp: expireTime.toString(),
     condition: null
   })
+
+  const starkSignature = await starkProvider.deserializeSignature(transferSignature)
   return { starkPublicKey, nonce, expireTime, starkSignature }
 }
