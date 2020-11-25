@@ -165,7 +165,7 @@ module.exports = () => {
   }
   dvf.authereum = {
     deposit: compose(require('../../api/authereum/deposit')),
-    withdraw: compose(require(('../../api/authereum/withdraw')))
+    withdraw: compose(require('../../api/authereum/withdraw'))
   }
   dvf.estimatedNextBatchTime = compose(require('../../api/estimatedNextBatchTime'))
   return dvf
