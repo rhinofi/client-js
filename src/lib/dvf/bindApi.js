@@ -50,7 +50,8 @@ module.exports = () => {
     },
     authereum: {
       createSignedTransfer: compose(require('../stark/authereum/createSignedTransfer')),
-      createSignedOrder: compose(require('../stark/authereum/createSignedOrder'))
+      createSignedOrder: compose(require('../stark/authereum/createSignedOrder')),
+      getPublicKey: compose(require('../stark/authereum/getPublicKey'))
     }
   }
 

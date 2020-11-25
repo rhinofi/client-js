@@ -1,5 +1,4 @@
 const DVFError = require('../../dvf/DVFError')
-const BN = require('bignumber.js')
 
 module.exports = async (
   dvf,
@@ -15,7 +14,7 @@ module.exports = async (
   const {tokenAddress, quantization} = dvf.token.getTokenInfo(token)
   const nonce = dvf.util.generateRandomNonce()
   const amountTransfer = dvf.token.toBaseUnitAmount(token, amount)
-  const starkPublicKey = await starkProvider.getStarkKey()
+  const starkPublicKey = await dvf.stark.authereum.getPublicKey()
   const expireTime = Math.floor(Date.now() / (1000 * 3600)) + parseInt(dvf.config.defaultStarkExpiry)
 
   const transferSignature = await starkProvider.transfer({
@@ -24,7 +23,7 @@ module.exports = async (
     },
     to: {
       vaultId: destinationVault.toString(),
-      starkKey: starkPublicKey
+      starkKey: `0x${starkPublicKey.x}`
     },
     asset: {
       type: token === 'ETH' ? 'ETH' : 'ERC20',

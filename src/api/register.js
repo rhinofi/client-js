@@ -12,7 +12,7 @@ module.exports = async (dvf, starkPublicKey, nonce, signature, contractWalletAdd
   const data = {
     starkKey: tradingKey,
     nonce,
-    signature, 
+    signature,
     ...(contractWalletAddress && { contractWalletAddress })
   }
 
