@@ -1,4 +1,5 @@
 const DVFError = require('../../dvf/DVFError')
+const RSV = require('rsv-signature')
 
 module.exports = async (
   dvf,
@@ -38,6 +39,6 @@ module.exports = async (
     condition: null
   })
 
-  const starkSignature = await starkProvider.deserializeSignature(transferSignature)
+  const starkSignature = RSV.deserializeSignature(transferSignature, 63)
   return { starkPublicKey, nonce, expireTime, starkSignature }
 }
