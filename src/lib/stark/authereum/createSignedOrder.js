@@ -1,4 +1,5 @@
 const DVFError = require('../../dvf/DVFError')
+const RSV = require('rsv-signature')
 const _ = require('lodash')
 
 module.exports = async (dvf, starkOrder) => {
@@ -6,7 +7,7 @@ module.exports = async (dvf, starkOrder) => {
   if (!starkProvider) {
     throw new DVFError('NO_STARK_PROVIDER')
   }
-  const starkPublicKey = await starkProvider.getStarkKey()
+  const starkPublicKey = await dvf.stark.authereum.getPublicKey()
   const buySymbol = _.findKey(dvf.config.tokenRegistry, {
     starkTokenId: starkOrder.tokenBuy
   })
@@ -18,7 +19,7 @@ module.exports = async (dvf, starkOrder) => {
   const buyCurrency = dvf.config.tokenRegistry[buySymbol]
   const sellCurrency = dvf.config.tokenRegistry[sellSymbol]
 
-  const starkSignature = await starkProvider.createOrder({
+  const starkOrderSignature = await starkProvider.createOrder({
     sell: {
       type: sellSymbol === 'ETH' ? 'ETH' : 'ERC20',
       data: {
@@ -41,5 +42,7 @@ module.exports = async (dvf, starkOrder) => {
     expirationTimestamp: starkOrder.expirationTimestamp
   })
 
-  return {starkPublicKey: {x: starkPublicKey}, starkSignature}
+  const starkSignature = RSV.deserializeSignature(starkOrderSignature, 63)
+
+  return {starkPublicKey, starkSignature}
 }
