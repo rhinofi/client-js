@@ -1,5 +1,4 @@
 const DVFError = require('../../dvf/DVFError')
-const RSV = require('rsv-signature')
 const _ = require('lodash')
 
 module.exports = async (dvf, starkOrder) => {
@@ -19,30 +18,31 @@ module.exports = async (dvf, starkOrder) => {
   const buyCurrency = dvf.config.tokenRegistry[buySymbol]
   const sellCurrency = dvf.config.tokenRegistry[sellSymbol]
 
-  const starkOrderSignature = await starkProvider.createOrder({
+  const {r, s} = await starkProvider.createOrder({
     sell: {
       type: sellSymbol === 'ETH' ? 'ETH' : 'ERC20',
       data: {
-        quantum: sellCurrency.quantization,
+        quantum: sellCurrency.quantization.toString(),
         tokenAddress: sellCurrency.tokenAddress
       },
-      amount: starkOrder.amountSell,
-      vaultId: starkOrder.vaultIdSell
+      amount: starkOrder.amountSell.toString(),
+      vaultId: starkOrder.vaultIdSell.toString()
     },
     buy: {
       type: buySymbol === 'ETH' ? 'ETH' : 'ERC20',
       data: {
-        quantum: buyCurrency.quantization,
+        quantum: buyCurrency.quantization.toString(),
         tokenAddress: buyCurrency.tokenAddress
       },
-      amount: starkOrder.amountBuy,
-      vaultId: starkOrder.vaultIdBuy
+      amount: starkOrder.amountBuy.toString(),
+      vaultId: starkOrder.vaultIdBuy.toString()
     },
-    nonce: starkOrder.nonce,
-    expirationTimestamp: starkOrder.expirationTimestamp
+    nonce: starkOrder.nonce.toString(),
+    expirationTimestamp: starkOrder.expirationTimestamp.toString()
   })
 
-  const starkSignature = RSV.deserializeSignature(starkOrderSignature, 63)
-
-  return {starkPublicKey, starkSignature}
+  return {
+    starkPublicKey,
+    starkSignature: {r: r.toString('hex'), s: s.toString('hex')}
+  }
 }
