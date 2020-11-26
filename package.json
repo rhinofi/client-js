@@ -49,6 +49,7 @@
     "lodash": "^4.17.20",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
+    "rsv-signature": "^1.1.0",
     "starkware_crypto": "git+https://github.com/DeversiFi/starkware-crypto#bf94bde1f6bbb4156ded52171cd70d3e02cd5919",
     "web3": "^1.3.0",
     "web3-utils": "^1.3.0"
