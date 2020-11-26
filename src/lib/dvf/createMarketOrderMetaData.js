@@ -20,10 +20,15 @@ module.exports = async (dvf, orderData) => {
   validateProps(dvf, ['amountToSell', 'symbol', 'tokenToSell', 'worstCasePrice'], orderData)
 
   const { starkOrder, starkMessage } = await dvf.stark.createOrder(orderData)
+  let starkPublicKey, starkSignature
 
-  const { starkPublicKey, starkSignature } = await (orderData.ledgerPath
-    ? dvf.stark.ledger.createSignedOrder(orderData.ledgerPath, starkOrder)
-    : starkSignedOrder(dvf, orderData.starkPrivateKey, starkMessage))
+  if (orderData.starkPrivateKey) {
+    ({starkPublicKey, starkSignature} = await starkSignedOrder(dvf, orderData.starkPrivateKey, starkMessage))
+  } else if (orderData.ledgerPath) {
+    ({starkPublicKey, starkSignature} = await dvf.stark.ledger.createSignedOrder(orderData.ledgerPath, starkOrder))
+  } else if (dvf.config.starkProvider) {
+    ({starkPublicKey, starkSignature} = await dvf.stark.authereum.createSignedOrder(starkOrder))
+  }
 
   return {
     starkPublicKey,
