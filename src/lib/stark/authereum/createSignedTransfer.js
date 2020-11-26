@@ -18,7 +18,7 @@ module.exports = async (
   const starkPublicKey = await dvf.stark.authereum.getPublicKey()
   const expireTime = Math.floor(Date.now() / (1000 * 3600)) + parseInt(dvf.config.defaultStarkExpiry)
 
-  const transferSignature = await starkProvider.transfer({
+  const {r, s} = await starkProvider.transfer({
     from: {
       vaultId: sourceVault.toString()
     },
@@ -39,6 +39,10 @@ module.exports = async (
     condition: null
   })
 
-  const starkSignature = RSV.deserializeSignature(transferSignature, 63)
-  return { starkPublicKey, nonce, expireTime, starkSignature }
+  return {
+    starkPublicKey,
+    nonce,
+    expireTime,
+    starkSignature: {r: r.toString('hex'), s: s.toString('hex')}
+  }
 }
