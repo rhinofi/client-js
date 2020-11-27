@@ -1,11 +1,9 @@
 const DVFError = require('../../lib/dvf/DVFError')
 const sw = require('starkware_crypto')
-const FP = require('lodash/fp')
 
 const sigKeysToString = sig => ({
   r: sig.r.toString(16),
-  s: sig.s.toString(16),
-  recoveryParam: sig.recoveryParam
+  s: sig.s.toString(16)
 })
 
 module.exports = (dvf, starkKeyPair, starkMessage) => {
