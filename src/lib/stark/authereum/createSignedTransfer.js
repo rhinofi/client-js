@@ -1,5 +1,4 @@
 const DVFError = require('../../dvf/DVFError')
-const RSV = require('rsv-signature')
 
 module.exports = async (
   dvf,
