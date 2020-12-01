@@ -20,7 +20,7 @@ module.exports = async (dvf, token, amount) => {
     starkVaultId,
     nonce: starkWithdrawal.nonce,
     starkPublicKey: starkWithdrawal.starkPublicKey,
-    starkSignature: starkWithdrawal.signature,
+    starkSignature: starkWithdrawal.starkSignature,
     expireTime: starkWithdrawal.expireTime
   }
 
