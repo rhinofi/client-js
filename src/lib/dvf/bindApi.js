@@ -39,6 +39,7 @@ module.exports = () => {
       createWithdrawalData: compose(
         require('../stark/ledger/createWithdrawalData')
       ),
+      createFastWithdrawalPayload: compose(require('../stark/ledger/createFastWithdrawalPayload')),
       createDepositData: compose(require('../stark/ledger/createDepositData')),
       createSignedTransfer: compose(
         require('../stark/ledger/createSignedTransfer')
@@ -81,6 +82,7 @@ module.exports = () => {
   // dvf.token functions
   dvf.token = {
     // TODO: deprecate getTokenInfo
+    provideContractData: compose(require('../ledger/provideContractData')),
     getTokenInfo: compose(require('./token/getTokenInfo')),
     getTokenInfoOrThrow: compose(require('./token/getTokenInfoOrThrow')),
     fromBaseUnitAmount: compose(require('./token/fromBaseUnitAmount')),
@@ -162,7 +164,12 @@ module.exports = () => {
   dvf.fullWithdrawalRequest = compose(require('../../api/fullWithdrawalRequest'))
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),
-    withdraw: compose(require('../../api/ledger/withdraw'))
+    withdraw: compose(require('../../api/ledger/withdraw')),
+    fastWithdrawal: compose(require('../../api/ledger/fastWithdrawal'))
+  }
+  dvf.authereum = {
+    deposit: compose(require('../../api/authereum/deposit')),
+    withdraw: compose(require('../../api/authereum/withdraw'))
   }
   dvf.authereum = {
     deposit: compose(require('../../api/authereum/deposit')),
