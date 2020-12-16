@@ -2,7 +2,7 @@ const post = require('../lib/dvf/post-authenticated')
 
 const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (dvf, starkPublicKey, nonce, signature, contractWalletAddress) => {
+module.exports = async (dvf, starkPublicKey, nonce, signature, contractWalletAddress, encryptedTradingKey) => {
   validateAssertions(dvf, { starkPublicKey })
 
   const tradingKey = starkPublicKey.x
@@ -13,6 +13,7 @@ module.exports = async (dvf, starkPublicKey, nonce, signature, contractWalletAdd
     starkKey: tradingKey,
     nonce,
     signature,
+    ...(encryptedTradingKey && { encryptedTradingKey }),
     ...(contractWalletAddress && { contractWalletAddress })
   }
 
