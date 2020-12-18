@@ -3,6 +3,7 @@ const {
   fromQuantizedToBaseUnitsBN,
   Joi,
   starkTransferTxToMessageHash,
+  toBN,
   toQuantizedAmountBN
 } = require('dvf-utils')
 const swJs = require('starkware_crypto')
@@ -11,9 +12,6 @@ const calculateFact = require('../stark/calculateFact')
 const validateWithJoi = require('../validators/validateWithJoi')
 
 const DVFError = require('./DVFError')
-
-// TODO
-const calculateFee = amount => 0
 
 const address0 = '0x'.padEnd(42, '0')
 
@@ -37,6 +35,10 @@ const getValidTokenInfo = dvf => token => {
   return tokenInfo
 }
 
+const getFeeQuantised = async (dvf, token) => dvf
+  .fastWithdrawalFee(token)
+  .then(res => toBN(res.feeQuantised))
+
 const schema = Joi.object({
   amount: Joi.amount().required(),
   // NOTE: we are not specifying allowed tokens here since these can change
@@ -44,7 +46,10 @@ const schema = Joi.object({
   // the token in valid.
   token: Joi.string().required(),
   // TODO: create Joi.ethAddress
-  recipientEthAddress: Joi.string().optional()
+  recipientEthAddress: Joi.string().optional(),
+  transactionFee: Joi.alternatives()
+    .try(Joi.string(), Joi.number())
+    .optional()
 })
 
 const errorProps = { context: 'fastWithdrawal' }
@@ -65,16 +70,21 @@ module.exports = async (dvf, withdrawalData, starkPrivateKey) => {
   const {
     amount,
     token,
-    recipientEthAddress = dvf.config.ethAddress
+    recipientEthAddress = dvf.config.ethAddress,
+    transactionFee
   } = validateArg0(withdrawalData)
 
   const tokenInfo = getValidTokenInfo(dvf)(token)
 
-  const { starkPublicKey, starkKeyPair } = await dvf.stark.createKeyPair(
-    starkPrivateKey
-  )
-
-  const transactionFee = toQuantizedAmountBN(tokenInfo, calculateFee(amount))
+  const [
+    { starkPublicKey, starkKeyPair },
+    feeQuantised
+  ] = await Promise.all([
+    await dvf.stark.createKeyPair(starkPrivateKey),
+    transactionFee
+      ? toQuantizedAmountBN(tokenInfo, transactionFee)
+      : getFeeQuantised(dvf, token)
+  ])
 
   // This should be in hours
   const expirationTimestamp =
@@ -96,7 +106,7 @@ module.exports = async (dvf, withdrawalData, starkPrivateKey) => {
   const { DVF } = dvf.config
   const tx = {
     // Stark transaction includes the fee.
-    amount: quantisedAmount.plus(transactionFee).toString(),
+    amount: quantisedAmount.plus(feeQuantised).toString(),
     expirationTimestamp,
     fact,
     factRegistryAddress: DVF.starkExTransferRegistryContractAddress,
@@ -119,7 +129,7 @@ module.exports = async (dvf, withdrawalData, starkPrivateKey) => {
 
   return {
     recipientEthAddress,
-    transactionFee,
+    transactionFee: feeQuantised.toString(),
     tx: { ...tx, signature },
     starkPublicKey
   }
