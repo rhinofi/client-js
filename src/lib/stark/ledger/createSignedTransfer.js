@@ -27,8 +27,7 @@ module.exports = async (
 
   await dvf.token.provideContractData(eth, token, tokenAddress, transferQuantization)
 
-  const starkSignature = dvf.config.starkExUseV2
-    ? await eth.starkSignTransfer_v2(
+  const starkSignature = await eth.starkSignTransfer_v2(
       starkPath,
       tokenAddress,
       token === 'ETH' ? 'eth' : 'erc20',
@@ -42,17 +41,6 @@ module.exports = async (
       expireTime,
       null,
       null
-    )
-    : await eth.starkSignTransfer(
-      starkPath,
-      tokenAddress,
-      transferQuantization,
-      starkPublicKey.x,
-      sourceVault,
-      destinationVault,
-      amountTransfer,
-      nonce,
-      expireTime
     )
   await dvf.token.provideContractData(eth, token, tokenAddress, transferQuantization)
   await transport.close()

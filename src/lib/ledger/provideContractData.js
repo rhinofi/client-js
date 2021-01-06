@@ -23,8 +23,6 @@ module.exports = async (dvf, transport, token, tokenAddress = '', transferQuanti
     transferTokenAddress = null
   }
   if (transferQuantization) {
-    dvf.config.starkExUseV2
-      ? await transport.starkProvideQuantum_v2(transferTokenAddress, token === 'ETH' ? 'eth' : 'erc20', transferQuantization, null)
-      : await transport.starkProvideQuantum(transferTokenAddress, transferQuantization)
+    await transport.starkProvideQuantum_v2(transferTokenAddress, token === 'ETH' ? 'eth' : 'erc20', transferQuantization, null)
   }
 }
