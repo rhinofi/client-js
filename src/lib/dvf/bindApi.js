@@ -140,6 +140,7 @@ module.exports = () => {
   dvf.deposit = compose(require('../../api/deposit'))
   dvf.fastWithdrawal = compose(require('../../api/fastWithdrawal'))
   dvf.fastWithdrawalFee = compose(require('../../api/fastWithdrawalFee'))
+  dvf.fastWithdrawalMaxAmount = compose(require('../../api/fastWithdrawalMaxAmount'))
   dvf.getDeposits = compose(require('../../api/getDeposits'))
   dvf.getBalance = compose(require('../../api/getBalance'))
   dvf.getConfig = compose(require('../../api/getConfig'))
