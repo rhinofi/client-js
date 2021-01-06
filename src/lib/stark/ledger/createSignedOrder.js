@@ -83,8 +83,7 @@ module.exports = async (dvf, path, starkOrder) => {
     sellTokenAddress = null
   }
 
-  const starkSignature = dvf.config.starkExUseV2
-    ? await eth.starkSignOrder_v2(
+  const starkSignature = await eth.starkSignOrder_v2(
       starkPath,
       sellTokenAddress,
       sellSymbol === 'ETH' ? 'eth' : 'erc20',
@@ -94,19 +93,6 @@ module.exports = async (dvf, path, starkOrder) => {
       buySymbol === 'ETH' ? 'eth' : 'erc20',
       new BN(buyCurrency.quantization),
       null,
-      starkOrder.vaultIdSell,
-      starkOrder.vaultIdBuy,
-      new BN(starkOrder.amountSell),
-      new BN(starkOrder.amountBuy),
-      starkOrder.nonce,
-      starkOrder.expirationTimestamp
-    )
-    : await eth.starkSignOrder(
-      starkPath,
-      sellTokenAddress,
-      new BN(sellCurrency.quantization),
-      buyTokenAddress,
-      new BN(buyCurrency.quantization),
       starkOrder.vaultIdSell,
       starkOrder.vaultIdBuy,
       new BN(starkOrder.amountSell),
