@@ -5,11 +5,7 @@ module.exports = async (dvf, token, tradingKey) => {
 
   tradingKey = tradingKey || dvf.config.starkKeyHex
 
-  const args = [starkVaultId]
-
-  if (dvf.config.starkExUseV2) {
-    args.unshift(tradingKey)
-  }
+  const args = [tradingKey, starkVaultId]
 
   const action = 'fullWithdrawalRequest'
 

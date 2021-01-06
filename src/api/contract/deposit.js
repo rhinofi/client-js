@@ -8,11 +8,7 @@ module.exports = async (dvf, vaultId, token, amount, tradingKey) => {
     value = dvf.token.toQuantizedAmount(token, amount)
   }
 
-  const args = [dvf.token.getTokenInfo(token).starkTokenId, vaultId, value]
-
-  if (dvf.config.starkExUseV2) {
-    args.unshift(tradingKey)
-  }
+  const args = [tradingKey, dvf.token.getTokenInfo(token).starkTokenId, vaultId, value]
 
   const action = 'deposit'
   // In order to lock ETH we simply send ETH to the lockerAddress
