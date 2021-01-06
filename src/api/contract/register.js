@@ -10,19 +10,12 @@ module.exports = async (dvf, tradingKey, deFiSignature, ethAddress) => {
     dvf.config.DVF.starkExContractAddress
   )
 
-  let onchainResult = ''
-  const action = dvf.config.starkExUseV2
-    ? 'registerUser'
-    : 'register'
+  const action = 'registerUser'
 
-  const args = [`0x${tradingKey}`, deFiSignature]
-
-  if (dvf.config.starkExUseV2) {
-    args.unshift(ethAddress)
-  }
+  const args = [ethAddress, `0x${tradingKey}`, deFiSignature]
 
   try {
-    onchainResult = await dvf.eth.send(
+    await dvf.eth.send(
       dvf.contract.abi.getStarkEx(),
       dvf.config.DVF.starkExContractAddress,
       action,
@@ -33,25 +26,5 @@ module.exports = async (dvf, tradingKey, deFiSignature, ethAddress) => {
     throw new DVFError('ERR_STARK_REGISTRATION')
   }
 
-  if (dvf.config.starkExUseV2) {
-    // TODO: StarkExV2: do we need to do any extra validation here?
-    return true
-  }
-
-  if (onchainResult || onchainResult.status === true) {
-    try {
-      const fromStark = await starkInstance.methods
-        .getStarkKey(ethAddress)
-        .call()
-
-      if (new BN(fromStark).eq(new BN(tradingKey, 16))) {
-        return true
-      } else {
-        throw new DVFError('ERR_STARK_REGISTRATION_MISMATCH')
-      }
-    } catch (e) {
-      console.log('contract/stark/getStarkKey error is: ', e)
-      throw new DVFError('ERR_STARK_REGISTRATION_CONFIRMATION')
-    }
-  }
+  return true
 }

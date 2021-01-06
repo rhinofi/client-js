@@ -1,13 +1,8 @@
 const DVFError = require('../../lib/dvf/DVFError')
 
 module.exports = async (dvf, vaultId, token, tradingKey) => {
-  const args = [dvf.token.getTokenInfo(token).starkTokenId, vaultId]
-
   tradingKey = tradingKey || dvf.config.starkKeyHex
-
-  if (dvf.config.starkExUseV2) {
-    args.unshift(tradingKey)
-  }
+  const args = [tradingKey, dvf.token.getTokenInfo(token).starkTokenId, vaultId]
 
   const action = 'depositReclaim'
 

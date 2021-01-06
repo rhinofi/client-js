@@ -123,7 +123,7 @@ describe('dvf.getConfig', () => {
       gasApi: 'https://ethgasstation.info',
       defaultGasLimit: 200000,
       defaultGasPrice: 500000000,
-      defaultStarkExpiry: 720,
+      defaultStarkExpiry: 4320,
       defaultNonceAge: 43200,
       defaultProvider: 'http://localhost:8545',
       account: 0,
