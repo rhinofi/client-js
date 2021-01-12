@@ -125,7 +125,9 @@ module.exports = () => {
   dvf.createFastWithdrawalPayload = compose(
     require('./createFastWithdrawalPayload')
   )
-
+  dvf.createTransferPayload = compose(
+    require('./createTransferPayload')
+  )
   // dvf trading volume data
   dvf.get30DaysVolume = compose(require('../../api/get30DaysVolume'))
 
@@ -157,6 +159,7 @@ module.exports = () => {
   dvf.submitOrder = compose(require('../../api/submitOrder'))
   dvf.submitMarketOrder = compose(require('../../api/submitMarketOrder'))
   dvf.submitSellOrder = compose(require('../../api/submitSellOrder'))
+  dvf.transfer = compose(require('../../api/transfer'))
   dvf.getWithdrawal = compose(require('../../api/getWithdrawal'))
   dvf.getWithdrawals = compose(require('../../api/getWithdrawals'))
   dvf.withdraw = compose(require('../../api/withdraw'))
