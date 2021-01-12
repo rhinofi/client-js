@@ -1,16 +1,15 @@
-const FP = require('lodash/fp')
 const {
   fromQuantizedToBaseUnitsBN,
   Joi,
-  starkTransferTxToMessageHash,
   toBN,
   toQuantizedAmountBN
 } = require('dvf-utils')
-const swJs = require('starkware_crypto')
 
 const calculateFact = require('../stark/calculateFact')
+const makeKeystore = require('../keystore')
 const validateWithJoi = require('../validators/validateWithJoi')
 
+const createSignedTransferPayload = require('./createSignedTransferPayload')
 const DVFError = require('./DVFError')
 
 const address0 = '0x'.padEnd(42, '0')
@@ -59,13 +58,9 @@ const validateArg0 = validateWithJoi
   ({ ...errorProps, argIdx: 0 })
 
 module.exports = async (dvf, withdrawalData, starkPrivateKey) => {
-  // Not asserting a specific type since it could be either a string or BigInt
-  // depending on the used sw crypto implementation.
-  if (!starkPrivateKey) {
-    throw new DVFError(
-      'STARK_PRIVATE_KEY_IS_REQUIRED', { ...errorProps, argIdx: 1 }
-    )
-  }
+  // TODO: see todo in createTransferPayload.js
+  const keystore = makeKeystore(dvf.sw)(starkPrivateKey)
+  dvf = { ...dvf, dvfStarkProvider: keystore }
 
   const {
     amount,
@@ -76,20 +71,11 @@ module.exports = async (dvf, withdrawalData, starkPrivateKey) => {
 
   const tokenInfo = getValidTokenInfo(dvf)(token)
 
-  const [
-    { starkPublicKey, starkKeyPair },
-    feeQuantised
-  ] = await Promise.all([
-    await dvf.stark.createKeyPair(starkPrivateKey),
+  const feeQuantised = await (
     transactionFee
       ? toQuantizedAmountBN(tokenInfo, transactionFee)
       : getFeeQuantised(dvf, token)
-  ])
-
-  // This should be in hours
-  const expirationTimestamp =
-    Math.ceil(Date.now() / (1000 * 3600)) +
-    parseInt(dvf.config.defaultStarkExpiry)
+  )
 
   const tokenContractAddress = token === 'ETH'
     ? address0
@@ -98,6 +84,7 @@ module.exports = async (dvf, withdrawalData, starkPrivateKey) => {
   const baseUnitsAmount = fromQuantizedToBaseUnitsBN(tokenInfo)(quantisedAmount)
 
   const nonce = dvf.util.generateRandomNonce()
+
   // On chain transfer will be for the amount without fee
   const fact = calculateFact(
     recipientEthAddress, baseUnitsAmount.toString(), tokenContractAddress, nonce
@@ -107,30 +94,19 @@ module.exports = async (dvf, withdrawalData, starkPrivateKey) => {
   const tx = {
     // Stark transaction includes the fee.
     amount: quantisedAmount.plus(feeQuantised).toString(),
-    expirationTimestamp,
     fact,
     factRegistryAddress: DVF.starkExTransferRegistryContractAddress,
     nonce,
     receiverPublicKey: DVF.deversifiStarkKeyHex,
     receiverVaultId: tokenInfo.deversifiStarkVaultId,
-    senderPublicKey: `0x${starkPublicKey.x}`,
     senderVaultId: tokenInfo.starkVaultId,
     token: tokenInfo.starkTokenId,
     type: 'ConditionalTransferRequest'
   }
 
-  const starkMessage = starkTransferTxToMessageHash(dvf.sw || swJs)(tx)
-
-  const signature = FP.mapValues(
-    // Prepend 0x to each prop on the signature.
-    x => '0x' + x,
-    dvf.stark.sign(starkKeyPair, starkMessage)
-  )
-
   return {
     recipientEthAddress,
     transactionFee: feeQuantised.toString(),
-    tx: { ...tx, signature },
-    starkPublicKey
+    ...(await createSignedTransferPayload(dvf)(tx))
   }
 }
