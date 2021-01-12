@@ -1,14 +1,13 @@
 // TODO: remove code dup between this and createFastWithdrawalPayload
-const FP = require('lodash/fp')
 const {
   Joi,
-  starkTransferTxToMessageHash,
   toQuantizedAmountBN
 } = require('dvf-utils')
-const swJs = require('starkware_crypto')
 
+const makeKeystore = require('../keystore')
 const validateWithJoi = require('../validators/validateWithJoi')
 
+const createSignedTransferPayload = require('./createSignedTransferPayload')
 const DVFError = require('./DVFError')
 
 const getValidTokenInfo = dvf => token => {
@@ -51,13 +50,12 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 })
 
 module.exports = async (dvf, transferData, starkPrivateKey) => {
-  // Not asserting a specific type since it could be either a string or BigInt
-  // depending on the used sw crypto implementation.
-  if (!starkPrivateKey) {
-    throw new DVFError(
-      'STARK_PRIVATE_KEY_IS_REQUIRED', { ...errorProps, argIdx: 1 }
-    )
-  }
+  // TODO: dvfStarkProvider should be set on DVF Client initialisation, which
+  // will allow us to avoid having to pass starkPrivateKey and unify
+  // how stark signing etc is handled between different providers (keystore,
+  // ledger, authereum etc)
+  const keystore = makeKeystore(dvf.sw)(starkPrivateKey)
+  dvf = { ...dvf, dvfStarkProvider: keystore }
 
   const {
     amount,
@@ -68,39 +66,16 @@ module.exports = async (dvf, transferData, starkPrivateKey) => {
 
   const tokenInfo = getValidTokenInfo(dvf)(token)
 
-  const { starkPublicKey, starkKeyPair } = await dvf.stark.createKeyPair(starkPrivateKey)
-
-  // This should be in hours
-  const expirationTimestamp =
-    Math.ceil(Date.now() / (1000 * 3600)) +
-    parseInt(dvf.config.defaultStarkExpiry)
-
   const quantisedAmount = toQuantizedAmountBN(tokenInfo, amount)
-
-  const nonce = dvf.util.generateRandomNonce()
 
   const tx = {
     amount: quantisedAmount.toString(),
-    expirationTimestamp,
-    nonce,
     receiverPublicKey: recipientPublicKey,
     receiverVaultId: recipientValuntId,
-    senderPublicKey: `0x${starkPublicKey.x}`,
     senderVaultId: tokenInfo.starkVaultId,
     token: tokenInfo.starkTokenId,
     type: 'TransferRequest'
   }
 
-  const starkMessage = starkTransferTxToMessageHash(dvf.sw || swJs)(tx)
-
-  const signature = FP.mapValues(
-    // Prepend 0x to each prop on the signature.
-    x => '0x' + x,
-    dvf.stark.sign(starkKeyPair, starkMessage)
-  )
-
-  return {
-    tx: { ...tx, signature },
-    starkPublicKey
-  }
+  return createSignedTransferPayload(dvf)(tx)
 }

@@ -9,8 +9,11 @@ const sigKeysToString = sig => ({
 module.exports = (dvf, starkKeyPair, starkMessage) => {
   let starkSignature
 
-  if (!starkKeyPair || !starkMessage) {
-    throw 'Stark key pair or stark message missing'
+  if (!starkKeyPair) {
+    throw new Error('starkKeyPair is required')
+  }
+  if (!starkMessage) {
+    throw new Error('starkMessage required')
   }
 
   try {
