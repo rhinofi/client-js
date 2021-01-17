@@ -1,6 +1,7 @@
 const sw = require('starkware_crypto')
+
 const createPrivateKey = require('./createPrivateKey')
-const errorReasons = require('../dvf/DVFError')
+const DVFError = require('../dvf/DVFError')
 const formatStarkPublicKey = require('./formatStarkPublicKey')
 
 const pubKeysToString = pubKey => ({
@@ -50,11 +51,8 @@ module.exports = (dvf, starkPrivateKey) => {
       starkPublicKey = formatStarkPublicKey(tempKey)
     }
     return { starkPrivateKey, starkKeyPair, starkPublicKey }
-  } catch (e) {
+  } catch (originalError) {
     // TODO: use dvf.logger to log the actual error
-    return {
-      error: 'ERR_PUBLICKEY_CREATION',
-      reason: errorReasons.ERR_PUBLICKEY_CREATION
-    }
+    throw new DVFError('ERR_PUBLICKEY_CREATION', { originalError })
   }
 }
