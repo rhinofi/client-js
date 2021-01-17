@@ -29,7 +29,7 @@ module.exports = (dvf, starkPrivateKey) => {
     let starkKeyPair
     let starkPublicKey
 
-    if (dvf.sw) {
+    if (dvf.sw && dvf.sw.raw) {
       // This is really only used as a private key to pass to stark.sign
       // which accepts private key as string if sw is defined
       starkKeyPair = starkPrivateKey
