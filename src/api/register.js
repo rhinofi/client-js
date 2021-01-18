@@ -1,5 +1,5 @@
 const post = require('../lib/dvf/post-authenticated')
-const DVFError = require('../../lib/dvf/DVFError')
+const DVFError = require('../lib/dvf/DVFError')
 
 const validateAssertions = require('../lib/validators/validateAssertions')
 
