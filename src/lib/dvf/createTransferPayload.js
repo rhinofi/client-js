@@ -36,9 +36,9 @@ const schema = Joi.object({
   // the token in valid.
   token: Joi.string(),
   recipientPublicKey: prefixedHexString,
-  recipientValuntId: Joi.number().integer()
+  recipientVaultId: Joi.number().integer()
   // TODO: provide a way of converting recipientEthAddress into above 2 props.
-  // This would require making both recipientPublicKey and recipientValuntId
+  // This would require making both recipientPublicKey and recipientVaultId
   // publicly available (or at least available to users who have been granted
   // access by the owner of recipientEthAddress).
   // recipientEthAddress: Joi.ethAddress()
@@ -61,7 +61,7 @@ module.exports = async (dvf, transferData, starkPrivateKey) => {
     amount,
     token,
     recipientPublicKey,
-    recipientValuntId
+    recipientVaultId
   } = validateArg0(transferData)
 
   const tokenInfo = getValidTokenInfo(dvf)(token)
@@ -71,7 +71,7 @@ module.exports = async (dvf, transferData, starkPrivateKey) => {
   const tx = {
     amount: quantisedAmount.toString(),
     receiverPublicKey: recipientPublicKey,
-    receiverVaultId: recipientValuntId,
+    receiverVaultId: recipientVaultId,
     senderVaultId: tokenInfo.starkVaultId,
     token: tokenInfo.starkTokenId,
     type: 'TransferRequest'
