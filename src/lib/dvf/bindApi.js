@@ -138,6 +138,7 @@ module.exports = () => {
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
   dvf.cancelWithdrawal = compose(require('../../api/cancelWithdrawal'))
   dvf.deposit = compose(require('../../api/deposit'))
+  dvf.depositV2 = compose(require('../../api/depositV2'))
   dvf.fastWithdrawal = compose(require('../../api/fastWithdrawal'))
   dvf.fastWithdrawalFee = compose(require('../../api/fastWithdrawalFee'))
   dvf.fastWithdrawalMaxAmount = compose(require('../../api/fastWithdrawalMaxAmount'))
@@ -163,6 +164,7 @@ module.exports = () => {
   dvf.getWithdrawal = compose(require('../../api/getWithdrawal'))
   dvf.getWithdrawals = compose(require('../../api/getWithdrawals'))
   dvf.withdraw = compose(require('../../api/withdraw'))
+  dvf.withdrawalV2 = compose(require('../../api/withdrawalV2'))
   dvf.withdrawOnchain = compose(require('../../api/withdrawOnchain'))
   dvf.fullWithdrawalRequest = compose(require('../../api/fullWithdrawalRequest'))
   dvf.ledger = {
