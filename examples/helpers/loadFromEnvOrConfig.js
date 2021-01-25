@@ -1,5 +1,5 @@
-fs = require('fs')
-path = require('path')
+const fs = require('fs')
+const path = require('path')
 
 const getConfigVar_ = (config, configFileName) => (varName, defaultValue) => {
   const value = process.env[ varName ] || config[ varName ] || defaultValue
@@ -38,10 +38,12 @@ module.exports = (configFileName = 'config.json') => {
   const getConfigVar = getConfigVar_(config, configFilePath)
 
   const apiUrl = getConfigVar('API_URL', 'https://api.stg.deversifi.com')
+  const ETH_PRIVATE_KEY = getConfigVar('ETH_PRIVATE_KEY')
 
   return {
     INFURA_PROJECT_ID: getConfigVar('INFURA_PROJECT_ID'),
-    ETH_PRIVATE_KEY: getConfigVar('ETH_PRIVATE_KEY'),
+    ETH_PRIVATE_KEY,
+    STARK_PRIVATE_KEY: getConfigVar('STARK_PRIVATE_KEY', ETH_PRIVATE_KEY),
     API_URL: apiUrl,
     DATA_API_URL: getConfigVar('DATA_API_URL', apiUrl)
   }
