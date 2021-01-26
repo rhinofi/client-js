@@ -39,6 +39,7 @@ module.exports = () => {
       createWithdrawalData: compose(
         require('../stark/ledger/createWithdrawalData')
       ),
+      createFastWithdrawalPayload: compose(require('../stark/ledger/createFastWithdrawalPayload')),
       createDepositData: compose(require('../stark/ledger/createDepositData')),
       createSignedTransfer: compose(
         require('../stark/ledger/createSignedTransfer')
@@ -46,6 +47,11 @@ module.exports = () => {
       createSignedOrder: compose(
         require('../../lib/stark/ledger/createSignedOrder')
       )
+    },
+    authereum: {
+      createSignedTransfer: compose(require('../stark/authereum/createSignedTransfer')),
+      createSignedOrder: compose(require('../stark/authereum/createSignedOrder')),
+      getPublicKey: compose(require('../stark/authereum/getPublicKey'))
     }
   }
 
@@ -67,15 +73,14 @@ module.exports = () => {
     withdraw: compose(require('../../api/contract/withdraw')),
     abi: {
       token: require('../../api/contract/abi/token.abi'),
-      StarkEx: require('../../api/contract/abi/StarkEx.abi'),
-      StarkExV2: require('../../api/contract/abi/StarkExV2.abi'),
-      getStarkEx: () => dvf.contract.abi[dvf.config.starkExUseV2 === true ? 'StarkExV2' : 'StarkEx'],
+      getStarkEx: () => require('../../api/contract/abi/StarkExV2.abi'),
       WithdrawalBalanceReader: require('../../api/contract/abi/WithdrawalBalanceReader.abi')
     }
   }
   // dvf.token functions
   dvf.token = {
     // TODO: deprecate getTokenInfo
+    provideContractData: compose(require('../ledger/provideContractData')),
     getTokenInfo: compose(require('./token/getTokenInfo')),
     getTokenInfoOrThrow: compose(require('./token/getTokenInfoOrThrow')),
     fromBaseUnitAmount: compose(require('./token/fromBaseUnitAmount')),
@@ -120,7 +125,9 @@ module.exports = () => {
   dvf.createFastWithdrawalPayload = compose(
     require('./createFastWithdrawalPayload')
   )
-
+  dvf.createTransferPayload = compose(
+    require('./createTransferPayload')
+  )
   // dvf trading volume data
   dvf.get30DaysVolume = compose(require('../../api/get30DaysVolume'))
 
@@ -131,7 +138,10 @@ module.exports = () => {
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
   dvf.cancelWithdrawal = compose(require('../../api/cancelWithdrawal'))
   dvf.deposit = compose(require('../../api/deposit'))
+  dvf.depositV2 = compose(require('../../api/depositV2'))
   dvf.fastWithdrawal = compose(require('../../api/fastWithdrawal'))
+  dvf.fastWithdrawalFee = compose(require('../../api/fastWithdrawalFee'))
+  dvf.fastWithdrawalMaxAmount = compose(require('../../api/fastWithdrawalMaxAmount'))
   dvf.getDeposits = compose(require('../../api/getDeposits'))
   dvf.getBalance = compose(require('../../api/getBalance'))
   dvf.getConfig = compose(require('../../api/getConfig'))
@@ -150,14 +160,21 @@ module.exports = () => {
   dvf.submitOrder = compose(require('../../api/submitOrder'))
   dvf.submitMarketOrder = compose(require('../../api/submitMarketOrder'))
   dvf.submitSellOrder = compose(require('../../api/submitSellOrder'))
+  dvf.transfer = compose(require('../../api/transfer'))
   dvf.getWithdrawal = compose(require('../../api/getWithdrawal'))
   dvf.getWithdrawals = compose(require('../../api/getWithdrawals'))
   dvf.withdraw = compose(require('../../api/withdraw'))
+  dvf.withdrawalV2 = compose(require('../../api/withdrawalV2'))
   dvf.withdrawOnchain = compose(require('../../api/withdrawOnchain'))
   dvf.fullWithdrawalRequest = compose(require('../../api/fullWithdrawalRequest'))
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),
-    withdraw: compose(require('../../api/ledger/withdraw'))
+    withdraw: compose(require('../../api/ledger/withdraw')),
+    fastWithdrawal: compose(require('../../api/ledger/fastWithdrawal'))
+  }
+  dvf.authereum = {
+    deposit: compose(require('../../api/authereum/deposit')),
+    withdraw: compose(require('../../api/authereum/withdraw'))
   }
   dvf.estimatedNextBatchTime = compose(require('../../api/estimatedNextBatchTime'))
   return dvf

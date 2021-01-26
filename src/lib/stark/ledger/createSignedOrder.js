@@ -9,16 +9,20 @@ const selectTransport = require('../../ledger/selectTransport')
 module.exports = async (dvf, path, starkOrder) => {
   const Transport = selectTransport(dvf.isBrowser)
 
-  const buyCurrency = _.find(dvf.config.tokenRegistry, {
+  const buySymbol = _.findKey(dvf.config.tokenRegistry, {
     starkTokenId: starkOrder.tokenBuy
   })
-  const sellCurrency = _.find(dvf.config.tokenRegistry, {
+
+  const sellSymbol = _.findKey(dvf.config.tokenRegistry, {
     starkTokenId: starkOrder.tokenSell
   })
 
+  const buyCurrency = dvf.config.tokenRegistry[buySymbol]
+  const sellCurrency = dvf.config.tokenRegistry[sellSymbol]
+
   const transport = await Transport.create()
   const eth = new Eth(transport)
-  const { address } = await eth.getAddress(path)
+  const {address} = await eth.getAddress(path)
   const starkPath = dvf.stark.ledger.getPath(address)
   const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')
   let starkPublicKey = {
@@ -38,7 +42,7 @@ module.exports = async (dvf, path, starkOrder) => {
     if (buyTokenInfo) {
       await eth.provideERC20TokenInformation(buyTokenInfo)
     } else {
-      if (dvf.chainId!==1) {
+      if (dvf.chainId !== 1) {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
           `00${buyTokenAddress}0000000000000003`,
@@ -64,7 +68,7 @@ module.exports = async (dvf, path, starkOrder) => {
     if (sellTokenInfo) {
       await eth.provideERC20TokenInformation(sellTokenInfo)
     } else {
-      if (dvf.chainId!==1) {
+      if (dvf.chainId !== 1) {
         let tokenInfo = {}
         tokenInfo['data'] = Buffer.from(
           `00${sellTokenAddress}0000000000000003`,
@@ -79,21 +83,25 @@ module.exports = async (dvf, path, starkOrder) => {
     sellTokenAddress = null
   }
 
-  const starkSignature = await eth.starkSignOrder(
-    starkPath,
-    sellTokenAddress,
-    new BN(sellCurrency.quantization),
-    buyTokenAddress,
-    new BN(buyCurrency.quantization),
-    starkOrder.vaultIdSell,
-    starkOrder.vaultIdBuy,
-    new BN(starkOrder.amountSell),
-    new BN(starkOrder.amountBuy),
-    starkOrder.nonce,
-    starkOrder.expirationTimestamp
-  )
+  const starkSignature = await eth.starkSignOrder_v2(
+      starkPath,
+      sellTokenAddress,
+      sellSymbol === 'ETH' ? 'eth' : 'erc20',
+      new BN(sellCurrency.quantization),
+      null,
+      buyTokenAddress,
+      buySymbol === 'ETH' ? 'eth' : 'erc20',
+      new BN(buyCurrency.quantization),
+      null,
+      starkOrder.vaultIdSell,
+      starkOrder.vaultIdBuy,
+      new BN(starkOrder.amountSell),
+      new BN(starkOrder.amountBuy),
+      starkOrder.nonce,
+      starkOrder.expirationTimestamp
+    )
 
   await transport.close()
 
-  return { starkPublicKey, starkSignature }
+  return {starkPublicKey, starkSignature}
 }

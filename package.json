@@ -1,6 +1,6 @@
 {
   "name": "dvf-client-js",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "main": "src/dvf.js",
   "contributors": [
     "Henrique Matias <hems.inlet@gmail.com>",
@@ -40,13 +40,12 @@
   "homepage": "https://github.com/deversifi/dvf-client-js",
   "license": "MIT",
   "dependencies": {
-    "@ledgerhq/hw-app-eth": "^5.25.1",
-    "@ledgerhq/hw-transport-webhid": "^5.25.0",
-    "@ledgerhq/hw-transport-webusb": "^5.25.0",
+    "@ledgerhq/hw-app-eth": "5.38.0",
+    "@ledgerhq/hw-transport-webusb": "5.38.0",
     "aigle": "git+https://github.com/suguru03/aigle#8739846ba9d4cfc116e1546da1181c73564cae0b",
     "aware": "^0.3.1",
     "bignumber.js": "^9.0.0",
-    "dvf-utils": "git+https://github.com/DeversiFi/dvf-utils#c9be9e9b818863a05fac396e1af5c2d536dd90d1",
+    "dvf-utils": "git+https://github.com/DeversiFi/dvf-utils#77692b6e5d45f6051e9263fab209589db145012c",
     "lodash": "^4.17.20",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
