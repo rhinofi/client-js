@@ -4,11 +4,10 @@ const {
   toBN,
   toQuantizedAmountBN
 } = require('dvf-utils')
-const BN = require('bignumber.js')
-const calculateFact = require('../calculateFact')
-const validateWithJoi = require('../../validators/validateWithJoi')
+const calculateFact = require('../../lib/stark/calculateFact')
+const validateWithJoi = require('../../lib/validators/validateWithJoi')
 
-const DVFError = require('../../dvf/DVFError')
+const DVFError = require('../../lib/dvf/DVFError')
 
 const address0 = '0x'.padEnd(42, '0')
 
