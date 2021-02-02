@@ -1,4 +1,3 @@
-const FP = require('lodash/fp')
 const {
   fromQuantizedToBaseUnitsBN,
   Joi,
@@ -6,17 +5,10 @@ const {
   toQuantizedAmountBN
 } = require('dvf-utils')
 const BN = require('bignumber.js')
-const swJs = require('starkware_crypto')
-const Eth = require('@ledgerhq/hw-app-eth').default
-const selectTransport = require('../../ledger/selectTransport')
-
 const calculateFact = require('../calculateFact')
 const validateWithJoi = require('../../validators/validateWithJoi')
 
 const DVFError = require('../../dvf/DVFError')
-
-// TODO
-const calculateFee = amount => 0
 
 const address0 = '0x'.padEnd(42, '0')
 
@@ -57,22 +49,15 @@ const schema = Joi.object({
 const errorProps = {context: 'fastWithdrawal'}
 const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({...errorProps, argIdx: 0})
 
-module.exports = async (dvf, withdrawalData, path) => {
+module.exports = async (dvf, withdrawalData) => {
   const {
     amount,
     token,
     recipientEthAddress = dvf.config.ethAddress,
     transactionFee
   } = validateArg0(withdrawalData)
-  const Transport = selectTransport(dvf.isBrowser)
-  const starkPublicKey = await dvf.stark.ledger.getPublicKey(path)
-  const transport = await Transport.create()
-  const eth = new Eth(transport)
-  const {address} = await eth.getAddress(path)
-  const starkPath = dvf.stark.ledger.getPath(address)
+  const starkPublicKey = await dvf.stark.authereum.getPublicKey()
   const tokenInfo = getValidTokenInfo(dvf)(token)
-  const transferQuantization = new BN(tokenInfo.quantization)
-
   const feeQuantised = await (
     transactionFee
       ? toQuantizedAmountBN(tokenInfo, transactionFee)
@@ -97,7 +82,7 @@ module.exports = async (dvf, withdrawalData, path) => {
     Math.ceil(Date.now() / (1000 * 3600)) +
     parseInt(dvf.config.defaultStarkExpiry)
 
-  const {DVF} = dvf.config
+  const { DVF } = dvf.config
   const tx = {
     // Stark transaction includes the fee.
     amount: quantisedAmount.plus(feeQuantised).toString(),
@@ -112,32 +97,18 @@ module.exports = async (dvf, withdrawalData, path) => {
     token: tokenInfo.starkTokenId,
     type: 'ConditionalTransferRequest'
   }
-  await dvf.token.provideContractData(eth, token, token === 'ETH' ? '' : tokenContractAddress, transferQuantization)
-  const starkSignature = await eth.starkSignTransfer_v2(
-    starkPath,
-    tokenContractAddress,
-    token === 'ETH' ? 'eth' : 'erc20',
-    transferQuantization,
-    null,
-    DVF.deversifiStarkKeyHex,
-    tokenInfo.starkVaultId,
-    tokenInfo.deversifiStarkVaultId,
-    quantisedAmount.plus(feeQuantised),
-    nonce,
-    expirationTimestamp,
-    DVF.starkExTransferRegistryContractAddress,
-    fact
+  const {starkSignature} = await dvf.authereum.createSignedTransfer(
+    token,
+    tx.amount,
+    tx.senderVaultId,
+    tx.receiverVaultId
   )
-  await transport.close()
   return {
     recipientEthAddress,
     transactionFee: feeQuantised.toString(),
     tx: {
       ...tx,
-      signature: {
-        r: `0x${starkSignature.r}`,
-        s: `0x${starkSignature.s}`
-      }
+      signature: starkSignature
     },
     starkPublicKey
   }
