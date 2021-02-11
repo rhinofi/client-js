@@ -1,6 +1,8 @@
-module.exports = dvf => action => (sendArgsArray = []) => dvf.eth.send(
+module.exports = dvf => action => (args, value, options) => dvf.eth.send(
   dvf.contract.abi.getStarkEx(),
   dvf.config.DVF.starkExContractAddress,
   action,
-  ...sendArgsArray
+  args,
+  value,
+  options
 )

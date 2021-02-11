@@ -52,7 +52,7 @@ describe('dvf.deposit', () => {
     expect(payloadValidator).toBeCalled()
   })
 
-  it.only('Deposits ETH to users vault', async () => {
+  it('Deposits ETH to users vault', async () => {
     mockGetConf()
     const starkPrivateKey = '100'
     const token = 'ETH'

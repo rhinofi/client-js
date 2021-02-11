@@ -1,6 +1,6 @@
-module.exports = async (dvf, abi, address, action, args, value) => {
+module.exports = async (dvf, abi, address, action, args, value, options = {}) => {
   if (dvf.config.send) {
-    return dvf.config.send(dvf, abi, address, action, args, value)
+    return dvf.config.send(dvf, abi, address, action, args, value, options)
   }
 
   const { web3 } = dvf
@@ -16,12 +16,16 @@ module.exports = async (dvf, abi, address, action, args, value) => {
 
   const gasPrice = await dvf.eth.getGasPrice()
 
-  let options = {
+  let sendOptions = {
     from: dvf.get('account'),
     gasLimit: gasLimit,
     gasPrice: gasPrice,
     ...(value && { value })
   }
-  // console.log({ options })
-  return method.send(options)
+
+  const txPromEvent = method.send(sendOptions)
+  if (options.transactionHashCb) {
+    txPromEvent.on('transactionHash', options.transactionHashCb)
+  }
+  return txPromEvent
 }

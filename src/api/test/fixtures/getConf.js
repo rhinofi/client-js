@@ -2,6 +2,7 @@ const nock = require('nock')
 
 module.exports = () => {
   const getConfResponse = {
+    starkKeyHex: '0x011869c13b32ab9b7ec84e2b31c1de58baaaa6bbb2443a33bbad8df739a6e957',
     DVF: {
       exchangeSymbols: ['ETH:USDT', 'ZRX:USDT', 'ZRX:ETH'],
       exchangeAddress: '0xBd25cD867C304F079E696CBE44D958f3d3B683ba',
