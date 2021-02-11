@@ -23,28 +23,17 @@ const getValidTokenInfo = dvf => token => {
   return tokenInfo
 }
 
-// TODO: move to dvf-utils
-const prefixedHexString = Joi.string()
-  .pattern(/^0x[a-f0-9]+$/i)
-  .message('"value" must be composed of hexadecimal characters prefixed with: "0x"')
-  .description('hexadecimal string prefixed with: "0x"')
-
 const schema = Joi.object({
   amount: Joi.amount(),
   // NOTE: we are not specifying allowed tokens here since these can change
   // dynamically. However a call to `getTokenInfoOrThrow` will ensure that
   // the token in valid.
   token: Joi.string(),
-  recipientPublicKey: prefixedHexString,
+  recipientPublicKey: Joi.prefixedHexString(),
   recipientVaultId: Joi.number().integer()
-  // TODO: provide a way of converting recipientEthAddress into above 2 props.
-  // This would require making both recipientPublicKey and recipientVaultId
-  // publicly available (or at least available to users who have been granted
-  // access by the owner of recipientEthAddress).
-  // recipientEthAddress: Joi.ethAddress()
 })
 
-const errorProps = { context: 'transfer' }
+const errorProps = { context: 'transferUsingVaultIdAndStarkKey' }
 const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
   ...errorProps, argIdx: 0
 })
