@@ -3169,9 +3169,9 @@ duplexer@^0.1.1:
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.2.tgz#3abe43aef3835f8ae077d136ddce0f276b0400e6"
   integrity sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==
 
-"dvf-utils@git+https://github.com/DeversiFi/dvf-utils#77692b6e5d45f6051e9263fab209589db145012c":
+"dvf-utils@git+https://github.com/DeversiFi/dvf-utils#d047a36547c17991e012d783850360a77c070c12":
   version "0.2.4"
-  resolved "git+https://github.com/DeversiFi/dvf-utils#77692b6e5d45f6051e9263fab209589db145012c"
+  resolved "git+https://github.com/DeversiFi/dvf-utils#d047a36547c17991e012d783850360a77c070c12"
   dependencies:
     "@hapi/joi" "^17.1.1"
     bignumber.js "^9.0.0"
