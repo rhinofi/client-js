@@ -1,4 +1,5 @@
 module.exports = async (dvf, abi, address, action, args, value) => {
+  console.log('the args', args)
   if (dvf.config.send) {
     return dvf.config.send(dvf, abi, address, action, args, value)
   }
