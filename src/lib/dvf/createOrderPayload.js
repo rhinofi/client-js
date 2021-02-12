@@ -22,6 +22,8 @@ const schema = Joi.object({
   protocol: Joi.any().default('stark'),
   isPostOnly: Joi.bool().description('Flag to indicate if the order is post-only.'),
   isHidden: Joi.bool().description('Flag to indicate if the order is hidden.'),
+  isIgnoringSlippage: Joi.bool().description('Flag to indicate if the order should ignore slippage.'),
+  isFillOrKill: Joi.bool().description('Flag to indicate if the order is fill-or-kill'),
   nonce: Joi.string().allow(''),
   signature: Joi.string().allow('')
 })
@@ -46,7 +48,9 @@ module.exports = async (dvf, orderData) => {
         'type',
         'protocol',
         'isPostOnly',
-        'isHidden'
+        'isHidden',
+        'isIgnoringSlippage',
+        'isFillOrKill'
       ],
       value
     ),
