@@ -28,13 +28,18 @@ const dvfConfig = {
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
-  const transferResponse = await dvf.transfer({
-    recipientEthAddress: '0x5317c63f870e8D2f85f0dE3c2666D1414f5a728c',
-    token: 'USDT',
-    amount: 1
-  }, starkPrivKey)
+  const waitForDepositCreditedOnChain = require('./helpers/waitForDepositCreditedOnChain')
 
-  logExampleResult(transferResponse)
+  const keyPair = await dvf.stark.createKeyPair(starkPrivKey)
+
+  const depositResponse = await dvf.registerAndDeposit({ token: 'ETH', amount: 0.1 }, keyPair.starkPublicKey)
+
+  if (process.env.WAIT_FOR_DEPOSIT_READY === 'true') {
+    await waitForDepositCreditedOnChain(dvf, depositResponse)
+  }
+
+  logExampleResult(depositResponse)
+  
 })()
   .catch(error => {
     console.error(error)
