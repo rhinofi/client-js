@@ -32,7 +32,7 @@ module.exports = async (dvf, token, deposit, spender = dvf.config.DVF.starkExCon
     ? maxAmountBN
     : validateDepositAmountAndConvertToBN(deposit)
 
-  const allowance = await dvf.contract.isApproved(token)
+  const allowance = await dvf.contract.isApproved(token, spender)
 
   const allowanceBN = toBN(allowance)
 

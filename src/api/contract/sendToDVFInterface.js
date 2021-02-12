@@ -1,6 +1,6 @@
-module.exports = dvf => action => (sendArgsArray = [], value = null) => dvf.eth.send(
+module.exports = dvf => action => (sendArgsArray = [], value = null, options) => dvf.eth.send(
   dvf.contract.abi.getDVFInterface(),
-  '0xeccac43fc2f30b4765335278294d1eec6c3c2174', // dvf.config.DVF.interfaceContractAddress,
+  dvf.config.DVF.registrationAndDepositInterfaceAddress,
   action,
   sendArgsArray,
   value

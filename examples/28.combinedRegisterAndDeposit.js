@@ -33,7 +33,7 @@ const dvfConfig = {
 
   const waitForDepositCreditedOnChain = require('./helpers/waitForDepositCreditedOnChain')
 
-  const depositResponse = await dvf.registerAndDeposit({ token: 'ETH', amount: 0.2 }, keyPair.starkPublicKey)
+  const depositResponse = await dvf.registerAndDeposit({ token: 'USDT', amount: 1000 }, keyPair.starkPublicKey)
 
   if (process.env.WAIT_FOR_DEPOSIT_READY === 'true') {
     await waitForDepositCreditedOnChain(dvf, depositResponse)

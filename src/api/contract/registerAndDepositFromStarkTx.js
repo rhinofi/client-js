@@ -2,25 +2,22 @@ const errorReasons = require('../../lib/dvf/errorReasons')
 const sendToDVFInterface = require('./sendToDVFInterface')
 const { fromQuantizedToBaseUnitsBN } = require('dvf-utils')
 
-module.exports = async (dvf, deFiSignature, { starkKey, tokenId, vaultId, amount }) => {
+module.exports = async (dvf, deFiSignature, { starkKey, tokenId, vaultId, amount }, options) => {
   const ethTokenInfo = dvf.token.getTokenInfoOrThrow('ETH')
-
   if (ethTokenInfo.starkTokenId === tokenId) {
-    value = fromQuantizedToBaseUnitsBN(ethTokenInfo, amount).toString()
     action = 'registerAndDepositEth'
   } else {
-    value = amount
     action = 'registerAndDeposit'
   }
 
-  console.log('DeFiSignature:', deFiSignature)
+  const methodArgs = [starkKey, deFiSignature, tokenId, vaultId]
 
-  const args = [starkKey, deFiSignature, tokenId, vaultId, value]
+  const [args, value] = tokenId === ethTokenInfo.starkTokenId
+    // For ETH, we convert amount to WEI and add as extra send arg
+    ? [methodArgs, fromQuantizedToBaseUnitsBN(ethTokenInfo, amount).toString()]
+    // For other tokens, use amount as is (should be quantised), and add to
+    // method args.
+    : [methodArgs.concat(amount.toString())]
 
-  if (ethTokenInfo.starkTokenId === tokenId) {
-    args.pop()
-    return sendToDVFInterface(dvf)(action)(args, value)
-  }
-
-  return sendToDVFInterface(dvf)(action)(args)
+  return sendToDVFInterface(dvf)(action)(args, value, options)
 }
