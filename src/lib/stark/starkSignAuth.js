@@ -11,12 +11,12 @@ module.exports = (dvf, tradingKey, nonce) => {
   if (!tradingKey) {
     throw new Error('tradingKey is required')
   }
-  if (!starkMessage) {
+  if (!nonce) {
     throw new Error('nonce is required')
   }
 
   try {
-    const {starkKeyPair} = await dvf.stark.createKeyPair(tradingKey)
+    const {starkKeyPair} = dvf.stark.createKeyPair(tradingKey)
     return sigKeysToString(
       (dvf.sw || sw).ec.sign(nonce, starkKeyPair, {canonical: true})
     )
