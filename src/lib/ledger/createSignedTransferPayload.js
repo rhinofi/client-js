@@ -33,7 +33,7 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
   ...errorProps, argIdx: 0
 })
 
-module.exports = dvf => async (transferData, path) => {
+module.exports = async (dvf, transferData, path) => {
   const {
     amount,
     token,
@@ -47,6 +47,7 @@ module.exports = dvf => async (transferData, path) => {
 
   const tx = {
     amount: quantisedAmount.toString(),
+    senderPublicKey: `0x${starkPublicKey.x}`,
     receiverPublicKey: recipientPublicKey,
     receiverVaultId: recipientVaultId,
     senderVaultId: tokenInfo.starkVaultId,
@@ -56,8 +57,8 @@ module.exports = dvf => async (transferData, path) => {
 
   const {starkSignature, nonce, expireTime} = await dvf.stark.ledger.createSignedTransfer(
     path,
-    tx.token,
-    tx.amount,
+    token,
+    amount,
     tx.senderVaultId,
     tx.receiverVaultId
   )
@@ -65,8 +66,11 @@ module.exports = dvf => async (transferData, path) => {
   return {
     tx: {
       ...tx,
-      signature: starkSignature,
       nonce,
+      signature: {
+        r: `0x${starkSignature.r}`,
+        s: `0x${starkSignature.s}`
+      },
       expirationTimestamp: expireTime
     },
     starkPublicKey

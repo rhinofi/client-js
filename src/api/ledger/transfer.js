@@ -1,7 +1,7 @@
 const FP = require('lodash/fp')
 const { Joi } = require('dvf-utils')
 
-const validateWithJoi = require('../lib/validators/validateWithJoi')
+const validateWithJoi = require('../../lib/validators/validateWithJoi')
 
 const schema = Joi.object({
   token: Joi.string(),
