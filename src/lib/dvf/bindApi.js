@@ -46,6 +46,9 @@ module.exports = () => {
       ),
       createSignedOrder: compose(
         require('../../lib/stark/ledger/createSignedOrder')
+      ),
+      createSignedTransferPayload: compose(
+        require('../../lib/ledger/createSignedTransferPayload')
       )
     },
     authereum: {
@@ -173,7 +176,9 @@ module.exports = () => {
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),
     withdraw: compose(require('../../api/ledger/withdraw')),
-    fastWithdrawal: compose(require('../../api/ledger/fastWithdrawal'))
+    fastWithdrawal: compose(require('../../api/ledger/fastWithdrawal')),
+    transfer: compose(require('../../api/ledger/transfer')),
+    transferUsingVaultIdAndStarkKey: compose(require('../../api/ledger/transferUsingVaultIdAndStarkKey'))
   }
   dvf.authereum = {
     deposit: compose(require('../../api/authereum/deposit')),
