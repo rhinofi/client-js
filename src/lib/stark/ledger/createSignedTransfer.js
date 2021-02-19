@@ -8,7 +8,8 @@ module.exports = async (
   token,
   amount,
   sourceVault,
-  destinationVault
+  destinationVault,
+  receiverPublicKey
 ) => {
   const Transport = selectTransport(dvf.isBrowser)
   const {tokenAddress, quantization} = dvf.token.getTokenInfo(token)
@@ -33,7 +34,7 @@ module.exports = async (
     token === 'ETH' ? 'eth' : 'erc20',
     transferQuantization,
     null,
-    starkPublicKey.x,
+    receiverPublicKey || starkPublicKey.x,
     sourceVault,
     destinationVault,
     amountTransfer,

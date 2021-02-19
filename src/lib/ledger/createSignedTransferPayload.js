@@ -60,7 +60,8 @@ module.exports = async (dvf, transferData, path) => {
     token,
     amount,
     tx.senderVaultId,
-    tx.receiverVaultId
+    tx.receiverVaultId,
+    tx.receiverPublicKey
   )
 
   return {
