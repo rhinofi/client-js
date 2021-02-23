@@ -3,10 +3,9 @@ const { preparePriceBN, prepareAmountBN, splitSymbol } = require('dvf-utils')
 const DVFError = require('../dvf/DVFError')
 const computeBuySellData = require('../dvf/computeBuySellData')
 
-
 module.exports = async (dvf, { symbol, amount, price, validFor, feeRate, nonce, signature }) => {
   price = preparePriceBN(price)
-  amount = preparePriceBN(amount)
+  amount = prepareAmountBN(amount)
 
   feeRate = parseFloat(feeRate) || dvf.config.DVF.defaultFeeRate
 
