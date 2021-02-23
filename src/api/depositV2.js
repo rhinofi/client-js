@@ -49,8 +49,14 @@ module.exports = async (dvf, data, nonce, signature) => {
   // event without changing the return signatures of the underlying 'send'
   // More : https://github.com/ChainSafe/web3.js/issues/1547
   let transactionHashCb
-  const transactionHashPromise = new Promise(resolve => {
-    transactionHashCb = resolve
+  const transactionHashPromise = new Promise((resolve, reject) => {
+    transactionHashCb = (err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    }
   })
 
   const onChainDepositPromise = contractDepositFromStarkTx(dvf, tx, {transactionHashCb})
