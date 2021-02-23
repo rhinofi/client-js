@@ -4,9 +4,9 @@ const {
   toBN,
   toQuantizedAmountBN
 } = require('dvf-utils')
+const { post } = require('request-promise')
 const calculateFact = require('../../lib/stark/calculateFact')
 const validateWithJoi = require('../../lib/validators/validateWithJoi')
-
 const DVFError = require('../../lib/dvf/DVFError')
 
 const address0 = '0x'.padEnd(42, '0')
@@ -49,6 +49,7 @@ const errorProps = {context: 'fastWithdrawal'}
 const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({...errorProps, argIdx: 0})
 
 module.exports = async (dvf, withdrawalData) => {
+  const url = dvf.config.api + '/v1/trading/w/fastWithdrawal'
   const {
     amount,
     token,
@@ -96,19 +97,31 @@ module.exports = async (dvf, withdrawalData) => {
     token: tokenInfo.starkTokenId,
     type: 'ConditionalTransferRequest'
   }
-  const {starkSignature} = await dvf.authereum.createSignedTransfer(
+
+  const {starkSignature} = await dvf.stark.authereum.createSignedTransfer(
     token,
     tx.amount,
+    tx.nonce,
+    tx.expirationTimestamp,
     tx.senderVaultId,
-    tx.receiverVaultId
+    tx.receiverVaultId,
+    tx.senderPublicKey,
+    tx.receiverPublicKey,
+    tx.factRegistryAddress,
+    fact,
+    tokenInfo.starkTokenId
   )
-  return {
+  const json = {
     recipientEthAddress,
     transactionFee: feeQuantised.toString(),
     tx: {
       ...tx,
-      signature: starkSignature
+      signature: {
+        r: `0x${starkSignature.r}`,
+        s: `0x${starkSignature.s}`
+      }
     },
     starkPublicKey
   }
+  return post(url, { json })
 }
