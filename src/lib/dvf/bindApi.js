@@ -105,7 +105,8 @@ module.exports = () => {
     generateRandomNonce: require('./generateRandomNonce'),
     dvfToBfxSymbol: require('../../lib/dvf/dvfToBfxSymbol'),
     bfxToDvfSymbol: require('../../lib/dvf/bfxToDvfSymbol'),
-    prepareDepositAmount: compose(require('../util/prepareDepositAmount'))
+    prepareDepositAmount: compose(require('../util/prepareDepositAmount')),
+    attachStarkProvider: compose(require('../../lib/wallet/attachStarkProvider'))
   }
 
   // dvf.sign functions

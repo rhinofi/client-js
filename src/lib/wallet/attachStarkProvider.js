@@ -16,5 +16,4 @@ module.exports = (dvf, wallet) => {
     const provider = makeLedgerProvider(dvf)
     dvf = {...dvf, dvfStarkProvider: provider}
   }
-  // TODO: Fail if wallet is not supported once we switch to use starkProvider for all methods
 }
