@@ -18,6 +18,7 @@ const getTxSignature = async (dvf, tx, path) => {
     const starkPath = dvf.stark.ledger.getPath(address)
     const {tokenAddress, quantization} = dvf.token.getTokenInfoByTokenId(tx.token)
     const transferQuantization = new BN(quantization)
+    const transferAmount = new BN(tx.amount)
 
     // Load token information for Ledger device
     await dvf.token.provideContractData(eth, tokenAddress, transferQuantization)
@@ -28,10 +29,10 @@ const getTxSignature = async (dvf, tx, path) => {
       tokenAddress ? 'erc20' : 'eth',
       transferQuantization,
       null,
-      tx.senderPublicKey,
+      tx.receiverPublicKey,
       tx.senderVaultId,
       tx.receiverVaultId,
-      tx.amount,
+      transferAmount,
       tx.nonce,
       tx.expirationTimestamp,
       tx.type === 'ConditionalTransferRequest' ? tx.factRegistryAddress : null,
@@ -46,17 +47,17 @@ const getTxSignature = async (dvf, tx, path) => {
 }
 
 module.exports = (dvf) => {
-  if (!dvf.config.wallet.path) throw new DVFError('LEDGER_PATH_IS_REQUIRED')
+  if (!dvf.config.wallet.meta.path) throw new DVFError('LEDGER_PATH_IS_REQUIRED')
   let starkPublicKey
 
   const getPublicKey = async () => {
     if (starkPublicKey) { return starkPublicKey }
-    starkPublicKey = await dvf.stark.ledger.getPublicKey(path)
+    starkPublicKey = await dvf.stark.ledger.getPublicKey(dvf.config.wallet.meta.path)
     return starkPublicKey
   }
 
   const sign = async tx => {
-    const starkSignature = await getTxSignature(dvf, tx, dvf.config.wallet.path)
+    const starkSignature = await getTxSignature(dvf, tx, dvf.config.wallet.meta.path)
     return FP.mapValues(
       x => '0x' + x,
       starkSignature
