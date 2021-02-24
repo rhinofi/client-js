@@ -89,7 +89,10 @@ module.exports = async (web3, userConfig = {}, sw) => {
 
   dvf.recommendedGasPrices = await dvf.getGasPrice()
 
-  attachStarkProvider(dvf, userConfig.wallet)
+  try {
+    attachStarkProvider(dvf, userConfig.wallet)
+    // Fail silently in case no wallet is provider since provider can be attached later
+  } catch (e) {}
 
   return dvf
 }
