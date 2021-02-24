@@ -46,6 +46,9 @@ module.exports = () => {
       ),
       createSignedOrder: compose(
         require('../../lib/stark/ledger/createSignedOrder')
+      ),
+      createSignedTransferPayload: compose(
+        require('../../lib/ledger/createSignedTransferPayload')
       )
     },
     authereum: {
@@ -140,11 +143,13 @@ module.exports = () => {
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
   dvf.cancelWithdrawal = compose(require('../../api/cancelWithdrawal'))
   dvf.deposit = compose(require('../../api/deposit'))
+  dvf.depositV2 = compose(require('../../api/depositV2'))
   dvf.fastWithdrawal = compose(require('../../api/fastWithdrawal'))
   dvf.fastWithdrawalFee = compose(require('../../api/fastWithdrawalFee'))
   dvf.fastWithdrawalMaxAmount = compose(require('../../api/fastWithdrawalMaxAmount'))
   dvf.getDeposits = compose(require('../../api/getDeposits'))
   dvf.getBalance = compose(require('../../api/getBalance'))
+  dvf.getBalanceUsd = compose(require('../../api/getBalanceUsd'))
   dvf.getConfig = compose(require('../../api/getConfig'))
   dvf.getDeposits = compose(require('../../api/getDeposits'))
   dvf.getFeeRate = compose(require('../../api/getFeeRate'))
@@ -156,21 +161,26 @@ module.exports = () => {
   dvf.getUserConfigFromServer = compose(require('../../api/getUserConfigFromServer'))
   dvf.getVaultId = compose(require('../../api/getVaultId'))
   dvf.getVaultIdFromServer = compose(require('../../api/getVaultIdFromServer'))
+  dvf.getVaultIdAndStarkKey = compose(require('../../api/getVaultIdAndStarkKey'))
   dvf.register = compose(require('../../api/register'))
   dvf.submitBuyOrder = compose(require('../../api/submitBuyOrder'))
   dvf.submitOrder = compose(require('../../api/submitOrder'))
   dvf.submitMarketOrder = compose(require('../../api/submitMarketOrder'))
   dvf.submitSellOrder = compose(require('../../api/submitSellOrder'))
+  dvf.transferUsingVaultIdAndStarkKey = compose(require('../../api/transferUsingVaultIdAndStarkKey'))
   dvf.transfer = compose(require('../../api/transfer'))
   dvf.getWithdrawal = compose(require('../../api/getWithdrawal'))
   dvf.getWithdrawals = compose(require('../../api/getWithdrawals'))
   dvf.withdraw = compose(require('../../api/withdraw'))
+  dvf.withdrawV2 = compose(require('../../api/withdrawV2'))
   dvf.withdrawOnchain = compose(require('../../api/withdrawOnchain'))
   dvf.fullWithdrawalRequest = compose(require('../../api/fullWithdrawalRequest'))
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),
     withdraw: compose(require('../../api/ledger/withdraw')),
-    fastWithdrawal: compose(require('../../api/ledger/fastWithdrawal'))
+    fastWithdrawal: compose(require('../../api/ledger/fastWithdrawal')),
+    transfer: compose(require('../../api/ledger/transfer')),
+    transferUsingVaultIdAndStarkKey: compose(require('../../api/ledger/transferUsingVaultIdAndStarkKey'))
   }
   dvf.authereum = {
     deposit: compose(require('../../api/authereum/deposit')),

@@ -1,12 +1,9 @@
-// TODO: remove code dup between this and createFastWithdrawalPayload
 const {
   Joi,
   toQuantizedAmountBN
 } = require('dvf-utils')
 const validateWithJoi = require('../validators/validateWithJoi')
-
-const createSignedTransferPayload = require('./createSignedTransferPayload')
-const DVFError = require('./DVFError')
+const DVFError = require('../dvf/DVFError')
 
 const getValidTokenInfo = dvf => token => {
   const tokenInfo = dvf.token.getTokenInfoOrThrow(token)
@@ -14,7 +11,7 @@ const getValidTokenInfo = dvf => token => {
   if (!tokenInfo.starkVaultId) {
     throw new DVFError(
       'NO_STARK_VAULT_ID_FOR_TOKEN',
-      { token, context: 'createTransferPayload' }
+      {token, context: 'createTransferPayload'}
     )
   }
 
@@ -31,12 +28,12 @@ const schema = Joi.object({
   recipientVaultId: Joi.number().integer()
 })
 
-const errorProps = { context: 'transferUsingVaultIdAndStarkKey' }
+const errorProps = {context: 'transferUsingVaultIdAndStarkKey'}
 const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
   ...errorProps, argIdx: 0
 })
 
-module.exports = async (dvf, transferData) => {
+module.exports = async (dvf, transferData, path) => {
   const {
     amount,
     token,
@@ -44,12 +41,13 @@ module.exports = async (dvf, transferData) => {
     recipientVaultId
   } = validateArg0(transferData)
 
+  const starkPublicKey = await dvf.stark.ledger.getPublicKey(path)
   const tokenInfo = getValidTokenInfo(dvf)(token)
-
   const quantisedAmount = toQuantizedAmountBN(tokenInfo, amount)
 
   const tx = {
     amount: quantisedAmount.toString(),
+    senderPublicKey: `0x${starkPublicKey.x}`,
     receiverPublicKey: recipientPublicKey,
     receiverVaultId: recipientVaultId,
     senderVaultId: tokenInfo.starkVaultId,
@@ -57,5 +55,25 @@ module.exports = async (dvf, transferData) => {
     type: 'TransferRequest'
   }
 
-  return createSignedTransferPayload(dvf)(tx)
+  const {starkSignature, nonce, expireTime} = await dvf.stark.ledger.createSignedTransfer(
+    path,
+    token,
+    amount,
+    tx.senderVaultId,
+    tx.receiverVaultId,
+    tx.receiverPublicKey
+  )
+
+  return {
+    tx: {
+      ...tx,
+      nonce,
+      signature: {
+        r: `0x${starkSignature.r}`,
+        s: `0x${starkSignature.s}`
+      },
+      expirationTimestamp: expireTime
+    },
+    starkPublicKey
+  }
 }

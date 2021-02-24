@@ -124,7 +124,7 @@ describe('dvf.submitOrder', () => {
   it('Forces 5 significant digits on price and 8 decimal places on amount', async () => {
     mockGetConf()
     const symbol = 'ZRX:ETH'
-    const amount = -55.000000001
+    const amount = -55.123456789
     const price = 12.3456
     const validFor = '0'
 
@@ -136,7 +136,7 @@ describe('dvf.submitOrder', () => {
       gid: '',
       type: 'EXCHANGE LIMIT',
       symbol,
-      amount: '-55.00000001',
+      amount: '-55.12345679',
       price: '12.346',
       feeRate: 0.0025,
       protocol: 'stark',

@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const HDWalletProvider = require('@truffle/hdwallet-provider')
-const sw = require('starkware_crypto')
 const Web3 = require('web3')
 
 const DVF = require('../src/dvf')
@@ -29,10 +28,15 @@ const dvfConfig = {
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
-{{{EXAMPLE_SRC}}}
-})()
-.catch(error => {
-  console.error(error)
-  process.exit(1)
-})
+  const transferResponse = await dvf.transfer({
+    recipientEthAddress: '0x5317c63f870e8D2f85f0dE3c2666D1414f5a728c',
+    token: 'USDT',
+    amount: 1
+  }, starkPrivKey)
 
+  logExampleResult(transferResponse)
+})()
+  .catch(error => {
+    console.error(error)
+    process.exit(1)
+  })

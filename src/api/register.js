@@ -1,9 +1,10 @@
 const post = require('../lib/dvf/post-authenticated')
+const DVFError = require('../lib/dvf/DVFError')
 
 const validateAssertions = require('../lib/validators/validateAssertions')
 
 module.exports = async (dvf, starkPublicKey, nonce, signature, contractWalletAddress, encryptedTradingKey) => {
-  validateAssertions(dvf, { starkPublicKey })
+  validateAssertions(dvf, {starkPublicKey})
 
   const tradingKey = starkPublicKey.x
 
@@ -13,8 +14,8 @@ module.exports = async (dvf, starkPublicKey, nonce, signature, contractWalletAdd
     starkKey: tradingKey,
     nonce,
     signature,
-    ...(encryptedTradingKey && { encryptedTradingKey }),
-    ...(contractWalletAddress && { contractWalletAddress })
+    ...(encryptedTradingKey && {encryptedTradingKey}),
+    ...(contractWalletAddress && {contractWalletAddress})
   }
 
   const userRegistered = await post(dvf, endpoint, nonce, signature, data)
@@ -24,13 +25,18 @@ module.exports = async (dvf, starkPublicKey, nonce, signature, contractWalletAdd
   }
 
   if (userRegistered.deFiSignature) {
-    const onchainRegister = await dvf.stark.register(
-      dvf,
-      tradingKey,
-      userRegistered.deFiSignature
-    )
+    let onChainRegister
+    try {
+      onChainRegister = await dvf.stark.register(
+        dvf,
+        tradingKey,
+        userRegistered.deFiSignature
+      )
+    } catch (error) {
+      throw new DVFError('ERR_STARK_REGISTRATION', {error})
+    }
 
-    if (onchainRegister) {
+    if (onChainRegister) {
       return dvf.getUserConfig(nonce, signature)
     }
   }

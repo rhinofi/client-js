@@ -1,8 +1,8 @@
 const nock = require('nock')
-const instance = require('./test/helpers/instance')
-const url = require('url')
 
+const instance = require('./test/helpers/instance')
 const mockGetConf = require('./test/fixtures/getConf')
+const makeQueryValidator = require('./test/helpers/makeQueryValidator')
 
 let dvf
 
@@ -25,12 +25,7 @@ describe('getFeeRate', () => {
       startDate: '2020-04-04T16:54:25.886Z'
     }
 
-    const queryValidator = jest.fn((uri, body) => {
-      const parsed = new url.URL(uri, 'http://example.com')
-      expect(typeof parseInt(parsed.searchParams.get('nonce'))).toBe('number')
-      expect(parsed.searchParams.get('signature')).toMatch(/[\da-f]/i)
-      return [200, apiResponse]
-    })
+    const queryValidator = makeQueryValidator(apiResponse)
 
     nock(dvf.config.api)
       .get('/v1/trading/r/30DaysVolume')
