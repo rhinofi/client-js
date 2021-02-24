@@ -3,6 +3,7 @@ const defaultConfig = require('./config')
 const Web3 = require('web3')
 const aware = require('aware')
 const BigNumber = require('bignumber.js')
+const attachStarkProvider = require('./lib/wallet/attachStarkProvider')
 BigNumber.config({ EXPONENTIAL_AT: 1e9 })
 
 /**
@@ -87,6 +88,8 @@ module.exports = async (web3, userConfig = {}, sw) => {
   }
 
   dvf.recommendedGasPrices = await dvf.getGasPrice()
+
+  attachStarkProvider(dvf, userConfig.wallet)
 
   return dvf
 }

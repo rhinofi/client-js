@@ -112,7 +112,7 @@ module.exports = async (dvf, withdrawalData, path) => {
     token: tokenInfo.starkTokenId,
     type: 'ConditionalTransferRequest'
   }
-  await dvf.token.provideContractData(eth, token, token === 'ETH' ? '' : tokenContractAddress, transferQuantization)
+  await dvf.token.provideContractData(eth, token === 'ETH' ? '' : tokenContractAddress, transferQuantization)
   const starkSignature = await eth.starkSignTransfer_v2(
     starkPath,
     tokenContractAddress,

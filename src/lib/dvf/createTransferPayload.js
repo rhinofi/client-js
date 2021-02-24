@@ -3,8 +3,6 @@ const {
   Joi,
   toQuantizedAmountBN
 } = require('dvf-utils')
-
-const makeKeystore = require('../keystore')
 const validateWithJoi = require('../validators/validateWithJoi')
 
 const createSignedTransferPayload = require('./createSignedTransferPayload')
@@ -36,9 +34,9 @@ const schema = Joi.object({
   // the token in valid.
   token: Joi.string(),
   recipientPublicKey: prefixedHexString,
-  recipientValuntId: Joi.number().integer()
+  recipientVaultId: Joi.number().integer()
   // TODO: provide a way of converting recipientEthAddress into above 2 props.
-  // This would require making both recipientPublicKey and recipientValuntId
+  // This would require making both recipientPublicKey and recipientVaultId
   // publicly available (or at least available to users who have been granted
   // access by the owner of recipientEthAddress).
   // recipientEthAddress: Joi.ethAddress()
@@ -49,19 +47,12 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
   ...errorProps, argIdx: 0
 })
 
-module.exports = async (dvf, transferData, starkPrivateKey) => {
-  // TODO: dvfStarkProvider should be set on DVF Client initialisation, which
-  // will allow us to avoid having to pass starkPrivateKey and unify
-  // how stark signing etc is handled between different providers (keystore,
-  // ledger, authereum etc)
-  const keystore = makeKeystore(dvf.sw)(starkPrivateKey)
-  dvf = { ...dvf, dvfStarkProvider: keystore }
-
+module.exports = async (dvf, transferData) => {
   const {
     amount,
     token,
     recipientPublicKey,
-    recipientValuntId
+    recipientVaultId
   } = validateArg0(transferData)
 
   const tokenInfo = getValidTokenInfo(dvf)(token)
@@ -71,7 +62,7 @@ module.exports = async (dvf, transferData, starkPrivateKey) => {
   const tx = {
     amount: quantisedAmount.toString(),
     receiverPublicKey: recipientPublicKey,
-    receiverVaultId: recipientValuntId,
+    receiverVaultId: recipientVaultId,
     senderVaultId: tokenInfo.starkVaultId,
     token: tokenInfo.starkTokenId,
     type: 'TransferRequest'

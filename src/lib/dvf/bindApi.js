@@ -83,6 +83,7 @@ module.exports = () => {
     provideContractData: compose(require('../ledger/provideContractData')),
     getTokenInfo: compose(require('./token/getTokenInfo')),
     getTokenInfoOrThrow: compose(require('./token/getTokenInfoOrThrow')),
+    getTokenInfoByTokenId: compose(require('./token/getTokenInfoByTokenId')),
     fromBaseUnitAmount: compose(require('./token/fromBaseUnitAmount')),
     fromQuantizedAmount: compose(require('./token/fromQuantizedAmount')),
     toBaseUnitAmount: compose(require('./token/toBaseUnitAmount')),
