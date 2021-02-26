@@ -2,7 +2,7 @@ const FP = require('lodash/fp')
 const {
   fromQuantizedToBaseUnitsBN,
   Joi,
-  starkTransferTxToMessageHash,
+  toBN,
   toQuantizedAmountBN
 } = require('dvf-utils')
 const BN = require('bignumber.js')
@@ -26,19 +26,23 @@ const getValidTokenInfo = dvf => token => {
   if (!tokenInfo.starkVaultId) {
     throw new DVFError(
       'NO_STARK_VAULT_ID_FOR_TOKEN',
-      { token, context: 'fastWithdrawal' }
+      {token, context: 'fastWithdrawal'}
     )
   }
 
   if (!tokenInfo.deversifiStarkVaultId) {
     throw new DVFError(
       'NO_DEVERSIFI_STARK_VAULT_ID_FOR_TOKEN',
-      { token, context: 'fastWithdrawal' }
+      {token, context: 'fastWithdrawal'}
     )
   }
 
   return tokenInfo
 }
+
+const getFeeQuantised = async (dvf, token) => dvf
+  .fastWithdrawalFee(token)
+  .then(res => toBN(res.feeQuantised))
 
 const schema = Joi.object({
   amount: Joi.amount().required(),
@@ -50,14 +54,15 @@ const schema = Joi.object({
   recipientEthAddress: Joi.string().optional()
 })
 
-const errorProps = { context: 'fastWithdrawal' }
-const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({ ...errorProps, argIdx: 0 })
+const errorProps = {context: 'fastWithdrawal'}
+const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({...errorProps, argIdx: 0})
 
 module.exports = async (dvf, withdrawalData, path) => {
   const {
     amount,
     token,
-    recipientEthAddress = dvf.config.ethAddress
+    recipientEthAddress = dvf.config.ethAddress,
+    transactionFee
   } = validateArg0(withdrawalData)
   const Transport = selectTransport(dvf.isBrowser)
   const starkPublicKey = await dvf.stark.ledger.getPublicKey(path)
@@ -68,12 +73,11 @@ module.exports = async (dvf, withdrawalData, path) => {
   const tokenInfo = getValidTokenInfo(dvf)(token)
   const transferQuantization = new BN(tokenInfo.quantization)
 
-  const transactionFee = toQuantizedAmountBN(tokenInfo, calculateFee(amount))
-
-  // This should be in hours
-  const expirationTimestamp =
-    Math.ceil(Date.now() / (1000 * 3600)) +
-    parseInt(dvf.config.defaultStarkExpiry)
+  const feeQuantised = await (
+    transactionFee
+      ? toQuantizedAmountBN(tokenInfo, transactionFee)
+      : getFeeQuantised(dvf, token)
+  )
 
   const tokenContractAddress = token === 'ETH'
     ? address0
@@ -82,15 +86,21 @@ module.exports = async (dvf, withdrawalData, path) => {
   const baseUnitsAmount = fromQuantizedToBaseUnitsBN(tokenInfo)(quantisedAmount)
 
   const nonce = dvf.util.generateRandomNonce()
+
   // On chain transfer will be for the amount without fee
   const fact = calculateFact(
     recipientEthAddress, baseUnitsAmount.toString(), tokenContractAddress, nonce
   )
 
-  const { DVF } = dvf.config
+  // This should be in hours
+  const expirationTimestamp =
+    Math.ceil(Date.now() / (1000 * 3600)) +
+    parseInt(dvf.config.defaultStarkExpiry)
+
+  const {DVF} = dvf.config
   const tx = {
     // Stark transaction includes the fee.
-    amount: quantisedAmount.plus(transactionFee).toString(),
+    amount: quantisedAmount.plus(feeQuantised).toString(),
     expirationTimestamp,
     fact,
     factRegistryAddress: DVF.starkExTransferRegistryContractAddress,
@@ -102,7 +112,7 @@ module.exports = async (dvf, withdrawalData, path) => {
     token: tokenInfo.starkTokenId,
     type: 'ConditionalTransferRequest'
   }
-  await dvf.token.provideContractData(eth, token, token === 'ETH' ? null : tokenContractAddress, transferQuantization)
+  await dvf.token.provideContractData(eth, token === 'ETH' ? '' : tokenContractAddress, transferQuantization)
   const starkSignature = await eth.starkSignTransfer_v2(
     starkPath,
     tokenContractAddress,
@@ -112,7 +122,7 @@ module.exports = async (dvf, withdrawalData, path) => {
     DVF.deversifiStarkKeyHex,
     tokenInfo.starkVaultId,
     tokenInfo.deversifiStarkVaultId,
-    quantisedAmount.plus(transactionFee),
+    quantisedAmount.plus(feeQuantised),
     nonce,
     expirationTimestamp,
     DVF.starkExTransferRegistryContractAddress,
@@ -121,8 +131,14 @@ module.exports = async (dvf, withdrawalData, path) => {
   await transport.close()
   return {
     recipientEthAddress,
-    transactionFee,
-    tx: { ...tx, signature: starkSignature },
+    transactionFee: feeQuantised.toString(),
+    tx: {
+      ...tx,
+      signature: {
+        r: `0x${starkSignature.r}`,
+        s: `0x${starkSignature.s}`
+      }
+    },
     starkPublicKey
   }
 }

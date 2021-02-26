@@ -26,7 +26,7 @@ module.exports = async (
   const {address} = await eth.getAddress(path)
   const starkPath = dvf.stark.ledger.getPath(address)
 
-  await dvf.token.provideContractData(eth, token, tokenAddress, transferQuantization)
+  await dvf.token.provideContractData(eth, tokenAddress, transferQuantization)
 
   const starkSignature = await eth.starkSignTransfer_v2(
     starkPath,

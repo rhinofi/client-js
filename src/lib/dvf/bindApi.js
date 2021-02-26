@@ -86,6 +86,7 @@ module.exports = () => {
     provideContractData: compose(require('../ledger/provideContractData')),
     getTokenInfo: compose(require('./token/getTokenInfo')),
     getTokenInfoOrThrow: compose(require('./token/getTokenInfoOrThrow')),
+    getTokenInfoByTokenId: compose(require('./token/getTokenInfoByTokenId')),
     fromBaseUnitAmount: compose(require('./token/fromBaseUnitAmount')),
     fromQuantizedAmount: compose(require('./token/fromQuantizedAmount')),
     toBaseUnitAmount: compose(require('./token/toBaseUnitAmount')),
@@ -107,7 +108,8 @@ module.exports = () => {
     generateRandomNonce: require('./generateRandomNonce'),
     dvfToBfxSymbol: require('../../lib/dvf/dvfToBfxSymbol'),
     bfxToDvfSymbol: require('../../lib/dvf/bfxToDvfSymbol'),
-    prepareDepositAmount: compose(require('../util/prepareDepositAmount'))
+    prepareDepositAmount: compose(require('../util/prepareDepositAmount')),
+    attachStarkProvider: compose(require('../../lib/wallet/attachStarkProvider'))
   }
 
   // dvf.sign functions
@@ -176,7 +178,6 @@ module.exports = () => {
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),
     withdraw: compose(require('../../api/ledger/withdraw')),
-    fastWithdrawal: compose(require('../../api/ledger/fastWithdrawal')),
     transfer: compose(require('../../api/ledger/transfer')),
     transferUsingVaultIdAndStarkKey: compose(require('../../api/ledger/transferUsingVaultIdAndStarkKey'))
   }
