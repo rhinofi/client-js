@@ -178,14 +178,12 @@ module.exports = () => {
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),
     withdraw: compose(require('../../api/ledger/withdraw')),
-    fastWithdrawal: compose(require('../../api/ledger/fastWithdrawal')),
     transfer: compose(require('../../api/ledger/transfer')),
     transferUsingVaultIdAndStarkKey: compose(require('../../api/ledger/transferUsingVaultIdAndStarkKey'))
   }
   dvf.authereum = {
     deposit: compose(require('../../api/authereum/deposit')),
-    withdraw: compose(require('../../api/authereum/withdraw')),
-    fastWithdrawal: compose(require('../../api/authereum/fastWithdrawal'))
+    withdraw: compose(require('../../api/authereum/withdraw'))
   }
   dvf.estimatedNextBatchTime = compose(require('../../api/estimatedNextBatchTime'))
   return dvf
