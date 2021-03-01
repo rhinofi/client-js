@@ -6,7 +6,6 @@ const {
 } = require('dvf-utils')
 
 const calculateFact = require('../stark/calculateFact')
-const makeKeystore = require('../keystore')
 const validateWithJoi = require('../validators/validateWithJoi')
 
 const createSignedTransferPayload = require('./createSignedTransferPayload')
@@ -57,11 +56,7 @@ const validateArg0 = validateWithJoi
   ('INVALID_METHOD_ARGUMENT')
   ({ ...errorProps, argIdx: 0 })
 
-module.exports = async (dvf, withdrawalData, starkPrivateKey) => {
-  // TODO: see todo in createTransferPayload.js
-  const keystore = makeKeystore(dvf.sw)(starkPrivateKey)
-  dvf = { ...dvf, dvfStarkProvider: keystore }
-
+module.exports = async (dvf, withdrawalData) => {
   const {
     amount,
     token,
