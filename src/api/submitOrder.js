@@ -25,8 +25,15 @@ const schema = Joi.object({
   isHidden: Joi.bool().description('Flag to indicate if the order is hidden.'),
   isSlippageDisabled: Joi.bool().description('Flag to indicate if the order should ignore slippage.'),
   isFillOrKill: Joi.bool().description('Flag to indicate if the order is fill-or-kill'),
-  nonce: Joi.string().allow(''),
-  signature: Joi.string().allow('')
+  nonce: Joi.alternatives().try(Joi.string().allow(''), Joi.number().allow('')),
+  signature: Joi.alternatives().try(
+    Joi.string().allow(''),
+    Joi.object({
+      s: Joi.string(),
+      r: Joi.string(),
+      recoveryParam: Joi.number()
+    })
+  )
 })
 
 module.exports = async (dvf, orderData) => {
