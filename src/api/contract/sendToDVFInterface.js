@@ -3,5 +3,6 @@ module.exports = dvf => action => (sendArgsArray = [], value = null, options) =>
   dvf.config.DVF.registrationAndDepositInterfaceAddress,
   action,
   sendArgsArray,
-  value
+  value,
+  options
 )
