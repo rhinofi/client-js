@@ -18,7 +18,6 @@ const starkSignedOrder = async (dvf, starkPrivateKey, starkMessage) => {
 
 module.exports = async (dvf, orderData) => {
   validateProps(dvf, ['amountToSell', 'symbol', 'tokenToSell', 'worstCasePrice'], orderData)
-
   const { starkOrder, starkMessage } = await dvf.stark.createOrder(orderData)
   let starkPublicKey, starkSignature
 

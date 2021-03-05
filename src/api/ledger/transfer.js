@@ -20,10 +20,14 @@ module.exports = async (dvf, data, path) => {
     token,
     targetEthAddress: recipientEthAddress
   })
+  const feeRecipient = await dvf.getVaultIdAndStarkKey({
+    token,
+    targetEthAddress: dvf.config.DVF.deversifiAddress
+  })
   return dvf.ledger.transferUsingVaultIdAndStarkKey({
     token,
     amount,
     recipientVaultId: vaultId,
     recipientPublicKey: starkKey
-  }, path)
+  }, path, feeRecipient)
 }

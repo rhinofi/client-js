@@ -20,10 +20,14 @@ module.exports = async (dvf, data, starkPrivateKey, nonce, signature) => {
     token,
     targetEthAddress: recipientEthAddress
   }, nonce, signature)
+  const feeRecipient = await dvf.getVaultIdAndStarkKey({
+    token,
+    targetEthAddress: dvf.config.DVF.deversifiAddress
+  }, nonce, signature)
   return dvf.transferUsingVaultIdAndStarkKey({
     token,
     amount,
     recipientVaultId: vaultId,
     recipientPublicKey: starkKey
-  }, starkPrivateKey)
+  }, feeRecipient)
 }
