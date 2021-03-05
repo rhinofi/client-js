@@ -54,7 +54,9 @@ module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, cont
       vaultId,
       tokenId: tokenInfo.starkTokenId,
       starkKey,
-      amount: quantisedAmount
+      amount: quantisedAmount,
+      tokenAddress: tokenInfo.tokenAddress,
+      quantum: tokenInfo.quantization
     }
 
     let transactionHashCb
