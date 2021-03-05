@@ -60,8 +60,14 @@ module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, cont
     }
 
     let transactionHashCb
-    const transactionHashPromise = new Promise(resolve => {
-      transactionHashCb = resolve
+    const transactionHashPromise = new Promise((resolve, reject) => {
+      transactionHashCb = (err, result) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(result)
+        }
+      }
     })
 
     const onChainRegisterDeposit = await contractRegisterAndDepositFromStarkTx(dvf, userRegistered.deFiSignature, tx, {transactionHashCb})
