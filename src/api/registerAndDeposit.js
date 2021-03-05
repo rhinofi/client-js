@@ -1,3 +1,4 @@
+const FP = require('lodash/fp')
 const post = require('../lib/dvf/post-authenticated')
 const DVFError = require('../lib/dvf/DVFError')
 const { Joi, fromQuantizedToBaseUnitsBN } = require('dvf-utils')
