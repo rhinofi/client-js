@@ -22,7 +22,13 @@ provider.engine.stop()
 
 const dvfConfig = {
   api: envVars.API_URL,
-  dataApi: envVars.DATA_API_URL
+  dataApi: envVars.DATA_API_URL,
+  wallet: {
+    type: 'tradingKey',
+    meta: {
+      starkPrivateKey: starkPrivKey
+    }
+  }
   // Add more variables to override default values
 }
 
@@ -32,8 +38,7 @@ const dvfConfig = {
   const fastWithdrawalResponse = await dvf.fastWithdrawal(
     // recipientEthAddress could be added here to send the withdrawal to address
     // other then users registered address.
-    { token: 'ETH', amount: 0.1 },
-    starkPrivKey
+    { token: 'ETH', amount: 0.1 }
   )
 
   logExampleResult(fastWithdrawalResponse)

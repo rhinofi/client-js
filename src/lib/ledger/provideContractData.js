@@ -1,7 +1,7 @@
 const byContractAddress = require('@ledgerhq/hw-app-eth/erc20').byContractAddress
 const DVFError = require('../dvf/DVFError')
 
-module.exports = async (dvf, transport, token, tokenAddress = '', transferQuantization) => {
+module.exports = async (dvf, transport, tokenAddress = '', transferQuantization) => {
   let transferTokenAddress = tokenAddress.slice(0, 2) === '0x' ? tokenAddress.substr(2) : tokenAddress
   if (transferTokenAddress) {
     const tokenInfo = byContractAddress(`0x${transferTokenAddress}`)
@@ -23,6 +23,6 @@ module.exports = async (dvf, transport, token, tokenAddress = '', transferQuanti
     transferTokenAddress = null
   }
   if (transferQuantization) {
-    await transport.starkProvideQuantum_v2(transferTokenAddress, token === 'ETH' ? 'eth' : 'erc20', transferQuantization, null)
+    await transport.starkProvideQuantum_v2(transferTokenAddress, tokenAddress ? 'erc20' : 'eth', transferQuantization, null)
   }
 }

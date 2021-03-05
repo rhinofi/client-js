@@ -5,16 +5,17 @@ const selectTransport = require('../../ledger/selectTransport')
 module.exports = async (
   dvf,
   path,
-  token,
-  amount,
+  tokenInfo,
+  quantizedAmount,
   sourceVault,
-  destinationVault
+  destinationVault,
+  receiverPublicKey
 ) => {
   const Transport = selectTransport(dvf.isBrowser)
-  const {tokenAddress, quantization} = dvf.token.getTokenInfo(token)
+  const {token, tokenAddress, quantization} = tokenInfo
   const nonce = dvf.util.generateRandomNonce()
   const transferQuantization = new BN(quantization)
-  const amountTransfer = new BN(dvf.token.toQuantizedAmount(token, amount))
+  const amountTransfer = new BN(quantizedAmount)
 
   const expireTime =
     Math.floor(Date.now() / (1000 * 3600)) +
@@ -25,24 +26,22 @@ module.exports = async (
   const {address} = await eth.getAddress(path)
   const starkPath = dvf.stark.ledger.getPath(address)
 
-  await dvf.token.provideContractData(eth, token, tokenAddress, transferQuantization)
-
+  await dvf.token.provideContractData(eth, tokenAddress, transferQuantization)
   const starkSignature = await eth.starkSignTransfer_v2(
-      starkPath,
-      tokenAddress,
-      token === 'ETH' ? 'eth' : 'erc20',
-      transferQuantization,
-      null,
-      starkPublicKey.x,
-      sourceVault,
-      destinationVault,
-      amountTransfer,
-      nonce,
-      expireTime,
-      null,
-      null
-    )
-  await dvf.token.provideContractData(eth, token, tokenAddress, transferQuantization)
+    starkPath,
+    tokenAddress,
+    token === 'ETH' ? 'eth' : 'erc20',
+    transferQuantization,
+    null,
+    receiverPublicKey || starkPublicKey.x,
+    sourceVault,
+    destinationVault,
+    amountTransfer,
+    nonce,
+    expireTime,
+    null,
+    null
+  )
   await transport.close()
 
   return {starkPublicKey, nonce, expireTime, starkSignature}

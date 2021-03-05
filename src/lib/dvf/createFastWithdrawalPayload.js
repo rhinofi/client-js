@@ -6,10 +6,9 @@ const {
 } = require('dvf-utils')
 
 const calculateFact = require('../stark/calculateFact')
-const makeKeystore = require('../keystore')
 const validateWithJoi = require('../validators/validateWithJoi')
+const createSignedTransfer = require('./createSignedTransfer')
 
-const createSignedTransferPayload = require('./createSignedTransferPayload')
 const DVFError = require('./DVFError')
 
 const address0 = '0x'.padEnd(42, '0')
@@ -52,16 +51,11 @@ const schema = Joi.object({
 })
 
 const errorProps = { context: 'fastWithdrawal' }
-const validateArg0 = validateWithJoi
-  (schema)
+const validateArg0 = validateWithJoi(schema)
   ('INVALID_METHOD_ARGUMENT')
   ({ ...errorProps, argIdx: 0 })
 
-module.exports = async (dvf, withdrawalData, starkPrivateKey) => {
-  // TODO: see todo in createTransferPayload.js
-  const keystore = makeKeystore(dvf.sw)(starkPrivateKey)
-  dvf = { ...dvf, dvfStarkProvider: keystore }
-
+module.exports = async (dvf, withdrawalData) => {
   const {
     amount,
     token,
@@ -91,7 +85,7 @@ module.exports = async (dvf, withdrawalData, starkPrivateKey) => {
   )
 
   const { DVF } = dvf.config
-  const tx = {
+  const txParams = {
     // Stark transaction includes the fee.
     amount: quantisedAmount.plus(feeQuantised).toString(),
     fact,
@@ -104,9 +98,16 @@ module.exports = async (dvf, withdrawalData, starkPrivateKey) => {
     type: 'ConditionalTransferRequest'
   }
 
+  const tx = await createSignedTransfer(dvf)(txParams)
+
+  // TODO: Refactor to avoid getting pub key at different levels
+  const { dvfStarkProvider } = dvf
+  const starkPublicKey = await dvfStarkProvider.getPublicKey()
+
   return {
     recipientEthAddress,
     transactionFee: feeQuantised.toString(),
-    ...(await createSignedTransferPayload(dvf)(tx))
+    tx,
+    starkPublicKey
   }
 }

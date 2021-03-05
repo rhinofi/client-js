@@ -7,6 +7,7 @@ module.exports = async (dvf, token, amount) => {
   const {starkVaultId} = dvf.token.getTokenInfo(token)
   const tempVaultId = dvf.config.DVF.tempStarkVaultId
 
+  // TODO: Refactor so signing function gets quantizedAmount and tokenInfo
   const starkWithdrawal = await dvf.stark.authereum.createSignedTransfer(
     token,
     amount,

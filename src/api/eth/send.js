@@ -25,7 +25,11 @@ module.exports = async (dvf, abi, address, action, args, value, options = {}) =>
 
   const txPromEvent = method.send(sendOptions)
   if (options.transactionHashCb) {
-    txPromEvent.on('transactionHash', options.transactionHashCb)
+    txPromEvent.on('transactionHash', (txHash) => options.transactionHashCb(null, txHash))
+    txPromEvent.catch(error => {
+      options.transactionHashCb(error)
+      throw error
+    })
   }
   return txPromEvent
 }
