@@ -77,7 +77,7 @@ module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, cont
     dvf = FP.set('config.useAuthHeader', true, dvf)
     const httpDeposit = await post(dvf, '/v1/trading/deposits', nonce, signature, payload)
 
-    const onChainDeposit = await onChainDepositPromise
+    const onChainDeposit = await onChainRegisterDeposit
 
     if (!onChainDeposit.status) {
       throw new DVFError('ERR_ONCHAIN_DEPOSIT', {
