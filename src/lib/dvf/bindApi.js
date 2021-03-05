@@ -47,9 +47,6 @@ module.exports = () => {
       ),
       createSignedOrder: compose(
         require('../../lib/stark/ledger/createSignedOrder')
-      ),
-      createSignedTransferPayload: compose(
-        require('../../lib/ledger/createSignedTransferPayload')
       )
     },
     authereum: {
