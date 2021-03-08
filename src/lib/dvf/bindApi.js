@@ -75,7 +75,8 @@ module.exports = () => {
     abi: {
       token: require('../../api/contract/abi/token.abi'),
       getStarkEx: () => require('../../api/contract/abi/StarkExV2.abi'),
-      WithdrawalBalanceReader: require('../../api/contract/abi/WithdrawalBalanceReader.abi')
+      WithdrawalBalanceReader: require('../../api/contract/abi/WithdrawalBalanceReader.abi'),
+      getDVFInterface: () => require('../../api/contract/abi/DVFInterface.abi')
     }
   }
   // dvf.token functions
@@ -161,6 +162,7 @@ module.exports = () => {
   dvf.getVaultIdFromServer = compose(require('../../api/getVaultIdFromServer'))
   dvf.getVaultIdAndStarkKey = compose(require('../../api/getVaultIdAndStarkKey'))
   dvf.register = compose(require('../../api/register'))
+  dvf.registerAndDeposit = compose(require('../../api/registerAndDeposit'))
   dvf.submitBuyOrder = compose(require('../../api/submitBuyOrder'))
   dvf.submitOrder = compose(require('../../api/submitOrder'))
   dvf.submitMarketOrder = compose(require('../../api/submitMarketOrder'))
