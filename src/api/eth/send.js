@@ -6,7 +6,6 @@ module.exports = async (dvf, abi, address, action, args, value, options = {}) =>
   const { web3 } = dvf
 
   const contract = new web3.eth.Contract(abi, address)
-  // console.log(...args)
   const method = contract.methods[action](...args)
 
   const gasLimit =
@@ -15,8 +14,10 @@ module.exports = async (dvf, abi, address, action, args, value, options = {}) =>
       : dvf.config.defaultGasLimit
 
   const gasPrice = await dvf.eth.getGasPrice()
+  const { id: chainId } = await dvf.eth.getNetwork()
 
   let sendOptions = {
+    chainId,
     from: dvf.get('account'),
     gasLimit: gasLimit,
     gasPrice: gasPrice,

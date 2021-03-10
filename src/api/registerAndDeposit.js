@@ -19,10 +19,10 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 
 module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, contractWalletAddress, encryptedTradingKey) => {
 
-  const tradingKey = starkPublicKey.x
+  const starkKey = starkPublicKey.x
 
   const registrationData = {
-    starkKey: tradingKey,
+    starkKey,
     nonce,
     signature,
     ...(encryptedTradingKey && {encryptedTradingKey}),
@@ -38,8 +38,6 @@ module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, cont
   if (userRegistered.deFiSignature) {
     const { token, amount } = validateArg0(depositData)
 
-    const starkKey = dvf.config.starkKeyHex
-
     const tokenInfo = dvf.token.getTokenInfoOrThrow(token)
     const quantisedAmount = getSafeQuantizedAmountOrThrow(amount, tokenInfo)
     const vaultId = await getVaultId(dvf, token, nonce, signature)
@@ -54,7 +52,7 @@ module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, cont
     const tx = {
       vaultId,
       tokenId: tokenInfo.starkTokenId,
-      starkKey,
+      starkKey: '0x' + starkKey,
       amount: quantisedAmount,
       tokenAddress: tokenInfo.tokenAddress,
       quantum: tokenInfo.quantization
