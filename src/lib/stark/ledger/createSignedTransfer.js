@@ -43,7 +43,6 @@ module.exports = async (
     null,
     null
   )
-  await dvf.token.provideContractData(eth, token, tokenAddress, transferQuantization)
   await transport.close()
 
   return {starkPublicKey, nonce, expireTime, starkSignature}
