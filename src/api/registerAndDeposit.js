@@ -68,8 +68,8 @@ module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, cont
         }
       }
     })
-
-    const onChainRegisterDeposit = await contractRegisterAndDepositFromStarkTx(dvf, userRegistered.deFiSignature, tx, {transactionHashCb})
+    // Don't await for the tx, resolve on tx hash and the integration will take care of the rest
+    const onChainRegisterDeposit = contractRegisterAndDepositFromStarkTx(dvf, userRegistered.deFiSignature, tx, {transactionHashCb})
 
     const transactionHash = await transactionHashPromise
 
@@ -81,7 +81,7 @@ module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, cont
     // Force the use of header (instead of payload) for authentication.
     dvf = FP.set('config.useAuthHeader', true, dvf)
     const httpDeposit = await post(dvf, '/v1/trading/deposits', nonce, signature, payload)
-    // Don't await for the full tx, leave the integration to handle that
+
     return { ...httpDeposit, transactionHash, onChainRegisterDeposit }
   }
 }
