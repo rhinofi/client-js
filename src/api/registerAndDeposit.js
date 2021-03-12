@@ -81,16 +81,7 @@ module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, cont
     // Force the use of header (instead of payload) for authentication.
     dvf = FP.set('config.useAuthHeader', true, dvf)
     const httpDeposit = await post(dvf, '/v1/trading/deposits', nonce, signature, payload)
-
-    const onChainDeposit = await onChainRegisterDeposit
-
-    if (!onChainDeposit.status) {
-      throw new DVFError('ERR_ONCHAIN_DEPOSIT', {
-        httpDeposit,
-        onChainDeposit
-      })
-    }
-
-    return { ...httpDeposit, transactionHash }
+    // Don't await for the full tx, leave the integration to handle that
+    return { ...httpDeposit, transactionHash, onChainRegisterDeposit }
   }
 }
