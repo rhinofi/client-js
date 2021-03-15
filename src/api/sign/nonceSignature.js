@@ -1,17 +1,16 @@
+const { makeGenerateAuthMessage } = require('dvf-utils')
 /**
- *
- * if either nonce and signature are not provided a
- * new nonce and signature are created. if nonce and
- * signature were provided the same are returned back
- *
+ * if either message and signature are not provided a
+ * new nonce/message and signature are created. if nonce
+ * and signature were provided the same are returned back
  */
-
 module.exports = async (dvf, nonce, signature) => {
   if (!(nonce && signature)) {
     nonce = Date.now() / 1000
-    signature = await dvf.sign(String(nonce).toString(16))
+    const authVersion = dvf.config.DVF.authVersion || 1
+    const message = makeGenerateAuthMessage(authVersion)(nonce)
+    signature = await dvf.sign(message)
   }
 
-  
   return {nonce, signature}
 }
