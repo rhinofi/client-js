@@ -29,7 +29,7 @@ describe('dvf.getBalance', () => {
       })
       .reply(200, apiResponse)
 
-    const balance = await dvf.getBalance('ETH', nonce, signature)
+    const balance = await dvf.getBalance({token: 'ETH'}, nonce, signature)
     expect(balance).toEqual(apiResponse)
   })
 
@@ -69,7 +69,7 @@ describe('dvf.getBalance', () => {
       .reply(422, apiErrorResponse)
 
     try {
-      await dvf.getBalance('ETH', nonce, signature)
+      await dvf.getBalance({token: 'ETH'}, nonce, signature)
     } catch (e) {
       expect(e.error).toEqual(apiErrorResponse)
     }
