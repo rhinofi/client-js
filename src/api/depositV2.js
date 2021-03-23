@@ -4,6 +4,7 @@ const { Joi, fromQuantizedToBaseUnitsBN } = require('dvf-utils')
 const post = require('../lib/dvf/post-authenticated')
 
 const contractDepositFromStarkTx = require('./contract/depositFromStarkTx')
+const contractDepositFromProxiedStarkTx = require('./contract/depositFromProxiedStarkTx')
 const getVaultId = require('./getVaultId')
 const validateWithJoi = require('../lib/validators/validateWithJoi')
 const DVFError = require('../lib/dvf/DVFError')
@@ -11,7 +12,8 @@ const getSafeQuantizedAmountOrThrow = require('../lib/dvf/token/getSafeQuantized
 
 const schema = Joi.object({
   token: Joi.string(),
-  amount: Joi.bigNumber().greaterThan(0).required() // number or number string
+  amount: Joi.bigNumber().greaterThan(0).required(), // number or number string
+  useProxiedContract: Joi.boolean()
 })
 
 const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
@@ -21,7 +23,7 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 const endpoint = '/v1/trading/deposits'
 
 module.exports = async (dvf, data, nonce, signature) => {
-  const { token, amount } = validateArg0(data)
+  const { token, amount, useProxiedContract = false } = validateArg0(data)
 
   const starkKey = dvf.config.starkKeyHex
 
@@ -31,7 +33,10 @@ module.exports = async (dvf, data, nonce, signature) => {
 
   await dvf.contract.approve(
     token,
-    fromQuantizedToBaseUnitsBN(tokenInfo, quantisedAmount).toString()
+    fromQuantizedToBaseUnitsBN(tokenInfo, quantisedAmount).toString(),
+    useProxiedContract
+      ? dvf.config.DVF.registrationAndDepositInterfaceAddress
+      : dvf.config.DVF.starkExContractAddress
   )
 
   // Sending the deposit transaction to the blockchain first before notifying the server
@@ -39,7 +44,9 @@ module.exports = async (dvf, data, nonce, signature) => {
     vaultId,
     tokenId: tokenInfo.starkTokenId,
     starkKey,
-    amount: quantisedAmount
+    amount: quantisedAmount,
+    tokenAddress: tokenInfo.tokenAddress,
+    quantum: tokenInfo.quantization
   }
 
   // As we need the txHash ASAP (before the tx is mined),
@@ -59,7 +66,9 @@ module.exports = async (dvf, data, nonce, signature) => {
     }
   })
 
-  const onChainDepositPromise = contractDepositFromStarkTx(dvf, tx, {transactionHashCb})
+  const onChainDepositPromise = useProxiedContract
+    ? contractDepositFromProxiedStarkTx(dvf, tx, { transactionHashCb })
+    : contractDepositFromStarkTx(dvf, tx, { transactionHashCb })
 
   const transactionHash = await transactionHashPromise
 
