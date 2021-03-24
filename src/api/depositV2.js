@@ -13,7 +13,7 @@ const getSafeQuantizedAmountOrThrow = require('../lib/dvf/token/getSafeQuantized
 const schema = Joi.object({
   token: Joi.string(),
   amount: Joi.bigNumber().greaterThan(0).required(), // number or number string
-  useProxiedContract: Joi.boolean()
+  useProxiedContract: Joi.boolean().default(false)
 })
 
 const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
@@ -23,7 +23,7 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 const endpoint = '/v1/trading/deposits'
 
 module.exports = async (dvf, data, nonce, signature) => {
-  const { token, amount, useProxiedContract = false } = validateArg0(data)
+  const { token, amount, useProxiedContract } = validateArg0(data)
 
   const starkKey = dvf.config.starkKeyHex
 
