@@ -33,9 +33,16 @@ const dvfConfig = {
 
   const order = await getOrCreateActiveOrder(dvf, starkPrivKey)
 
-  const response = await dvf.getOrder(order._id)
+  {
+    const response = await dvf.getOrder(order._id)
+    logExampleResult(response)
+  }
 
-  logExampleResult(response)
+  {
+    // Alternative using cid :
+    const response = await dvf.getOrder({cid: order.cid})
+    logExampleResult(response)
+  }
 
 })()
 .catch(error => {
