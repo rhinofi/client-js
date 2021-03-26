@@ -4,7 +4,7 @@ module.exports = {
   gasApi: 'https://ethgasstation.info',
 
   // default transaction arguments
-  defaultGasLimit: 200000,
+  defaultGasLimit: 300000,
   defaultGasPrice: 50000000000,
 
   // default stark related constants

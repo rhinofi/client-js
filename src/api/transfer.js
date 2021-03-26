@@ -13,17 +13,21 @@ const validateInputs = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
   context: `transfer`
 })
 
-module.exports = async (dvf, data, starkPrivateKey) => {
+module.exports = async (dvf, data, starkPrivateKey, nonce, signature) => {
   dvf = FP.set('config.useAuthHeader', true, dvf)
   const { token, amount, recipientEthAddress } = validateInputs(data)
   const { vaultId, starkKey } = await dvf.getVaultIdAndStarkKey({
     token,
     targetEthAddress: recipientEthAddress
-  })
+  }, nonce, signature)
+  const feeRecipient = await dvf.getVaultIdAndStarkKey({
+    token,
+    targetEthAddress: dvf.config.DVF.deversifiAddress
+  }, nonce, signature)
   return dvf.transferUsingVaultIdAndStarkKey({
     token,
     amount,
     recipientVaultId: vaultId,
     recipientPublicKey: starkKey
-  }, starkPrivateKey)
+  }, feeRecipient)
 }

@@ -13,5 +13,5 @@ module.exports = (dvf, token) => {
     throw new DVFError('ERR_INVALID_TOKEN', { token, validTokens })
   }
 
-  return tokenInfo
+  return {token, ...tokenInfo}
 }

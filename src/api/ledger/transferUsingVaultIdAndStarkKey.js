@@ -1,7 +1,9 @@
 const { post } = require('request-promise')
+const makeCreateSignedTransferTxLedger = require('../../lib/ledger/makeCreateSignedTransferTxLedger')
 
-module.exports = async (dvf, data, path) => {
+module.exports = async (dvf, transferData, path, feeRecipient) => {
   const url = dvf.config.api + '/v1/trading/w/transfer'
-  const json = await dvf.stark.ledger.createSignedTransferPayload(data, path)
+  const createSignedTransferTx = makeCreateSignedTransferTxLedger(dvf)(path)
+  const json = await dvf.createTransferPayload(transferData, feeRecipient, createSignedTransferTx)
   return post(url, { json })
 }

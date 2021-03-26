@@ -53,7 +53,7 @@ const dvfConfig = {
       validFor,           // Optional
       feeRate,            // Optional
       gid: '1',           // Optional
-      cid: '1',           // Optional
+      cid: 'mycid-cancel-example',           // Optional
       partnerId: 'P1'    // Optional
     })
 
@@ -74,6 +74,8 @@ const dvfConfig = {
   console.log('cancelling orderId', orderId)
 
   const response = await dvf.cancelOrder(orderId)
+  // Alternative with cid :
+  // const response = await dvf.cancelOrder({cid: 'mycid-cancel-example'})
 
   logExampleResult(response)
 

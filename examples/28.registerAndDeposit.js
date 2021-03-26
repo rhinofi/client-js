@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const HDWalletProvider = require('@truffle/hdwallet-provider')
-const sw = require('starkware_crypto')
 const Web3 = require('web3')
 
 const DVF = require('../src/dvf')
@@ -29,24 +28,20 @@ const dvfConfig = {
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
-  const getOrCreateActiveOrder = require('./helpers/getOrCreateActiveOrder')
+  const waitForDepositCreditedOnChain = require('./helpers/waitForDepositCreditedOnChain')
 
-  const order = await getOrCreateActiveOrder(dvf, starkPrivKey)
+  const keyPair = await dvf.stark.createKeyPair(starkPrivKey)
 
-  {
-    const response = await dvf.getOrder(order._id)
-    logExampleResult(response)
+  const depositResponse = await dvf.registerAndDeposit({ token: 'ETH', amount: 0.1 }, keyPair.starkPublicKey)
+
+  if (process.env.WAIT_FOR_DEPOSIT_READY === 'true') {
+    await waitForDepositCreditedOnChain(dvf, depositResponse)
   }
 
-  {
-    // Alternative using cid :
-    const response = await dvf.getOrder({cid: order.cid})
-    logExampleResult(response)
-  }
-
+  logExampleResult(depositResponse)
+  
 })()
-.catch(error => {
-  console.error(error)
-  process.exit(1)
-})
-
+  .catch(error => {
+    console.error(error)
+    process.exit(1)
+  })
