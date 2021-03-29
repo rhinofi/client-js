@@ -38,8 +38,8 @@ const dvfConfig = {
     logExampleResult(response)
   }
 
-  {
-    // Alternative using cid :
+  // Alternative using cid :
+  if (order.cid) {
     const response = await dvf.getOrder({cid: order.cid})
     logExampleResult(response)
   }

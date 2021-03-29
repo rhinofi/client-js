@@ -21,7 +21,13 @@ provider.engine.stop()
 
 const dvfConfig = {
   api: envVars.API_URL,
-  dataApi: envVars.DATA_API_URL
+  dataApi: envVars.DATA_API_URL,
+  wallet: {
+    type: 'tradingKey',
+    meta: {
+      starkPrivateKey: starkPrivKey
+    }
+  }
   // Add more variables to override default values
 }
 
@@ -32,7 +38,7 @@ const dvfConfig = {
     recipientEthAddress: '0x5317c63f870e8D2f85f0dE3c2666D1414f5a728c',
     token: 'USDT',
     amount: 1
-  }, starkPrivKey)
+  })
 
   logExampleResult(transferResponse)
 })()
