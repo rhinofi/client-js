@@ -135,8 +135,8 @@ module.exports = () => {
   // dvf trading volume data
   dvf.get30DaysVolume = compose(require('../../api/get30DaysVolume'))
 
-  // bfx data
-  dvf.getTickers = compose(require('../../lib/bfx/getTickers'))
+  // dvf tickers
+  dvf.getTickers = compose(require('../../api/getTickers'))
 
   // dvf main functions
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
