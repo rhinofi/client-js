@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.1 - 2021-30-03
+### Fixed
+- Schema validated using `validateWithJoi` to be `required()` by default
+
 ## 2.0.0 - 2021-30-03
 ### Changed
 - `dvf.transfer` method signature changes : `starkPrivateKey` to be set via configuration instead of input argument - see `examples/27.transfer.js`
