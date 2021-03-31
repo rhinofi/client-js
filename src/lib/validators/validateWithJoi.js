@@ -7,8 +7,7 @@ const defaultOptions = Object.freeze({
 })
 
 module.exports = (schema, options = defaultOptions) => errorType => errorProps => value => {
-  const { value: validated, error } = schema.validate(value)
-
+  const { value: validated, error } = schema.validate(value, options)
   if (error) {
     throw new DVFError(
       errorType,
