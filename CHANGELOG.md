@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.1.0 - 2021-31-03
+### Added
+- `dvf.getRegistrationStatuses` endpoint for checking both Deversifi and on-chain registration statuses - see `examples/29.getRegistrationStatuses.js`
+
 ## 2.0.1 - 2021-30-03
 ### Fixed
 - Schema validated using `validateWithJoi` to be `required()` by default

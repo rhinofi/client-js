@@ -174,6 +174,7 @@ module.exports = () => {
   dvf.withdraw = compose(require('../../api/withdraw'))
   dvf.withdrawV2 = compose(require('../../api/withdrawV2'))
   dvf.withdrawOnchain = compose(require('../../api/withdrawOnchain'))
+  dvf.getRegistrationStatuses = compose(require('../../api/getRegistrationStatuses'))
   dvf.fullWithdrawalRequest = compose(require('../../api/fullWithdrawalRequest'))
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),
