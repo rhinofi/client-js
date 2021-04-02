@@ -9,7 +9,7 @@ const getSafeQuantizedAmountOrThrow = require('../lib/dvf/token/getSafeQuantized
 
 const schema = Joi.object({
   token: Joi.string(),
-  amount: Joi.bigNumber().greaterThan(0).required(), // number or number string
+  amount: Joi.bigNumber().greaterThan(0), // number or number string
   nonce: Joi.number().integer()
     .min(0)
     // Will be auto-generated if not provided.

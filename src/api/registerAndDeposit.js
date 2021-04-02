@@ -10,7 +10,7 @@ const getSafeQuantizedAmountOrThrow = require('../lib/dvf/token/getSafeQuantized
 
 const schema = Joi.object({
   token: Joi.string(),
-  amount: Joi.bigNumber().greaterThan(0).required() // number or number string
+  amount: Joi.bigNumber().greaterThan(0) // number or number string
 })
 
 const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({

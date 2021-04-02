@@ -1,6 +1,7 @@
 const P = require('aigle')
 
 const defaultOrderProps = Object.freeze({
+  cid: 'mycid-' + Math.random().toString(36).substring(7),
   // Order to sell 0.1 ETH at a the price of 100000 USDT per ETH.
   symbol: 'ETH:USDT',
   amount: -0.1,

@@ -135,8 +135,8 @@ module.exports = () => {
   // dvf trading volume data
   dvf.get30DaysVolume = compose(require('../../api/get30DaysVolume'))
 
-  // bfx data
-  dvf.getTickers = compose(require('../../lib/bfx/getTickers'))
+  // dvf tickers
+  dvf.getTickers = compose(require('../../api/getTickers'))
 
   // dvf main functions
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
@@ -174,6 +174,7 @@ module.exports = () => {
   dvf.withdraw = compose(require('../../api/withdraw'))
   dvf.withdrawV2 = compose(require('../../api/withdrawV2'))
   dvf.withdrawOnchain = compose(require('../../api/withdrawOnchain'))
+  dvf.getRegistrationStatuses = compose(require('../../api/getRegistrationStatuses'))
   dvf.fullWithdrawalRequest = compose(require('../../api/fullWithdrawalRequest'))
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),

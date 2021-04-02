@@ -21,26 +21,18 @@ provider.engine.stop()
 
 const dvfConfig = {
   api: envVars.API_URL,
-  dataApi: envVars.DATA_API_URL,
-  wallet: {
-    type: 'tradingKey',
-    meta: {
-      starkPrivateKey: starkPrivKey
-    }
-  }
+  dataApi: envVars.DATA_API_URL
   // Add more variables to override default values
 }
 
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
-  const transferResponse = await dvf.transfer({
-    recipientEthAddress: '0x5317c63f870e8D2f85f0dE3c2666D1414f5a728c',
-    token: 'USDT',
-    amount: 1
+  const registrationStatusesResponse = await dvf.getRegistrationStatuses({
+    targetEthAddress: '0x08152c1265dbc218ccc8ab5c574e6bd52279b3b7'
   })
 
-  logExampleResult(transferResponse)
+  logExampleResult(registrationStatusesResponse)
 })()
   .catch(error => {
     console.error(error)
