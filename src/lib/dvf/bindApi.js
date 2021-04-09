@@ -117,6 +117,7 @@ module.exports = () => {
   dvf.sign.nonceSignature = compose(require('../../api/sign/nonceSignature'))
 
   dvf.postAuthenticated = compose(require('../../lib/dvf/post-authenticated'))
+  dvf.getAuthenticated = compose(require('../../lib/dvf/get-authenticated'))
 
   dvf.createOrderPayload = compose(require('../../lib/dvf/createOrderPayload'))
   dvf.createMarketOrderPayload = compose(require('../../lib/dvf/createMarketOrderPayload'))
