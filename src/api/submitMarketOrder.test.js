@@ -18,12 +18,12 @@ describe('dvf.submitOrder', () => {
     const tokenToSell = 'USDT'
     const worstCasePrice = 250
 
-    const worstCaseAmountToRecieve = amountToSell / worstCasePrice
+    const worstCaseAmountToReceive = amountToSell / worstCasePrice
 
     const expectedBody = {
       type: 'EXCHANGE MARKET',
       symbol,
-      amount: worstCaseAmountToRecieve.toString(),
+      amount: worstCaseAmountToReceive.toString(),
       price: worstCasePrice.toString(),
       meta: {
         starkPublicKey: {
@@ -126,12 +126,12 @@ describe('dvf.submitOrder', () => {
     const worstCasePrice = 3.00001
     const worstCasePriceAdjusted = 3
 
-    const worstCaseAmountToRecieve = amountToSellAdjusted / worstCasePriceAdjusted
+    const worstCaseAmountToReceive = amountToSellAdjusted / worstCasePriceAdjusted
 
     const expectedBody = {
       type: 'EXCHANGE MARKET',
       symbol,
-      amount: worstCaseAmountToRecieve.toFixed(8),
+      amount: worstCaseAmountToReceive.toFixed(8),
       price: worstCasePriceAdjusted.toString(),
       meta: {
         starkPublicKey: {
@@ -152,8 +152,8 @@ describe('dvf.submitOrder', () => {
       expect(body.meta.starkSignature.s).toMatch(/[\da-f]/i)
       expect(typeof body.meta.starkOrder.expirationTimestamp).toBe('number')
       expect(typeof body.meta.starkOrder.nonce).toBe('number')
-      expect(body.meta.starkOrder.amountBuy).toBe('3326633400')
-      expect(body.meta.starkOrder.amountSell).toBe('99999000')
+      expect(body.meta.starkOrder.amountBuy).toBe('3326666666')
+      expect(body.meta.starkOrder.amountSell).toBe('99999999')
       return true
     })
 

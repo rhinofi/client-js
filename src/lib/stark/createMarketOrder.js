@@ -36,13 +36,12 @@ module.exports = async (dvf, { symbol, tokenToSell, amountToSell, worstCasePrice
     amountBuy
   } = computeBuySellData(dvf, { symbol: flippedSymbol, amount: amountToSell.negated(), price: adjustedPrice, feeRate })
 
-  let expiration // in hours
-  expiration = Math.floor(Date.now() / (1000 * 3600))
+  let expirationHours = Math.floor(Date.now() / (1000 * 3600))
 
   if (validFor) {
-    expiration += parseInt(validFor)
+    expirationHours += parseInt(validFor)
   } else {
-    expiration += parseInt(dvf.config.defaultStarkExpiry)
+    expirationHours += parseInt(dvf.config.defaultStarkExpiry)
   }
 
   const starkOrder = {
@@ -53,7 +52,7 @@ module.exports = async (dvf, { symbol, tokenToSell, amountToSell, worstCasePrice
     tokenSell: sellCurrency.starkTokenId,
     tokenBuy: buyCurrency.starkTokenId,
     nonce: dvf.util.generateRandomNonce(),
-    expirationTimestamp: expiration
+    expirationTimestamp: expirationHours
   }
 
   const starkMessage = dvf.stark.createOrderMessage(starkOrder)
