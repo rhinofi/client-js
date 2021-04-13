@@ -17,8 +17,7 @@ describe('dvf.getWithdrawal', () => {
 
     const payloadValidator = jest.fn(body => {
       expect(body.withdrawalId).toBe('123')
-
-      expect(typeof body.nonce).toBe('number')
+      expect(typeof body.nonce).toBe('string')
       expect(typeof body.signature).toBe('string')
 
       return true
@@ -31,7 +30,6 @@ describe('dvf.getWithdrawal', () => {
     const withdrawal = await dvf.getWithdrawal('123')
 
     expect(payloadValidator).toBeCalled()
-
     expect(withdrawal).toEqual(apiResponse)
   })
 
