@@ -8,3 +8,4 @@ examples/config.json
 *.sublime-project
 *.sublime-workspace
 examples/config*.json
+.idea/

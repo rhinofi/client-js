@@ -8,7 +8,7 @@
 
 const _ = require('lodash')
 const fs = require('fs')
-const readline = require('readline');
+const readline = require('readline')
 const Web3 = require('web3')
 const P = require('aigle')
 
@@ -39,11 +39,10 @@ if (!INFURA_PROJECT_ID) {
 const configFileName = process.env.CONFIG_FILE_NAME || 'config.json'
 const configFilePath = `${__dirname}/${configFileName}`
 
-
 const ethRequestOptsForUrl = {
-  'https://faucet.ropsten.be': ( address ) => `https://faucet.ropsten.be/donate/${address}`,
+  'https://faucet.ropsten.be': (address) => `https://faucet.ropsten.be/donate/${address}`,
   // This one gives on only 0.5 eth
-  'https://ropsten.faucet.b9lab.com': ( address ) => {
+  'https://ropsten.faucet.b9lab.com': (address) => {
     return {
       uri: 'https://ropsten.faucet.b9lab.com/tap',
       method: 'POST',
@@ -51,7 +50,7 @@ const ethRequestOptsForUrl = {
       body: { toWhom: address }
     }
   },
-  'https://faucet.metamask.io': ( address ) => {
+  'https://faucet.metamask.io': (address) => {
     return {
       uri: 'https://faucet.metamask.io',
       method: 'POST',
@@ -81,24 +80,24 @@ const requestEth = (serviceUrl, address) => {
   console.log(`Requesting Eth from: ${serviceUrl}`)
 
   return request(useTor, ethRequestOptsForUrl[serviceUrl](address))
-  .then(({ response, body }) => {
+    .then(({ response, body }) => {
 
-    // ropsten.faucet.b9lab.com still responds with 200 if rate limiting kicks
-    // in, so we need to parse the error from the body.
-    if (_.get(body, 'txHash.errorMessage')) throw { response, body }
+      // ropsten.faucet.b9lab.com still responds with 200 if rate limiting kicks
+      // in, so we need to parse the error from the body.
+      if (_.get(body, 'txHash.errorMessage')) throw { response, body }
 
-    console.log(`Request for Eth from ${serviceUrl} succeeded! Response body:`, body)
-    console.log('Please allow some time for the transaction to be validated.')
-    return true;
-  })
-  .catch(data => {
-    console.error(`Request for Eth from ${serviceUrl} failed!`, {
-      error: data.error,
-      statusCode: data.response && data.response.statusCode,
-      body: data.body
+      console.log(`Request for Eth from ${serviceUrl} succeeded! Response body:`, body)
+      console.log('Please allow some time for the transaction to be validated.')
+      return true
     })
-    return false
-  })
+    .catch(data => {
+      console.error(`Request for Eth from ${serviceUrl} failed!`, {
+        error: data.error,
+        statusCode: data.response && data.response.statusCode,
+        body: data.body
+      })
+      return false
+    })
 }
 
 const maybeSpawnTor = async () => {
@@ -107,7 +106,7 @@ const maybeSpawnTor = async () => {
   console.log('Starting TOR...')
 
   const torProcess = spawnProcess({
-    command: [ 'tor' ],
+    command: ['tor'],
     waitForLogOnInit: /.*Bootstrapped 100% \(done\): Done.*/,
     log: false
   })
@@ -142,7 +141,7 @@ const getEth = async (account) => {
 const go = async (configPath) => {
   const web3 = new Web3(new Web3.providers.HttpProvider(
     `https://ropsten.infura.io/v3/${INFURA_PROJECT_ID}`
-  ));
+  ))
 
   let account
 
@@ -154,8 +153,7 @@ const go = async (configPath) => {
     if (!(config.account && config.account.address)) throw new Error('account.address not defined in config')
 
     account = config.account
-  }
-  else {
+  } else {
     account = web3.eth.accounts.create()
 
     console.log('Created new Ethereum account:', account.address)
@@ -196,24 +194,22 @@ const go = async (configPath) => {
 }
 
 const ask = question => {
-  return new P((resolve, reject) => {
-    try {
-      const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-      })
+    return new P((resolve, reject) => {
+      try {
+        const rl = readline.createInterface({
+          input: process.stdin,
+          output: process.stdout
+        })
 
-      rl.question(question, answer => {
-        rl.close()
-        resolve(answer)
-      })
-    } catch (error) {
-      reject(error)
-    }
-  })
-}
-
-
+        rl.question(question, answer => {
+          rl.close()
+          resolve(answer)
+        })
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 
 ;(async () => {
   if (fs.existsSync(configFilePath)) {
@@ -228,12 +224,11 @@ const ask = question => {
         If you chooce 'no', a new account will be created, Eth added to it and the ./${configFileName} file overwritten (yes/no): `,
       )
       await (answer === 'yes'
-        ? go(configFilePath)
-        : go()
+          ? go(configFilePath)
+          : go()
       )
     }
-  }
-  else {
+  } else {
     await go()
   }
 })().catch(error => {
