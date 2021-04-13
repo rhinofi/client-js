@@ -16,7 +16,7 @@ describe('dvf.getDeposits', () => {
     const apiResponse = []
 
     const payloadValidator = jest.fn(body => {
-      expect(typeof body.nonce).toBe('number')
+      expect(typeof body.nonce).toBe('string')
       expect(typeof body.signature).toBe('string')
       expect(typeof body.token).toBe('undefined')
 
@@ -30,7 +30,6 @@ describe('dvf.getDeposits', () => {
     const result = await dvf.getDeposits()
 
     expect(payloadValidator).toBeCalled()
-
     expect(result).toEqual(apiResponse)
   })
 
@@ -56,7 +55,6 @@ describe('dvf.getDeposits', () => {
     const result = await dvf.getDeposits(token, nonce, signature)
 
     expect(payloadValidator).toBeCalled()
-
     expect(result).toEqual(apiResponse)
   })
 
@@ -66,7 +64,7 @@ describe('dvf.getDeposits', () => {
     const apiResponse = []
 
     const payloadValidator = jest.fn(body => {
-      expect(typeof body.nonce).toBe('number')
+      expect(typeof body.nonce).toBe('string')
       expect(typeof body.signature).toBe('string')
       return true
     })
@@ -78,7 +76,6 @@ describe('dvf.getDeposits', () => {
     const result = await dvf.getDeposits(token)
 
     expect(payloadValidator).toBeCalled()
-
     expect(result).toEqual(apiResponse)
   })
 

@@ -37,7 +37,7 @@ describe('dvf.getVaultIdAndStarkKey', () => {
       .query(queryValidator)
       .reply(200, apiResponse)
 
-    const response = await dvf.getVaultIdAndStarkKey({targetEthAddress, token})
+    const response = await dvf.getVaultIdAndStarkKey({ targetEthAddress, token })
     expect(queryValidator).toBeCalled()
     expect(response).toMatchObject(apiResponse)
   })
@@ -48,9 +48,9 @@ describe('dvf.getVaultIdAndStarkKey', () => {
 
     nock(dvf.config.api)
       .get(/\/v1\/trading\/r\/vaultIdAndStarkKey/)
-      .reply(404, {statusCode: 404, message: 'Target user is not registered'})
+      .reply(404, { statusCode: 404, message: 'Target user is not registered' })
 
-    await expect(dvf.getVaultIdAndStarkKey({targetEthAddress, token}))
+    await expect(dvf.getVaultIdAndStarkKey({ targetEthAddress, token }))
       .rejects
       .toThrow(/404/)
   })

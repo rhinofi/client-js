@@ -60,7 +60,7 @@ describe('dvf.register', () => {
 
     const nonce = Date.now() / 1000 + ''
     const signature = await dvf.sign(nonce.toString(16))
-  
+
     const pvtKey = '100'
     const starkKeyPair = sw.ec.keyFromPrivate(pvtKey, 'hex')
     const fullPublicKey = sw.ec.keyFromPublic(

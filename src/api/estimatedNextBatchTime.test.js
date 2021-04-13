@@ -16,7 +16,7 @@ describe('dvf.estimatedNextBatchTime', () => {
     nock.cleanAll()
   })
 
-  it('Returns the config recieved from the API', async () => {
+  it('Returns the config received from the API', async () => {
     const apiResponse = {
       estimatedTime: 10000
     }
