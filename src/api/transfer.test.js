@@ -8,7 +8,7 @@ const toQuantizedAmount = require('../lib/dvf/token/toQuantizedAmount')
 const createKeyPair = require('../lib/stark/createKeyPair')
 
 // Mocks the first call to the server used to lookup recipient vaultId and stark key
-const mockVaultIdAndStarkKeyApiCall = ({targetEthAddress, token}) => {
+const mockVaultIdAndStarkKeyApiCall = ({ targetEthAddress, token }) => {
   const vaultIdAndStarkKeyApiResponse = {
     vaultId: 1559,
     // For ETH address : 0x5317c63f870e8d2f85f0de3c2666d1414f5a728c
@@ -54,7 +54,7 @@ describe('dvf.transfer', () => {
     const [
       vaultIdAndStarkKeyQueryValidator,
       vaultIdAndStarkKeyApiResponse
-    ] = mockVaultIdAndStarkKeyApiCall({targetEthAddress: recipientEthAddress, token})
+    ] = mockVaultIdAndStarkKeyApiCall({ targetEthAddress: recipientEthAddress, token })
 
     const transferApiResponse = {
       _id: 'LCafcGC6tBH',
@@ -88,7 +88,7 @@ describe('dvf.transfer', () => {
       .post('/v1/trading/w/transfer', transferPayloadValidator)
       .reply(200, transferApiResponse)
 
-    await dvf.transfer({recipientEthAddress, token, amount}, starkPrivateKey)
+    await dvf.transfer({ recipientEthAddress, token, amount }, starkPrivateKey)
 
     expect(vaultIdAndStarkKeyQueryValidator).toBeCalled()
     expect(transferPayloadValidator).toBeCalled()
@@ -105,7 +105,7 @@ describe('dvf.transfer', () => {
     const [
       vaultIdAndStarkKeyQueryValidator,
       vaultIdAndStarkKeyApiResponse
-    ] = mockVaultIdAndStarkKeyApiCall({targetEthAddress: recipientEthAddress, token})
+    ] = mockVaultIdAndStarkKeyApiCall({ targetEthAddress: recipientEthAddress, token })
 
     const transferApiResponse = {
       _id: 'LCafcGC6tBH',
@@ -139,7 +139,7 @@ describe('dvf.transfer', () => {
       .post('/v1/trading/w/transfer', transferPayloadValidator)
       .reply(200, transferApiResponse)
 
-    await dvf.transfer({recipientEthAddress, token, amount}, starkPrivateKey)
+    await dvf.transfer({ recipientEthAddress, token, amount }, starkPrivateKey)
 
     expect(vaultIdAndStarkKeyQueryValidator).toBeCalled()
     expect(transferPayloadValidator).toBeCalled()
@@ -159,7 +159,7 @@ describe('dvf.transfer', () => {
     nock(dvf.config.api)
       .get(/\/v1\/trading\/r\/vaultIdAndStarkKey.*/)
       .query(vaultIdAndStarkKeyQueryValidator)
-      .reply(404, {message: 'Target user not registered'})
+      .reply(404, { message: 'Target user not registered' })
 
     const transferPayloadValidator = jest.fn(body => {
       return true
@@ -169,7 +169,7 @@ describe('dvf.transfer', () => {
       .post('/v1/trading/w/transfer', transferPayloadValidator)
       .reply(200)
 
-    await expect(dvf.transfer({recipientEthAddress, token, amount}, starkPrivateKey))
+    await expect(dvf.transfer({ recipientEthAddress, token, amount }, starkPrivateKey))
       .rejects
       .toThrow(/Target user not registered/)
 
@@ -184,7 +184,7 @@ describe('dvf.transfer', () => {
     const amount = 0
     const token = 'ZRX'
 
-    await expect(dvf.transfer({token, amount, recipientEthAddress}, starkPrivateKey))
+    await expect(dvf.transfer({ token, amount, recipientEthAddress }, starkPrivateKey))
       .rejects
       .toThrow('INVALID_METHOD_ARGUMENT')
   })
@@ -196,7 +196,7 @@ describe('dvf.transfer', () => {
     const amount = 14
     const token = ''
 
-    await expect(dvf.transfer({token, amount, recipientEthAddress}, starkPrivateKey))
+    await expect(dvf.transfer({ token, amount, recipientEthAddress }, starkPrivateKey))
       .rejects
       .toThrow('INVALID_METHOD_ARGUMENT')
   })
@@ -208,9 +208,9 @@ describe('dvf.transfer', () => {
     const amount = 14
     const token = 'NOT'
 
-    mockVaultIdAndStarkKeyApiCall({targetEthAddress: recipientEthAddress, token})
+    mockVaultIdAndStarkKeyApiCall({ targetEthAddress: recipientEthAddress, token })
 
-    await expect(dvf.transfer({token, amount, recipientEthAddress}, starkPrivateKey))
+    await expect(dvf.transfer({ token, amount, recipientEthAddress }, starkPrivateKey))
       .rejects
       .toThrow('ERR_INVALID_TOKEN')
   })
@@ -222,9 +222,9 @@ describe('dvf.transfer', () => {
     const amount = 14
     const token = 'ZRX'
 
-    mockVaultIdAndStarkKeyApiCall({targetEthAddress: recipientEthAddress, token})
+    mockVaultIdAndStarkKeyApiCall({ targetEthAddress: recipientEthAddress, token })
 
-    await expect(dvf.transfer({token, amount, recipientEthAddress}, starkPrivateKey))
+    await expect(dvf.transfer({ token, amount, recipientEthAddress }, starkPrivateKey))
       .rejects
       .toThrow('STARK_PRIVATE_KEY_IS_REQUIRED')
   })
@@ -249,7 +249,7 @@ describe('dvf.transfer', () => {
       }
     }
 
-    mockVaultIdAndStarkKeyApiCall({targetEthAddress: recipientEthAddress, token})
+    mockVaultIdAndStarkKeyApiCall({ targetEthAddress: recipientEthAddress, token })
 
     nock(dvf.config.api)
       .post('/v1/trading/w/transfer')

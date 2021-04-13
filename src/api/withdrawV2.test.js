@@ -145,6 +145,6 @@ describe('dvf.withdrawV2', () => {
     expect(dvf.withdrawV2({
       token: 'ZRX',
       amount: 31
-    })).rejects.toThrow({error: apiErrorResponse})
+    })).rejects.toThrow({ error: apiErrorResponse })
   })
 })
