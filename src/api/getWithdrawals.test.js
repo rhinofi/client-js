@@ -35,7 +35,7 @@ describe('dvf.getWithdrawals', () => {
     ]
 
     const payloadValidator = jest.fn(body => {
-      expect(typeof body.nonce).toBe('number')
+      expect(typeof body.nonce).toBe('string')
       expect(typeof body.signature).toBe('string')
       expect(typeof body.token).toBe('undefined')
 
@@ -49,7 +49,6 @@ describe('dvf.getWithdrawals', () => {
     const result = await dvf.getWithdrawals()
 
     expect(payloadValidator).toBeCalled()
-
     expect(result).toEqual(apiResponse)
   })
 
@@ -89,7 +88,6 @@ describe('dvf.getWithdrawals', () => {
     const result = await dvf.getWithdrawals(token, nonce, signature)
 
     expect(payloadValidator).toBeCalled()
-
     expect(result).toEqual(apiResponse)
   })
 
@@ -99,7 +97,7 @@ describe('dvf.getWithdrawals', () => {
     const apiResponse = []
 
     const payloadValidator = jest.fn(body => {
-      expect(typeof body.nonce).toBe('number')
+      expect(typeof body.nonce).toBe('string')
       expect(typeof body.signature).toBe('string')
       return true
     })
@@ -111,7 +109,6 @@ describe('dvf.getWithdrawals', () => {
     const result = await dvf.getWithdrawals(token)
 
     expect(payloadValidator).toBeCalled()
-
     expect(result).toEqual(apiResponse)
   })
 

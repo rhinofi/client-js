@@ -5,23 +5,19 @@ const sw = require('starkware_crypto')
 const Web3 = require('web3')
 const DVF = require('../src/dvf')
 
-
-
 const privateKey = '8F085...' // Account's private key
-const infuraKey = '9e28b...'  // Your Infura API KEY
+const infuraKey = '9e28b...' // Your Infura API KEY
 const infuraURL = 'https://mainnet.infura.io/v3/' + infuraKey
 
 const starkPrivKey = privateKey
-
 
 const provider = new HDWalletProvider(privateKey, infuraURL)
 const web3 = new Web3(provider)
 
 const dvfConfig = {
   // Using staging API.
-  api:  'https://api.stg.deversifi.com'
+  api: 'https://api.stg.deversifi.com'
 }
-
 
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
@@ -32,7 +28,6 @@ const dvfConfig = {
   const price = 200
   const validFor = '0'
   const feeRate = ''
-
 
   const submitOrderResponse = await dvf.submitOrder({
 
@@ -48,15 +43,13 @@ const dvfConfig = {
   })
 
   console.log('submitOrder response ->', submitOrderResponse)
-
-
 })()
-// Stop provider to allow process to exit.
-.then(() => {
-  console.log('Stopping provider...')
-  provider.engine.stop()
-})
-.catch(error => {
-  console.error(error)
-  process.exit(1)
-})
+  // Stop provider to allow process to exit.
+  .then(() => {
+    console.log('Stopping provider...')
+    provider.engine.stop()
+  })
+  .catch(error => {
+    console.error(error)
+    process.exit(1)
+  })

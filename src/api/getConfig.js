@@ -5,9 +5,10 @@ module.exports = async dvf => {
   try {
     const exchangeConf = await post(url, { json: {} })
     dvf.config = Object.assign({}, dvf.config, exchangeConf)
-  return exchangeConf
-  } catch(error)  {
-    console.log('error getting config from dvf-pub-api')
+    return exchangeConf
+  } catch (error) {
+    // TODO: use logger
+    // console.log('error getting config from dvf-pub-api')
     return dvf.config
   }
 }

@@ -22,11 +22,11 @@ module.exports = async (dvf, orderData) => {
   let starkPublicKey, starkSignature
 
   if (orderData.starkPrivateKey) {
-    ({starkPublicKey, starkSignature} = await starkSignedOrder(dvf, orderData.starkPrivateKey, starkMessage))
+    ({ starkPublicKey, starkSignature } = await starkSignedOrder(dvf, orderData.starkPrivateKey, starkMessage))
   } else if (orderData.ledgerPath) {
-    ({starkPublicKey, starkSignature} = await dvf.stark.ledger.createSignedOrder(orderData.ledgerPath, starkOrder))
+    ({ starkPublicKey, starkSignature } = await dvf.stark.ledger.createSignedOrder(orderData.ledgerPath, starkOrder))
   } else if (dvf.config.starkProvider) {
-    ({starkPublicKey, starkSignature} = await dvf.stark.authereum.createSignedOrder(starkOrder))
+    ({ starkPublicKey, starkSignature } = await dvf.stark.authereum.createSignedOrder(starkOrder))
   }
 
   return {
