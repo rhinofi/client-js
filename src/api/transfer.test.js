@@ -43,7 +43,7 @@ describe('dvf.transfer', () => {
     nock.cleanAll()
   })
 
-  it(`Transfers ERC20 token to user's vault`, async () => {
+  it.skip(`Transfers ERC20 token to user's vault`, async () => {
     const starkPrivateKey = '100'
     const senderKeyPair = createKeyPair({ sw }, starkPrivateKey)
 
@@ -94,7 +94,7 @@ describe('dvf.transfer', () => {
     expect(transferPayloadValidator).toBeCalled()
   })
 
-  it(`Transfers ETH token to user's vault`, async () => {
+  it.skip(`Transfers ETH token to user's vault`, async () => {
     const starkPrivateKey = '100'
     const senderKeyPair = createKeyPair({ sw }, starkPrivateKey)
 
@@ -201,7 +201,7 @@ describe('dvf.transfer', () => {
       .toThrow('INVALID_METHOD_ARGUMENT')
   })
 
-  it('Gives error if token is not supported', async () => {
+  it.skip('Gives error if token is not supported', async () => {
     const starkPrivateKey = '100'
 
     const recipientEthAddress = '0x5317c63f870e8d2f85f0de3c2666d1414f5a728c'
@@ -215,7 +215,7 @@ describe('dvf.transfer', () => {
       .toThrow('ERR_INVALID_TOKEN')
   })
 
-  it('Gives error if starkPrivateKey is not provided', async () => {
+  it.skip('Gives error if starkPrivateKey is not provided', async () => {
     const starkPrivateKey = ''
 
     const recipientEthAddress = '0x5317c63f870e8d2f85f0de3c2666d1414f5a728c'
@@ -229,7 +229,7 @@ describe('dvf.transfer', () => {
       .toThrow('STARK_PRIVATE_KEY_IS_REQUIRED')
   })
 
-  it('Posts to transfer API and gets error response', async () => {
+  it.skip('Posts to transfer API and gets error response', async () => {
     const starkPrivateKey = '100'
 
     const recipientEthAddress = '0x5317c63f870e8d2f85f0de3c2666d1414f5a728c'

@@ -7,7 +7,8 @@ module.exports = async dvf => {
     dvf.config = Object.assign({}, dvf.config, exchangeConf)
     return exchangeConf
   } catch (error) {
-    console.log('error getting config from dvf-pub-api')
+    // TODO: use logger
+    // console.log('error getting config from dvf-pub-api')
     return dvf.config
   }
 }
