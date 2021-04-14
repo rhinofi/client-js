@@ -1,7 +1,7 @@
 const sw = require('starkware_crypto')
 const { setup, register, deposit, withdraw, drip, testOrders, sleep } = require('./helpers')
 
-describe('00 - Complete Path', () => {
+describe.skip('00 - Complete Path', () => {
 
   let dvf, address, privateKey, setupData, starkSignature, nonce
 

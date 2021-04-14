@@ -14,7 +14,7 @@ describe('dvf.register', () => {
     dvf = await instance()
   })
 
-  it('Registers user with Stark Ex', async () => {
+  it.skip('Registers user with Stark Ex', async () => {
     const apiResponse = {
       isRegistered: true
     }
@@ -51,7 +51,7 @@ describe('dvf.register', () => {
     expect(result).toEqual(apiResponse)
   })
 
-  it('Register method accepts nonce and signature', async () => {
+  it.skip('Register method accepts nonce and signature', async () => {
     const apiResponse = {
       isRegistered: true
     }
