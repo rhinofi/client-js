@@ -242,7 +242,7 @@ This authenticated endpoint is used to place an order.
 - `isHidden` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** Flag to indicate if the order is hidden.      
 - `validFor` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)**? Validation time in hours
 - `feeRate` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)**? Fee rate if known
-- `cid` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**?      
+- `cid` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Optional custom order ID that could be set when placing order and used later to retrieve order. This ID is unique per user (user A and B can each have an order with `cid = AAA`, but the same user cannot have two orders with the same `cid`).
 - `gid` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**?      
 - `partnerId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**?      
 - `ethAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**?      
@@ -268,6 +268,7 @@ This method allows you to cancel a specific order.
 - `orderId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** ID of the order
 - `nonce` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Nonce which is used to provide the time until which this nonce is valid. It is presented as seconds since epoch.
 - `signature` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? The signature obtained by signing the nonce with your private ethereum key.
+- `cid` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? If order was placed with custom order ID (`cid`) property set, it can be canceled using same `cid`.
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[CancelOrderResponse](https://docs.deversifi.com/docs#postV1TradingWCancelorder)>**
 
