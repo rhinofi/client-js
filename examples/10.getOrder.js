@@ -34,7 +34,7 @@ const dvfConfig = {
   const order = await getOrCreateActiveOrder(dvf, starkPrivKey)
 
   {
-    const response = await dvf.getOrder(order._id)
+    const response = await dvf.getOrder({orderId: order._id})
     logExampleResult(response)
   }
 

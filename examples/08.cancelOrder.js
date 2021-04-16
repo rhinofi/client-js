@@ -73,7 +73,7 @@ const dvfConfig = {
 
   console.log('cancelling orderId', orderId)
 
-  const response = await dvf.cancelOrder(orderId)
+  const response = await dvf.cancelOrder({orderId})
   // Alternative with cid :
   // const response = await dvf.cancelOrder({cid: 'mycid-cancel-example'})
 
