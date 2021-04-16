@@ -3,7 +3,7 @@ const DVFError = require('../lib/dvf/DVFError')
 
 const validateAssertions = require('../lib/validators/validateAssertions')
 
-module.exports = async (dvf, starkPublicKey, nonce, signature, contractWalletAddress, encryptedTradingKey) => {
+module.exports = async (dvf, starkPublicKey, nonce, signature, contractWalletAddress, encryptedTradingKey, meta) => {
   validateAssertions(dvf, {starkPublicKey})
 
   const tradingKey = starkPublicKey.x
@@ -15,7 +15,8 @@ module.exports = async (dvf, starkPublicKey, nonce, signature, contractWalletAdd
     nonce,
     signature,
     ...(encryptedTradingKey && {encryptedTradingKey}),
-    ...(contractWalletAddress && {contractWalletAddress})
+    ...(contractWalletAddress && {contractWalletAddress}),
+    ...(meta && {meta})
   }
 
   const userRegistered = await post(dvf, endpoint, nonce, signature, data)
