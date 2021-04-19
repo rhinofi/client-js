@@ -403,21 +403,21 @@ const symbol = 'ETH:USDT'
 const amount = -1.42
 const price = 3000
 
-const customeOrderID = `short-` + Math.random().toString(36).substring(7)
+const customOrderID = `short-` + Math.random().toString(36).substring(7)
 
 await dvf.submitOrder({
   symbol, 
   amount, 
   price,
-  cid: customeOrderID,
+  cid: customOrderID,
 })
 
 // ...
 // Later we can use `cid` to get order
-const order = await dvf.getOrder({cid: customeOrderID})
+const order = await dvf.getOrder({cid: customOrderID})
 
 // or cancel it
-await dvf.cancelOrder({cid: customeOrderID})
+await dvf.cancelOrder({cid: customOrderID})
 ```
 
 ## Troubleshooting
