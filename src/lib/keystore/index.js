@@ -56,5 +56,7 @@ module.exports = sw => starkPrivateKey => {
     return signature
   }
 
-  return { sign, getKeyPair, getPublicKey }
+  const getWalletType = () => 'KEYSTORE'
+
+  return { sign, getKeyPair, getPublicKey, getWalletType }
 }

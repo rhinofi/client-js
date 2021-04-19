@@ -64,5 +64,7 @@ module.exports = (dvf) => {
     )
   }
 
-  return {sign, getPublicKey}
+  const getWalletType = () => 'LEDGER'
+
+  return {sign, getPublicKey, getWalletType}
 }

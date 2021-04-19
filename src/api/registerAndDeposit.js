@@ -69,6 +69,10 @@ module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, cont
         }
       }
     })
+
+    if (dvf.dvfStarkProvider && dvf.dvfStarkProvider.getWalletType() === 'LEDGER') {
+      await dvf.token.provideContractData(null, tx.tokenAddress, tx.quantum)
+    }
     // Don't await for the tx, resolve on tx hash and the integration will take care of the rest
     const onChainRegisterDeposit = contractRegisterAndDepositFromStarkTx(dvf, userRegistered.deFiSignature, tx, {transactionHashCb})
 
