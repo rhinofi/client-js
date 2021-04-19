@@ -66,6 +66,10 @@ module.exports = async (dvf, data, nonce, signature) => {
     }
   })
 
+  if (dvf.dvfStarkProvider && dvf.dvfStarkProvider.getWalletType() === 'LEDGER') {
+    await dvf.token.provideContractData(null, tx.tokenAddress, tx.quantum)
+  }
+
   const onChainDepositPromise = useProxiedContract
     ? contractDepositFromProxiedStarkTx(dvf, tx, { transactionHashCb })
     : contractDepositFromStarkTx(dvf, tx, { transactionHashCb })
