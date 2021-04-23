@@ -20,7 +20,9 @@ module.exports = () => {
   dvf.account = {
     balance: compose(require('../../api/account/balance')),
     tokenBalance: compose(require('../../api/account/tokenBalance')),
-    select: compose(require('../../api/account/select'))
+    select: compose(require('../../api/account/select')),
+    getPermissions: compose(require('../../api/account/permissions').getPermissions),
+    setPermissions: compose(require('../../api/account/permissions').setPermissions)
   }
 
   dvf.stark = {
@@ -190,5 +192,6 @@ module.exports = () => {
     withdraw: compose(require('../../api/authereum/withdraw'))
   }
   dvf.estimatedNextBatchTime = compose(require('../../api/estimatedNextBatchTime'))
+  dvf.publicUserPermissions = compose(require('../../api/getPublicPermissions'))
   return dvf
 }
