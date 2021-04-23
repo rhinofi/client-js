@@ -5,28 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.1.4 - 2021-04-26
+### Changed
+- Public user permissioning added to the client
+
 ## 2.1.3 - 2021-16-04
 ### Added
 - `dvf.getMinMaxOrderSize` to get order size limitations by `symbol`
 
-## 2.1.2 - 2021-16-04
+## 2.1.2 - 2021-04-16
 ### Changed
 - `dvf.register` and `dvf.registerAndDeposit` to accept an optional `meta` parameter for interal use
 
-## 2.1.1 - 2021-09-04
+## 2.1.1 - 2021-04-09
 ### Changed
 - Exposing `dvf.getAuthenticated` for arbitrary calls to GET endpoints
 - Allowing custom headers in `dvf.getAuthenticated`
 
-## 2.1.0 - 2021-31-03
+## 2.1.0 - 2021-03-31
 ### Added
 - `dvf.getRegistrationStatuses` endpoint for checking both Deversifi and on-chain registration statuses - see `examples/29.getRegistrationStatuses.js`
 
-## 2.0.1 - 2021-30-03
+## 2.0.1 - 2021-03-30
 ### Fixed
 - Schema validated using `validateWithJoi` to be `required()` by default
 
-## 2.0.0 - 2021-30-03
+## 2.0.0 - 2021-03-30
 ### Changed
 - `dvf.transfer` method signature changes : `starkPrivateKey` to be set via configuration instead of input argument - see `examples/27.transfer.js`
 - Updated examples
