@@ -50,11 +50,6 @@ module.exports = () => {
       createSignedOrder: compose(
         require('../../lib/stark/ledger/createSignedOrder')
       )
-    },
-    authereum: {
-      createSignedTransfer: compose(require('../stark/authereum/createSignedTransfer')),
-      createSignedOrder: compose(require('../stark/authereum/createSignedOrder')),
-      getPublicKey: compose(require('../stark/authereum/getPublicKey'))
     }
   }
 
@@ -186,10 +181,6 @@ module.exports = () => {
     withdraw: compose(require('../../api/ledger/withdraw')),
     transfer: compose(require('../../api/ledger/transfer')),
     transferUsingVaultIdAndStarkKey: compose(require('../../api/ledger/transferUsingVaultIdAndStarkKey'))
-  }
-  dvf.authereum = {
-    deposit: compose(require('../../api/authereum/deposit')),
-    withdraw: compose(require('../../api/authereum/withdraw'))
   }
   dvf.estimatedNextBatchTime = compose(require('../../api/estimatedNextBatchTime'))
   dvf.publicUserPermissions = compose(require('../../api/getPublicPermissions'))
