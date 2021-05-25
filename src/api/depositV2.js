@@ -13,7 +13,8 @@ const getSafeQuantizedAmountOrThrow = require('../lib/dvf/token/getSafeQuantized
 const schema = Joi.object({
   token: Joi.string(),
   amount: Joi.bigNumber().greaterThan(0), // number or number string
-  useProxiedContract: Joi.boolean().optional().default(false)
+  useProxiedContract: Joi.boolean().optional().default(false),
+  web3Options: Joi.object().optional() // For internal use (custom gas limits, etc)
 })
 
 const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
@@ -23,7 +24,7 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 const endpoint = '/v1/trading/deposits'
 
 module.exports = async (dvf, data, nonce, signature) => {
-  const { token, amount, useProxiedContract } = validateArg0(data)
+  const { token, amount, useProxiedContract, web3Options } = validateArg0(data)
 
   const starkKey = dvf.config.starkKeyHex
 
@@ -70,9 +71,14 @@ module.exports = async (dvf, data, nonce, signature) => {
     await dvf.token.provideContractData(null, tx.tokenAddress, tx.quantum)
   }
 
+  const options = {
+    transactionHashCb,
+    ...web3Options
+  }
+
   const onChainDepositPromise = useProxiedContract
-    ? contractDepositFromProxiedStarkTx(dvf, tx, { transactionHashCb })
-    : contractDepositFromStarkTx(dvf, tx, { transactionHashCb })
+    ? contractDepositFromProxiedStarkTx(dvf, tx, options)
+    : contractDepositFromStarkTx(dvf, tx, options)
 
   const transactionHash = await transactionHashPromise
 
