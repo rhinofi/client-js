@@ -33,7 +33,7 @@ const dvfConfig = {
   logExampleResult(publicPermissionsDescriptor)
 
   // Get currently set permissions for a user, authenticated endpoint
-  const currentUerPermissions = await dvf.account.getPermisions()
+  const currentUerPermissions = await dvf.account.getPermissions()
   logExampleResult(currentUerPermissions)
 
   // Enable all of the permissions
