@@ -5,6 +5,8 @@ const makeLedgerProvider = require('../ledger/index')
 module.exports = (dvf, wallet) => {
   if (!wallet) throw new DVFError('WALLET_IS_REQUIRED')
 
+  dvf.config.wallet = wallet
+
   if (wallet.type === 'tradingKey') {
     if (!wallet.meta.starkPrivateKey) throw new DVFError('STARK_PRIVATE_KEY_IS_REQUIRED')
 

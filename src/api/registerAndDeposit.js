@@ -1,6 +1,5 @@
 const FP = require('lodash/fp')
 const post = require('../lib/dvf/post-authenticated')
-const DVFError = require('../lib/dvf/DVFError')
 const { Joi, fromQuantizedToBaseUnitsBN } = require('dvf-utils')
 
 const contractRegisterAndDepositFromStarkTx = require('./contract/registerAndDepositFromStarkTx')
@@ -10,14 +9,15 @@ const getSafeQuantizedAmountOrThrow = require('../lib/dvf/token/getSafeQuantized
 
 const schema = Joi.object({
   token: Joi.string(),
-  amount: Joi.bigNumber().greaterThan(0) // number or number string
+  amount: Joi.bigNumber().greaterThan(0), // number or number string
+  web3Options: Joi.object().optional() // For internal use (custom gas limits, etc)
 })
 
 const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
   context: 'depositV2'
 })
 
-module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, contractWalletAddress, encryptedTradingKey, meta) => {
+module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, contractWalletAddress, encryptedTradingKey, meta, web3Options = {}) => {
 
   const starkKey = starkPublicKey.x
 
@@ -70,11 +70,16 @@ module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, cont
       }
     })
 
+    const options = {
+      transactionHashCb,
+      ...web3Options
+    }
+
     if (dvf.dvfStarkProvider && dvf.dvfStarkProvider.getWalletType() === 'LEDGER') {
       await dvf.token.provideContractData(null, tx.tokenAddress, tx.quantum)
     }
     // Don't await for the tx, resolve on tx hash and the integration will take care of the rest
-    const onChainRegisterDeposit = contractRegisterAndDepositFromStarkTx(dvf, userRegistered.deFiSignature, tx, {transactionHashCb})
+    const onChainRegisterDeposit = contractRegisterAndDepositFromStarkTx(dvf, userRegistered.deFiSignature, tx, options)
 
     const transactionHash = await transactionHashPromise
 
