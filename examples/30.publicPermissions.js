@@ -38,7 +38,7 @@ const dvfConfig = {
 
   // Enable all of the permissions
   Object.keys(currentUerPermissions).map(async (permissionKey) => {
-    const updatedPermissions = await dvf.account.setPermisions({ key: permissionKey, value: true })
+    const updatedPermissions = await dvf.account.setPermissions({ key: permissionKey, value: true })
     logExampleResult(updatedPermissions)
   })
 })()
