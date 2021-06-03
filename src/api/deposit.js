@@ -49,7 +49,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey, nonce, signature) =
   }
   // console.log({ data })
 
-  await dvf.contract.approve(token, dvf.token.toBaseUnitAmount(token, amount))
+  await dvf.contract.approve(token, dvf.token.toBaseUnitAmount(token, amount), dvf.config.DVF.starkExContractAddress, 'ETHEREUM')
 
   const depositResponse = await post(url, { json: data })
 
