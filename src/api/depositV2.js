@@ -59,12 +59,12 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
   let transactionHashCb
   const transactionHashPromise = new Promise((resolve, reject) => {
     transactionHashCb = (err, result) => {
-      if (txHashCb) {
-        txHashCb()
-      }
       if (err) {
         reject(err)
       } else {
+        if (txHashCb) {
+          txHashCb(result)
+        }
         resolve(result)
       }
     }
