@@ -73,7 +73,7 @@ module.exports = async (dvf, withdrawalData) => {
 
   const tokenContractAddress = token === 'ETH'
     ? address0
-    : tokenInfo.tokenAddress
+    : tokenInfo.tokenAddressPerChain.ETHEREUM
   const quantisedAmount = toQuantizedAmountBN(tokenInfo, amount)
   const baseUnitsAmount = fromQuantizedToBaseUnitsBN(tokenInfo)(quantisedAmount)
 

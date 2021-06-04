@@ -6,6 +6,7 @@ const contractRegisterAndDepositFromStarkTx = require('./contract/registerAndDep
 const getVaultId = require('./getVaultId')
 const validateWithJoi = require('../lib/validators/validateWithJoi')
 const getSafeQuantizedAmountOrThrow = require('../lib/dvf/token/getSafeQuantizedAmountOrThrow')
+const getTokenAddressFromTokenInfoOrThrow = require('../lib/dvf/token/getTokenAddressFromTokenInfoOrThrow')
 
 const schema = Joi.object({
   token: Joi.string(),
@@ -46,8 +47,11 @@ module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, cont
     await dvf.contract.approve(
       token,
       fromQuantizedToBaseUnitsBN(tokenInfo, quantisedAmount).toString(),
-      dvf.config.DVF.registrationAndDepositInterfaceAddress
+      dvf.config.DVF.registrationAndDepositInterfaceAddress,
+      'ETHEREUM'
     )
+
+    const tokenAddress = getTokenAddressFromTokenInfoOrThrow(tokenInfo, 'ETHEREUM')
 
     // Sending the deposit transaction to the blockchain first before notifying the server
     const tx = {
@@ -55,7 +59,7 @@ module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, cont
       tokenId: tokenInfo.starkTokenId,
       starkKey: '0x' + starkKey,
       amount: quantisedAmount,
-      tokenAddress: tokenInfo.tokenAddress,
+      tokenAddress,
       quantum: tokenInfo.quantization
     }
 

@@ -17,7 +17,10 @@ module.exports = () => {
         minOrderSize: 0.05,
         settleSpread: 0,
         starkTokenId:
-          '0xb333e3142fe16b78628f19bb15afddaef437e72d6d7f5c6c20c6801a27fba6'
+          '0xb333e3142fe16b78628f19bb15afddaef437e72d6d7f5c6c20c6801a27fba6',
+        tokenAddressPerChain: {
+          ETHEREUM: 'native'
+        }
       },
       USDT: {
         decimals: 6,
@@ -26,7 +29,9 @@ module.exports = () => {
         settleSpread: 0,
         starkTokenId:
           '0x180bef8ae3462e919489763b84dc1dc700c45a249dec4d1136814a639f2dd7b',
-        tokenAddress: '0x4c5f66596197a86fb30a2435e2ef4ddcb39342c9'
+        tokenAddressPerChain: {
+          ETHEREUM: '0x4c5f66596197a86fb30a2435e2ef4ddcb39342c9'
+        }
       },
       ZRX: {
         decimals: 18,
@@ -35,7 +40,9 @@ module.exports = () => {
         settleSpread: 0,
         starkTokenId:
           '0x3901ee6a6c5ac0f6e284f4273b961b7e9f29d25367d31d90b75820473a202f7',
-        tokenAddress: '0xcd077abedd831a3443ffbe24fb76661bbb17eb69'
+        tokenAddressPerChain: {
+          ETHEREUM: '0xcd077abedd831a3443ffbe24fb76661bbb17eb69'
+        }
       },
       BTC: {
         decimals: 18,
@@ -44,7 +51,9 @@ module.exports = () => {
         settleSpread: 0,
         starkTokenId:
           '0x21ef21d6b234cd669edd702dd3d1d017be888337010b950ae3679eb4194b4bc',
-        tokenAddress: '0x40d8978500bf68324a51533cd6a21e3e59be324a'
+        tokenAddressPerChain: {
+          ETHEREUM: '0x40d8978500bf68324a51533cd6a21e3e59be324a'
+        }
       }
     }
   }
@@ -70,6 +79,9 @@ module.exports = () => {
       exchangeSymbols: ['ETH:USDT', 'ZRX:USDT', 'ZRX:ETH'],
       exchangeAddress: '0xBd25cD867C304F079E696CBE44D958f3d3B683ba',
       starkExContractAddress: '0xA9F9cC1189b9d6051b26467b29629787C671905d',
+      tokenAddressPerChain: {
+        ETHEREUM: 'native'
+      },
       tempStarkVaultId: 1,
       defaultFeeRate: 0.0025
     },
@@ -89,7 +101,9 @@ module.exports = () => {
         settleSpread: 0,
         starkTokenId:
           '0x180bef8ae3462e919489763b84dc1dc700c45a249dec4d1136814a639f2dd7b',
-        tokenAddress: '0x4c5f66596197a86fb30a2435e2ef4ddcb39342c9',
+        tokenAddressPerChain: {
+          ETHEREUM: '0x4c5f66596197a86fb30a2435e2ef4ddcb39342c9'
+        },
         starkVaultId: 1000002
       },
       ZRX: {
@@ -98,7 +112,9 @@ module.exports = () => {
         minOrderSize: 40,
         starkTokenId:
           '0x3901ee6a6c5ac0f6e284f4273b961b7e9f29d25367d31d90b75820473a202f7',
-        tokenAddress: '0xcd077abedd831a3443ffbe24fb76661bbb17eb69',
+        tokenAddressPerChain: {
+          ETHEREUM: '0xcd077abedd831a3443ffbe24fb76661bbb17eb69'
+        },
         starkVaultId: 1000003
       },
       BTC: {
@@ -107,7 +123,9 @@ module.exports = () => {
         minOrderSize: 0.0001,
         starkTokenId:
           '0x21ef21d6b234cd669edd702dd3d1d017be888337010b950ae3679eb4194b4bc',
-        tokenAddress: '0x40d8978500bf68324a51533cd6a21e3e59be324a',
+        tokenAddressPerChain: {
+          ETHEREUM: '0x40d8978500bf68324a51533cd6a21e3e59be324a'
+        },
         starkVaultId: 1000004
       }
     },
