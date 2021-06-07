@@ -21,7 +21,7 @@ const validateDepositAmountAndConvertToBN = amount => {
 
 const tokensWhichNeedResetToZero = ['USDT', 'OMG']
 
-module.exports = async (dvf, token, deposit, spender = dvf.config.DVF.starkExContractAddress) => {
+module.exports = async (dvf, token, deposit, spender = dvf.config.DVF.starkExContractAddress, options = {}) => {
   if (token === 'ETH') {
     // TODO: This code is not very safe if caller expects the result to be of
     // the shape returned by dvf.eth.send below.
@@ -50,7 +50,9 @@ module.exports = async (dvf, token, deposit, spender = dvf.config.DVF.starkExCon
     [
       spender,
       amount
-    ]
+    ],
+    null,
+    options
   )
 
   // For some tokens, the amount needs to be reset to 0 before setting it to

@@ -17,7 +17,7 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
   context: 'depositV2'
 })
 
-module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, contractWalletAddress, encryptedTradingKey, meta, web3Options = {}) => {
+module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, contractWalletAddress, encryptedTradingKey, meta, web3Options = {}, txHashCb) => {
 
   const starkKey = starkPublicKey.x
 
@@ -25,9 +25,9 @@ module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, cont
     starkKey,
     nonce,
     signature,
-    ...(encryptedTradingKey && {encryptedTradingKey}),
-    ...(contractWalletAddress && {contractWalletAddress}),
-    ...(meta && {meta})
+    ...(encryptedTradingKey && { encryptedTradingKey }),
+    ...(contractWalletAddress && { contractWalletAddress }),
+    ...(meta && { meta })
   }
 
   const userRegistered = await post(dvf, '/v1/trading/w/register', nonce, signature, registrationData)
@@ -65,6 +65,9 @@ module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, cont
         if (err) {
           reject(err)
         } else {
+          if (txHashCb) {
+            txHashCb(result)
+          }
           resolve(result)
         }
       }
