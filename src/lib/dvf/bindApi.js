@@ -58,6 +58,7 @@ module.exports = () => {
     approve: compose(require('../../api/contract/approve')),
     isApproved: compose(require('../../api/contract/isApproved')),
     getPermitNonceForAddress: compose(require('../../api/contract/getPermitNonceForAddress')),
+    getPermitNonceWithUnderscoreForAddress: compose(require('../../api/contract/getPermitNonceWithUnderscoreForAddress')),
     getNameForAddress: compose(require('../../api/contract/getNameForAddress')),
     deposit: compose(require('../../api/contract/deposit')),
     depositCancel: compose(require('../../api/contract/depositCancel')),
