@@ -1,6 +1,6 @@
 {
   "name": "dvf-client-js",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "main": "src/dvf.js",
   "contributors": [
     "Henrique Matias <hems.inlet@gmail.com>",

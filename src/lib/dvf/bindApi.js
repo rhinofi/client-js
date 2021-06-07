@@ -57,6 +57,8 @@ module.exports = () => {
   dvf.contract = {
     approve: compose(require('../../api/contract/approve')),
     isApproved: compose(require('../../api/contract/isApproved')),
+    getPermitNonceForAddress: compose(require('../../api/contract/getPermitNonceForAddress')),
+    getNameForAddress: compose(require('../../api/contract/getNameForAddress')),
     deposit: compose(require('../../api/contract/deposit')),
     depositCancel: compose(require('../../api/contract/depositCancel')),
     depositReclaim: compose(require('../../api/contract/depositReclaim')),
