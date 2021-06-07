@@ -6,9 +6,10 @@ const DVFError = require('../dvf/DVFError')
 
 module.exports = async (dvf, transport, tokenAddress = '', transferQuantization) => {
   let _transport = transport || null
+  let createdTransport = null
   if (!transport) {
     const selectedTransport = selectTransport(dvf.isBrowser)
-    const createdTransport = await selectedTransport.create()
+    createdTransport = await selectedTransport.create()
     _transport = new Eth(createdTransport)
   }
 
@@ -34,5 +35,8 @@ module.exports = async (dvf, transport, tokenAddress = '', transferQuantization)
   }
   if (transferQuantization) {
     await _transport.starkProvideQuantum_v2(transferTokenAddress, tokenAddress ? 'erc20' : 'eth', transferQuantization, null)
+  }
+  if (createdTransport) {
+    await createdTransport.close()
   }
 }
