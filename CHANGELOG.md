@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.5.0 - 2021-06-7
+### Changed
+- Adding optional `permitParams` argument to `depositV2` and `registerAndDeposit` (will try to use signature-based eip-2612 permit instead of `approve` if passed)
+
 ## 2.4.0 - 2021-06-4
 ### Changed
 - Accomodating changes in configuration tokenRegistry structure (`tokenAddressPerChain`)
