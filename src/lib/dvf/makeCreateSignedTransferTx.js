@@ -1,5 +1,3 @@
-const createSignedTransfer = require('./createSignedTransfer')
-
 module.exports = dvf => async data => {
   const {
     recipientPublicKey,
@@ -22,7 +20,7 @@ module.exports = dvf => async data => {
   }
 
   return {
-    tx: await createSignedTransfer(dvf)(txParams),
+    tx: await dvf.createSignedTransfer(txParams),
     starkPublicKey
   }
 }

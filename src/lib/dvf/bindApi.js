@@ -133,6 +133,9 @@ module.exports = () => {
   dvf.createTransferPayload = compose(
     require('./createTransferPayload')
   )
+  dvf.createSignedTransfer = compose(
+    require('./createSignedTransfer')
+  )
   // dvf trading volume data
   dvf.get30DaysVolume = compose(require('../../api/get30DaysVolume'))
 
