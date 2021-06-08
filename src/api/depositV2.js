@@ -25,6 +25,7 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 })
 
 const endpoint = '/v1/trading/deposits'
+const validationEndpoint = '/v1/trading/deposits-validate'
 
 module.exports = async (dvf, data, nonce, signature) => {
   const { token, amount, useProxiedContract, web3Options, permitParams } = validateArg0(data)
@@ -34,6 +35,8 @@ module.exports = async (dvf, data, nonce, signature) => {
   const tokenInfo = dvf.token.getTokenInfoOrThrow(token)
   const quantisedAmount = getSafeQuantizedAmountOrThrow(amount, tokenInfo)
   const vaultId = await getVaultId(dvf, token, nonce, signature)
+
+  await post(dvf, validationEndpoint, nonce, signature, { token, amount: quantisedAmount })
 
   if (!permitParams) {
     await dvf.contract.approve(
