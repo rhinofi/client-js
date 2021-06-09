@@ -7,7 +7,6 @@ const {
 
 const calculateFact = require('../stark/calculateFact')
 const validateWithJoi = require('../validators/validateWithJoi')
-const createSignedTransfer = require('./createSignedTransfer')
 
 const DVFError = require('./DVFError')
 
@@ -98,7 +97,7 @@ module.exports = async (dvf, withdrawalData) => {
     type: 'ConditionalTransferRequest'
   }
 
-  const tx = await createSignedTransfer(dvf)(txParams)
+  const tx = await dvf.createSignedTransfer(txParams)
 
   // TODO: Refactor to avoid getting pub key at different levels
   const { dvfStarkProvider } = dvf

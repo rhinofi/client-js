@@ -1,7 +1,7 @@
 const createSignedTransaction = require('./createSignedTransaction')
 const DVFError = require('./DVFError')
 
-module.exports = dvf => async transferTransaction => {
+module.exports = async (dvf, transferTransaction) => {
   // dvfStarkProvider abstracts specifics of how a public key is obtained.
   const { dvfStarkProvider } = dvf
   const starkPublicKey = await dvfStarkProvider.getPublicKey()
