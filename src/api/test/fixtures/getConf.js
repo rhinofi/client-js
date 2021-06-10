@@ -19,7 +19,7 @@ module.exports = () => {
         starkTokenId:
           '0xb333e3142fe16b78628f19bb15afddaef437e72d6d7f5c6c20c6801a27fba6',
         tokenAddressPerChain: {
-          ETHEREUM: 'native'
+          ETHEREUM: '0x0000000000000000000000000000000000000000'
         }
       },
       USDT: {
@@ -80,7 +80,7 @@ module.exports = () => {
       exchangeAddress: '0xBd25cD867C304F079E696CBE44D958f3d3B683ba',
       starkExContractAddress: '0xA9F9cC1189b9d6051b26467b29629787C671905d',
       tokenAddressPerChain: {
-        ETHEREUM: 'native'
+        ETHEREUM: '0x0000000000000000000000000000000000000000'
       },
       tempStarkVaultId: 1,
       defaultFeeRate: 0.0025
