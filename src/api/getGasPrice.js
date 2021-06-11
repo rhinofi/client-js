@@ -8,7 +8,7 @@ module.exports = async (dvf) => {
   const url = dvf.config.api + endpoint
 
   try {
-    const newGasPrice = await get(url)
+    const newGasPrice = await get(url, { json: true })
     dvf.config.defaultGasPrice = newGasPrice.fast || dvf.config.defaultGasPrice
     return newGasPrice ||  oldGasPrice
   }
