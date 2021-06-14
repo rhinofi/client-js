@@ -27,7 +27,7 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 const endpoint = '/v1/trading/deposits'
 const validationEndpoint = '/v1/trading/deposits-validate'
 
-module.exports = async (dvf, data, nonce, signature) => {
+module.exports = async (dvf, data, nonce, signature, txHashCb) => {
   const { token, amount, useProxiedContract, web3Options, permitParams } = validateArg0(data)
 
   const starkKey = dvf.config.starkKeyHex
@@ -74,6 +74,9 @@ module.exports = async (dvf, data, nonce, signature) => {
       if (err) {
         reject(err)
       } else {
+        if (txHashCb) {
+          txHashCb(result)
+        }
         resolve(result)
       }
     }

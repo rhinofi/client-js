@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Accomodating changes in configuration tokenRegistry structure (`tokenAddressPerChain`)
 - `dvf.approve` to accept an extra argument `chain` (defaults to `'ETHEREUM'`)
+- accept transaction hash callback option when doing token approval, deposit and register + deposit
 
 ## 2.3.0 - 2021-05-25
 ### Changed
