@@ -9,11 +9,14 @@ const getVaultId = require('./getVaultId')
 const validateWithJoi = require('../lib/validators/validateWithJoi')
 const DVFError = require('../lib/dvf/DVFError')
 const getSafeQuantizedAmountOrThrow = require('../lib/dvf/token/getSafeQuantizedAmountOrThrow')
+const getTokenAddressFromTokenInfoOrThrow = require('../lib/dvf/token/getTokenAddressFromTokenInfoOrThrow')
+const permitParamsSchema = require('../lib/schemas/permitParamsSchema')
 
 const schema = Joi.object({
   token: Joi.string(),
   amount: Joi.bigNumber().greaterThan(0), // number or number string
   useProxiedContract: Joi.boolean().optional().default(false),
+  permitParams: permitParamsSchema.optional(),
   web3Options: Joi.object().optional() // For internal use (custom gas limits, etc)
 })
 
@@ -22,9 +25,10 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 })
 
 const endpoint = '/v1/trading/deposits'
+const validationEndpoint = '/v1/trading/deposits-validate'
 
 module.exports = async (dvf, data, nonce, signature, txHashCb) => {
-  const { token, amount, useProxiedContract, web3Options } = validateArg0(data)
+  const { token, amount, useProxiedContract, web3Options, permitParams } = validateArg0(data)
 
   const starkKey = dvf.config.starkKeyHex
 
@@ -32,13 +36,20 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
   const quantisedAmount = getSafeQuantizedAmountOrThrow(amount, tokenInfo)
   const vaultId = await getVaultId(dvf, token, nonce, signature)
 
-  await dvf.contract.approve(
-    token,
-    fromQuantizedToBaseUnitsBN(tokenInfo, quantisedAmount).toString(),
-    useProxiedContract
-      ? dvf.config.DVF.registrationAndDepositInterfaceAddress
-      : dvf.config.DVF.starkExContractAddress
-  )
+  await post(dvf, validationEndpoint, nonce, signature, { token, amount: quantisedAmount })
+
+  if (!permitParams) {
+    await dvf.contract.approve(
+      token,
+      fromQuantizedToBaseUnitsBN(tokenInfo, quantisedAmount).toString(),
+      useProxiedContract
+        ? dvf.config.DVF.registrationAndDepositInterfaceAddress
+        : dvf.config.DVF.starkExContractAddress,
+      'ETHEREUM'
+    )
+  }
+
+  const tokenAddress = getTokenAddressFromTokenInfoOrThrow(tokenInfo, 'ETHEREUM')
 
   // Sending the deposit transaction to the blockchain first before notifying the server
   const tx = {
@@ -46,8 +57,9 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
     tokenId: tokenInfo.starkTokenId,
     starkKey,
     amount: quantisedAmount,
-    tokenAddress: tokenInfo.tokenAddress,
-    quantum: tokenInfo.quantization
+    tokenAddress,
+    quantum: tokenInfo.quantization,
+    permitParams
   }
 
   // As we need the txHash ASAP (before the tx is mined),

@@ -1,6 +1,6 @@
 {
   "name": "dvf-client-js",
-  "version": "2.4.0",
+  "version": "2.5.1",
   "main": "src/dvf.js",
   "contributors": [
     "Henrique Matias <hems.inlet@gmail.com>",
@@ -41,8 +41,7 @@
   "license": "MIT",
   "dependencies": {
     "@ledgerhq/hw-app-eth": "5.49.0",
-    "@ledgerhq/hw-transport-node-hid": "^5.51.1",
-    "@ledgerhq/hw-transport-webusb": "5.49.0",
+    "@ledgerhq/hw-transport-webhid": "5.51.1",
     "aigle": "git+https://github.com/suguru03/aigle#8739846ba9d4cfc116e1546da1181c73564cae0b",
     "aware": "^0.3.1",
     "bignumber.js": "^9.0.0",

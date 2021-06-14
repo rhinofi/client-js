@@ -146,7 +146,9 @@ to this:
          "decimals":18,
          "quantization":10000000000,
          "minOrderSize":0.025,
-         "tokenAddress":"0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2",
+         "tokenAddressPerChain": {
+            "ETHEREUM": "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2"
+         },
          "starkTokenId":"0x1a4af39d27ce2e3445ed084809e5bc36d03918df04b7e2b6ee3c769a9892600"
       }
    }
