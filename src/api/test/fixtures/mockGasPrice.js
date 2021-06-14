@@ -67,8 +67,6 @@ module.exports = () => {
   }
 
   nock('https://api.stg.deversifi.com')
-    .post('/v1/trading/r/getGasPrice', body => {
-      return true
-    })
+    .get('/v1/trading/r/getGasPrice')
     .reply(200, mockGasResponse)
 }
