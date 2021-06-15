@@ -1,6 +1,6 @@
 {
   "name": "dvf-client-js",
-  "version": "2.5.1",
+  "version": "2.5.3",
   "main": "src/dvf.js",
   "contributors": [
     "Henrique Matias <hems.inlet@gmail.com>",
@@ -9,10 +9,7 @@
     "Thiago Kroger <thiago.kroger@deversifi.com>"
   ],
   "standard": {
-    "ignore": [
-      "/examples",
-      "/dist"
-    ]
+    "ignore": ["/examples", "/dist"]
   },
   "scripts": {
     "lint": "standard",
@@ -27,16 +24,10 @@
     "test:coverage": "env-cmd -f ./env/test jest --testTimeout 10000 --coverage"
   },
   "jest": {
-    "coverageReporters": [
-      "html"
-    ],
+    "coverageReporters": ["html"],
     "coverageDirectory": ".coverage"
   },
-  "keywords": [
-    "deversifi",
-    "ethereum",
-    "trading"
-  ],
+  "keywords": ["deversifi", "ethereum", "trading"],
   "homepage": "https://github.com/deversifi/dvf-client-js",
   "license": "MIT",
   "dependencies": {
