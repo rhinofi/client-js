@@ -6,6 +6,7 @@ const validateWithJoi = require('../../lib/validators/validateWithJoi')
 const schema = Joi.object({
   token: Joi.string(),
   amount: Joi.bigNumber().greaterThan(0),
+  memo: Joi.string().optional(),
   recipientEthAddress: Joi.ethAddress()
 })
 
@@ -22,7 +23,7 @@ module.exports = async (
   walletSignCb = () => {}
 ) => {
   dvf = FP.set('config.useAuthHeader', true, dvf)
-  const { token, amount, recipientEthAddress } = validateInputs(data)
+  const { token, amount, recipientEthAddress, memo } = validateInputs(data)
   const { vaultId, starkKey } = await dvf.getVaultIdAndStarkKey(
     {
       token,
@@ -43,6 +44,7 @@ module.exports = async (
     {
       token,
       amount,
+      memo,
       recipientVaultId: vaultId,
       recipientPublicKey: starkKey
     },
