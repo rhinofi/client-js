@@ -15,5 +15,6 @@ module.exports = async (
     feeRecipient,
     createSignedTransferTx
   )
-  return post(url, { json }, walletSignCb)
+  walletSignCb()
+  return post(url, { json })
 }
