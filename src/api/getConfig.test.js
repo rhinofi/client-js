@@ -122,7 +122,7 @@ describe('dvf.getConfig', () => {
       api: 'https://api.stg.deversifi.com',
       gasApi: 'https://ethgasstation.info',
       defaultGasLimit: 300000, // defined in `/src/config.js`
-      defaultGasPrice: 500000000,
+      defaultGasPrice: 50000000000,
       defaultStarkExpiry: 4320,
       defaultNonceAge: 43200,
       defaultProvider: 'http://localhost:8545',
