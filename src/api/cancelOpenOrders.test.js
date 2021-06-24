@@ -18,15 +18,12 @@ describe('dvf.cancelOrder', () => {
     .post('/v1/trading/w/cancelOpenOrders', payloadValidator)
     .reply(status, apiResponse)
 
-  it.skip('Posts to cancel order API and gets response', async () => {
+  it('Posts to cancel order API and gets response', async () => {
     const apiResponse = [{ orderId: '1', canceled: true, active: true }]
 
-    const payloadValidator = jest.fn((order) => {
-      console.log('Order details', order)
-      expect(order.orderId).toBe('1')
-      expect(typeof order.orderId).toBe('string')
-      expect(typeof order.nonce).toBe('string')
-      expect(typeof order.signature).toBe('string')
+    const payloadValidator = jest.fn((payload) => {
+      expect(typeof payload.nonce).toBe('string')
+      expect(typeof payload.signature).toBe('string')
 
       return true
     })
