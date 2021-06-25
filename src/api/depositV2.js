@@ -37,6 +37,8 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
   const quantisedAmount = getSafeQuantizedAmountOrThrow(amount, tokenInfo)
   const vaultId = await getVaultId(dvf, token, nonce, signature)
 
+  // Force the use of header (instead of payload) for authentication.
+  dvf = FP.set('config.useAuthHeader', true, dvf)
   await post(dvf, validationEndpoint, nonce, signature, { token, amount: quantisedAmount })
 
   if (!permitParams) {
@@ -85,8 +87,6 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
     amount: quantisedAmount,
     txHash: transactionHash
   }
-  // Force the use of header (instead of payload) for authentication.
-  dvf = FP.set('config.useAuthHeader', true, dvf)
   const httpDeposit = await post(dvf, endpoint, nonce, signature, payload)
 
   const onChainDeposit = await onChainDepositPromise
