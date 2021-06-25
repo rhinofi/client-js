@@ -1,6 +1,9 @@
 const { post } = require('request-promise')
 const DVFError = require('../lib/dvf/DVFError')
 const { Joi } = require('dvf-utils')
+const P = require('aigle')
+const FP = require('lodash/fp')
+
 /*
 Keeping the schema visible and not in a seperate method
 for reference as required parameters can be checked by reading
@@ -58,8 +61,8 @@ module.exports = async (dvf, orderData) => {
   }
 
   const json = await (
-    value.length
-      ? Promise.all(value.map(o => dvf.createOrderPayload(o)))
+    FP.isArray(value)
+      ? P.map(value, o => dvf.createOrderPayload(o))
       : dvf.createOrderPayload(value)
   )
 
