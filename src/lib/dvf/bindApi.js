@@ -143,6 +143,15 @@ module.exports = () => {
   // dvf tickers
   dvf.getTickers = compose(require('../../api/getTickers'))
 
+  // dvf get DLM APIs
+  dvf.getTokenHolders = compose(require('../../api/getTokenHolders'))
+  dvf.getTokenLiquidityLeft = compose(require('../../api/getTokenLiquidityLeft'))
+  dvf.getTokenSaleStartEnd = compose(require('../../api/getTokenSaleStartEnd'))
+
+  dvf.getBridgeContractAddressOrThrow = compose(
+    require('../../lib/dvf/getBridgeContractAddressOrThrow')
+  )
+
   dvf.getBridgeContractAddressOrThrow = compose(require('../../lib/dvf/getBridgeContractAddressOrThrow'))
 
   // dvf main functions
