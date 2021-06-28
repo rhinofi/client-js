@@ -9,7 +9,7 @@ Keeping the schema visible and not in a seperate method
 for reference as required parameters can be checked by reading
 */
 
-const ordereSchema = Joi.object({
+const orderSchema = Joi.object({
   symbol: Joi.string().required(), // trading symbol
   amount: Joi.amount().required(), // number or number string
   price: Joi.price().required(), // number or number string
@@ -39,7 +39,7 @@ const ordereSchema = Joi.object({
   )
 })
 
-const schema = Joi.alternatives().try(ordereSchema, Joi.array().items(ordereSchema))
+const schema = Joi.alternatives().try(orderSchema, Joi.array().items(orderSchema))
 
 module.exports = async (dvf, orderData) => {
   const { value, error } = schema.validate(orderData)
