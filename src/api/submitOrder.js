@@ -1,12 +1,15 @@
 const { post } = require('request-promise')
 const DVFError = require('../lib/dvf/DVFError')
 const { Joi } = require('dvf-utils')
+const P = require('aigle')
+const FP = require('lodash/fp')
+
 /*
 Keeping the schema visible and not in a seperate method
 for reference as required parameters can be checked by reading
 */
 
-const schema = Joi.object({
+const orderSchema = Joi.object({
   symbol: Joi.string().required(), // trading symbol
   amount: Joi.amount().required(), // number or number string
   price: Joi.price().required(), // number or number string
@@ -36,6 +39,8 @@ const schema = Joi.object({
   )
 })
 
+const schema = Joi.alternatives().try(orderSchema, Joi.array().items(orderSchema))
+
 module.exports = async (dvf, orderData) => {
   const { value, error } = schema.validate(orderData)
 
@@ -55,7 +60,11 @@ module.exports = async (dvf, orderData) => {
     }
   }
 
-  return post(dvf.config.api + '/v1/trading/w/submitOrder', {
-    json: await dvf.createOrderPayload(value)
-  })
+  const json = await (
+    FP.isArray(value)
+      ? P.map(value, o => dvf.createOrderPayload(o))
+      : dvf.createOrderPayload(value)
+  )
+
+  return post(dvf.config.api + '/v1/trading/w/submitOrder', { json })
 }
