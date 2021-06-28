@@ -76,7 +76,8 @@ module.exports = () => {
       token: require('../../api/contract/abi/token.abi'),
       getStarkEx: () => require('../../api/contract/abi/StarkExV2.abi'),
       WithdrawalBalanceReader: require('../../api/contract/abi/WithdrawalBalanceReader.abi'),
-      getDVFInterface: () => require('../../api/contract/abi/DVFInterface.abi')
+      getDVFInterface: () => require('../../api/contract/abi/DVFInterface.abi'),
+      getSidechainBridgeInterface: () => require('../../api/contract/abi/BridgeDepositContract.abi')
     }
   }
   // dvf.token functions
@@ -142,11 +143,15 @@ module.exports = () => {
   // dvf tickers
   dvf.getTickers = compose(require('../../api/getTickers'))
 
+  dvf.getBridgeContractAddressOrThrow = compose(require('../../lib/dvf/getBridgeContractAddressOrThrow'))
+
   // dvf main functions
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
+  dvf.cancelOpenOrders = compose(require('../../api/cancelOpenOrders'))
   dvf.cancelWithdrawal = compose(require('../../api/cancelWithdrawal'))
   dvf.deposit = compose(require('../../api/deposit'))
   dvf.depositV2 = compose(require('../../api/depositV2'))
+  dvf.bridgedDeposit = compose(require('../../api/bridgedDeposit'))
   dvf.fastWithdrawal = compose(require('../../api/fastWithdrawal'))
   dvf.fastWithdrawalFee = compose(require('../../api/fastWithdrawalFee'))
   dvf.fastWithdrawalMaxAmount = compose(require('../../api/fastWithdrawalMaxAmount'))
@@ -177,6 +182,7 @@ module.exports = () => {
   dvf.getWithdrawals = compose(require('../../api/getWithdrawals'))
   dvf.withdraw = compose(require('../../api/withdraw'))
   dvf.withdrawV2 = compose(require('../../api/withdrawV2'))
+  dvf.bridgedWithdraw = compose(require('../../api/bridgedWithdraw'))
   dvf.withdrawOnchain = compose(require('../../api/withdrawOnchain'))
   dvf.getRegistrationStatuses = compose(require('../../api/getRegistrationStatuses'))
   dvf.fullWithdrawalRequest = compose(require('../../api/fullWithdrawalRequest'))

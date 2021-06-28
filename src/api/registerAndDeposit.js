@@ -8,6 +8,7 @@ const validateWithJoi = require('../lib/validators/validateWithJoi')
 const getSafeQuantizedAmountOrThrow = require('../lib/dvf/token/getSafeQuantizedAmountOrThrow')
 const getTokenAddressFromTokenInfoOrThrow = require('../lib/dvf/token/getTokenAddressFromTokenInfoOrThrow')
 const permitParamsSchema = require('../lib/schemas/permitParamsSchema')
+const createPromiseAndCallbackFn = require('../lib/util/createPromiseAndCallbackFn')
 
 const schema = Joi.object({
   token: Joi.string(),
@@ -68,19 +69,7 @@ module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, cont
       permitParams
     }
 
-    let transactionHashCb
-    const transactionHashPromise = new Promise((resolve, reject) => {
-      transactionHashCb = (err, result) => {
-        if (err) {
-          reject(err)
-        } else {
-          if (txHashCb) {
-            txHashCb(result)
-          }
-          resolve(result)
-        }
-      }
-    })
+    const [transactionHashPromise, transactionHashCb] = createPromiseAndCallbackFn(txHashCb)
 
     const options = {
       transactionHashCb,

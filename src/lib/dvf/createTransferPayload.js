@@ -5,6 +5,7 @@ const {
 const validateWithJoi = require('../validators/validateWithJoi')
 const DVFError = require('./DVFError')
 const makeCreateSignedTransferTx = require('./makeCreateSignedTransferTx')
+const getSafeQuantizedAmountOrThrow = require('./token/getSafeQuantizedAmountOrThrow')
 
 const getValidTokenInfo = dvf => token => {
   const tokenInfo = dvf.token.getTokenInfoOrThrow(token)
@@ -54,7 +55,7 @@ module.exports = async (dvf, transferData, feesRecipient, createSignedTransferTx
   } = validateArg0(transferData)
 
   const tokenInfo = getValidTokenInfo(dvf)(token)
-  const quantisedAmount = toQuantizedAmountBN(tokenInfo, amount)
+  const quantisedAmount = getSafeQuantizedAmountOrThrow(amount, tokenInfo)
 
   // tokenInfo.transferFee from conf as fee switch
   if (!tokenInfo.transferFee || !feesRecipient) {

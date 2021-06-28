@@ -23,7 +23,9 @@ const validateDepositAmountAndConvertToBN = amount => {
 const tokensWhichNeedResetToZero = ['USDT', 'OMG']
 
 module.exports = async (dvf, token, deposit, spender = dvf.config.DVF.starkExContractAddress, chain = 'ETHEREUM', options = {}) => {
-  if (token === 'ETH') {
+  const tokenInfo = dvf.token.getTokenInfoOrThrow(token)
+  const tokenAddress = getTokenAddressFromTokenInfoOrThrow(tokenInfo, chain)
+  if (!tokenAddress) { // undefined is equivalent of 0x0... address
     // TODO: This code is not very safe if caller expects the result to be of
     // the shape returned by dvf.eth.send below.
     return true
@@ -41,9 +43,6 @@ module.exports = async (dvf, token, deposit, spender = dvf.config.DVF.starkExCon
     // As above
     return true
   }
-
-  const tokenInfo = dvf.token.getTokenInfoOrThrow(token)
-  const tokenAddress = getTokenAddressFromTokenInfoOrThrow(tokenInfo, chain)
 
   const approve = amount => dvf.eth.send(
     dvf.contract.abi.token,

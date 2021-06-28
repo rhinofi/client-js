@@ -7,6 +7,10 @@ module.exports = () => {
       exchangeSymbols: ['ETH:USDT', 'ZRX:USDT', 'ZRX:ETH'],
       exchangeAddress: '0xBd25cD867C304F079E696CBE44D958f3d3B683ba',
       starkExContractAddress: '0xA9F9cC1189b9d6051b26467b29629787C671905d',
+      deversifiAddress: '0x9ab450355b4ab504cbc0e4de484781dac08e6a26',
+      bridgedDepositContractsPerChain: {
+        MATIC_POS: '0x3D8D1AaAD38d465d2c451B9d623EBd7Fda0edb0d'
+      },
       tempStarkVaultId: 1,
       defaultFeeRate: 0.0025
     },
@@ -19,7 +23,8 @@ module.exports = () => {
         starkTokenId:
           '0xb333e3142fe16b78628f19bb15afddaef437e72d6d7f5c6c20c6801a27fba6',
         tokenAddressPerChain: {
-          ETHEREUM: '0x0000000000000000000000000000000000000000'
+          ETHEREUM: '0x0000000000000000000000000000000000000000',
+          MATIC_POS: '0x0000000000000000000000000000000000000014'
         }
       },
       USDT: {
@@ -30,7 +35,8 @@ module.exports = () => {
         starkTokenId:
           '0x180bef8ae3462e919489763b84dc1dc700c45a249dec4d1136814a639f2dd7b',
         tokenAddressPerChain: {
-          ETHEREUM: '0x4c5f66596197a86fb30a2435e2ef4ddcb39342c9'
+          ETHEREUM: '0x4c5f66596197a86fb30a2435e2ef4ddcb39342c9',
+          MATIC_POS: '0x0000000000000000000000000000000000000011'
         }
       },
       ZRX: {
@@ -78,9 +84,10 @@ module.exports = () => {
     DVF: {
       exchangeSymbols: ['ETH:USDT', 'ZRX:USDT', 'ZRX:ETH'],
       exchangeAddress: '0xBd25cD867C304F079E696CBE44D958f3d3B683ba',
+      deversifiAddress: '0x9ab450355b4ab504cbc0e4de484781dac08e6a26',
       starkExContractAddress: '0xA9F9cC1189b9d6051b26467b29629787C671905d',
-      tokenAddressPerChain: {
-        ETHEREUM: '0x0000000000000000000000000000000000000000'
+      bridgedDepositContractsPerChain: {
+        MATIC_POS: '0x3D8D1AaAD38d465d2c451B9d623EBd7Fda0edb0d'
       },
       tempStarkVaultId: 1,
       defaultFeeRate: 0.0025
@@ -92,6 +99,10 @@ module.exports = () => {
         minOrderSize: 0.1,
         starkTokenId:
           '0xb333e3142fe16b78628f19bb15afddaef437e72d6d7f5c6c20c6801a27fba6',
+        tokenAddressPerChain: {
+          ETHEREUM: '0x0000000000000000000000000000000000000000',
+          MATIC_POS: '0x0000000000000000000000000000000000000014'
+        },
         starkVaultId: 1000001
       },
       USDT: {
@@ -102,7 +113,8 @@ module.exports = () => {
         starkTokenId:
           '0x180bef8ae3462e919489763b84dc1dc700c45a249dec4d1136814a639f2dd7b',
         tokenAddressPerChain: {
-          ETHEREUM: '0x4c5f66596197a86fb30a2435e2ef4ddcb39342c9'
+          ETHEREUM: '0x4c5f66596197a86fb30a2435e2ef4ddcb39342c9',
+          MATIC_POS: '0x0000000000000000000000000000000000000011'
         },
         starkVaultId: 1000002
       },
