@@ -4,6 +4,7 @@ const Web3 = require('web3')
 const aware = require('aware')
 const BigNumber = require('bignumber.js')
 const attachStarkProvider = require('./lib/wallet/attachStarkProvider')
+const { isObject } = require('lodash')
 BigNumber.config({ EXPONENTIAL_AT: 1e9 })
 
 /**
@@ -51,8 +52,14 @@ module.exports = async (web3, userConfig = {}, sw) => {
     }
   }
 
-  // save web3 instance int it
-  dvf.web3 = web3
+  // Guessing if web3 passed as argument is a single web3 instance
+  // or a map of web3 instances (for cross-chain features)
+  if (isObject(web3) && web3.ETHEREUM) {
+    dvf.web3 = web3.ETHEREUM
+    dvf.web3PerChain = web3
+  } else {
+    dvf.web3 = web3
+  }
 
   let chainId = 3
 
