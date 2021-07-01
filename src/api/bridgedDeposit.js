@@ -34,7 +34,6 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
   const baseUnitAmount = fromQuantizedToBaseUnitsBN(tokenInfo, quantisedAmount).toString()
 
   const bridgeContractAddress = dvf.getBridgeContractAddressOrThrow(chain)
-
   if (!permitParams) {
     await dvf.contract.approve(
       token,
@@ -54,12 +53,9 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
   }
   const [transactionHashPromise, transactionHashCb] = createPromiseAndCallbackFn(txHashCb)
 
-  if (dvf.dvfStarkProvider && dvf.dvfStarkProvider.getWalletType() === 'LEDGER') {
-    await dvf.token.provideContractData(null, tx.tokenAddress, tx.quantum)
-  }
-
   const options = {
     transactionHashCb,
+    chain,
     ...web3Options
   }
 

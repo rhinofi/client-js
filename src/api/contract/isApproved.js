@@ -19,6 +19,7 @@ module.exports = (dvf, token, chain, spender = dvf.config.DVF.starkExContractAdd
     dvf.contract.abi.token,
     tokenAddress,
     action,
-    args
+    args,
+    { chain }
   )
 }

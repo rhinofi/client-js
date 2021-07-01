@@ -53,7 +53,10 @@ module.exports = async (dvf, token, deposit, spender = dvf.config.DVF.starkExCon
       amount
     ],
     null,
-    options
+    {
+      chain,
+      ...options
+    }
   )
 
   // For some tokens, the amount needs to be reset to 0 before setting it to

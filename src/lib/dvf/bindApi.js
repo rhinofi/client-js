@@ -96,6 +96,7 @@ module.exports = () => {
 
   // dvf.eth functions
   dvf.eth = {
+    getWeb3ForChain: compose(require('../../api/eth/getWeb3ForChain')),
     call: compose(require('../../api/eth/call')),
     send: compose(require('../../api/eth/send')),
     getNetwork: compose(require('../../api/eth/getNetwork')),
