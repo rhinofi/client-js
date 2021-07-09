@@ -19,7 +19,14 @@ module.exports = async (dvf, transport, tokenAddress = '', transferQuantization)
     if (tokenInfo) {
       await _transport.provideERC20TokenInformation(tokenInfo)
     } else {
-      if (dvf.chainId !== 1) {
+      if (transferTokenAddress === 'dddddd4301a082e62e84e43f474f044423921918') {
+        await _transport.provideERC20TokenInformation({
+          data: Buffer.from(
+            `03445646DDdddd4301A082e62E84e43F474f04442392191800000012000000013045022100bd8a55c10b02bbe70f7266be7f5f5e7132140623b6de3fa27bdd820f11baa0d902207eb91acba7c2c5131d8285f9eba2f0d06bc9be3b4dfc29d05b0f25aa3b620a41`,
+            'hex'
+          )
+        })
+      } else if (dvf.chainId !== 1) {
         await _transport.provideERC20TokenInformation({
           data: Buffer.from(
             `00${transferTokenAddress}0000000000000003`,
