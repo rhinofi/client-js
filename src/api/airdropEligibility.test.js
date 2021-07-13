@@ -16,14 +16,14 @@ describe('dvf.airdropEligibility', () => {
       amount: '15.53',
       isRegistered: true
     }
-    const ethAddress = '0x1234'
+    const ethAddress = '0x15A9812E214B18cF5346a2FEC9EA91A68FD9ce00'
 
     nock(dvf.config.api)
       .get('/v1/trading/r/airdropEligibility')
       .query({ ethAddress })
       .reply(200, apiResponse)
 
-    const amount = await dvf.airdropEligibility(ethAddress)
-    expect(JSON.parse(amount)).toEqual(apiResponse)
+    const res = await dvf.airdropEligibility(ethAddress)
+    expect(res).toEqual(apiResponse)
   })
 })
