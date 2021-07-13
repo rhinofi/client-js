@@ -12,7 +12,10 @@ describe('dvf.airdropEligibility', () => {
   })
 
   it('Returns the DVF airdrop amount eligible for this address recieved from the API....', async () => {
-    const apiResponse = '15.53'
+    const apiResponse = {
+      amount: '15.53',
+      isRegistered: true
+    }
     const ethAddress = '0x1234'
 
     nock(dvf.config.api)
@@ -21,6 +24,6 @@ describe('dvf.airdropEligibility', () => {
       .reply(200, apiResponse)
 
     const amount = await dvf.airdropEligibility(ethAddress)
-    expect(amount).toEqual(apiResponse)
+    expect(JSON.parse(amount)).toEqual(apiResponse)
   })
 })
