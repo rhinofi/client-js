@@ -112,33 +112,37 @@ module.exports = async (dvf, withdrawalData, path) => {
     token: tokenInfo.starkTokenId,
     type: 'ConditionalTransferRequest'
   }
-  await dvf.token.provideContractData(eth, token === 'ETH' ? '' : tokenContractAddress, transferQuantization)
-  const starkSignature = await eth.starkSignTransfer_v2(
-    starkPath,
-    tokenContractAddress,
-    token === 'ETH' ? 'eth' : 'erc20',
-    transferQuantization,
-    null,
-    DVF.deversifiStarkKeyHex,
-    tokenInfo.starkVaultId,
-    tokenInfo.deversifiStarkVaultId,
-    quantisedAmount.plus(feeQuantised),
-    nonce,
-    expirationTimestamp,
-    DVF.starkExTransferRegistryContractAddress,
-    fact
-  )
-  await transport.close()
-  return {
-    recipientEthAddress,
-    transactionFee: feeQuantised.toString(),
-    tx: {
-      ...tx,
-      signature: {
-        r: `0x${starkSignature.r}`,
-        s: `0x${starkSignature.s}`
-      }
-    },
-    starkPublicKey
+
+  try {
+    await dvf.token.provideContractData(eth, token === 'ETH' ? '' : tokenContractAddress, transferQuantization)
+    const starkSignature = await eth.starkSignTransfer_v2(
+      starkPath,
+      tokenContractAddress,
+      token === 'ETH' ? 'eth' : 'erc20',
+      transferQuantization,
+      null,
+      DVF.deversifiStarkKeyHex,
+      tokenInfo.starkVaultId,
+      tokenInfo.deversifiStarkVaultId,
+      quantisedAmount.plus(feeQuantised),
+      nonce,
+      expirationTimestamp,
+      DVF.starkExTransferRegistryContractAddress,
+      fact
+    )
+    return {
+      recipientEthAddress,
+      transactionFee: feeQuantised.toString(),
+      tx: {
+        ...tx,
+        signature: {
+          r: `0x${starkSignature.r}`,
+          s: `0x${starkSignature.s}`
+        }
+      },
+      starkPublicKey
+    }
+  } finally {
+    await transport.close()
   }
 }

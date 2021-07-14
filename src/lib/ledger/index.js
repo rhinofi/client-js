@@ -22,27 +22,29 @@ const getTxSignature = async (dvf, tx, path) => {
     const transferQuantization = new BN(tokenInfo.quantization)
     const transferAmount = new BN(tx.amount)
 
-    // Load token information for Ledger device
-    await dvf.token.provideContractData(eth, tokenAddress, transferQuantization)
+    try {
+      // Load token information for Ledger device
+      await dvf.token.provideContractData(eth, tokenAddress, transferQuantization)
 
-    const starkSignature = await eth.starkSignTransfer_v2(
-      starkPath,
-      tokenAddress,
-      tokenAddress ? 'erc20' : 'eth',
-      transferQuantization,
-      null,
-      tx.receiverPublicKey,
-      tx.senderVaultId,
-      tx.receiverVaultId,
-      transferAmount,
-      tx.nonce,
-      tx.expirationTimestamp,
-      tx.type === 'ConditionalTransferRequest' ? tx.factRegistryAddress : null,
-      tx.type === 'ConditionalTransferRequest' ? tx.fact : null
-    )
-    await transport.close()
-
-    return starkSignature
+      const starkSignature = await eth.starkSignTransfer_v2(
+        starkPath,
+        tokenAddress,
+        tokenAddress ? 'erc20' : 'eth',
+        transferQuantization,
+        null,
+        tx.receiverPublicKey,
+        tx.senderVaultId,
+        tx.receiverVaultId,
+        transferAmount,
+        tx.nonce,
+        tx.expirationTimestamp,
+        tx.type === 'ConditionalTransferRequest' ? tx.factRegistryAddress : null,
+        tx.type === 'ConditionalTransferRequest' ? tx.fact : null
+      )
+      return starkSignature
+    } finally {
+      await transport.close()
+    }
   } else {
     throw new DVFError(`Unsupported stark transaction type: ${tx.type}`, {tx})
   }

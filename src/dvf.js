@@ -54,8 +54,8 @@ module.exports = async (web3, userConfig = {}, sw) => {
 
   // Guessing if web3 passed as argument is a single web3 instance
   // or a map of web3 instances (for cross-chain features)
-  if (isObject(web3) && web3.ETHEREUM) {
-    dvf.web3 = web3.ETHEREUM
+  if (isObject(web3) && web3.DEFAULT) {
+    dvf.web3 = web3.DEFAULT
     dvf.web3PerChain = web3
   } else {
     dvf.web3 = web3
