@@ -151,6 +151,7 @@ module.exports = () => {
 
   // dvf airdrop eligibility
   dvf.airdropEligibility = compose(require('../../api/airdropEligibility'))
+  dvf.claimAirdrop = compose(require('../../api/claimAirdrop'))
 
   dvf.getBridgeContractAddressOrThrow = compose(
     require('../../lib/dvf/getBridgeContractAddressOrThrow')
