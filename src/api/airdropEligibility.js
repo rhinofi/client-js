@@ -13,6 +13,6 @@ const validateInputs = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 
 module.exports = async (dvf, data) => {
   const { ethAddress, token } = validateInputs(data)
-  const endpoint = `/v1/trading/r/airdropEligibility?ethAddress=${ethAddress}&token=${token}`
-  return get(dvf, endpoint)
+  const endpoint = '/v1/trading/r/airdropEligibility'
+  return get(dvf, endpoint, {ethAddress, token})
 }
