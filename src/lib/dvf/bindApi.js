@@ -209,5 +209,6 @@ module.exports = () => {
   }
   dvf.estimatedNextBatchTime = compose(require('../../api/estimatedNextBatchTime'))
   dvf.publicUserPermissions = compose(require('../../api/getPublicPermissions'))
+  dvf.addAirdrops = compose(require('../../api/addAirdrops'))
   return dvf
 }
