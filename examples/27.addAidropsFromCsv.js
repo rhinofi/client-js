@@ -41,9 +41,10 @@ const dvfConfig = {
   const readFromCsv = (path) => {
     const data = fs.readFileSync(path, 'utf8')
     const splitData = data.split(/\r?\n/)
-    const airdrops = map(([user, token, amount]) => ({
-      user, token, amount
-    }))(splitData)
+    const airdrops = map((line) => {
+      const [user, token, amount] = line.split(',')
+      return { user, token, amount }
+    })(splitData)
 
     return airdrops
   }
