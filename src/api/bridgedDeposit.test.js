@@ -36,6 +36,10 @@ describe('dvf.bridgedDeposit', () => {
     stubDvfEthCall(dvf.eth)
     stubSendFn = stubDvfEthSend(dvf.eth, { stubTxHash })
     nock.cleanAll()
+
+    nock(dvf.config.api)
+      .post('/v1/trading/deposits-validate')
+      .reply(204)
   })
 
   afterEach(() => {
