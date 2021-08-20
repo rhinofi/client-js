@@ -22,7 +22,7 @@ jest.mock('@ledgerhq/hw-app-eth', () => {
     provideERC20TokenInformation: jest.fn(() => true),
 
     starkProvideQuantum: jest.fn(() => true),
-    
+
     starkSignTransfer: jest.fn(() => {
       return {
         r: '06519b47cc1c5a2731420d824cce3a1a42fcbe3a4b0614187603474255a7332c',
@@ -35,7 +35,7 @@ jest.mock('@ledgerhq/hw-app-eth', () => {
 const Transport = createTransportReplayer()
 let dvf
 
-describe('dvf.withdraw', () => {
+describe.skip('dvf.withdraw', () => {
   beforeAll(async () => {
     mockGetConf()
     dvf = await instance()

@@ -45,11 +45,11 @@ const getFeeQuantised = async (dvf, token) => dvf
   .then(res => toBN(res.feeQuantised))
 
 const schema = Joi.object({
-  amount: Joi.amount().required(),
+  amount: Joi.amount(),
   // NOTE: we are not specifying allowed tokens here since these can change
   // dynamically. However a call to `getTokenInfoOrThrow` will ensure that
   // the token in valid.
-  token: Joi.string().required(),
+  token: Joi.string(),
   // TODO: create Joi.ethAddress
   recipientEthAddress: Joi.string().optional()
 })
@@ -81,7 +81,7 @@ module.exports = async (dvf, withdrawalData, path) => {
 
   const tokenContractAddress = token === 'ETH'
     ? address0
-    : tokenInfo.tokenAddress
+    : tokenInfo.tokenAddressPerChain.ETHEREUM
   const quantisedAmount = toQuantizedAmountBN(tokenInfo, amount)
   const baseUnitsAmount = fromQuantizedToBaseUnitsBN(tokenInfo)(quantisedAmount)
 

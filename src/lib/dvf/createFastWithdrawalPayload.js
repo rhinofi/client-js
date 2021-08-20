@@ -8,7 +8,6 @@ const {
 const calculateFact = require('../stark/calculateFact')
 const validateWithJoi = require('../validators/validateWithJoi')
 
-const createSignedTransferPayload = require('./createSignedTransferPayload')
 const DVFError = require('./DVFError')
 
 const address0 = '0x'.padEnd(42, '0')
@@ -38,11 +37,11 @@ const getFeeQuantised = async (dvf, token) => dvf
   .then(res => toBN(res.feeQuantised))
 
 const schema = Joi.object({
-  amount: Joi.amount().required(),
+  amount: Joi.amount(),
   // NOTE: we are not specifying allowed tokens here since these can change
   // dynamically. However a call to `getTokenInfoOrThrow` will ensure that
   // the token in valid.
-  token: Joi.string().required(),
+  token: Joi.string(),
   // TODO: create Joi.ethAddress
   recipientEthAddress: Joi.string().optional(),
   transactionFee: Joi.alternatives()
@@ -51,8 +50,7 @@ const schema = Joi.object({
 })
 
 const errorProps = { context: 'fastWithdrawal' }
-const validateArg0 = validateWithJoi
-  (schema)
+const validateArg0 = validateWithJoi(schema)
   ('INVALID_METHOD_ARGUMENT')
   ({ ...errorProps, argIdx: 0 })
 
@@ -74,7 +72,7 @@ module.exports = async (dvf, withdrawalData) => {
 
   const tokenContractAddress = token === 'ETH'
     ? address0
-    : tokenInfo.tokenAddress
+    : tokenInfo.tokenAddressPerChain.ETHEREUM
   const quantisedAmount = toQuantizedAmountBN(tokenInfo, amount)
   const baseUnitsAmount = fromQuantizedToBaseUnitsBN(tokenInfo)(quantisedAmount)
 
@@ -86,7 +84,7 @@ module.exports = async (dvf, withdrawalData) => {
   )
 
   const { DVF } = dvf.config
-  const tx = {
+  const txParams = {
     // Stark transaction includes the fee.
     amount: quantisedAmount.plus(feeQuantised).toString(),
     fact,
@@ -99,9 +97,16 @@ module.exports = async (dvf, withdrawalData) => {
     type: 'ConditionalTransferRequest'
   }
 
+  const tx = await dvf.createSignedTransfer(txParams)
+
+  // TODO: Refactor to avoid getting pub key at different levels
+  const { dvfStarkProvider } = dvf
+  const starkPublicKey = await dvfStarkProvider.getPublicKey()
+
   return {
     recipientEthAddress,
     transactionFee: feeQuantised.toString(),
-    ...(await createSignedTransferPayload(dvf)(tx))
+    tx,
+    starkPublicKey
   }
 }

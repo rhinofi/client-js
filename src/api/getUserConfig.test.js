@@ -16,7 +16,7 @@ describe('dvf.getUserConfig', () => {
     nock.cleanAll()
   })
 
-  it.only('Returns the user config recieved from the API', async () => {
+  it('Returns the user config recieved from the API', async () => {
 
     const apiResponse = {
       DVF: {
@@ -72,7 +72,7 @@ describe('dvf.getUserConfig', () => {
     }
 
     const payloadValidator = jest.fn(body => {
-      expect(typeof body.nonce).toEqual('number')
+      expect(typeof body.nonce).toEqual('string')
       expect(typeof body.signature).toEqual('string')
       return true
     })

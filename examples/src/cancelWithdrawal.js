@@ -1,7 +1,8 @@
 let withdrawalId
 const withdrawals = await dvf.getWithdrawals()
+const nonFastWithdrawals = withdrawals.filter(w => !w.fastWithdrawalData)
 
-if (withdrawals.length == 0) {
+if (nonFastWithdrawals.length === 0) {
   console.log('creating a new withdrawal')
 
   const token = 'ETH'
@@ -15,9 +16,8 @@ if (withdrawals.length == 0) {
 
   console.log('withdrawalResponse', withdrawalResponse)
   withdrawalId = withdrawalResponse._id
-}
-else {
-  withdrawalId = withdrawals[0]._id
+} else {
+  withdrawalId = nonFastWithdrawals[0]._id
 }
 
 const canceledWithdrawal = await dvf.cancelWithdrawal(withdrawalId)

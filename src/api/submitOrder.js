@@ -6,7 +6,6 @@ Keeping the schema visible and not in a seperate method
 for reference as required parameters can be checked by reading
 */
 
-
 const schema = Joi.object({
   symbol: Joi.string().required(), // trading symbol
   amount: Joi.amount().required(), // number or number string
@@ -19,14 +18,22 @@ const schema = Joi.object({
   gid: Joi.string().allow(''),
   partnerId: Joi.string().allow(''),
   ethAddress: Joi.string().pattern(/[\da-f]/i),
+  feature: Joi.string().default('UNKNOWN'), // Tracks order origin (ex: 'TRADING', 'SWAP')
   type: Joi.any().default('EXCHANGE LIMIT'),
   protocol: Joi.any().default('stark'),
   isPostOnly: Joi.bool().description('Flag to indicate if the order is post-only.'),
   isHidden: Joi.bool().description('Flag to indicate if the order is hidden.'),
   isSlippageDisabled: Joi.bool().description('Flag to indicate if the order should ignore slippage.'),
   isFillOrKill: Joi.bool().description('Flag to indicate if the order is fill-or-kill'),
-  nonce: Joi.string().allow(''),
-  signature: Joi.string().allow('')
+  nonce: Joi.alternatives().try(Joi.string().allow(''), Joi.number().allow('')),
+  signature: Joi.alternatives().try(
+    Joi.string().allow(''),
+    Joi.object({
+      s: Joi.string(),
+      r: Joi.string(),
+      recoveryParam: Joi.number()
+    })
+  )
 })
 
 module.exports = async (dvf, orderData) => {

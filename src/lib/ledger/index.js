@@ -3,6 +3,7 @@ const BN = require('bignumber.js')
 const Eth = require('@ledgerhq/hw-app-eth').default
 const DVFError = require('../dvf/DVFError')
 const selectTransport = require('./selectTransport')
+const getTokenAddressFromTokenInfoOrThrow = require('../dvf/token/getTokenAddressFromTokenInfoOrThrow')
 
 const transferTransactionTypes = [
   'ConditionalTransferRequest',
@@ -16,8 +17,9 @@ const getTxSignature = async (dvf, tx, path) => {
     const eth = new Eth(transport)
     const {address} = await eth.getAddress(path)
     const starkPath = dvf.stark.ledger.getPath(address)
-    const {tokenAddress, quantization} = dvf.token.getTokenInfoByTokenId(tx.token)
-    const transferQuantization = new BN(quantization)
+    const tokenInfo = dvf.token.getTokenInfoByTokenId(tx.token)
+    const tokenAddress = getTokenAddressFromTokenInfoOrThrow(tokenInfo, 'ETHEREUM')
+    const transferQuantization = new BN(tokenInfo.quantization)
     const transferAmount = new BN(tx.amount)
 
     // Load token information for Ledger device
@@ -64,5 +66,7 @@ module.exports = (dvf) => {
     )
   }
 
-  return {sign, getPublicKey}
+  const getWalletType = () => 'LEDGER'
+
+  return {sign, getPublicKey, getWalletType}
 }

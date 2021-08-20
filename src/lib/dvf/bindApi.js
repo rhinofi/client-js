@@ -20,7 +20,9 @@ module.exports = () => {
   dvf.account = {
     balance: compose(require('../../api/account/balance')),
     tokenBalance: compose(require('../../api/account/tokenBalance')),
-    select: compose(require('../../api/account/select'))
+    select: compose(require('../../api/account/select')),
+    getPermissions: compose(require('../../api/account/permissions').getPermissions),
+    setPermissions: compose(require('../../api/account/permissions').setPermissions)
   }
 
   dvf.stark = {
@@ -28,6 +30,7 @@ module.exports = () => {
     createMarketOrder: compose(require('../stark/createMarketOrder')),
     createOrderMessage: compose(require('../stark/createOrderMessage')),
     sign: compose(require('../stark/starkSign')),
+    signAuth: compose(require('../stark/starkSignAuth')),
     createTransferMsg: compose(require('../stark/createTransferMessage')),
     createPrivateKey: require('../stark/createPrivateKey'),
     createKeyPair: compose(require('../stark/createKeyPair')),
@@ -46,15 +49,7 @@ module.exports = () => {
       ),
       createSignedOrder: compose(
         require('../../lib/stark/ledger/createSignedOrder')
-      ),
-      createSignedTransferPayload: compose(
-        require('../../lib/ledger/createSignedTransferPayload')
       )
-    },
-    authereum: {
-      createSignedTransfer: compose(require('../stark/authereum/createSignedTransfer')),
-      createSignedOrder: compose(require('../stark/authereum/createSignedOrder')),
-      getPublicKey: compose(require('../stark/authereum/getPublicKey'))
     }
   }
 
@@ -62,6 +57,9 @@ module.exports = () => {
   dvf.contract = {
     approve: compose(require('../../api/contract/approve')),
     isApproved: compose(require('../../api/contract/isApproved')),
+    getPermitNonceForAddress: compose(require('../../api/contract/getPermitNonceForAddress')),
+    getPermitNonceWithUnderscoreForAddress: compose(require('../../api/contract/getPermitNonceWithUnderscoreForAddress')),
+    getNameForAddress: compose(require('../../api/contract/getNameForAddress')),
     deposit: compose(require('../../api/contract/deposit')),
     depositCancel: compose(require('../../api/contract/depositCancel')),
     depositReclaim: compose(require('../../api/contract/depositReclaim')),
@@ -77,7 +75,9 @@ module.exports = () => {
     abi: {
       token: require('../../api/contract/abi/token.abi'),
       getStarkEx: () => require('../../api/contract/abi/StarkExV2.abi'),
-      WithdrawalBalanceReader: require('../../api/contract/abi/WithdrawalBalanceReader.abi')
+      WithdrawalBalanceReader: require('../../api/contract/abi/WithdrawalBalanceReader.abi'),
+      getDVFInterface: () => require('../../api/contract/abi/DVFInterface.abi'),
+      getSidechainBridgeInterface: () => require('../../api/contract/abi/BridgeDepositContract.abi')
     }
   }
   // dvf.token functions
@@ -118,6 +118,7 @@ module.exports = () => {
   dvf.sign.nonceSignature = compose(require('../../api/sign/nonceSignature'))
 
   dvf.postAuthenticated = compose(require('../../lib/dvf/post-authenticated'))
+  dvf.getAuthenticated = compose(require('../../lib/dvf/get-authenticated'))
 
   dvf.createOrderPayload = compose(require('../../lib/dvf/createOrderPayload'))
   dvf.createMarketOrderPayload = compose(require('../../lib/dvf/createMarketOrderPayload'))
@@ -133,17 +134,24 @@ module.exports = () => {
   dvf.createTransferPayload = compose(
     require('./createTransferPayload')
   )
+  dvf.createSignedTransfer = compose(
+    require('./createSignedTransfer')
+  )
   // dvf trading volume data
   dvf.get30DaysVolume = compose(require('../../api/get30DaysVolume'))
 
-  // bfx data
-  dvf.getTickers = compose(require('../../lib/bfx/getTickers'))
+  // dvf tickers
+  dvf.getTickers = compose(require('../../api/getTickers'))
+
+  dvf.getBridgeContractAddressOrThrow = compose(require('../../lib/dvf/getBridgeContractAddressOrThrow'))
 
   // dvf main functions
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
+  dvf.cancelOpenOrders = compose(require('../../api/cancelOpenOrders'))
   dvf.cancelWithdrawal = compose(require('../../api/cancelWithdrawal'))
   dvf.deposit = compose(require('../../api/deposit'))
   dvf.depositV2 = compose(require('../../api/depositV2'))
+  dvf.bridgedDeposit = compose(require('../../api/bridgedDeposit'))
   dvf.fastWithdrawal = compose(require('../../api/fastWithdrawal'))
   dvf.fastWithdrawalFee = compose(require('../../api/fastWithdrawalFee'))
   dvf.fastWithdrawalMaxAmount = compose(require('../../api/fastWithdrawalMaxAmount'))
@@ -163,6 +171,7 @@ module.exports = () => {
   dvf.getVaultIdFromServer = compose(require('../../api/getVaultIdFromServer'))
   dvf.getVaultIdAndStarkKey = compose(require('../../api/getVaultIdAndStarkKey'))
   dvf.register = compose(require('../../api/register'))
+  dvf.registerAndDeposit = compose(require('../../api/registerAndDeposit'))
   dvf.submitBuyOrder = compose(require('../../api/submitBuyOrder'))
   dvf.submitOrder = compose(require('../../api/submitOrder'))
   dvf.submitMarketOrder = compose(require('../../api/submitMarketOrder'))
@@ -173,18 +182,19 @@ module.exports = () => {
   dvf.getWithdrawals = compose(require('../../api/getWithdrawals'))
   dvf.withdraw = compose(require('../../api/withdraw'))
   dvf.withdrawV2 = compose(require('../../api/withdrawV2'))
+  dvf.bridgedWithdraw = compose(require('../../api/bridgedWithdraw'))
   dvf.withdrawOnchain = compose(require('../../api/withdrawOnchain'))
+  dvf.getRegistrationStatuses = compose(require('../../api/getRegistrationStatuses'))
   dvf.fullWithdrawalRequest = compose(require('../../api/fullWithdrawalRequest'))
+  dvf.getMinMaxOrderSize = compose(require('../../api/getMinMaxOrderSize'))
+
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),
     withdraw: compose(require('../../api/ledger/withdraw')),
     transfer: compose(require('../../api/ledger/transfer')),
     transferUsingVaultIdAndStarkKey: compose(require('../../api/ledger/transferUsingVaultIdAndStarkKey'))
   }
-  dvf.authereum = {
-    deposit: compose(require('../../api/authereum/deposit')),
-    withdraw: compose(require('../../api/authereum/withdraw'))
-  }
   dvf.estimatedNextBatchTime = compose(require('../../api/estimatedNextBatchTime'))
+  dvf.publicUserPermissions = compose(require('../../api/getPublicPermissions'))
   return dvf
 }

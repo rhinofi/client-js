@@ -17,7 +17,7 @@ describe('dvf.getGasPrice', () => {
     nock.cleanAll()
   })
 
-  it.only('Returns gas price range', async () => {
+  it('Returns gas price range', async () => {
     const apiResponse = {
       cheap: 700000000,
       average: 600000000,

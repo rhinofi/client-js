@@ -1,7 +1,5 @@
 const nock = require('nock')
 const instance = require('./test/helpers/instance')
-const _ = require('lodash')
-
 const mockGetConf = require('./test/fixtures/getConf')
 
 let dvf
@@ -17,7 +15,7 @@ describe('dvf.getOrders', () => {
 
     const payloadValidator = jest.fn(body => {
       expect(body.symbol).toEqual('ETH:USDT')
-      expect(typeof body.nonce).toEqual('number')
+      expect(typeof body.nonce).toEqual('string')
       expect(typeof body.signature).toEqual('string')
       return true
     })

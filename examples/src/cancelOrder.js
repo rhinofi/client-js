@@ -1,5 +1,5 @@
 const P = require('aigle')
-let orderId
+let order
 const orders = await dvf.getOrders()
 
 console.log('orders', orders)
@@ -14,7 +14,7 @@ if (orders.length == 0) {
   const validFor = '0'
   const feeRate = ''
 
-  const submitOrderResponse = await dvf.submitOrder({
+  order = await dvf.submitOrder({
     symbol,
     amount,
     price,
@@ -22,26 +22,26 @@ if (orders.length == 0) {
     validFor,           // Optional
     feeRate,            // Optional
     gid: '1',           // Optional
-    cid: '1',           // Optional
+    cid: 'mycid-cancel-example-' + Math.random().toString(36).substring(7), // Optional
     partnerId: 'P1'    // Optional
   })
 
-  console.log('submitOrder response ->', submitOrderResponse)
-
-  orderId = submitOrderResponse._id
+  console.log('submitOrder response ->', order)
 
   while (true) {
     console.log('checking if order appears on the book...')
-    if ((await dvf.getOrders()).find(o => o._id === orderId)) break
+    if ((await dvf.getOrders()).find(o => o._id === order._id)) break
     await P.delay(1000)
   }
 }
 else {
-  orderId = orders[0]._id
+  order = orders[0]
 }
 
-console.log('cancelling orderId', orderId)
+console.log('cancelling orderId', order._id)
 
-const response = await dvf.cancelOrder(orderId)
+const response = await dvf.cancelOrder(order._id)
+// Alternative with cid :
+// const response = await dvf.cancelOrder({ cid: order.cid })
 
 logExampleResult(response)

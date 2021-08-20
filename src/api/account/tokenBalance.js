@@ -1,11 +1,14 @@
-module.exports = (dvf, token) => {
-  const currency = dvf.token.getTokenInfo(token)
+const getTokenAddressFromTokenInfoOrThrow = require('../../lib/dvf/token/getTokenAddressFromTokenInfoOrThrow')
+
+module.exports = (dvf, token, chain = 'ETHEREUN') => {
+  const tokenInfo = dvf.token.getTokenInfo(token)
   const action = 'balanceOf'
   const args = [dvf.get('account')]
+  const tokenAddress = getTokenAddressFromTokenInfoOrThrow(tokenInfo, chain)
 
   return dvf.eth.call(
     dvf.contract.abi.token,
-    currency.tokenAddress,
+    tokenAddress,
     action,
     args
   )

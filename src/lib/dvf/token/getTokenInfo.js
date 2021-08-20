@@ -1,5 +1,10 @@
 const bfxTodvf = require('dvf-utils').BfxToDvfToken
 
+// TODO: Deprecated
 module.exports = (dvf, token) => {
-  return dvf.config.tokenRegistry[bfxTodvf(token)]
+  const tokenInfo = dvf.config.tokenRegistry[bfxTodvf(token)]
+  // Returning the symbol along with the info
+  if (tokenInfo) {
+    return {token, ...tokenInfo}
+  }
 }

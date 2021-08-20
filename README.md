@@ -28,7 +28,8 @@ A js client library for DeversiFi - StarkWare orders
 - [Cancelling Orders](#cancelling-orders)
 - [Authenticated data endpoints](#authenticated-data-endpoints)
 - [More examples](#more-examples)
-- [Gas Price](#gas-price)
+    - [Gas Price](#gas-price)
+    - [Custom order ID](#custom-order-id)
 - [Troubleshooting](#troubleshooting)
 - [Developing](#developing)
     - [Setup](#setup-1)
@@ -145,7 +146,9 @@ to this:
          "decimals":18,
          "quantization":10000000000,
          "minOrderSize":0.025,
-         "tokenAddress":"0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2",
+         "tokenAddressPerChain": {
+            "ETHEREUM": "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2"
+         },
          "starkTokenId":"0x1a4af39d27ce2e3445ed084809e5bc36d03918df04b7e2b6ee3c769a9892600"
       }
    }
@@ -242,7 +245,7 @@ This authenticated endpoint is used to place an order.
 - `isHidden` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** Flag to indicate if the order is hidden.      
 - `validFor` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)**? Validation time in hours
 - `feeRate` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)**? Fee rate if known
-- `cid` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**?      
+- `cid` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Optional custom order ID that could be set when placing order and used later to retrieve order. This ID is unique per user (user A and B can each have an order with `cid = AAA`, but the same user cannot have two orders with the same `cid`). [See example](#custom-order-id)
 - `gid` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**?      
 - `partnerId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**?      
 - `ethAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**?      
@@ -260,20 +263,45 @@ const price = 0.0025
 const orderId = await dvf.submitOrder(symbol, amount, price)
 ```
 
+### Getting Orders
+This method allows you to get a specific order by `orderId` or `cid`.
+
+##### Parameters
+- `orderId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? ID of the order
+- `nonce` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Nonce which is used to provide the time until which this nonce is valid. It is presented as seconds since epoch.
+- `signature` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? The signature obtained by signing the nonce with your private ethereum key.
+- `cid` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? If order was placed with custom order ID (`cid`) property set, it can be canceled using same `cid`.
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[CancelOrderResponse](https://docs.deversifi.com/docs#postV1TradingWCancelorder)>**
+
+```javascript
+const orderID = '123'
+const customID = 'cid-123'
+
+const order = await dvf.getOrder({ orderId: orderID })
+// or
+const order = await dvf.getOrder({ cid: customID })
+```
+
 
 ### Cancelling Orders
-This method allows you to cancel a specific order.
+This method allows you to cancel a specific order by `orderId` or `cid`.
 
 ##### Parameters
 - `orderId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** ID of the order
 - `nonce` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Nonce which is used to provide the time until which this nonce is valid. It is presented as seconds since epoch.
 - `signature` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? The signature obtained by signing the nonce with your private ethereum key.
+- `cid` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? If order was placed with custom order ID (`cid`) property set, it can be canceled using same `cid`.
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[CancelOrderResponse](https://docs.deversifi.com/docs#postV1TradingWCancelorder)>**
 
 ```javascript
-const orderId = '123'
-const response = await dvf.cancelOrder(orderId)
+const orderID = '123'
+const customID = 'cid-123'
+
+const response = await dvf.cancelOrder({ orderId: orderID })
+// or
+const response = await dvf.cancelOrder({ cid: customID })
 ```
 
 ### Withdrawing tokens
@@ -368,6 +396,30 @@ or by setting the 'gasStationApiKey' property:
 
 dvf.set('gasStationApiKey', 'a1b2c3...')
 
+```
+### Custom order ID
+Property `cid` can be used to give order custom identificator for further tracking.
+
+```js
+const symbol = 'ETH:USDT'
+const amount = -1.42
+const price = 3000
+
+const customOrderID = `short-` + Math.random().toString(36).substring(7)
+
+await dvf.submitOrder({
+  symbol, 
+  amount, 
+  price,
+  cid: customOrderID,
+})
+
+// ...
+// Later we can use `cid` to get order
+const order = await dvf.getOrder({cid: customOrderID})
+
+// or cancel it
+await dvf.cancelOrder({cid: customOrderID})
 ```
 
 ## Troubleshooting

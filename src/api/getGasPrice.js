@@ -1,4 +1,4 @@
-const { post } = require('request-promise')
+const { get } = require('request-promise')
 
 module.exports = async (dvf) => {
   const defaultGasPrice = dvf.config.defaultGasPrice
@@ -8,7 +8,7 @@ module.exports = async (dvf) => {
   const url = dvf.config.api + endpoint
 
   try {
-    const newGasPrice = await post(url, { json: {} })
+    const newGasPrice = await get(url, { json: true })
     dvf.config.defaultGasPrice = newGasPrice.fast || dvf.config.defaultGasPrice
     return newGasPrice ||  oldGasPrice
   }

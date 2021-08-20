@@ -49,3 +49,16 @@ examples.
 
 For the examples which required ether balance, you  will also need to call
 `./02.deposit.js`.
+
+
+## Editing or adding examples.
+
+Example files in the [/examples](/examples) directory SHOULD NOT BE EDITED
+BY HAND. Instead, they should be built with with [buildExamples](/examples/helpers/buildExamples.js) script.
+The script uses the [helpers/examplesList.js](/examples/helpers/examplesList.js), [helpers/example.js.tmpl](/examples/helpers/example.js.tmpl) and files from [src](/examples/src) directory. For simple methods
+which do not required arguments (or additional setup), including the name of the method
+in [examplesList](/examples/helpers/examplesList.js) should be enough. For other
+cases, a file named the same as the entry in [examplesList](/examples/helpers/examplesList.js)
+can be placed in [src](/examples/src), and the content of this file
+will be spliced into the [example.js.tmpl](/examples/helpers/example.js.tmpl)
+(in place of `{{{EXAMPLE_SRC}}}`).

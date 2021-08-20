@@ -95,7 +95,7 @@ describe('dvf.getOrdersHist', () => {
     const payloadValidator = jest.fn(body => {
       expect(body.symbol).toBe(symbol)
       expect(typeof body.symbol).toBe('string')
-      expect(typeof body.nonce).toBe('number')
+      expect(typeof body.nonce).toBe('string')
       expect(body.signature).toMatch(/[\da-f]/i)
 
       return true
@@ -194,7 +194,7 @@ describe('dvf.getOrdersHist', () => {
 
     const payloadValidator = jest.fn(body => {
       expect(body.symbol).toBe(undefined)
-      expect(typeof body.nonce).toBe('number')
+      expect(typeof body.nonce).toBe('string')
       expect(body.signature).toMatch(/[\da-f]/i)
 
       return true
