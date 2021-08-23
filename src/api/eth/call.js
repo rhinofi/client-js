@@ -1,6 +1,5 @@
 module.exports = async (dvf, abi, address, action, args, options = {}) => {
-  const { web3 } = dvf
-
+  const web3 = dvf.eth.getWeb3ForChain(options.chain)
   const contract = new web3.eth.Contract(abi, address)
 
   // using eth.call

@@ -4,15 +4,18 @@
  * https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md#construction_worker-network-check
  *
  **/
-module.exports = async (dvf) => {
-  const id = await dvf.web3.eth.net.getId()
+module.exports = async (dvf, chain = 'ETHEREUM') => {
+  const web3 = dvf.eth.getWeb3ForChain(chain)
+  const id = await web3.eth.net.getId()
 
   const labels = {
     '1': 'mainnet',
     '2': 'morden',
     '3': 'ropsten',
     '4': 'Rinkeby',
-    '42': 'Kovan'
+    '42': 'Kovan',
+    '137': 'Matic Network',
+    '80001': 'Mumbai'
   }
 
   return {

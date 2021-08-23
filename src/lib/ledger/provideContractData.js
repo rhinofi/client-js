@@ -13,30 +13,40 @@ module.exports = async (dvf, transport, tokenAddress = '', transferQuantization)
     _transport = new Eth(createdTransport)
   }
 
-  let transferTokenAddress = tokenAddress.slice(0, 2) === '0x' ? tokenAddress.substr(2) : tokenAddress
-  if (transferTokenAddress) {
-    const tokenInfo = byContractAddress(`0x${transferTokenAddress}`)
-    if (tokenInfo) {
-      await _transport.provideERC20TokenInformation(tokenInfo)
-    } else {
-      if (dvf.chainId !== 1) {
-        await _transport.provideERC20TokenInformation({
-          data: Buffer.from(
-            `00${transferTokenAddress}0000000000000003`,
-            'hex'
-          )
-        })
+  try {
+    let transferTokenAddress = tokenAddress.slice(0, 2) === '0x' ? tokenAddress.substr(2) : tokenAddress
+    if (transferTokenAddress) {
+      const tokenInfo = byContractAddress(`0x${transferTokenAddress}`)
+      if (tokenInfo) {
+        await _transport.provideERC20TokenInformation(tokenInfo)
       } else {
-        throw new DVFError('LEDGER_TOKENINFO_ERR')
+        if (transferTokenAddress === 'dddddd4301a082e62e84e43f474f044423921918') {
+          await _transport.provideERC20TokenInformation({
+            data: Buffer.from(
+              `03445646DDdddd4301A082e62E84e43F474f04442392191800000012000000013045022100bd8a55c10b02bbe70f7266be7f5f5e7132140623b6de3fa27bdd820f11baa0d902207eb91acba7c2c5131d8285f9eba2f0d06bc9be3b4dfc29d05b0f25aa3b620a41`,
+              'hex'
+            )
+          })
+        } else if (dvf.chainId !== 1) {
+          await _transport.provideERC20TokenInformation({
+            data: Buffer.from(
+              `00${transferTokenAddress}0000000000000003`,
+              'hex'
+            )
+          })
+        } else {
+          throw new DVFError('LEDGER_TOKENINFO_ERR')
+        }
       }
+    } else {
+      transferTokenAddress = null
     }
-  } else {
-    transferTokenAddress = null
-  }
-  if (transferQuantization) {
-    await _transport.starkProvideQuantum_v2(transferTokenAddress, tokenAddress ? 'erc20' : 'eth', transferQuantization, null)
-  }
-  if (createdTransport) {
-    await createdTransport.close()
+    if (transferQuantization) {
+      await _transport.starkProvideQuantum_v2(transferTokenAddress, tokenAddress ? 'erc20' : 'eth', transferQuantization, null)
+    }
+  } finally {
+    if (createdTransport) {
+      await createdTransport.close()
+    }
   }
 }

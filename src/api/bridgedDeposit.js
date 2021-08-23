@@ -25,6 +25,7 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 })
 
 const endpoint = '/v1/trading/bridgedDeposits'
+const validationEndpoint = '/v1/trading/deposits-validate'
 
 module.exports = async (dvf, data, nonce, signature, txHashCb) => {
   const { chain, token, amount, web3Options, permitParams } = validateArg0(data)
@@ -33,8 +34,11 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
   const quantisedAmount = getSafeQuantizedAmountOrThrow(amount, tokenInfo)
   const baseUnitAmount = fromQuantizedToBaseUnitsBN(tokenInfo, quantisedAmount).toString()
 
-  const bridgeContractAddress = dvf.getBridgeContractAddressOrThrow(chain)
+  // Force the use of header (instead of payload) for authentication.
+  dvf = FP.set('config.useAuthHeader', true, dvf)
+  await post(dvf, validationEndpoint, nonce, signature, { token, amount: quantisedAmount })
 
+  const bridgeContractAddress = dvf.getBridgeContractAddressOrThrow(chain)
   if (!permitParams) {
     await dvf.contract.approve(
       token,
@@ -54,12 +58,9 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
   }
   const [transactionHashPromise, transactionHashCb] = createPromiseAndCallbackFn(txHashCb)
 
-  if (dvf.dvfStarkProvider && dvf.dvfStarkProvider.getWalletType() === 'LEDGER') {
-    await dvf.token.provideContractData(null, tx.tokenAddress, tx.quantum)
-  }
-
   const options = {
     transactionHashCb,
+    chain,
     ...web3Options
   }
 
@@ -73,8 +74,6 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
     amount: quantisedAmount,
     txHash: transactionHash
   }
-  // Force the use of header (instead of payload) for authentication.
-  dvf = FP.set('config.useAuthHeader', true, dvf)
   const httpDeposit = await post(dvf, endpoint, nonce, signature, payload)
 
   const onChainDeposit = await onChainDepositPromise

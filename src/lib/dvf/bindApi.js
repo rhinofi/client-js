@@ -97,6 +97,7 @@ module.exports = () => {
 
   // dvf.eth functions
   dvf.eth = {
+    getWeb3ForChain: compose(require('../../api/eth/getWeb3ForChain')),
     call: compose(require('../../api/eth/call')),
     send: compose(require('../../api/eth/send')),
     getNetwork: compose(require('../../api/eth/getNetwork')),
@@ -144,10 +145,23 @@ module.exports = () => {
   // dvf tickers
   dvf.getTickers = compose(require('../../api/getTickers'))
 
+  // dvf get DLM APIs
+  dvf.getTokenHolders = compose(require('../../api/getTokenHolders'))
+  dvf.getTokenLiquidityLeft = compose(require('../../api/getTokenLiquidityLeft'))
+  dvf.getTokenSaleStartEnd = compose(require('../../api/getTokenSaleStartEnd'))
+
+  // dvf airdrop eligibility
+  dvf.airdropEligibility = compose(require('../../api/airdropEligibility'))
+
+  dvf.getBridgeContractAddressOrThrow = compose(
+    require('../../lib/dvf/getBridgeContractAddressOrThrow')
+  )
+
   dvf.getBridgeContractAddressOrThrow = compose(require('../../lib/dvf/getBridgeContractAddressOrThrow'))
 
   // dvf main functions
   dvf.cancelOrder = compose(require('../../api/cancelOrder'))
+  dvf.cancelOpenOrders = compose(require('../../api/cancelOpenOrders'))
   dvf.cancelWithdrawal = compose(require('../../api/cancelWithdrawal'))
   dvf.deposit = compose(require('../../api/deposit'))
   dvf.depositV2 = compose(require('../../api/depositV2'))
