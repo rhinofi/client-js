@@ -10,7 +10,7 @@ if (process.env.WAIT_FOR_DEPOSIT_READY === 'true') {
   await waitForDepositCreditedOnChain(dvf, depositUSDTResponse)
 }
 
-const pool = `${token1}:${token2}`
+const pool = `${token1}${token2}`
 
 // Amm deposit consist of 2 orders, one for each of the pool tokens.
 // The tokens need to be supplied in a specific ratio. This call fetches
