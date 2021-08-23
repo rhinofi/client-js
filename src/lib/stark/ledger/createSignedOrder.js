@@ -1,13 +1,20 @@
 const Eth = require('@ledgerhq/hw-app-eth').default
-const byContractAddress = require('@ledgerhq/hw-app-eth/erc20')
-  .byContractAddress
+const { byContractAddress } = require('@ledgerhq/hw-app-eth/erc20')
 const DVFError = require('../../dvf/DVFError')
 const BN = require('bignumber.js')
 const _ = require('lodash')
 const selectTransport = require('../../ledger/selectTransport')
 const getTokenAddressFromTokenInfoOrThrow = require('../../dvf/token/getTokenAddressFromTokenInfoOrThrow')
 
-module.exports = async (dvf, path, starkOrder) => {
+const getPublicKey = async (eth, starkPath) => {
+  const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')
+  return {
+    x: tempKey.substr(2, 64),
+    y: tempKey.substr(66)
+  }
+}
+
+module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true } = {}) => {
   const Transport = selectTransport(dvf.isBrowser)
 
   const buySymbol = _.findKey(dvf.config.tokenRegistry, {
@@ -25,11 +32,10 @@ module.exports = async (dvf, path, starkOrder) => {
   const eth = new Eth(transport)
   const {address} = await eth.getAddress(path)
   const starkPath = dvf.stark.ledger.getPath(address)
-  const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')
-  let starkPublicKey = {
-    x: tempKey.substr(2, 64),
-    y: tempKey.substr(66)
-  }
+
+  const starkPublicKey = returnStarkPublicKey
+    ? null
+    : await getPublicKey(eth, starkPath)
 
   try {
     // TODO Extract below code to a utility method
@@ -115,7 +121,7 @@ module.exports = async (dvf, path, starkOrder) => {
       starkOrder.nonce,
       starkOrder.expirationTimestamp
     )
-    return {starkPublicKey, starkSignature}
+    return { starkPublicKey, starkSignature }
   } finally {
     await transport.close()
   }
