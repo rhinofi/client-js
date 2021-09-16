@@ -44,7 +44,9 @@ module.exports = async (dvf, orderData) => {
 
   const finalValue = {
     ...value,
-    feeRate: value.feeRate || dvf.config.DVF.defaultFeeRate,
+    feeRate: [undefined, null].includes(value.feeRate)
+      ? dvf.config.DVF.defaultFeeRate
+      : value.feeRate,
     amount: prepareAmount(amountBN),
     price: value.worstCasePrice
   }
