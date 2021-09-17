@@ -34,7 +34,9 @@ module.exports = async (dvf, orderData) => {
   const { value, error } = schema.validate(orderData)
   // TODO: handle error
   // TODO: don't mutate
-  value.feeRate = value.feeRate || dvf.config.DVF.defaultFeeRate
+  value.feeRate = [undefined, null].includes(value.feeRate)
+    ? dvf.config.DVF.defaultFeeRate
+    : value.feeRate
   const ethAddress = orderData.ethAddress || dvf.get('account')
 
   return {
