@@ -52,7 +52,7 @@ const dvfConfig = {
   const ammDepositOrderData = await dvf.getAmmFundingOrderData({
     pool,
     token: token1,
-    amount: 0.1
+    amount: '0.1'
   })
 
   let ammDeposit = await dvf.postAmmFundingOrder(
@@ -61,7 +61,7 @@ const dvfConfig = {
 
   await P.retry(
     { times: 360, interval: 1000 },
-    () => {
+    async () => {
       ammDeposit = await dvf.getAmmFunding(ammDeposit._id)
       if (ammDeposit.pending) {
         throw new Error('funding order for amm deposit still pending')

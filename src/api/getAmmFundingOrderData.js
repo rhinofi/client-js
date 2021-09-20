@@ -6,7 +6,7 @@ const validateWithJoi = require('../lib/validators/validateWithJoi')
 const schema = Joi.object({
   pool: Joi.string(),
   token: Joi.string(),
-  amount: Joi.bigNumber().greaterThan(0)
+  amount: Joi.string().example('0.1')
 })
 
 const validateData = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
