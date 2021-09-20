@@ -1,3 +1,5 @@
+dvf.config.useAuthHeader = true
+
 const waitForDepositCreditedOnChain = require('./helpers/waitForDepositCreditedOnChain')
 
 const token1 = 'ETH'
@@ -19,7 +21,7 @@ const pool = `${token1}${token2}`
 const ammFundingOrderData = await dvf.getAmmFundingOrderData({
   pool,
   token: 'ETH',
-  amount: 0.1
+  amount: '0.1'
 })
 
 // ammFundingOrderData can be inspected/validate if desired, before signing
