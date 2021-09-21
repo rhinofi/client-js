@@ -4,7 +4,7 @@
 
 A js client library for DeversiFi - StarkWare orders
 
-**Note:** This library is for DeversiFi. A test version of the platform to use during integrations is connected to the Ropsten test network at https://app.stg.deversifi.com // https://api.stg.deversifi.com
+**Note:** This library is for DeversiFi. A test version of the platform to use during integrations is connected to the Goerli test network at https://app.stg.deversifi.com // https://api.stg.deversifi.com
 
 ## Contents
 
@@ -97,7 +97,7 @@ parameter `userConf` when calling the DVF function.
 
 ##### Parameters
 
-- `api` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? (default `https://api.stg.deversifi.com`) API endpoint you are connecting to Staging (ropsten): https://api.stg.deversifi.com, Production (mainnet): https://api.deversifi.com)
+- `api` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? (default `https://api.stg.deversifi.com`) API endpoint you are connecting to Staging (goerli): https://api.stg.deversifi.com, Production (mainnet): https://api.deversifi.com)
 - `gasApi` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? (default `https://ethgasstation.info`)
 - `defaultGasLimit` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)**? (default `200000`)
 - `defaultGasPrice` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)**? (default `50000000000`)
@@ -453,7 +453,7 @@ $ npm run test:watch
  - Add your tests to './test/index.js' file if necessary
  - Create your features on ./src/ folder
 
- * _You will need a ropsten node to do blockchain related tests_
+ * _You will need a goerli node to do blockchain related tests_
 
 ### Testing
 

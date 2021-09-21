@@ -80,6 +80,7 @@ const getEth = async account => {
   let gotEth = await requestEth('https://faucet.metamask.io', account.address)
 
   if (!gotEth) {
+    // TODO: Not sure this faucet was working before transition to goerli
     gotEth = await requestEth('https://faucet.ropsten.be', account.address)
   }
 
@@ -89,7 +90,7 @@ const getEth = async account => {
 const go = async () => {
   const web3 = new Web3(
     new Web3.providers.HttpProvider(
-      `https://ropsten.infura.io/v3/${INFURA_PROJECT_ID}`
+      `https://goerli.infura.io/v3/${INFURA_PROJECT_ID}`
     )
   )
 

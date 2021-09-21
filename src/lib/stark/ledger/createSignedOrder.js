@@ -57,6 +57,8 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true } =
             )
           })
         } else if (dvf.chainId !== 1) {
+          // TODO: For Goerli testnet (chainId 4), this won't work with Ledger.
+          // We might need a new Eth Goerli app from Ledger
           let tokenInfo = {}
           tokenInfo['data'] = Buffer.from(
             `00${buyTokenAddress}0000000000000003`,
@@ -90,6 +92,8 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true } =
             )
           })
         } else if (dvf.chainId !== 1) {
+          // TODO: For Goerli testnet (chainId 4), this won't work with Ledger.
+          // We might need a new Eth Goerli app from Ledger
           let tokenInfo = {}
           tokenInfo['data'] = Buffer.from(
             `00${sellTokenAddress}0000000000000003`,

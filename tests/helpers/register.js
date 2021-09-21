@@ -6,7 +6,7 @@ const register = async ({INFURA_PROJECT_ID, account}, bypassRegister = false, us
   try {
     console.log("generating dvf")
 
-    const infuraURL = `https://ropsten.infura.io/v3/${INFURA_PROJECT_ID}`
+    const infuraURL = `https://goerli.infura.io/v3/${INFURA_PROJECT_ID}`
     const provider = new HDWalletProvider(account.privateKey, infuraURL)
     const web3 = new Web3(provider)
     const dvfConfig = {

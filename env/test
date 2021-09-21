@@ -1,5 +1,5 @@
 # Add Web3 url
-NODE_URL=https://ropsten.infura.io/v3/7bfab7398ae84af3b1b70c955cfd9491
+NODE_URL=https://goerli.infura.io/v3/7bfab7398ae84af3b1b70c955cfd9491
 # Add GAS STATION API KEY
 # Ethereum private key prefixed with 0x
 PRIVATE_ETH_KEY=0x49e4d1e2aa7d026188251392dd2d335c176d846d8a894a8092c835f3b345e2ad

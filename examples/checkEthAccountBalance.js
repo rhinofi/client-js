@@ -11,7 +11,7 @@ const envVars = require('./helpers/loadFromEnvOrConfig')(
 )
 
 const web3 = new Web3(new Web3.providers.HttpProvider(
-  `https://ropsten.infura.io/v3/${envVars.INFURA_PROJECT_ID}`
+  `https://goerli.infura.io/v3/${envVars.INFURA_PROJECT_ID}`
 ))
 
 const ethPrivKey = envVars.ETH_PRIVATE_KEY

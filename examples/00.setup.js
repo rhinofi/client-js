@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /*
-1. Create new Ethereum wallet on ropsten
+1. Create new Ethereum wallet on goerli
 2. Loads it with Eth
 3. Saves the private key in config.json
 */
