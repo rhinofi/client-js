@@ -18,9 +18,7 @@ const endpoint = '/v1/trading/amm/fundingOrderData'
 module.exports = (dvf, data, nonce, signature) => {
   // convert `amount` to string, since it's passed as a query string parameter, and bigNumber vars aren't converted
   const validatedData = validateData(data)
-  validatedData.amount = validatedData.amount.toString()
+  const requestData = { ...validatedData, amount: validatedData.amount.toString() }
 
-  return get(
-    dvf, endpoint, nonce, signature, validatedData
-  )
+  return get(dvf, endpoint, nonce, signature, requestData)
 }
