@@ -52,7 +52,7 @@ const dvfConfig = {
   const ammDepositOrderData = await dvf.getAmmFundingOrderData({
     pool,
     token: token1,
-    amount: '0.1'
+    amount: 0.1
   })
 
   let ammDeposit = await dvf.postAmmFundingOrder(

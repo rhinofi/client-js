@@ -6,7 +6,7 @@ const validateWithJoi = require('../lib/validators/validateWithJoi')
 const schema = Joi.object({
   pool: Joi.string(),
   token: Joi.string(),
-  amount: Joi.string().example('0.1')
+  amount: Joi.bigNumber().greaterThan(0)
 })
 
 const validateData = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
@@ -15,6 +15,12 @@ const validateData = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 
 const endpoint = '/v1/trading/amm/fundingOrderData'
 
-module.exports = (dvf, data, nonce, signature) => get(
-  dvf, endpoint, nonce, signature, validateData(data)
-)
+module.exports = (dvf, data, nonce, signature) => {
+  // convert `amount` to string, since it's passed as a query string parameter, and bigNumber vars aren't converted
+  const validatedData = validateData(data)
+  validatedData.amount = validatedData.amount.toString()
+
+  return get(
+    dvf, endpoint, nonce, signature, validatedData
+  )
+}
