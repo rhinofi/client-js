@@ -1,3 +1,5 @@
+dvf.config.useAuthHeader = true
+
 const waitForDepositCreditedOnChain = require('./helpers/waitForDepositCreditedOnChain')
 
 const token1 = 'ETH'
