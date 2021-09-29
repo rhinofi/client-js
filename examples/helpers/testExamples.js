@@ -56,7 +56,8 @@ const examplesToSkip = [
 ;(async () => {
 
   const { waitForCleanExit } = await spawnProcess({
-    command: [ `${examplesDir}/00.setup.js`, parsedEnv.RPC_URL ],
+    // Third arg is to avoid interactive prompt when using existing config
+    command: [ `${examplesDir}/00.setup.js`, parsedEnv.RPC_URL, '--yes' ],
     cwd: examplesDir,
     log: true,
     env: parsedEnv

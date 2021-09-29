@@ -215,7 +215,22 @@ const ask = question => {
     } else if (createNewAccount) {
       await go()
     } else {
-      const answer = await ask(
+      let answer
+      // For non-interactive mode (reponds to the prompt below)
+      if (process.argv.length >= 4) {
+        switch (process.argv[3]) {
+          case '--yes':
+            answer = 'yes'
+            break
+          case '--no':
+            answer = 'no'
+            break
+          default:
+            break
+        }
+      }
+
+      answer = answer || await ask(
         `The ./${configFileName} file exits, do you want to use this config?
         If you choose 'yes', existing ./${configFileName} will not be modified and Eth will be added to the account found in this config.
         If you chooce 'no', a new account will be created, Eth added to it and the ./${configFileName} file overwritten (yes/no): `,
