@@ -3,7 +3,7 @@ const Web3 = require('web3')
 const tr = require('tor-request')
 const P = require('aigle')
 
-const { INFURA_PROJECT_ID } = process.env
+const { RPC_URL } = process.env
 
 const request = arg =>
   new Promise((resolve, reject) => {
@@ -89,9 +89,7 @@ const getEth = async account => {
 
 const go = async () => {
   const web3 = new Web3(
-    new Web3.providers.HttpProvider(
-      `https://goerli.infura.io/v3/${INFURA_PROJECT_ID}`
-    )
+    new Web3.providers.HttpProvider(RPC_URL)
   )
 
   const account = web3.eth.accounts.create()
@@ -109,17 +107,17 @@ const go = async () => {
     () => checkBalance(web3, account, 1)
   )
 
-  return { ETH_PRIVATE_KEY: account.privateKey, INFURA_PROJECT_ID, account }
+  return { ETH_PRIVATE_KEY: account.privateKey, RPC_URL, account }
 }
 
 const setup = async (existingAccount) => {
-  if (!INFURA_PROJECT_ID) {
-    console.error('Error: INFURA_PROJECT_ID not set')
+  if (!RPC_URL) {
+    console.error('Error: RPC_URL not set')
     process.exit(1)
   }
 
   if (existingAccount) {
-    return {INFURA_PROJECT_ID, account: existingAccount}
+    return {RPC_URL, account: existingAccount}
   }
 
   return go()
