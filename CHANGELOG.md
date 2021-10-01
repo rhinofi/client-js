@@ -7,7 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 3.0.0 - 2021-09-21
 ### Changed
-- Switch default test network from Ropsten to Goerli
 - Using RPC_URL instead of INFURA_PROJECT_ID in config for more flexibility
 
 ## 2.8.3 - 2021-09-16

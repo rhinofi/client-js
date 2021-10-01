@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /*
-1. Create new Ethereum wallet on goerli
+1. Create new Ethereum wallet on the network indicated by RPC_URL
 2. Loads it with Eth
 3. Saves the private key in config.json
 */
