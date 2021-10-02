@@ -34,8 +34,8 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true } =
   const starkPath = dvf.stark.ledger.getPath(address)
 
   const starkPublicKey = returnStarkPublicKey
-    ? null
-    : await getPublicKey(eth, starkPath)
+    ? await getPublicKey(eth, starkPath)
+    : null
 
   try {
     // TODO Extract below code to a utility method
