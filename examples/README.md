@@ -1,32 +1,32 @@
 To run the examples, you will need to set the following config variables:
-1. `INFURA_PROJECT_ID` : an PROJECT ID (formerly called API KEY) from https://infura.io
+1. `RPC_URL` : the RPC endpoint of an Ethereum node (ex: from https://infura.io)
 2. `ETH_PRIVATE_KEY` : a private key of an Ethereum wallet with some ETH in it
 
 These can be sat as environment variables or in a config.json file placed in
 this directory.
 
 You can use `00.setup.js` to create the `config.json` file, however since
-the `INFURA_PROJECT_ID` cannot be created pragmatically, you will first need to
-obtain it by following the 3 easy steps here: https://ethereumico.io/knowledge-base/infura-api-key-guide
+the `RPC_URL` cannot be created pragmatically, you will first need to run
+your own node or use a third-party RPC endpoint. https://ethereumico.io/knowledge-base/infura-api-key-guide
 
 NOTE: the `API KEY` mentioned in the instructions has been renamed to `PROJECT ID`.
 
-Once you obtain the `INFURA_PROJECT_ID` you can then run:
+Once you obtain the `RPC_URL` you can then run:
 
 ```sh
-node 00.setup.js YOUR_INFURA_PROJECT_ID
+node 00.setup.js <RPC_URL>
 ```
 
 or simply
 
 ```sh
-./00.setup.js YOUR_INFURA_PROJECT_ID
+./00.setup.js <RPC_URL>
 ```
 
 This will:
-1. generate a new Ethereum wallet on ropsten
+1. generate a new Ethereum wallet on 
 2. pre-load it with Eth (at least 1 Eth)
-3. save both the wallets private key and passed in `INFURA_PROJECT_ID` into
+3. save both the wallets private key and passed in `RPC_URL` into
    `./config.json` file in this directory.
 
 NOTE:
@@ -41,7 +41,7 @@ following should work if you have previously ran the `./00.setup.js` script:
 or if you prefer, you can provide the required config vars on command line:
 
 ```sh
-INFURA_PROJECT_ID=YOUR_ID ETH_PRIVATE_KEY=YORU_KEY ./01.register.js
+RPC_URL=YOUR_NODE_OR_INFURA_URL ETH_PRIVATE_KEY=YORU_KEY ./01.register.js
 ```
 
 You need to run `./01.register.js` exactly once before attempting any other

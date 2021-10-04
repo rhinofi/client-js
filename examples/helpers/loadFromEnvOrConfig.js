@@ -41,7 +41,7 @@ module.exports = (configFileName = 'config.json') => {
   const ETH_PRIVATE_KEY = getConfigVar('ETH_PRIVATE_KEY')
 
   return {
-    INFURA_PROJECT_ID: getConfigVar('INFURA_PROJECT_ID'),
+    RPC_URL: getConfigVar('RPC_URL'),
     ETH_PRIVATE_KEY,
     STARK_PRIVATE_KEY: getConfigVar('STARK_PRIVATE_KEY', ETH_PRIVATE_KEY),
     API_URL: apiUrl,

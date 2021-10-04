@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /*
-1. Create new Ethereum wallet on ropsten
+1. Create new Ethereum wallet on the network indicated by RPC_URL
 2. Loads it with Eth
 3. Saves the private key in config.json
 */
@@ -17,7 +17,7 @@ const spawnProcess = require('./helpers/spawnProcess')
 const request = require('./helpers/request')
 const saveAsJson = require('./helpers/saveAsJson')
 
-const INFURA_PROJECT_ID = process.argv[2]
+const RPC_URL = process.argv[2]
 const useTor = process.env.USE_TOR === 'true'
 const createNewAccount = process.env.CREATE_NEW_ACCOUNT === 'true'
 const useExistingAccount = process.env.USE_EXISTING_ACCOUNT === 'true'
@@ -25,11 +25,10 @@ const waitForBalance = process.env.WAIT_FOR_BALANCE === 'true'
 const API_URL = process.env.API_URL || 'https://api.stg.deversifi.com'
 const DATA_API_URL = process.env.DATA_API_URL || API_URL
 
-if (!INFURA_PROJECT_ID) {
-  console.error('Error: INFURA_PROJECT_ID not set')
-  console.error('\nusage: ./0.setup.js INFURA_PROJECT_ID')
-  console.error('\n  you can obtain an INFURA_PROJECT_ID by following instructions here: https://ethereumico.io/knowledge-base/infura-api-key-guide ')
-  console.error('    NOTE: the `API KEY` mentioned in the instructions has been renamed to `PROJECT ID`.')
+if (!RPC_URL) {
+  console.error('Error: RPC_URL not set')
+  console.error('\nusage: ./0.setup.js RPC_URL')
+  console.error('\n  you need an Ethereum node to connect to. You can use Infura by following instructions here: https://ethereumico.io/knowledge-base/infura-api-key-guide ')
   console.error('\n  if you get an error when requesting Eth from a faucet, set USE_TOR=true env var to make requests via a TOR (using https://www.npmjs.com/package/tor-request)')
   console.error('    NOTE: tor executable needs to be on your path for this to work (it will be started/stopped automatically)')
   console.error('    tor can be installed via brew on MacOS or using your distros package manager if you are using linux')
@@ -139,9 +138,7 @@ const getEth = async (account) => {
 }
 
 const go = async (configPath) => {
-  const web3 = new Web3(new Web3.providers.HttpProvider(
-    `https://ropsten.infura.io/v3/${INFURA_PROJECT_ID}`
-  ))
+  const web3 = new Web3(new Web3.providers.HttpProvider(RPC_URL))
 
   let account
 
@@ -159,7 +156,7 @@ const go = async (configPath) => {
     console.log('Created new Ethereum account:', account.address)
 
     saveAsJson(configFilePath, {
-      INFURA_PROJECT_ID,
+      RPC_URL,
       ETH_PRIVATE_KEY: account.privateKey,
       API_URL,
       DATA_API_URL,
@@ -218,7 +215,22 @@ const ask = question => {
     } else if (createNewAccount) {
       await go()
     } else {
-      const answer = await ask(
+      let answer
+      // For non-interactive mode (reponds to the prompt below)
+      if (process.argv.length >= 4) {
+        switch (process.argv[3]) {
+          case '--yes':
+            answer = 'yes'
+            break
+          case '--no':
+            answer = 'no'
+            break
+          default:
+            break
+        }
+      }
+
+      answer = answer || await ask(
         `The ./${configFileName} file exits, do you want to use this config?
         If you choose 'yes', existing ./${configFileName} will not be modified and Eth will be added to the account found in this config.
         If you chooce 'no', a new account will be created, Eth added to it and the ./${configFileName} file overwritten (yes/no): `,

@@ -28,12 +28,10 @@ module.exports = async (dvf, transport, tokenAddress = '', transferQuantization)
             )
           })
         } else if (dvf.chainId !== 1) {
-          await _transport.provideERC20TokenInformation({
-            data: Buffer.from(
-              `00${transferTokenAddress}0000000000000003`,
-              'hex'
-            )
-          })
+          // TODO: How to provide contract data properly on testnet and sidechains ?
+          console.warn(`Skipping Ledger provide contract data on chainId ${dvf.chainId}`)
+          transferTokenAddress = null
+          transferQuantization = null
         } else {
           throw new DVFError('LEDGER_TOKENINFO_ERR')
         }

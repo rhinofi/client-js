@@ -13,6 +13,7 @@ module.exports = async (dvf, chain = 'ETHEREUM') => {
     '2': 'morden',
     '3': 'ropsten',
     '4': 'Rinkeby',
+    '5': 'Goerli',
     '42': 'Kovan',
     '137': 'Matic Network',
     '80001': 'Mumbai'
