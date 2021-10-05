@@ -35,6 +35,8 @@ const dvfConfig = {
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
+  dvf.config.useAuthHeader = true
+
   const waitForDepositCreditedOnChain = require('./helpers/waitForDepositCreditedOnChain')
 
   const token1 = 'ETH'
