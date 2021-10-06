@@ -61,16 +61,11 @@ module.exports = async (web3, userConfig = {}, sw) => {
     dvf.web3 = web3
   }
 
-  let chainId = 3
-
   try {
-    chainId = chainId || (await web3.eth.net.getId())
-  }
-  catch(e)  {
+    dvf.config.ethereumChainId = dvf.config.ethereumChainId || (await dvf.web3.eth.net.getId())
+  } catch (e) {
     console.log('error getting chainId')
   }
-
-  dvf.chainId = chainId
 
   if (dvf.config.autoSelectAccount) {
     await dvf.account.select(dvf.config.account)

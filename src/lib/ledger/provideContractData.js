@@ -1,7 +1,7 @@
 const byContractAddress = require('@ledgerhq/hw-app-eth/erc20').byContractAddress
 const Eth = require('@ledgerhq/hw-app-eth').default
 const selectTransport = require('./selectTransport')
-
+const generateTestNetworkTokenData = require('./generateTestNetworkTokenData')
 const DVFError = require('../dvf/DVFError')
 
 module.exports = async (dvf, transport, tokenAddress = '', transferQuantization) => {
@@ -27,11 +27,9 @@ module.exports = async (dvf, transport, tokenAddress = '', transferQuantization)
               'hex'
             )
           })
-        } else if (dvf.chainId !== 1) {
-          // TODO: How to provide contract data properly on testnet and sidechains ?
-          console.warn(`Skipping Ledger provide contract data on chainId ${dvf.chainId}`)
-          transferTokenAddress = null
-          transferQuantization = null
+        } else if (dvf.config.ethereumChainId !== 1) {
+          const tokenData = generateTestNetworkTokenData(transferTokenAddress, dvf.config.ethereumChainId)
+          await _transport.provideERC20TokenInformation(tokenData)
         } else {
           throw new DVFError('LEDGER_TOKENINFO_ERR')
         }
