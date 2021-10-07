@@ -5,6 +5,7 @@ const BN = require('bignumber.js')
 const _ = require('lodash')
 const selectTransport = require('../../ledger/selectTransport')
 const getTokenAddressFromTokenInfoOrThrow = require('../../dvf/token/getTokenAddressFromTokenInfoOrThrow')
+const generateTestNetworkTokenData = require('../../ledger/generateTestNetworkTokenData')
 
 const getPublicKey = async (eth, starkPath) => {
   const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')
@@ -56,15 +57,9 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true } =
               'hex'
             )
           })
-        } else if (dvf.chainId !== 1) {
-          // TODO: For Goerli testnet (chainId 4), this won't work with Ledger.
-          // We might need a new Eth Goerli app from Ledger
-          let tokenInfo = {}
-          tokenInfo['data'] = Buffer.from(
-            `00${buyTokenAddress}0000000000000003`,
-            'hex'
-          )
-          await eth.provideERC20TokenInformation(tokenInfo)
+        } else if (dvf.config.ethereumChainId !== 1) {
+          const tokenData = generateTestNetworkTokenData(buyTokenAddress, dvf.config.ethereumChainId)
+          await eth.provideERC20TokenInformation(tokenData)
         } else {
           throw new DVFError('LEDGER_TOKENINFO_ERR')
         }
@@ -91,15 +86,9 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true } =
               'hex'
             )
           })
-        } else if (dvf.chainId !== 1) {
-          // TODO: For Goerli testnet (chainId 4), this won't work with Ledger.
-          // We might need a new Eth Goerli app from Ledger
-          let tokenInfo = {}
-          tokenInfo['data'] = Buffer.from(
-            `00${sellTokenAddress}0000000000000003`,
-            'hex'
-          )
-          await eth.provideERC20TokenInformation(tokenInfo)
+        } else if (dvf.config.ethereumChainId !== 1) {
+          const tokenData = generateTestNetworkTokenData(sellTokenAddress, dvf.config.ethereumChainId)
+          await eth.provideERC20TokenInformation(tokenData)
         } else {
           throw new DVFError('LEDGER_TOKENINFO_ERR')
         }
