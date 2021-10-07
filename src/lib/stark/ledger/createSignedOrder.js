@@ -1,5 +1,5 @@
 const Eth = require('@ledgerhq/hw-app-eth').default
-const { byContractAddress } = require('@ledgerhq/hw-app-eth/erc20')
+const { byContractAddressAndChainId } = require('@ledgerhq/hw-app-eth/erc20')
 const DVFError = require('../../dvf/DVFError')
 const BN = require('bignumber.js')
 const _ = require('lodash')
@@ -45,7 +45,7 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true } =
 
     let buyTokenAddress = getTokenAddressFromTokenInfoOrThrow(buyTokenInfo, 'ETHEREUM')
     if (buyTokenAddress) {
-      const buyTokenInfo = byContractAddress(buyTokenAddress)
+      const buyTokenInfo = byContractAddressAndChainId(buyTokenAddress, dvf.config.ethereumChainId || 1)
       buyTokenAddress = buyTokenAddress.substr(2)
       if (buyTokenInfo) {
         await eth.provideERC20TokenInformation(buyTokenInfo)
@@ -74,7 +74,7 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true } =
 
     let sellTokenAddress = getTokenAddressFromTokenInfoOrThrow(sellTokenInfo, 'ETHEREUM')
     if (sellTokenAddress) {
-      const sellTokenInfo = byContractAddress(sellTokenAddress)
+      const sellTokenInfo = byContractAddressAndChainId(sellTokenAddress, dvf.config.ethereumChainId || 1)
       sellTokenAddress = sellTokenAddress.substr(2)
       if (sellTokenInfo) {
         await eth.provideERC20TokenInformation(sellTokenInfo)
