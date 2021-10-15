@@ -7,10 +7,10 @@ const Web3 = require('web3')
 const DVF = require('../../../dvf')
 
 module.exports = async () => {
-  const nodeURL = process.env.NODE_URL
+  const rpcUrl = process.env.RPC_URL
   const privateKey = process.env.PRIVATE_ETH_KEY
 
-  const provider = new HDWalletProvider(privateKey, nodeURL)
+  const provider = new HDWalletProvider(privateKey, rpcUrl)
 
   const web3 = new Web3(provider)
 

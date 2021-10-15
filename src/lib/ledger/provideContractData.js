@@ -1,7 +1,7 @@
 const byContractAddress = require('@ledgerhq/hw-app-eth/erc20').byContractAddress
 const Eth = require('@ledgerhq/hw-app-eth').default
 const selectTransport = require('./selectTransport')
-
+const generateTestNetworkTokenData = require('./generateTestNetworkTokenData')
 const DVFError = require('../dvf/DVFError')
 
 module.exports = async (dvf, transport, tokenAddress = '', transferQuantization) => {
@@ -27,13 +27,9 @@ module.exports = async (dvf, transport, tokenAddress = '', transferQuantization)
               'hex'
             )
           })
-        } else if (dvf.chainId !== 1) {
-          await _transport.provideERC20TokenInformation({
-            data: Buffer.from(
-              `00${transferTokenAddress}0000000000000003`,
-              'hex'
-            )
-          })
+        } else if (dvf.config.ethereumChainId !== 1) {
+          const tokenData = generateTestNetworkTokenData(transferTokenAddress, dvf.config.ethereumChainId)
+          await _transport.provideERC20TokenInformation(tokenData)
         } else {
           throw new DVFError('LEDGER_TOKENINFO_ERR')
         }
