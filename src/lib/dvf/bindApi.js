@@ -169,7 +169,6 @@ module.exports = () => {
   dvf.fastWithdrawal = compose(require('../../api/fastWithdrawal'))
   dvf.fastWithdrawalFee = compose(require('../../api/fastWithdrawalFee'))
   dvf.fastWithdrawalMaxAmount = compose(require('../../api/fastWithdrawalMaxAmount'))
-  dvf.getAmmFundingOrderData = compose(require('../../api/getAmmFundingOrderData'))
   dvf.getDeposits = compose(require('../../api/getDeposits'))
   dvf.getBalance = compose(require('../../api/getBalance'))
   dvf.getBalanceUsd = compose(require('../../api/getBalanceUsd'))
@@ -185,7 +184,6 @@ module.exports = () => {
   dvf.getVaultId = compose(require('../../api/getVaultId'))
   dvf.getVaultIdFromServer = compose(require('../../api/getVaultIdFromServer'))
   dvf.getVaultIdAndStarkKey = compose(require('../../api/getVaultIdAndStarkKey'))
-  dvf.postAmmFundingOrder = compose(require('../../api/postAmmFundingOrder'))
   dvf.register = compose(require('../../api/register'))
   dvf.registerAndDeposit = compose(require('../../api/registerAndDeposit'))
   dvf.submitBuyOrder = compose(require('../../api/submitBuyOrder'))
@@ -203,6 +201,15 @@ module.exports = () => {
   dvf.getRegistrationStatuses = compose(require('../../api/getRegistrationStatuses'))
   dvf.fullWithdrawalRequest = compose(require('../../api/fullWithdrawalRequest'))
   dvf.getMinMaxOrderSize = compose(require('../../api/getMinMaxOrderSize'))
+  dvf.postAmmFundingOrders = compose(require('../../api/amm/postAmmFundingOrders'))
+  dvf.getAmmFundingOrderData = compose(require('../../api/amm/getAmmFundingOrderData'))
+  dvf.poolTVL = compose(require('../../api/amm/poolTVL'))
+  dvf.poolVolume24Hours = compose(require('../../api/amm/poolVolume24Hours'))
+  dvf.poolSwapFees = compose(require('../../api/amm/poolSwapFees'))
+  dvf.poolAPY = compose(require('../../api/amm/poolAPY'))
+  dvf.poolUserLpBalance = compose(require('../../api/amm/poolUserLpBalance'))
+  dvf.poolStoredTokens = compose(require('../../api/amm/poolStoredTokens'))
+  dvf.poolUserRewards = compose(require('../../api/amm/poolUserRewards'))
 
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),

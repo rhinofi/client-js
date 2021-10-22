@@ -1,8 +1,8 @@
 const { Joi } = require('dvf-utils')
 const R = require('ramda')
 
-const post = require('../lib/dvf/post-authenticated')
-const validateWithJoi = require('../lib/validators/validateWithJoi')
+const post = require('../../lib/dvf/post-authenticated')
+const validateWithJoi = require('../../lib/validators/validateWithJoi')
 
 const unsignedInt = Joi.number().integer().min(0)
 const maxTimestampHours = Math.pow(2, 22) * 1000 * 60 * 60 - 1
