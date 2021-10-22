@@ -57,6 +57,13 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true } =
               'hex'
             )
           })
+        } else if (buyTokenAddress === 'dddd0e38d30dd29c683033fa0132f868597763ab') {
+          await eth.provideERC20TokenInformation({
+            data: Buffer.from(
+              `0478445646dddd0e38d30dd29c683033fa0132f868597763ab00000012000000013045022100b6a0d84315a9935d0245336bb12ef30fc4b4592d30407f33ab695f01fc445eef02200a74e7ee316e753e127de5e05a3fefade56b025a7c84d107594808582399872d`,
+              'hex'
+            )
+          })
         } else if (dvf.config.ethereumChainId !== 1) {
           const tokenData = generateTestNetworkTokenData(buyTokenAddress, dvf.config.ethereumChainId)
           await eth.provideERC20TokenInformation(tokenData)
@@ -83,6 +90,13 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true } =
           await eth.provideERC20TokenInformation({
             data: Buffer.from(
               `03445646DDdddd4301A082e62E84e43F474f04442392191800000012000000013045022100bd8a55c10b02bbe70f7266be7f5f5e7132140623b6de3fa27bdd820f11baa0d902207eb91acba7c2c5131d8285f9eba2f0d06bc9be3b4dfc29d05b0f25aa3b620a41`,
+              'hex'
+            )
+          })
+        } else if (sellTokenAddress === 'dddd0e38d30dd29c683033fa0132f868597763ab') {
+          await eth.provideERC20TokenInformation({
+            data: Buffer.from(
+              `0478445646dddd0e38d30dd29c683033fa0132f868597763ab00000012000000013045022100b6a0d84315a9935d0245336bb12ef30fc4b4592d30407f33ab695f01fc445eef02200a74e7ee316e753e127de5e05a3fefade56b025a7c84d107594808582399872d`,
               'hex'
             )
           })
