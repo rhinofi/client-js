@@ -3,7 +3,7 @@ const getAuthenticated = require('../../lib/dvf/get-authenticated')
 const validateWithJoi = require('../../lib/validators/validateWithJoi')
 
 const schema = Joi.object({
-  pool: Joi.string()
+  poolName: Joi.string()
 })
 
 const validateInputs = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
@@ -11,7 +11,7 @@ const validateInputs = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 })
 
 module.exports = async (dvf, data, nonce, signature) => {
-  const { pool } = validateInputs(data)
-  const endpoint = `/v1/trading/amm/poolLpBalance/${pool}`
+  const { poolName } = validateInputs(data)
+  const endpoint = `/v1/trading/amm/poolLpBalance/${poolName}`
   return getAuthenticated(dvf, endpoint, nonce, signature)
 }

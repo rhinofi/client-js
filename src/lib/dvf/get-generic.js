@@ -2,7 +2,7 @@ const { get } = require('request-promise')
 const _ = require('lodash')
 
 module.exports = async (dvf, endpoint, qs = {}, headers = {}) => {
-  const url = endpoint.includes('market-data') ? 'https://api.deversifi.dev' + endpoint : dvf.config.api + endpoint
+  const url = dvf.config.api + endpoint
 
   const options = {
     uri: url,
