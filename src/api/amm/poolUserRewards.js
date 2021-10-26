@@ -12,14 +12,6 @@ const validateInputs = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 
 module.exports = async (dvf, data, nonce, signature) => {
   const { pool } = validateInputs(data)
-  const endpoint = `/v2/trading/amm/poolUserRewards/${pool}`
-  return {
-    pool,
-    user: '0x96b5834632ea9546ba0c990574ba8e348603f93c',
-    user: '0x96b5834632ea9546ba0c990574ba8e348603f93c',
-    totalLockedRewards: 12345,
-    totalUnlockedRewards: 6789,
-    timeToNextReward: 24
-  }
+  const endpoint = `/v1/trading/amm/poolUserRewards/${pool}`
   return getAuthenticated(dvf, endpoint, nonce, signature)
 }

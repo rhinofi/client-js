@@ -12,11 +12,6 @@ const validateInputs = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 
 module.exports = async (dvf, data) => {
   const { pool } = validateInputs(data)
-  const endpoint = `/v2/trading/amm/poolAPY/${pool}`
-  return {
-    pool,
-    liquidityMiningAPY: 0.003,
-    effectiveAPY: 0.01746546
-  }
-  // return get(dvf, endpoint)
+  const endpoint = `/v1/trading/amm/poolAPY/${pool}`
+  return get(dvf, endpoint)
 }

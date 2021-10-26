@@ -210,6 +210,9 @@ module.exports = () => {
   dvf.poolUserLpBalance = compose(require('../../api/amm/poolUserLpBalance'))
   dvf.poolStoredTokens = compose(require('../../api/amm/poolStoredTokens'))
   dvf.poolUserRewards = compose(require('../../api/amm/poolUserRewards'))
+  dvf.poolUserAccruedFees = compose(require('../../api/amm/poolUserAccruedFees'))
+  dvf.getRewardsLockedState = compose(require('../../api/amm/getRewardsLockedState'))
+  dvf.postRewardsLockedState = compose(require('../../api/amm/postRewardsLockedState'))
 
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),

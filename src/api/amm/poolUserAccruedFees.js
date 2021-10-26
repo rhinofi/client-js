@@ -1,5 +1,5 @@
 const { Joi } = require('dvf-utils')
-const get = require('../../lib/dvf/get-generic')
+const getAuthenticated = require('../../lib/dvf/get-authenticated')
 const validateWithJoi = require('../../lib/validators/validateWithJoi')
 
 const schema = Joi.object({
@@ -7,11 +7,11 @@ const schema = Joi.object({
 })
 
 const validateInputs = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
-  context: 'poolSwapFees'
+  context: 'poolUserLpBalance'
 })
 
-module.exports = async (dvf, data) => {
+module.exports = async (dvf, data, nonce, signature) => {
   const { pool } = validateInputs(data)
-  const endpoint = `/v1/trading/amm/poolSwapFees/${pool}`
-  return get(dvf, endpoint)
+  const endpoint = `/v1/trading/amm/poolUserAccruedFees/${pool}`
+  return getAuthenticated(dvf, endpoint, nonce, signature)
 }
