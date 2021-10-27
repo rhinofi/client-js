@@ -34,6 +34,13 @@ module.exports = async (dvf, transport, tokenAddress = '', transferQuantization)
               'hex'
             )
           })
+        } else if (transferTokenAddress === '0a0e3bfd5a8ce610e735d4469bc1b3b130402267') {
+          await _transport.provideERC20TokenInformation({
+            data: Buffer.from(
+              '034552500a0e3bfd5a8ce610e735d4469bc1b3b1304022670000001200000001304402204fc34364bdba254200371327e2f6cff6f6e07f488ee6d71f95499429be6e76fc02201d222d7c93a395bed86f9e0cf1b8b3f6fabec8535807d013783a9201fec30531',
+              'hex'
+            )
+          })
         } else if (dvf.config.ethereumChainId !== 1) {
           const tokenData = generateTestNetworkTokenData(transferTokenAddress, dvf.config.ethereumChainId)
           await _transport.provideERC20TokenInformation(tokenData)
