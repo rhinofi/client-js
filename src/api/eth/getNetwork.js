@@ -4,7 +4,7 @@
  * https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md#construction_worker-network-check
  *
  **/
-module.exports = async (dvf, chain = 'ETHEREUM') => {
+module.exports = async (dvf, chain) => {
   const web3 = dvf.eth.getWeb3ForChain(chain)
   const id = await web3.eth.net.getId()
 
