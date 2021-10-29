@@ -1,7 +1,7 @@
 const DVFError = require('../../lib/dvf/DVFError')
 
-module.exports = (dvf, chain = 'ETHEREUM') => {
-  if (chain === 'ETHEREUM') {
+module.exports = (dvf, chain = 'DEFAULT') => {
+  if (chain === 'DEFAULT') {
     return dvf.web3
   }
   const web3ForChain = dvf.web3PerChain && dvf.web3PerChain[chain]

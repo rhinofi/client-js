@@ -59,6 +59,7 @@ module.exports = async (web3, userConfig = {}, sw) => {
     dvf.web3PerChain = web3
   } else {
     dvf.web3 = web3
+    dvf.web3PerChain = { DEFAULT: web3 }
   }
 
   try {
