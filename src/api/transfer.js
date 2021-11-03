@@ -7,6 +7,7 @@ const schema = Joi.object({
   token: Joi.string(),
   amount: Joi.bigNumber().greaterThan(0),
   memo: Joi.string().optional(),
+  partnerId: Joi.string().optional(),
   recipientEthAddress: Joi.ethAddress()
 })
 
@@ -16,7 +17,7 @@ const validateInputs = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 
 module.exports = async (dvf, data, nonce, signature) => {
   dvf = FP.set('config.useAuthHeader', true, dvf)
-  const { token, amount, memo, recipientEthAddress } = validateInputs(data)
+  const { token, amount, memo, partnerId, recipientEthAddress } = validateInputs(data)
   const { vaultId, starkKey } = await dvf.getVaultIdAndStarkKey({
     token,
     targetEthAddress: recipientEthAddress
@@ -29,6 +30,7 @@ module.exports = async (dvf, data, nonce, signature) => {
     token,
     amount,
     memo,
+    partnerId,
     recipientVaultId: vaultId,
     recipientPublicKey: starkKey
   }, feeRecipient)
