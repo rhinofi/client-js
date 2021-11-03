@@ -38,7 +38,8 @@ module.exports = async (dvf, token, nonce, signature) => {
   try {
     const { starkKeyHex } = dvf.config
 
-    if (!dvf.config.DVF.withdrawalBalanceReaderContractAddress) {
+    // Using registrationAndDepositInterfaceAddress as it contains the same method
+    if (!dvf.config.DVF.registrationAndDepositInterfaceAddress) {
       // Use the deprecated way of getting balances in case the
       // WithdrawalBalanceReaderContractAddress was not set
       return await getWithdrawalBalancesDeprecated(dvf, withdrawals, starkKeyHex)

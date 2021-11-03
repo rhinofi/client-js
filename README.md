@@ -77,10 +77,9 @@ const HDWalletProvider = require("@truffle/hdwallet-provider");
 const Web3 = require("Web3")
 
 const privateKey = '8F085...' // Account's private key
-const infuraKey = '9e28b...'  // Your Infura API KEY
-const infuraURL = 'https://mainnet.infura.io/v3/' + infuraKey
+const rpcUrl = 'https://mainnet.infura.io/v3/9e28b...'
 
-const provider = new HDWalletProvider(privateKey, infuraURL)
+const provider = new HDWalletProvider(privateKey, rpcUrl)
 const web3 = new Web3(provider)
 
 dvf = await DVF(web3)

@@ -4,7 +4,7 @@ const _ = require('lodash')
 module.exports = async (dvf, endpoint, qs = {}, headers = {}) => {
   const url = dvf.config.api + endpoint
 
-  var options = {
+  const options = {
     uri: url,
     headers,
     // removes null and undefined values

@@ -2,6 +2,7 @@ const FP = require('lodash/fp')
 const BN = require('bignumber.js')
 const Eth = require('@ledgerhq/hw-app-eth').default
 const DVFError = require('../dvf/DVFError')
+const createSignedOrder = require('../stark/ledger/createSignedOrder')
 const selectTransport = require('./selectTransport')
 const getTokenAddressFromTokenInfoOrThrow = require('../dvf/token/getTokenAddressFromTokenInfoOrThrow')
 
@@ -11,7 +12,11 @@ const transferTransactionTypes = [
 ]
 
 const getTxSignature = async (dvf, tx, path) => {
-  if (transferTransactionTypes.includes(tx.type)) {
+  if (tx.type != null) {
+    if (!(transferTransactionTypes.includes(tx.type))) {
+      throw new DVFError(`Unsupported stark transaction type: ${tx.type}`, {tx})
+    }
+
     const Transport = selectTransport(dvf.isBrowser)
     const transport = await Transport.create()
     const eth = new Eth(transport)
@@ -22,29 +27,35 @@ const getTxSignature = async (dvf, tx, path) => {
     const transferQuantization = new BN(tokenInfo.quantization)
     const transferAmount = new BN(tx.amount)
 
-    // Load token information for Ledger device
-    await dvf.token.provideContractData(eth, tokenAddress, transferQuantization)
+    try {
+      // Load token information for Ledger device
+      await dvf.token.provideContractData(eth, tokenAddress, transferQuantization)
 
-    const starkSignature = await eth.starkSignTransfer_v2(
-      starkPath,
-      tokenAddress,
-      tokenAddress ? 'erc20' : 'eth',
-      transferQuantization,
-      null,
-      tx.receiverPublicKey,
-      tx.senderVaultId,
-      tx.receiverVaultId,
-      transferAmount,
-      tx.nonce,
-      tx.expirationTimestamp,
-      tx.type === 'ConditionalTransferRequest' ? tx.factRegistryAddress : null,
-      tx.type === 'ConditionalTransferRequest' ? tx.fact : null
+      const starkSignature = await eth.starkSignTransfer_v2(
+        starkPath,
+        tokenAddress,
+        tokenAddress ? 'erc20' : 'eth',
+        transferQuantization,
+        null,
+        tx.receiverPublicKey,
+        tx.senderVaultId,
+        tx.receiverVaultId,
+        transferAmount,
+        tx.nonce,
+        tx.expirationTimestamp,
+        tx.type === 'ConditionalTransferRequest' ? tx.factRegistryAddress : null,
+        tx.type === 'ConditionalTransferRequest' ? tx.fact : null
+      )
+      return starkSignature
+    } finally {
+      await transport.close()
+    }
+  } else {
+    const { starkSignature } = await createSignedOrder(
+      dvf, path, tx, { returnStarkPublicKey: false }
     )
-    await transport.close()
 
     return starkSignature
-  } else {
-    throw new DVFError(`Unsupported stark transaction type: ${tx.type}`, {tx})
   }
 }
 

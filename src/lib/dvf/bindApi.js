@@ -31,6 +31,7 @@ module.exports = () => {
     createOrderMessage: compose(require('../stark/createOrderMessage')),
     sign: compose(require('../stark/starkSign')),
     signAuth: compose(require('../stark/starkSignAuth')),
+    signAmmFundingOrder: require('../stark/signAmmFundingOrder')(dvf),
     createTransferMsg: compose(require('../stark/createTransferMessage')),
     createPrivateKey: require('../stark/createPrivateKey'),
     createKeyPair: compose(require('../stark/createKeyPair')),
@@ -96,6 +97,7 @@ module.exports = () => {
 
   // dvf.eth functions
   dvf.eth = {
+    getWeb3ForChain: compose(require('../../api/eth/getWeb3ForChain')),
     call: compose(require('../../api/eth/call')),
     send: compose(require('../../api/eth/send')),
     getNetwork: compose(require('../../api/eth/getNetwork')),
@@ -143,6 +145,18 @@ module.exports = () => {
   // dvf tickers
   dvf.getTickers = compose(require('../../api/getTickers'))
 
+  // dvf get DLM APIs
+  dvf.getTokenHolders = compose(require('../../api/getTokenHolders'))
+  dvf.getTokenLiquidityLeft = compose(require('../../api/getTokenLiquidityLeft'))
+  dvf.getTokenSaleStartEnd = compose(require('../../api/getTokenSaleStartEnd'))
+
+  // dvf airdrop eligibility
+  dvf.airdropEligibility = compose(require('../../api/airdropEligibility'))
+
+  dvf.getBridgeContractAddressOrThrow = compose(
+    require('../../lib/dvf/getBridgeContractAddressOrThrow')
+  )
+
   dvf.getBridgeContractAddressOrThrow = compose(require('../../lib/dvf/getBridgeContractAddressOrThrow'))
 
   // dvf main functions
@@ -187,6 +201,18 @@ module.exports = () => {
   dvf.getRegistrationStatuses = compose(require('../../api/getRegistrationStatuses'))
   dvf.fullWithdrawalRequest = compose(require('../../api/fullWithdrawalRequest'))
   dvf.getMinMaxOrderSize = compose(require('../../api/getMinMaxOrderSize'))
+  dvf.postAmmFundingOrders = compose(require('../../api/amm/postAmmFundingOrders'))
+  dvf.getAmmFundingOrderData = compose(require('../../api/amm/getAmmFundingOrderData'))
+  dvf.poolTVL = compose(require('../../api/amm/poolTVL'))
+  dvf.poolVolume24Hours = compose(require('../../api/amm/poolVolume24Hours'))
+  dvf.poolSwapFees = compose(require('../../api/amm/poolSwapFees'))
+  dvf.poolAPY = compose(require('../../api/amm/poolAPY'))
+  dvf.poolUserLpBalance = compose(require('../../api/amm/poolUserLpBalance'))
+  dvf.poolStoredTokens = compose(require('../../api/amm/poolStoredTokens'))
+  dvf.poolUserRewards = compose(require('../../api/amm/poolUserRewards'))
+  dvf.poolUserAccruedFees = compose(require('../../api/amm/poolUserAccruedFees'))
+  dvf.getRewardsLockedState = compose(require('../../api/amm/getRewardsLockedState'))
+  dvf.postRewardsLockedState = compose(require('../../api/amm/postRewardsLockedState'))
 
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),

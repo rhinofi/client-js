@@ -13,9 +13,9 @@ const ethPrivKey = envVars.ETH_PRIVATE_KEY
 // NOTE: you can also generate a new key using:`
 // const starkPrivKey = dvf.stark.createPrivateKey()
 const starkPrivKey = envVars.STARK_PRIVATE_KEY
-const infuraURL = `https://ropsten.infura.io/v3/${envVars.INFURA_PROJECT_ID}`
+const rpcUrl = envVars.RPC_URL
 
-const provider = new HDWalletProvider(ethPrivKey, infuraURL)
+const provider = new HDWalletProvider(ethPrivKey, rpcUrl)
 const web3 = new Web3(provider)
 provider.engine.stop()
 

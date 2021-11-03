@@ -1,17 +1,15 @@
 #!/usr/bin/env node
 
 const HDWalletProvider = require('@truffle/hdwallet-provider')
-const sw = require('starkware_crypto')
 const Web3 = require('web3')
 const DVF = require('../src/dvf')
 
 const privateKey = '8F085...' // Account's private key
-const infuraKey = '9e28b...' // Your Infura API KEY
-const infuraURL = 'https://mainnet.infura.io/v3/' + infuraKey
+const rpcUrl = 'https://mainnet.infura.io/v3/9e28b...'
 
 const starkPrivKey = privateKey
 
-const provider = new HDWalletProvider(privateKey, infuraURL)
+const provider = new HDWalletProvider(privateKey, rpcUrl)
 const web3 = new Web3(provider)
 
 const dvfConfig = {

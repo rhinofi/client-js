@@ -26,6 +26,7 @@ const transferDataSchema = Joi.object({
   // dynamically. However a call to `getTokenInfoOrThrow` will ensure that
   // the token in valid.
   memo: Joi.string().optional(),
+  partnerId: Joi.string().optional(),
   token: Joi.string(),
   recipientPublicKey: Joi.prefixedHexString(),
   recipientVaultId: Joi.number().integer()
@@ -51,7 +52,8 @@ module.exports = async (dvf, transferData, feesRecipient, createSignedTransferTx
     token,
     recipientPublicKey,
     recipientVaultId,
-    memo
+    memo,
+    partnerId
   } = validateArg0(transferData)
 
   const tokenInfo = getValidTokenInfo(dvf)(token)
@@ -94,5 +96,5 @@ module.exports = async (dvf, transferData, feesRecipient, createSignedTransferTx
     quantisedAmount: quantisedAmount.minus(feeAmount)
   })
 
-  return { tx, feeTx, starkPublicKey, memo }
+  return { tx, feeTx, starkPublicKey, memo, partnerId }
 }

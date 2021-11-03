@@ -1,5 +1,4 @@
 const DVFError = require('../../lib/dvf/DVFError')
-const BN = require('bignumber.js')
 
 module.exports = async (dvf, starkTokenIds, tradingKey) => {
   tradingKey = tradingKey || dvf.config.starkKeyHex
@@ -13,12 +12,13 @@ module.exports = async (dvf, starkTokenIds, tradingKey) => {
   try {
     return (withdrawalBalance = await dvf.eth.call(
       dvf.contract.abi.WithdrawalBalanceReader,
-      dvf.config.DVF.withdrawalBalanceReaderContractAddress,
+      dvf.config.DVF.registrationAndDepositInterfaceAddress,
       'allWithdrawalBalances',
-      args
+      args,
+      { chain: 'ETHEREUM' }
     ))
   } catch (e) {
-    console.log('contract/getStarkKey error is: ', e)
+    console.warn('contract/getAllWithdrawalBalances error is: ', e)
     throw new DVFError('ERR_GETTING_AVAILABLE_WITHDRAWAL')
   }
 }
