@@ -22,6 +22,7 @@ provider.engine.stop()
 const dvfConfig = {
   api: envVars.API_URL,
   dataApi: envVars.DATA_API_URL,
+  useAuthHeader: true,
   wallet: {
     type: 'tradingKey',
     meta: {

@@ -57,9 +57,10 @@ module.exports = async (web3, userConfig = {}, sw) => {
   if (isObject(web3) && web3.DEFAULT) {
     dvf.web3 = web3.DEFAULT
     dvf.web3PerChain = web3
+  // If single web3 passed as parameter, assuming it is Ethereum by default
   } else {
     dvf.web3 = web3
-    dvf.web3PerChain = { DEFAULT: web3 }
+    dvf.web3PerChain = { ETHEREUM: web3 }
   }
 
   try {
