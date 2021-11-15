@@ -202,6 +202,7 @@ module.exports = () => {
   dvf.fullWithdrawalRequest = compose(require('../../api/fullWithdrawalRequest'))
   dvf.getMinMaxOrderSize = compose(require('../../api/getMinMaxOrderSize'))
   dvf.postAmmFundingOrders = compose(require('../../api/amm/postAmmFundingOrders'))
+  dvf.getAmmFundingOrders = compose(require('../../api/amm/getAmmFundingOrders'))
   dvf.getAmmFundingOrderData = compose(require('../../api/amm/getAmmFundingOrderData'))
   dvf.poolTVL = compose(require('../../api/amm/poolTVL'))
   dvf.poolTvlHistory = compose(require('../../api/amm/poolTvlHistory'))
