@@ -1,38 +1,36 @@
 const FP = require('lodash/fp')
 const { Joi } = require('dvf-utils')
-const { post } = require('request-promise')
+const post = require('../lib/dvf/post-authenticated')
 
 const validateWithJoi = require('../lib/validators/validateWithJoi')
 const makeCreateSignedTransferTx = require('../lib/dvf/makeCreateSignedTransferTx')
+const generateRandomNonceV2 = require('../lib/dvf/generateRandomNonceV2')
 
 const schema = Joi.object({
   token: Joi.string(),
   amount: Joi.bigNumber().greaterThan(0),
-  recipientEthAddress: Joi.ethAddress()
+  recipientEthAddress: Joi.string(),
+  nonce: Joi.number().integer().optional()
 })
 
 const validateInputs = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
   context: `transferAndWithdraw`
 })
 
-module.exports = async (dvf, data, nonce, signature, createSignedTransferTx = makeCreateSignedTransferTx(dvf)) => {
+module.exports = async (dvf, data, authNonce, signature, createSignedTransferTx = makeCreateSignedTransferTx(dvf)) => {
   dvf = FP.set('config.useAuthHeader', true, dvf)
-  const { token, amount, recipientEthAddress } = validateInputs(data)
-  const { vaultId, starkKey } = await dvf.getVaultIdAndStarkKey({
-    token,
-    targetEthAddress: recipientEthAddress
-  }, nonce, signature)
+  const { token, amount, recipientEthAddress, nonce } = validateInputs(data)
 
   const transferData = {
     token,
     amount,
-    recipientVaultId: vaultId,
-    recipientPublicKey: starkKey
+    recipientVaultId: 0, // We will always use vaultId 0
+    recipientPublicKey: recipientEthAddress
   }
 
-  const url = dvf.config.api + '/v2/trading/w/transferAndWithdraw'
+  const endpoint = '/v1/trading/w/transferAndWithdraw'
 
-  const json = await dvf.createTransferAndWithdrawPayload(transferData, createSignedTransferTx)
+  const payload = await dvf.createTransferAndWithdrawPayload(transferData, createSignedTransferTx)
 
-  return post(url, { json })
+  return post(dvf, endpoint, authNonce, signature, { ...payload, nonce: nonce || generateRandomNonceV2() })
 }

@@ -40,10 +40,12 @@ module.exports = async (dvf, transferData, createSignedTransferTx = makeCreateSi
   const tokenInfo = getValidTokenInfo(dvf)(token)
   const quantisedAmount = getSafeQuantizedAmountOrThrow(amount, tokenInfo)
 
-  return createSignedTransferTx({
+  const { tx } = await createSignedTransferTx({
     recipientPublicKey,
     recipientVaultId,
     tokenInfo,
     quantisedAmount
   })
+
+  return { tx }
 }
