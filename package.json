@@ -45,7 +45,7 @@
     "aigle": "git+https://github.com/suguru03/aigle#8739846ba9d4cfc116e1546da1181c73564cae0b",
     "aware": "^0.3.1",
     "bignumber.js": "^9.0.0",
-    "dvf-utils": "git+https://github.com/DeversiFi/dvf-utils#b16d08a37eca2842b4368a35c274e8e6b765f96b",
+    "dvf-utils": "git+https://github.com/DeversiFi/dvf-utils#506a07d08c7b4874b8dc26e9e2f34f60f03ffa2e",
     "lodash": "^4.17.20",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
