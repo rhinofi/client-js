@@ -3,12 +3,18 @@ const { preparePriceBN, prepareAmountBN, splitSymbol } = require('dvf-utils')
 const DVFError = require('../dvf/DVFError')
 const computeBuySellData = require('../dvf/computeBuySellData')
 
-
-module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
+module.exports = async (
+  dvf,
+  { symbol, amount, price, validFor, feeRate, nonce, signature, settleSpread = {} }
+) => {
   price = preparePriceBN(price)
-  amount = preparePriceBN(amount)
+  amount = prepareAmountBN(amount)
 
-  feeRate = parseFloat(feeRate) || dvf.config.DVF.defaultFeeRate
+  feeRate = parseFloat(feeRate)
+
+  if (Number.isNaN(feeRate)) {
+    feeRate = dvf.config.DVF.defaultFeeRate
+  }
 
   const symbolArray = splitSymbol(symbol)
   const baseSymbol = symbolArray[0]
@@ -22,8 +28,8 @@ module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
   const buyCurrency = dvf.token.getTokenInfo(buySymbol)
 
   const [vaultIdSell, vaultIdBuy] = await P.join(
-    dvf.getVaultId(sellSymbol),
-    dvf.getVaultId(buySymbol)
+    dvf.getVaultId(sellSymbol, nonce, signature),
+    dvf.getVaultId(buySymbol, nonce, signature)
   )
   if (!(sellCurrency && buyCurrency)) {
     if (!vaultIdSell) {
@@ -31,24 +37,24 @@ module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
     }
   }
 
-  const settleSpreadBuy = buyCurrency.settleSpread
-  const settleSpreadSell = sellCurrency.settleSpread
+  const settleSpreadBuy = settleSpread.buy != null
+    ? settleSpread.buy
+    : buyCurrency.settleSpread
+  const settleSpreadSell = settleSpread.buy != null
+    ? settleSpread.sell
+    : sellCurrency.settleSpread
 
   const {
     amountSell,
     amountBuy
-  } = computeBuySellData(dvf,{ symbol, amount, price, feeRate, settleSpreadBuy, settleSpreadSell })
+  } = computeBuySellData(dvf, { symbol, amount, price, feeRate, settleSpreadBuy, settleSpreadSell })
 
-  // console.log('sell :', sellSymbol, sellCurrency)
-  // console.log('buy  :', buySymbol, buyCurrency)
-
-  let expiration // in hours
-  expiration = Math.floor(Date.now() / (1000 * 3600))
+  let expirationHours = Math.floor(Date.now() / (1000 * 3600))
 
   if (validFor) {
-    expiration += parseInt(validFor)
+    expirationHours += parseInt(validFor)
   } else {
-    expiration += parseInt(dvf.config.defaultStarkExpiry)
+    expirationHours += parseInt(dvf.config.defaultStarkExpiry)
   }
 
   const starkOrder = {
@@ -59,9 +65,8 @@ module.exports = async (dvf, { symbol, amount, price, validFor, feeRate }) => {
     tokenSell: sellCurrency.starkTokenId,
     tokenBuy: buyCurrency.starkTokenId,
     nonce: dvf.util.generateRandomNonce(),
-    expirationTimestamp: expiration
+    expirationTimestamp: expirationHours
   }
-  //console.log('stark order: ', starkOrder)
   const starkMessage = dvf.stark.createOrderMessage(starkOrder)
 
   return {

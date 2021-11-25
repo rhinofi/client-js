@@ -23,7 +23,7 @@ describe('dvf.cancelOrder', () => {
     const payloadValidator = jest.fn(body => {
       expect(body.orderId).toBe(orderId)
       expect(typeof body.orderId).toBe('string')
-      expect(typeof body.nonce).toBe('number')
+      expect(typeof body.nonce).toBe('string')
       expect(typeof body.signature).toBe('string')
 
       return true
@@ -34,6 +34,30 @@ describe('dvf.cancelOrder', () => {
       .reply(200, apiResponse)
 
     const response = await dvf.cancelOrder(orderId)
+
+    expect(payloadValidator).toBeCalled()
+
+    expect(response).toEqual(apiResponse)
+  })
+
+  it('Posts to cancel order API with { cid } and gets response', async () => {
+    const cid = 'cid-1'
+    const apiResponse = { cancelOrder: 'success' }
+
+    const payloadValidator = jest.fn(body => {
+      expect(body.cid).toBe(cid)
+      expect(typeof body.cid).toBe('string')
+      expect(typeof body.nonce).toBe('string')
+      expect(typeof body.signature).toBe('string')
+
+      return true
+    })
+
+    nock(dvf.config.api)
+      .post('/v1/trading/w/cancelOrder', payloadValidator)
+      .reply(200, apiResponse)
+
+    const response = await dvf.cancelOrder({ cid })
 
     expect(payloadValidator).toBeCalled()
 

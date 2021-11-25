@@ -7,7 +7,7 @@ const makeExampleFileName = require('./makeExampleFileName')
 const spawnProcess = require('./spawnProcess')
 
 const configSchema = Joi.object().keys({
-  INFURA_PROJECT_ID: Joi.string().required(),
+  RPC_URL: Joi.string().required(),
   SETUP_TIMEOUT: Joi.number().integer().default(10 * 60000),
   TEST_TIMEOUT: Joi.number().integer().default(10 * 60000),
   CONFIG_FILE_NAME: Joi.string().default(`config-test-${new Date().toISOString()}.js`),
@@ -56,7 +56,8 @@ const examplesToSkip = [
 ;(async () => {
 
   const { waitForCleanExit } = await spawnProcess({
-    command: [ `${examplesDir}/00.setup.js`, parsedEnv.INFURA_PROJECT_ID ],
+    // Third arg is to avoid interactive prompt when using existing config
+    command: [ `${examplesDir}/00.setup.js`, parsedEnv.RPC_URL, '--yes' ],
     cwd: examplesDir,
     log: true,
     env: parsedEnv

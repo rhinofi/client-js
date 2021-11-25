@@ -1,12 +1,9 @@
-module.exports = async (dvf, abi, address, action, args, value, txMeta) => {
+module.exports = async (dvf, abi, address, action, args, value, options = {}) => {
   if (dvf.config.send) {
-    return dvf.config.send(dvf, abi, address, action, args, value, txMeta)
+    return dvf.config.send(dvf, abi, address, action, args, value, options)
   }
-
-  const { web3 } = dvf
-
+  const web3 = dvf.eth.getWeb3ForChain(options.chain)
   const contract = new web3.eth.Contract(abi, address)
-  // console.log(...args)
   const method = contract.methods[action](...args)
 
   const gasLimit =
@@ -15,13 +12,23 @@ module.exports = async (dvf, abi, address, action, args, value, txMeta) => {
       : dvf.config.defaultGasLimit
 
   const gasPrice = await dvf.eth.getGasPrice()
+  const { id: chainId } = await dvf.eth.getNetwork()
 
-  let options = {
+  let sendOptions = {
+    chainId,
     from: dvf.get('account'),
     gasLimit: gasLimit,
     gasPrice: gasPrice,
     ...(value && { value })
   }
-  // console.log({ options })
-  return method.send(options)
+
+  const txPromEvent = method.send(sendOptions)
+  if (options.transactionHashCb) {
+    txPromEvent.on('transactionHash', (txHash) => options.transactionHashCb(null, txHash))
+    txPromEvent.catch(error => {
+      options.transactionHashCb(error)
+      throw error
+    })
+  }
+  return txPromEvent
 }

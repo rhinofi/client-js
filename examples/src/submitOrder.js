@@ -19,7 +19,7 @@ const submitOrderResponse = await dvf.submitOrder({
   validFor,           // Optional
   feeRate,            // Optional
   gid: '1',           // Optional
-  cid: '1',           // Optional
+  cid: 'mycid-' + Math.random().toString(36).substring(7), // Optional
   partnerId: 'P1'    // Optional
 })
 

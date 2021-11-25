@@ -4,11 +4,7 @@ module.exports = async (dvf, token, tradingKey) => {
   const { starkTokenId } = dvf.token.getTokenInfo(token)
   tradingKey = tradingKey || dvf.config.starkKeyHex
 
-  const args = [starkTokenId]
-
-  if (dvf.config.starkExUseV2) {
-    args.unshift(tradingKey)
-  }
+  const args = [tradingKey, starkTokenId]
 
   const action = 'withdraw'
 

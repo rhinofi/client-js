@@ -23,7 +23,13 @@ module.exports = Object.freeze([
   'ledgerDeposit',
   'ledgerSubmitOrder',
   'ledgerWithdraw',
-  'cancelWithdrawal'
+  'cancelWithdrawal',
+  'authWithTradingKey',
+  'fastWithdrawalFee',
+  'fastWithdrawalMaxAmount',
+  'ammDeposit',
+  'ammWithdrawal',
+  'transferAndWithdraw'
   // TODO
   // 'submitBuyOrder',
   // 'submitSellOrder',

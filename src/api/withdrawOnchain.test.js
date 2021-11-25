@@ -4,7 +4,7 @@ const mockGetConf = require('./test/fixtures/getConf')
 
 let dvf
 
-describe('dvf.withdrawOnchain', () => {
+describe.skip('dvf.withdrawOnchain', () => {
   beforeAll(async () => {
     nock.cleanAll()
     mockGetConf()
@@ -20,7 +20,6 @@ describe('dvf.withdrawOnchain', () => {
     const token = 'ETH'
 
     const response = await dvf.withdrawOnchain(token)
-    console.log(response)
     expect(response.transactionHash).toMatch(/[\da-f]/i)
   })
 })

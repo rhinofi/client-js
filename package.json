@@ -1,6 +1,6 @@
 {
   "name": "dvf-client-js",
-  "version": "1.0.6",
+  "version": "3.1.4",
   "main": "src/dvf.js",
   "contributors": [
     "Henrique Matias <hems.inlet@gmail.com>",
@@ -22,9 +22,9 @@
     "build:web:minify": "node-minify --compressor uglify-es --input './dist/dvf.js' --output './dist/dvf.min.js'",
     "build:web:hash": "hash-filename ./dist/dvf*.js;del ./dist/{dvf.js,dvf.min.js}",
     "build:web:run": "browserify --debug ./src/dvf.js --standalone EFX | browser-run --port 2222",
-    "test": "env-cmd -f ./env/test jest --testTimeout 20000000",
-    "test:watch": "env-cmd -f ./env/test jest --watch --testTimeout 200000 --verbose true",
-    "test:coverage": "env-cmd -f ./env/test jest --testTimeout 2000000 --coverage"
+    "test": "env-cmd -f ./env/test jest --testTimeout 10000",
+    "test:watch": "env-cmd -f ./env/test jest --watch --testTimeout 10000 --verbose true",
+    "test:coverage": "env-cmd -f ./env/test jest --testTimeout 10000 --coverage"
   },
   "jest": {
     "coverageReporters": [
@@ -40,13 +40,12 @@
   "homepage": "https://github.com/deversifi/dvf-client-js",
   "license": "MIT",
   "dependencies": {
-    "@ledgerhq/hw-app-eth": "^5.25.1",
-    "@ledgerhq/hw-transport-webhid": "^5.25.0",
-    "@ledgerhq/hw-transport-webusb": "^5.25.0",
+    "@ledgerhq/hw-app-eth": "5.49.0",
+    "@ledgerhq/hw-transport-webhid": "5.51.1",
     "aigle": "git+https://github.com/suguru03/aigle#8739846ba9d4cfc116e1546da1181c73564cae0b",
     "aware": "^0.3.1",
     "bignumber.js": "^9.0.0",
-    "dvf-utils": "git+https://github.com/DeversiFi/dvf-utils#c9be9e9b818863a05fac396e1af5c2d536dd90d1",
+    "dvf-utils": "git+https://github.com/DeversiFi/dvf-utils#5e5b38afa8c12ac269d281a11b446183c15770f4",
     "lodash": "^4.17.20",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
@@ -57,7 +56,7 @@
   "devDependencies": {
     "@ledgerhq/hw-transport-mocker": "^5.25.0",
     "@truffle/hdwallet-provider": "^1.1.0",
-    "browser-run": "^5.0.0",
+    "browser-run": "10.1.0",
     "browserify": "^16.2.2",
     "del": "^3.0.0",
     "del-cli": "^1.1.0",

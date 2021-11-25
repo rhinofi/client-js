@@ -3,6 +3,8 @@ const defaultConfig = require('./config')
 const Web3 = require('web3')
 const aware = require('aware')
 const BigNumber = require('bignumber.js')
+const attachStarkProvider = require('./lib/wallet/attachStarkProvider')
+const { isObject } = require('lodash')
 BigNumber.config({ EXPONENTIAL_AT: 1e9 })
 
 /**
@@ -50,19 +52,24 @@ module.exports = async (web3, userConfig = {}, sw) => {
     }
   }
 
-  // save web3 instance int it
-  dvf.web3 = web3
-
-  let chainId = 3
-
-  try {
-    chainId = chainId || (await web3.eth.net.getId())
+  // Guessing if web3 passed as argument is a single web3 instance
+  // or a map of web3 instances (for cross-chain features)
+  if (isObject(web3) && web3.DEFAULT) {
+    dvf.web3 = web3.DEFAULT
+    dvf.web3PerChain = web3
+  // If single web3 passed as parameter, assuming it is Ethereum by default
+  } else {
+    dvf.web3 = web3
+    dvf.web3PerChain = { ETHEREUM: web3 }
   }
-  catch(e)  {
-    console.log('error getting chainId')
-  }
 
-  dvf.chainId = chainId
+  if (!dvf.config.skipLoad) {
+    try {
+      dvf.config.ethereumChainId = dvf.config.ethereumChainId || (await dvf.web3.eth.net.getId())
+    } catch (e) {
+      console.log('error getting chainId')
+    }
+  }
 
   if (dvf.config.autoSelectAccount) {
     await dvf.account.select(dvf.config.account)
@@ -70,8 +77,7 @@ module.exports = async (web3, userConfig = {}, sw) => {
     if (!dvf.get('account')) {
       console.warn('Please specify a valid account or account index')
     }
-  }
-  else if (dvf.config.address){
+  } else if (dvf.config.address) {
     dvf.set('account', dvf.config.address.toLowerCase())
   }
 
@@ -86,7 +92,14 @@ module.exports = async (web3, userConfig = {}, sw) => {
     }
   }
 
-  dvf.recommendedGasPrices = await dvf.getGasPrice()
+  if (!dvf.config.skipLoad) {
+    dvf.recommendedGasPrices = await dvf.getGasPrice()
+  }
+
+  try {
+    attachStarkProvider(dvf, userConfig.wallet)
+    // Fail silently in case no wallet is provider since provider can be attached later
+  } catch (e) {}
 
   return dvf
 }

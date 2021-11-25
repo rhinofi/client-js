@@ -1,13 +1,15 @@
 const { post } = require('request-promise')
 const DVFError = require('../lib/dvf/DVFError')
 const { Joi } = require('dvf-utils')
+const P = require('aigle')
+const FP = require('lodash/fp')
+
 /*
 Keeping the schema visible and not in a seperate method
 for reference as required parameters can be checked by reading
 */
 
-
-const schema = Joi.object({
+const orderSchema = Joi.object({
   symbol: Joi.string().required(), // trading symbol
   amount: Joi.amount().required(), // number or number string
   price: Joi.price().required(), // number or number string
@@ -19,11 +21,26 @@ const schema = Joi.object({
   gid: Joi.string().allow(''),
   partnerId: Joi.string().allow(''),
   ethAddress: Joi.string().pattern(/[\da-f]/i),
+  feature: Joi.string().default('UNKNOWN'), // Tracks order origin (ex: 'TRADING', 'SWAP')
+  platform: Joi.string().valid('DESKTOP', 'MOBILE').default('DESKTOP'), // Tracks order platform (DESKTOP or MOBILE)
   type: Joi.any().default('EXCHANGE LIMIT'),
   protocol: Joi.any().default('stark'),
   isPostOnly: Joi.bool().description('Flag to indicate if the order is post-only.'),
-  isHidden: Joi.bool().description('Flag to indicate if the order is hidden.')
+  isHidden: Joi.bool().description('Flag to indicate if the order is hidden.'),
+  isSlippageDisabled: Joi.bool().description('Flag to indicate if the order should ignore slippage.'),
+  isFillOrKill: Joi.bool().description('Flag to indicate if the order is fill-or-kill'),
+  nonce: Joi.alternatives().try(Joi.string().allow(''), Joi.number().allow('')),
+  signature: Joi.alternatives().try(
+    Joi.string().allow(''),
+    Joi.object({
+      s: Joi.string(),
+      r: Joi.string(),
+      recoveryParam: Joi.number()
+    })
+  )
 })
+
+const schema = Joi.alternatives().try(orderSchema, Joi.array().items(orderSchema))
 
 module.exports = async (dvf, orderData) => {
   const { value, error } = schema.validate(orderData)
@@ -44,7 +61,11 @@ module.exports = async (dvf, orderData) => {
     }
   }
 
-  return post(dvf.config.api + '/v1/trading/w/submitOrder', {
-    json: await dvf.createOrderPayload(value)
-  })
+  const json = await (
+    FP.isArray(value)
+      ? P.map(value, o => dvf.createOrderPayload(o))
+      : dvf.createOrderPayload(value)
+  )
+
+  return post(dvf.config.api + '/v1/trading/w/submitOrder', { json })
 }

@@ -2,15 +2,20 @@ const validateAssertions = require('../lib/validators/validateAssertions')
 
 const post = require('../lib/dvf/post-authenticated')
 
-module.exports = async (dvf, token, nonce, signature) => {
-  if (token) {
-    validateAssertions(dvf, {token})
+/*
+  params: {
+    token: 'ETH', (optional)
+    fields: ['balance', 'updatedAt'] (optional)
+  }
+*/
+module.exports = async (dvf, params, nonce, signature) => {
+  if (params) {
+    validateAssertions(dvf, params)
   }
 
   const endpoint = '/v1/trading/r/getBalance'
 
-  const data = {token}
+  const data = params
 
   return post(dvf, endpoint, nonce, signature, data)
 }
-

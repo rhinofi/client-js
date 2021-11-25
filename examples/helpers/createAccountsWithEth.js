@@ -5,11 +5,11 @@ const P = require('aigle')
 
 const spawnProcess = require('./spawnProcess')
 
-const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID
+const RPC_URL = process.env.RPC_URL
 const configFileName = 'config-tmp.json'
 
-if (!INFURA_PROJECT_ID) {
-  throw new Error('INFURA_PROJECT_ID env var needs to be set')
+if (!RPC_URL) {
+  throw new Error('RPC_URL env var needs to be set')
 }
 
 function pad(n, width, z) {
@@ -25,7 +25,7 @@ const examplesDir = `${__dirname}/..`
 
 const createAccount = async (index) => {
   const { waitForCleanExit } = await spawnProcess({
-    command: [ `${examplesDir}/00.setup.js`, INFURA_PROJECT_ID ],
+    command: [ `${examplesDir}/00.setup.js`, RPC_URL ],
     cwd: examplesDir,
     log: true,
     env: Object.assign(

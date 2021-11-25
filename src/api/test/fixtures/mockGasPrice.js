@@ -65,11 +65,8 @@ module.exports = () => {
     average: 600000000,
     fast: 500000000
   }
-  
-  nock('https://api.stg.deversifi.com')
-    .post('/v1/trading/r/getGasPrice', body => {
-      return true
-    })
-    .reply(200, mockGasResponse)
 
+  nock('https://api.stg.deversifi.com')
+    .get('/v1/trading/r/getGasPrice')
+    .reply(200, mockGasResponse)
 }

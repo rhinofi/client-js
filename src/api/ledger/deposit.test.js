@@ -29,7 +29,7 @@ jest.mock('@ledgerhq/hw-app-eth', () => {
 const Transport = createTransportReplayer()
 let dvf
 
-describe('dvf.deposit', () => {
+describe.skip('dvf.deposit', () => {
   beforeAll(async () => {
     mockGetConf()
     dvf = await instance()
@@ -66,12 +66,7 @@ describe('dvf.deposit', () => {
       .post('/v1/trading/w/deposit', payloadValidator)
       .reply(200, apiResponse)
 
-    const starkDeposit = await dvf.stark.ledger.createDepositData(
-      path,
-      token,
-      amount
-    )
-    await dvf.ledger.deposit(token, amount, starkDeposit)
+    await dvf.ledger.deposit(token, amount, path)
 
     expect(payloadValidator).toBeCalled()
   })
@@ -108,12 +103,7 @@ describe('dvf.deposit', () => {
       .post('/v1/trading/w/deposit', payloadValidator)
       .reply(200, apiResponse)
 
-    const starkDeposit = await dvf.stark.ledger.createDepositData(
-      path,
-      token,
-      amount
-    )
-    await dvf.ledger.deposit(token, amount, starkDeposit)
+    await dvf.ledger.deposit(token, amount, path)
 
     expect(payloadValidator).toBeCalled()
   })
@@ -150,12 +140,7 @@ describe('dvf.deposit', () => {
       .post('/v1/trading/w/deposit', payloadValidator)
       .reply(200, apiResponse)
 
-    const starkDeposit = await dvf.stark.ledger.createDepositData(
-      path,
-      token,
-      amount
-    )
-    await dvf.ledger.deposit(token, amount, starkDeposit)
+    await dvf.ledger.deposit(token, amount, path)
 
     expect(payloadValidator).toBeCalled()
   })

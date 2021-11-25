@@ -1,3 +1,5 @@
+const errorReasons = require('../../lib/dvf/errorReasons')
+
 module.exports = async (dvf, vaultId, token, amount, tradingKey) => {
   let value
   tradingKey = tradingKey || dvf.config.starkKeyHex
@@ -8,11 +10,7 @@ module.exports = async (dvf, vaultId, token, amount, tradingKey) => {
     value = dvf.token.toQuantizedAmount(token, amount)
   }
 
-  const args = [dvf.token.getTokenInfo(token).starkTokenId, vaultId, value]
-
-  if (dvf.config.starkExUseV2) {
-    args.unshift(tradingKey)
-  }
+  const args = [tradingKey, dvf.token.getTokenInfo(token).starkTokenId, vaultId, value]
 
   const action = 'deposit'
   // In order to lock ETH we simply send ETH to the lockerAddress
@@ -35,10 +33,13 @@ module.exports = async (dvf, vaultId, token, amount, tradingKey) => {
       args
     )
   } catch (e) {
+    // TODO: why are we not simply throwing here? We are not awaiting the send
+    // so the error could only be caused by a bug in the block above but not
+    // actual execution of the contract method (since it's async).
     if (!dvf.contract.isApproved(token)) {
       return {
         error: 'ERR_CORE_ETHFX_NEEDS_APPROVAL',
-        reason: reasons.ERR_CORE_ETHFX_NEEDS_APPROVAL.trim(),
+        reason: errorReasons.ERR_CORE_ETHFX_NEEDS_APPROVAL.trim(),
         originalError: e
       }
     } else {

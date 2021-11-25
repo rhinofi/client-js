@@ -1,6 +1,7 @@
 const validators = {
   id: require('./id'),
   orderId: require('./orderId'),
+  cid: require('./cid'),
   symbol: require('./symbol'),
   token: require('./token'),
   nonce: require('./nonce'),

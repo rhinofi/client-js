@@ -15,7 +15,7 @@ describe('dvf.deposit', () => {
     nock.cleanAll()
   })
 
-  it(`Deposits ERC20 token to user's vault`, async () => {
+  it.skip(`Deposits ERC20 token to user's vault`, async () => {
     mockGetConf()
     const starkPrivateKey = '100'
     const amount = '1394.0000051'
@@ -33,7 +33,6 @@ describe('dvf.deposit', () => {
     }
 
     const payloadValidator = jest.fn((body) => {
-      console.log('body', body)
       expect(body).toMatchObject(apiResponse)
       expect(typeof body.nonce).toBe('number')
       expect(body.starkSignature.r).toMatch(/[\da-f]/i)
@@ -52,7 +51,7 @@ describe('dvf.deposit', () => {
     expect(payloadValidator).toBeCalled()
   })
 
-  it.only('Deposits ETH to users vault', async () => {
+  it.skip('Deposits ETH to users vault', async () => {
     mockGetConf()
     const starkPrivateKey = '100'
     const token = 'ETH'

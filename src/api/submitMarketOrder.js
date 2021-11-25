@@ -17,10 +17,14 @@ const schema = Joi.object({
   gid: Joi.string().allow(''),
   partnerId: Joi.string().allow(''),
   ethAddress: Joi.string().pattern(/[\da-f]/i),
+  feature: Joi.string().default('UNKNOWN'), // Tracks order origin (ex: 'TRADING', 'SWAP')
+  platform: Joi.string().valid('DESKTOP', 'MOBILE').default('DESKTOP'), // Tracks order platform (DESKTOP or MOBILE)
   type: Joi.string().default('EXCHANGE MARKET'),
   protocol: Joi.any().default('stark'),
   isPostOnly: Joi.bool().description('Flag to indicate if the order is post-only.'),
-  isHidden: Joi.bool().description('Flag to indicate if the order is hidden.')
+  isHidden: Joi.bool().description('Flag to indicate if the order is hidden.'),
+  nonce: Joi.string().allow(''),
+  signature: Joi.string().allow('')
 })
 
 module.exports = async (dvf, orderData) => {

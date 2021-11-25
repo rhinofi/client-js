@@ -20,10 +20,14 @@ const schema = Joi.object({
   gid: Joi.string().allow(''),
   partnerId: Joi.string().allow(''),
   ethAddress: Joi.string().pattern(/[\da-f]/i),
+  feature: Joi.string().default('UNKNOWN'), // Tracks order origin (ex: 'TRADING', 'SWAP')
+  platform: Joi.string().valid('DESKTOP', 'MOBILE').default('DESKTOP'), // Tracks order platform (DESKTOP or MOBILE)
   type: Joi.any().default('EXCHANGE LIMIT'),
   protocol: Joi.any().default('stark'),
   isPostOnly: Joi.bool().description('Flag to indicate if the order is post-only.'),
-  isHidden: Joi.bool().description('Flag to indicate if the order is hidden.')
+  isHidden: Joi.bool().description('Flag to indicate if the order is hidden.'),
+  nonce: Joi.string().allow(''),
+  signature: Joi.string().allow('')
 })
 
 module.exports = async (dvf, orderData) => {
@@ -40,7 +44,9 @@ module.exports = async (dvf, orderData) => {
 
   const finalValue = {
     ...value,
-    feeRate: value.feeRate || dvf.config.DVF.defaultFeeRate,
+    feeRate: [undefined, null].includes(value.feeRate)
+      ? dvf.config.DVF.defaultFeeRate
+      : value.feeRate,
     amount: prepareAmount(amountBN),
     price: value.worstCasePrice
   }
@@ -64,6 +70,8 @@ module.exports = async (dvf, orderData) => {
     ),
     meta: {
       ethAddress,
+      feature: finalValue.feature,
+      platform: finalValue.platform,
       ...(await dvf.createMarketOrderMetaData(finalValue))
     }
   }

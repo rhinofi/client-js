@@ -16,7 +16,7 @@ describe('dvf.getConfig', () => {
     nock.cleanAll()
   })
 
-  it('Returns the config recieved from the API', async () => {
+  it('Returns the config received from the API', async () => {
     const apiResponse = {
       DVF: {
         defaultFeeRate: 0.0025,
@@ -121,9 +121,9 @@ describe('dvf.getConfig', () => {
     expect(response).toMatchObject({
       api: 'https://api.stg.deversifi.com',
       gasApi: 'https://ethgasstation.info',
-      defaultGasLimit: 200000,
-      defaultGasPrice: 500000000,
-      defaultStarkExpiry: 720,
+      defaultGasLimit: 300000, // defined in `/src/config.js`
+      defaultGasPrice: 50000000000,
+      defaultStarkExpiry: 4320,
       defaultNonceAge: 43200,
       defaultProvider: 'http://localhost:8545',
       account: 0,

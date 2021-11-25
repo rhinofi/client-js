@@ -21,9 +21,9 @@ describe('dvf.cancelWithdrawal', () => {
     const apiResponse = { cancelWithdrawal: 'success' }
 
     const payloadValidator = jest.fn(body => {
-      expect(body.id).toBe(id)
+      expect(body.id).toEqual(id)
       expect(typeof body.id).toBe('string')
-      expect(typeof body.nonce).toBe('number')
+      expect(typeof body.nonce).toBe('string')
       expect(typeof body.signature).toBe('string')
 
       return true

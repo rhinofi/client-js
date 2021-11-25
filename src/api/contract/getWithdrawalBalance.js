@@ -2,9 +2,7 @@ const DVFError = require('../../lib/dvf/DVFError')
 const BN = require('bignumber.js')
 
 module.exports = async (dvf, token, tradingKey) => {
-  tradingKey = dvf.config.starkExUseV2
-    ? tradingKey || dvf.config.starkKeyHex
-    : '0x' + await dvf.contract.getStarkKey()
+  tradingKey = tradingKey || dvf.config.starkKeyHex
 
   if (!tradingKey) {
     throw new Error('getWithdrawalBalance: tradingKey is required')

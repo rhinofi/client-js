@@ -70,5 +70,7 @@ module.exports = {
   ERR_PUBLICKEY_CREATION: 'There was an error in creating a public key',
   NO_TOKEN_REGISTRY: 'No token information present on client. Please call getUserConfig.',
   NO_DEVERSIFI_STARK_VAULT_ID_FOR_TOKEN: 'No Deversifi stark vault id for token. Please call getUserConfig.',
-  NO_STARK_VAULT_ID_FOR_TOKEN: 'No stark vault id for token. You need to make a deposit or an order for given token first before attempting a withdrawal.'
+  NO_STARK_VAULT_ID_FOR_TOKEN: 'No stark vault id for token. You need to make a deposit or an order for given token first before attempting a transfer or withdrawal.',
+  NO_STARK_PROVIDER: 'No starkProvider. Please provide a starkProvider as a config argument.',
+  ERR_USER_DENIED_TX: 'User denied transaction signature'
 }

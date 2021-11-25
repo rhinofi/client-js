@@ -35,35 +35,40 @@ module.exports = async (dvf, token, nonce, signature) => {
 
   const withdrawals = await post(dvf, endpoint, nonce, signature, data)
 
-  const { starkKeyHex } = dvf.config
+  try {
+    const { starkKeyHex } = dvf.config
 
-  if (!dvf.config.DVF.withdrawalBalanceReaderContractAddress) {
-    // Use the deprecated way of getting balances in case the
-    // WithdrawalBalanceReaderContractAddress was not set
-    return getWithdrawalBalancesDeprecated(dvf, withdrawals, starkKeyHex)
-  }
-
-  const tokenMap = dvf.config.tokenRegistry;
-  const tokenMapKeys = Object.keys(dvf.config.tokenRegistry);
-  const starkTokenIds = tokenMapKeys.map(key => tokenMap[key].starkTokenId)
-
-  const balances = await dvf.contract.getAllWithdrawalBalances(starkTokenIds, starkKeyHex)
-
-  return balances.reduce((all, balance, index) => {
-    const key = tokenMapKeys[index]
-
-    if (parseInt(balance) > 0) {
-      const amount = dvf.token.toQuantizedAmount(
-        key,
-        dvf.token.fromBaseUnitAmount(key, balance)
-      )
-
-      all.push({
-        token: key,
-        status: 'ready',
-        amount
-      })
+    // Using registrationAndDepositInterfaceAddress as it contains the same method
+    if (!dvf.config.DVF.registrationAndDepositInterfaceAddress) {
+      // Use the deprecated way of getting balances in case the
+      // WithdrawalBalanceReaderContractAddress was not set
+      return await getWithdrawalBalancesDeprecated(dvf, withdrawals, starkKeyHex)
     }
-    return all
-  }, withdrawals)
+
+    const tokenMap = dvf.config.tokenRegistry;
+    const tokenMapKeys = Object.keys(dvf.config.tokenRegistry);
+    const starkTokenIds = tokenMapKeys.map(key => tokenMap[key].starkTokenId)
+
+    const balances = await dvf.contract.getAllWithdrawalBalances(starkTokenIds, starkKeyHex)
+    return balances.reduce((all, balance, index) => {
+      const key = tokenMapKeys[index]
+
+      if (parseInt(balance) > 0) {
+        const amount = dvf.token.toQuantizedAmount(
+          key,
+          dvf.token.fromBaseUnitAmount(key, balance)
+        )
+
+        all.push({
+          token: key,
+          status: 'ready',
+          amount
+        })
+      }
+      return all
+    }, withdrawals)
+  } catch (e) {
+    console.error('Error while fetching on-chain withdrawals information (returning only server withdrawals)', e)
+    return withdrawals
+  }
 }

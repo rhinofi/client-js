@@ -18,17 +18,25 @@ const schema = Joi.object({
   gid: Joi.string().allow(''),
   partnerId: Joi.string().allow(''),
   ethAddress: Joi.string().pattern(/[\da-f]/i),
+  feature: Joi.string().default('UNKNOWN'), // Tracks order origin (ex: 'TRADING', 'SWAP')
+  platform: Joi.string().valid('DESKTOP', 'MOBILE').default('DESKTOP'), // Tracks order platform (DESKTOP or MOBILE)
   type: Joi.any().default('EXCHANGE LIMIT'),
   protocol: Joi.any().default('stark'),
   isPostOnly: Joi.bool().description('Flag to indicate if the order is post-only.'),
-  isHidden: Joi.bool().description('Flag to indicate if the order is hidden.')
+  isHidden: Joi.bool().description('Flag to indicate if the order is hidden.'),
+  isSlippageDisabled: Joi.bool().description('Flag to indicate if the order should ignore slippage.'),
+  isFillOrKill: Joi.bool().description('Flag to indicate if the order is fill-or-kill'),
+  nonce: Joi.string().allow(''),
+  signature: Joi.string().allow('')
 })
 
 module.exports = async (dvf, orderData) => {
   const { value, error } = schema.validate(orderData)
   // TODO: handle error
   // TODO: don't mutate
-  value.feeRate = value.feeRate || dvf.config.DVF.defaultFeeRate
+  value.feeRate = [undefined, null].includes(value.feeRate)
+    ? dvf.config.DVF.defaultFeeRate
+    : value.feeRate
   const ethAddress = orderData.ethAddress || dvf.get('account')
 
   return {
@@ -44,12 +52,16 @@ module.exports = async (dvf, orderData) => {
         'type',
         'protocol',
         'isPostOnly',
-        'isHidden'
+        'isHidden',
+        'isSlippageDisabled',
+        'isFillOrKill'
       ],
       value
     ),
     meta: {
       ethAddress,
+      feature: value.feature,
+      platform: value.platform,
       ...(await dvf.createOrderMetaData(value))
     }
   }

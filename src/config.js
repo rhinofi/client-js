@@ -4,12 +4,12 @@ module.exports = {
   gasApi: 'https://ethgasstation.info',
 
   // default transaction arguments
-  defaultGasLimit: 200000,
+  defaultGasLimit: 300000,
   defaultGasPrice: 50000000000,
 
   // default stark related constants
   // default expiration time for transfers and orders in hours
-  defaultStarkExpiry: 720,
+  defaultStarkExpiry: 4320,
   // default nonce age in seconds
   defaultNonceAge: 43200,
   // in case no provider is provided we will try connecting to the this default
@@ -33,5 +33,8 @@ module.exports = {
 
   // enables integrators to select if they want to fetch user config upon initialization
   autoLoadUserConf: true,
-  autoLoadExchangeConf: true
+  autoLoadExchangeConf: true,
+
+  // enables integrations exposing starkProvider
+  starkProvider: null
 }
