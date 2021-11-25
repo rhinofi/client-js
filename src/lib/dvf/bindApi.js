@@ -139,6 +139,9 @@ module.exports = () => {
   dvf.createSignedTransfer = compose(
     require('./createSignedTransfer')
   )
+  dvf.createTransferAndWithdrawPayload = compose(
+    require('./createTransferAndWithdrawPayload')
+  )
   // dvf trading volume data
   dvf.get30DaysVolume = compose(require('../../api/get30DaysVolume'))
 
@@ -192,6 +195,7 @@ module.exports = () => {
   dvf.submitSellOrder = compose(require('../../api/submitSellOrder'))
   dvf.transferUsingVaultIdAndStarkKey = compose(require('../../api/transferUsingVaultIdAndStarkKey'))
   dvf.transfer = compose(require('../../api/transfer'))
+  dvf.transferAndWithdraw = compose(require('../../api/transferAndWithdraw'))
   dvf.getWithdrawal = compose(require('../../api/getWithdrawal'))
   dvf.getWithdrawals = compose(require('../../api/getWithdrawals'))
   dvf.withdraw = compose(require('../../api/withdraw'))
@@ -221,6 +225,7 @@ module.exports = () => {
     deposit: compose(require('../../api/ledger/deposit')),
     withdraw: compose(require('../../api/ledger/withdraw')),
     transfer: compose(require('../../api/ledger/transfer')),
+    transferAndWithdraw: compose(require('../../api/ledger/transferAndWithdraw')),
     transferUsingVaultIdAndStarkKey: compose(require('../../api/ledger/transferUsingVaultIdAndStarkKey'))
   }
   dvf.estimatedNextBatchTime = compose(require('../../api/estimatedNextBatchTime'))

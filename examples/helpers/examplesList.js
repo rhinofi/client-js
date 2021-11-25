@@ -28,7 +28,8 @@ module.exports = Object.freeze([
   'fastWithdrawalFee',
   'fastWithdrawalMaxAmount',
   'ammDeposit',
-  'ammWithdrawal'
+  'ammWithdrawal',
+  'transferAndWithdraw'
   // TODO
   // 'submitBuyOrder',
   // 'submitSellOrder',
