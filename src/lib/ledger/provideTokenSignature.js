@@ -1,5 +1,5 @@
 const { byContractAddress } = require('@ledgerhq/hw-app-eth/erc20')
-const generateTestNetworkTokenData = require('../../ledger/generateTestNetworkTokenData')
+const generateTestNetworkTokenData = require('../ledger/generateTestNetworkTokenData')
 
 module.exports = async (dvf, eth, tokenContractAddress) => {
   if (tokenContractAddress) {
