@@ -1,5 +1,4 @@
 const Eth = require('@ledgerhq/hw-app-eth').default
-const { byContractAddress } = require('@ledgerhq/hw-app-eth/erc20')
 const DVFError = require('../../dvf/DVFError')
 const BN = require('bignumber.js')
 const _ = require('lodash')
@@ -49,15 +48,16 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true, st
       provideTokenSignature(dvf, eth, sellTokenAddress)
     ])
     if (buySignature.unsafeSign || sellSignature.unsafeSign) {
-      await transport.close()
       const starkSignature = await eth.starkUnsafeSign(
         starkPath,
-        starkMessage
+        starkMessage.padStart(64, '0').substr(-64)
       )
+      await transport.close()
       return { starkSignature, starkPublicKey }
     }
   } catch (e) {
     await transport.close()
+    throw new DVFError('LEDGER_TOKENINFO_ERR')
   }
 
   const starkSignature = await eth.starkSignOrder_v2(
