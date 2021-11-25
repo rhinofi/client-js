@@ -5,6 +5,10 @@ const _ = require('lodash')
 const selectTransport = require('../../ledger/selectTransport')
 const provideTokenSignature = require('../../ledger/provideTokenSignature')
 const getTokenAddressFromTokenInfoOrThrow = require('../../dvf/token/getTokenAddressFromTokenInfoOrThrow')
+const swJS = require('starkware_crypto')
+const {
+  starkLimitOrderToMessageHash
+} = require('dvf-utils')
 
 const getPublicKey = async (eth, starkPath) => {
   const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')
@@ -48,9 +52,11 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true, st
       provideTokenSignature(dvf, eth, sellTokenAddress)
     ])
     if (buySignature.unsafeSign || sellSignature.unsafeSign) {
+      const message = starkMessage || starkLimitOrderToMessageHash(swJS)(starkOrder)
+      const paddedMessage = message.padStart(64, '0').substr(-64)
       const starkSignature = await eth.starkUnsafeSign(
         starkPath,
-        starkMessage.padStart(64, '0').substr(-64)
+        paddedMessage
       )
       await transport.close()
       return { starkSignature, starkPublicKey }

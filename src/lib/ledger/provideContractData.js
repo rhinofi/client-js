@@ -45,11 +45,12 @@ module.exports = async (dvf, transport, tokenAddress = '', transferQuantization)
           const tokenData = generateTestNetworkTokenData(transferTokenAddress, dvf.config.ethereumChainId)
           await _transport.provideERC20TokenInformation(tokenData)
         } else {
-          throw new DVFError('LEDGER_TOKENINFO_ERR')
+          return { unsafeSign: true }
         }
       }
     } else {
       transferTokenAddress = null
+      return { unsafeSign: true }
     }
     if (transferQuantization) {
       await _transport.starkProvideQuantum_v2(transferTokenAddress, tokenAddress ? 'erc20' : 'eth', transferQuantization, null)
