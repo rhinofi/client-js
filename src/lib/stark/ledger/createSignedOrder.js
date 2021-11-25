@@ -1,12 +1,13 @@
 const Eth = require('@ledgerhq/hw-app-eth').default
 const byContractAddress = require('@ledgerhq/hw-app-eth/erc20')
   .byContractAddress
-const DVFError = require('../../dvf/DVFError')
 const BN = require('bignumber.js')
 const _ = require('lodash')
 const selectTransport = require('../../ledger/selectTransport')
+const provideTokenSignature = require('../../ledger/provideTokenSignature')
 
-module.exports = async (dvf, path, starkOrder) => {
+// Use signing on the starkMessage only as a fallback
+module.exports = async (dvf, path, starkOrder, starkMessage) => {
   const Transport = selectTransport(dvf.isBrowser)
 
   const buyCurrency = _.find(dvf.config.tokenRegistry, {
@@ -30,53 +31,21 @@ module.exports = async (dvf, path, starkOrder) => {
   // to be used for both buy as sell tokens and
   // for transfer method as well as well
 
-  let buyTokenAddress = buyCurrency.tokenAddress
+  const buyTokenAddress = buyCurrency.tokenAddress
+  const sellTokenAddress = sellCurrency.tokenAddress
+  const [buyToken, sellToken] = await Promise.all([
+    await provideTokenSignature(dvf, eth, buyTokenAddress),
+    await provideTokenSignature(dvf, eth, sellTokenAddress)
+  ])
 
-  if (buyTokenAddress) {
-    const buyTokenInfo = byContractAddress(buyTokenAddress)
-    buyTokenAddress = buyTokenAddress.substr(2)
-    if (buyTokenInfo) {
-      await eth.provideERC20TokenInformation(buyTokenInfo)
-    } else {
-      if (dvf.chainId!==1) {
-        let tokenInfo = {}
-        tokenInfo['data'] = Buffer.from(
-          `00${buyTokenAddress}0000000000000003`,
-          'hex'
-        )
-        await eth.provideERC20TokenInformation(tokenInfo)
-      } else {
-        throw new DVFError('LEDGER_TOKENINFO_ERR')
-      }
-    }
-  } else {
-    buyTokenAddress = null
-  }
-
-  // TODO Extract below code to a utility method
-  // to be used for both buy as sell tokens and
-  // for transfer method as well as well
-
-  let sellTokenAddress = sellCurrency.tokenAddress
-  if (sellTokenAddress) {
-    const sellTokenInfo = byContractAddress(sellTokenAddress)
-    sellTokenAddress = sellTokenAddress.substr(2)
-    if (sellTokenInfo) {
-      await eth.provideERC20TokenInformation(sellTokenInfo)
-    } else {
-      if (dvf.chainId!==1) {
-        let tokenInfo = {}
-        tokenInfo['data'] = Buffer.from(
-          `00${sellTokenAddress}0000000000000003`,
-          'hex'
-        )
-        await eth.provideERC20TokenInformation(tokenInfo)
-      } else {
-        throw new DVFError('LEDGER_TOKENINFO_ERR')
-      }
-    }
-  } else {
-    sellTokenAddress = null
+  if (buyToken.unsafeSign || sellToken.unsafeSign) {
+    console.log('SIGN UNSAFELY')
+    const starkSignature = await eth.starkUnsafeSign(
+      starkPath,
+      starkMessage
+    )
+    await transport.close()
+    return { starkPublicKey, starkSignature }
   }
 
   const starkSignature = await eth.starkSignOrder(
