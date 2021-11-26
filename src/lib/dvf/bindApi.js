@@ -69,6 +69,9 @@ module.exports = () => {
     getWithdrawalBalance: compose(
       require('../../api/contract/getWithdrawalBalance')
     ),
+    getWithdrawalBalanceEthAddress: compose(
+      require('../../api/contract/getWithdrawalBalanceEthAddress')
+    ),
     getAllWithdrawalBalances: compose(
       require('../../api/contract/getAllWithdrawalBalances')
     ),
