@@ -4,23 +4,33 @@ const Eth = require('@ledgerhq/hw-app-eth').default
 const DVFError = require('../dvf/DVFError')
 const createSignedOrder = require('../stark/ledger/createSignedOrder')
 const selectTransport = require('./selectTransport')
+const swJS = require('starkware_crypto')
 const getTokenAddressFromTokenInfoOrThrow = require('../dvf/token/getTokenAddressFromTokenInfoOrThrow')
+const {
+  starkTransferTxToMessageHash
+} = require('dvf-utils')
 
 const transferTransactionTypes = [
   'ConditionalTransferRequest',
   'TransferRequest'
 ]
 
+const getMessage = sw => tx => {
+  if (!(transferTransactionTypes.includes(tx.type))) {
+    throw new DVFError(`Unsupported stark transaction type: ${tx.type}`, { tx })
+  }
+  return starkTransferTxToMessageHash(sw)(tx)
+}
+
 const getTxSignature = async (dvf, tx, path) => {
   if (tx.type != null) {
     if (!(transferTransactionTypes.includes(tx.type))) {
-      throw new DVFError(`Unsupported stark transaction type: ${tx.type}`, {tx})
+      throw new DVFError(`Unsupported stark transaction type: ${tx.type}`, { tx })
     }
-
     const Transport = selectTransport(dvf.isBrowser)
     const transport = await Transport.create()
     const eth = new Eth(transport)
-    const {address} = await eth.getAddress(path)
+    const { address } = await eth.getAddress(path)
     const starkPath = dvf.stark.ledger.getPath(address)
     const tokenInfo = dvf.token.getTokenInfoByTokenId(tx.token)
     const tokenAddress = getTokenAddressFromTokenInfoOrThrow(tokenInfo, 'ETHEREUM')
@@ -29,9 +39,18 @@ const getTxSignature = async (dvf, tx, path) => {
 
     try {
       // Load token information for Ledger device
-      await dvf.token.provideContractData(eth, tokenAddress, transferQuantization)
+      const tokenData = await dvf.token.provideContractData(eth, tokenAddress, transferQuantization)
 
-      const starkSignature = await eth.starkSignTransfer_v2(
+      if (tokenData && tokenData.unsafeSign) {
+        const message = getMessage(swJS)(tx)
+        const paddedMessage = message.padStart(64, '0').substr(-64)
+        return eth.starkUnsafeSign(
+          starkPath,
+          paddedMessage
+        )
+      }
+
+      return await eth.starkSignTransfer_v2(
         starkPath,
         tokenAddress,
         tokenAddress ? 'erc20' : 'eth',
@@ -46,7 +65,6 @@ const getTxSignature = async (dvf, tx, path) => {
         tx.type === 'ConditionalTransferRequest' ? tx.factRegistryAddress : null,
         tx.type === 'ConditionalTransferRequest' ? tx.fact : null
       )
-      return starkSignature
     } finally {
       await transport.close()
     }
@@ -79,5 +97,5 @@ module.exports = (dvf) => {
 
   const getWalletType = () => 'LEDGER'
 
-  return {sign, getPublicKey, getWalletType}
+  return { sign, getPublicKey, getWalletType }
 }
