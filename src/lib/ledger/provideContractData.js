@@ -55,6 +55,7 @@ module.exports = async (dvf, transport, tokenAddress = '', transferQuantization)
       await _transport.starkProvideQuantum_v2(transferTokenAddress, tokenAddress ? 'erc20' : 'eth', transferQuantization, null)
     }
   } catch (e) {
+    console.warn('Quantum not provided - switching to blind signing')
     return { unsafeSign: true }
   } finally {
     if (createdTransport) {

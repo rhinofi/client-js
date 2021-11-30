@@ -50,7 +50,7 @@ const getTxSignature = async (dvf, tx, path) => {
         )
       }
 
-      return await eth.starkSignTransfer_v2(
+      return eth.starkSignTransfer_v2(
         starkPath,
         tokenAddress,
         tokenAddress ? 'erc20' : 'eth',
