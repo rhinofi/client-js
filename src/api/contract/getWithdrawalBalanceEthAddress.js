@@ -14,7 +14,7 @@ module.exports = async (dvf, token, address) => {
     throw new Error(`getWithdrawalBalanceEthAddress: no starkTokenId for token: ${token}`)
   }
 
-  const args = [tradingKey, starkTokenId]
+  const args = [address, starkTokenId]
 
   try {
     return (withdrawalBalance = await dvf.eth.call(
