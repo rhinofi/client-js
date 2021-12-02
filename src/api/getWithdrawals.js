@@ -77,7 +77,6 @@ module.exports = async (dvf, token, address, nonce, signature) => {
 
     // Feature flag for v4
     if (dvf.config.DVF.starkExVersion === '4') {
-      console.warn('DVF version', dvf.config.DVF.starkExVersion)
       const ethBalances = await dvf.contract.getAllWithdrawalBalancesEthAddress(starkTokenIds, address)
 
       withdrawals = ethBalances.reduce(balanceReducer(dvf, tokenMapKeys, { target: address }), withdrawals)
