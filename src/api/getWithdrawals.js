@@ -46,7 +46,9 @@ module.exports = async (dvf, token, nonce, signature) => {
     }
 
     const tokenMap = dvf.config.tokenRegistry;
-    const tokenMapKeys = Object.keys(dvf.config.tokenRegistry);
+    const tokenMapKeys = Object.keys(dvf.config.tokenRegistry)
+      // TODO: Filter hack for AMM launch. Optimal is to look at ammPools config 
+      .filter(token => !token.startsWith('LP-'));
     const starkTokenIds = tokenMapKeys.map(key => tokenMap[key].starkTokenId)
 
     const balances = await dvf.contract.getAllWithdrawalBalances(starkTokenIds, starkKeyHex)
