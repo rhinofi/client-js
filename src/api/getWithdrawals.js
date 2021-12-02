@@ -23,8 +23,29 @@ const getWithdrawalBalancesDeprecated = async (dvf, withdrawals, tradingKey) => 
   return withdrawals
 }
 
+const balanceReducer = (dvf, tokenMapKeys, extraProps = {}) => (all, balance, index) => {
+  const key = tokenMapKeys[index]
 
-module.exports = async (dvf, token, nonce, signature) => {
+  if (parseInt(balance) > 0) {
+    const amount = dvf.token.toQuantizedAmount(
+      key,
+      dvf.token.fromBaseUnitAmount(key, balance)
+    )
+
+    all.push({
+      token: key,
+      status: 'ready',
+      amount,
+      ...extraProps
+    })
+  }
+
+  return all
+}
+
+
+
+module.exports = async (dvf, token, address, nonce, signature) => {
   if (token) {
     validateAssertions(dvf, { token })
   }
@@ -33,7 +54,7 @@ module.exports = async (dvf, token, nonce, signature) => {
 
   const data = { token }
 
-  const withdrawals = await post(dvf, endpoint, nonce, signature, data)
+  let withdrawals = await post(dvf, endpoint, nonce, signature, data)
 
   try {
     const { starkKeyHex } = dvf.config
@@ -52,23 +73,16 @@ module.exports = async (dvf, token, nonce, signature) => {
     const starkTokenIds = tokenMapKeys.map(key => tokenMap[key].starkTokenId)
 
     const balances = await dvf.contract.getAllWithdrawalBalances(starkTokenIds, starkKeyHex)
-    return balances.reduce((all, balance, index) => {
-      const key = tokenMapKeys[index]
+    withdrawals = balances.reduce(balanceReducer(dvf, tokenMapKeys), withdrawals)
 
-      if (parseInt(balance) > 0) {
-        const amount = dvf.token.toQuantizedAmount(
-          key,
-          dvf.token.fromBaseUnitAmount(key, balance)
-        )
+    // Feature flag for v4
+    if (dvf.config.DVF.starkExVersion === '4') {
+      const ethBalances = await dvf.contract.getAllWithdrawalBalancesEthAddress(starkTokenIds, address)
 
-        all.push({
-          token: key,
-          status: 'ready',
-          amount
-        })
-      }
-      return all
-    }, withdrawals)
+      withdrawals = ethBalances.reduce(balanceReducer(dvf, tokenMapKeys, { target: address }), withdrawals)
+    }
+
+    return withdrawals
   } catch (e) {
     console.error('Error while fetching on-chain withdrawals information (returning only server withdrawals)', e)
     return withdrawals
