@@ -1,8 +1,6 @@
 const DVFError = require('../../lib/dvf/DVFError')
 
 module.exports = async (dvf, starkTokenIds, address) => {
-  address = address || dvf.get('account')
-
   if (!address) {
     throw new Error('getWithdrawalBalanceEthAddress: address is required')
   }
