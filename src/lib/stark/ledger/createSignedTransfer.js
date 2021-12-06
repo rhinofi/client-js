@@ -11,6 +11,17 @@ module.exports = async (
   destinationVault,
   receiverPublicKey
 ) => {
+
+  // Will happen if it's an ETH address instead of public key
+  // ETH addresses a used in the context of StarkEx v4 withdrawals
+  // Ledger seems to only sign correctly if the ETH address
+  // is padded as if it was a stark public key
+  if (receiverPublicKey && receiverPublicKey.length < 66) {
+    const receiverPublicKeyWithoutPrefix = receiverPublicKey
+      .slice(2)
+      .padStart(64, '0')
+    receiverPublicKey = '0x' + receiverPublicKeyWithoutPrefix
+  }
   const Transport = selectTransport(dvf.isBrowser)
   const {token, tokenAddress, quantization} = tokenInfo
   const nonce = dvf.util.generateRandomNonce()
