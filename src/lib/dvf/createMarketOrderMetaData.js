@@ -24,7 +24,7 @@ module.exports = async (dvf, orderData) => {
   if (orderData.starkPrivateKey) {
     ({ starkPublicKey, starkSignature } = await starkSignedOrder(dvf, orderData.starkPrivateKey, starkMessage))
   } else if (orderData.ledgerPath) {
-    ({ starkPublicKey, starkSignature } = await dvf.stark.ledger.createSignedOrder(orderData.ledgerPath, starkOrder))
+    ({ starkPublicKey, starkSignature } = await dvf.stark.ledger.createSignedOrder(orderData.ledgerPath, starkOrder, { starkMessage }))
   }
 
   return {

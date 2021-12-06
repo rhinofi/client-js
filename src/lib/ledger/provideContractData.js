@@ -45,7 +45,7 @@ module.exports = async (dvf, transport, tokenAddress = '', transferQuantization)
           const tokenData = generateTestNetworkTokenData(transferTokenAddress, dvf.config.ethereumChainId)
           await _transport.provideERC20TokenInformation(tokenData)
         } else {
-          throw new DVFError('LEDGER_TOKENINFO_ERR')
+          return { unsafeSign: true }
         }
       }
     } else {
@@ -54,6 +54,9 @@ module.exports = async (dvf, transport, tokenAddress = '', transferQuantization)
     if (transferQuantization) {
       await _transport.starkProvideQuantum_v2(transferTokenAddress, tokenAddress ? 'erc20' : 'eth', transferQuantization, null)
     }
+  } catch (e) {
+    console.warn('Quantum not provided - switching to blind signing')
+    return { unsafeSign: true }
   } finally {
     if (createdTransport) {
       await createdTransport.close()
