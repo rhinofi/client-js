@@ -36,6 +36,18 @@ const getTxSignature = async (dvf, tx, path) => {
     const tokenAddress = getTokenAddressFromTokenInfoOrThrow(tokenInfo, 'ETHEREUM')
     const transferQuantization = new BN(tokenInfo.quantization)
     const transferAmount = new BN(tx.amount)
+    let receiverPublicKey = tx.receiverPublicKey
+
+    // Will happen if it's an ETH address instead of public key
+    // ETH addresses a used in the context of StarkEx v4 withdrawals
+    // Ledger seems to only sign correctly if the ETH address
+    // is padded as if it was a stark public key
+    if (receiverPublicKey && receiverPublicKey.length < 66) {
+      const receiverPublicKeyWithoutPrefix = receiverPublicKey
+        .slice(2)
+        .padStart(64, '0')
+      receiverPublicKey = '0x' + receiverPublicKeyWithoutPrefix
+    }
 
     try {
       // Load token information for Ledger device
@@ -56,7 +68,7 @@ const getTxSignature = async (dvf, tx, path) => {
         tokenAddress ? 'erc20' : 'eth',
         transferQuantization,
         null,
-        tx.receiverPublicKey,
+        receiverPublicKey,
         tx.senderVaultId,
         tx.receiverVaultId,
         transferAmount,
