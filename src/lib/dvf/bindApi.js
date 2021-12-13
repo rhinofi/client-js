@@ -69,8 +69,14 @@ module.exports = () => {
     getWithdrawalBalance: compose(
       require('../../api/contract/getWithdrawalBalance')
     ),
+    getWithdrawalBalanceEthAddress: compose(
+      require('../../api/contract/getWithdrawalBalanceEthAddress')
+    ),
     getAllWithdrawalBalances: compose(
       require('../../api/contract/getAllWithdrawalBalances')
+    ),
+    getAllWithdrawalBalancesEthAddress: compose(
+      require('../../api/contract/getAllWithdrawalBalancesEthAddress')
     ),
     withdraw: compose(require('../../api/contract/withdraw')),
     abi: {
@@ -220,6 +226,8 @@ module.exports = () => {
   dvf.poolTokensRate = compose(require('../../api/amm/poolTokensRate'))
   dvf.getRewardsLockedState = compose(require('../../api/amm/getRewardsLockedState'))
   dvf.postRewardsLockedState = compose(require('../../api/amm/postRewardsLockedState'))
+  dvf.walletFailedEvent = compose(require('../../api/walletFailedEvent'))
+  dvf.walletSuccessEvent = compose(require('../../api/walletSuccessEvent'))
 
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),

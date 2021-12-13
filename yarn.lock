@@ -3229,9 +3229,9 @@ duplexer@^0.1.1:
   resolved "https://registry.npmjs.org/duplexer/-/duplexer-0.1.2.tgz"
   integrity sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==
 
-"dvf-utils@git+https://github.com/DeversiFi/dvf-utils#5e5b38afa8c12ac269d281a11b446183c15770f4":
+"dvf-utils@git+https://github.com/DeversiFi/dvf-utils#3f202ac9ed6da4ab031ccfd4334af2917e4e8de7":
   version "1.0.2"
-  resolved "git+https://github.com/DeversiFi/dvf-utils#5e5b38afa8c12ac269d281a11b446183c15770f4"
+  resolved "git+https://github.com/DeversiFi/dvf-utils#3f202ac9ed6da4ab031ccfd4334af2917e4e8de7"
   dependencies:
     "@hapi/joi" "^17.1.1"
     axios "^0.24.0"
