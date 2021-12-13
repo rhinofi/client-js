@@ -53,7 +53,7 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true, st
     ])
     if (buySignature.unsafeSign || sellSignature.unsafeSign) {
       const message = starkMessage || starkLimitOrderToMessageHash(swJS)(starkOrder)
-      const paddedMessage = message.padStart(64, '0').substr(-64)
+      const paddedMessage = `0x${message.padEnd(64, '0').substr(-64)}`
       const starkSignature = await eth.starkUnsafeSign(
         starkPath,
         paddedMessage

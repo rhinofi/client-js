@@ -55,7 +55,7 @@ const getTxSignature = async (dvf, tx, path) => {
 
       if (tokenData && tokenData.unsafeSign) {
         const message = getMessage(swJS)(tx)
-        const paddedMessage = message.padStart(64, '0').substr(-64)
+        const paddedMessage = `0x${message.padEnd(64, '0').substr(-64)}`
         return eth.starkUnsafeSign(
           starkPath,
           paddedMessage
