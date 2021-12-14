@@ -9,6 +9,7 @@ const getSafeQuantizedAmountOrThrow = require('../lib/dvf/token/getSafeQuantized
 const getTokenAddressFromTokenInfoOrThrow = require('../lib/dvf/token/getTokenAddressFromTokenInfoOrThrow')
 const permitParamsSchema = require('../lib/schemas/permitParamsSchema')
 const createPromiseAndCallbackFn = require('../lib/util/createPromiseAndCallbackFn')
+const DVFError = require('../lib/dvf/DVFError')
 
 const schema = Joi.object({
   token: Joi.string(),
@@ -22,6 +23,10 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 })
 
 module.exports = async (dvf, depositData, starkPublicKey, nonce, signature, contractWalletAddress, encryptedTradingKey, meta, web3Options = {}, txHashCb) => {
+  if (dvf.config.DVF.starkExVersion === '4') {
+    console.warn('This endpoint is deprecated in StarkEx v4, please use dvf.register to soft-register and dvf.deposit to deposit.')
+    throw new DVFError('DEPRECATED')
+  }
 
   const starkKey = starkPublicKey.x
 
