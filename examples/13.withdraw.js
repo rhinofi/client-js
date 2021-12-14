@@ -7,8 +7,8 @@ Check README.md for more details.
 */
 
 const HDWalletProvider = require('@truffle/hdwallet-provider')
-const sw = require('starkware_crypto')
 const Web3 = require('web3')
+const config = require('./config.json')
 
 const DVF = require('../src/dvf')
 const envVars = require('./helpers/loadFromEnvOrConfig')(
@@ -29,7 +29,13 @@ provider.engine.stop()
 const dvfConfig = {
   api: envVars.API_URL,
   dataApi: envVars.DATA_API_URL,
-  useAuthHeader: true
+  useAuthHeader: true,
+  wallet: {
+    type: 'tradingKey',
+    meta: {
+      starkPrivateKey: starkPrivKey
+    }
+  }
   // Add more variables to override default values
 }
 
@@ -39,11 +45,11 @@ const dvfConfig = {
   const token = 'ETH'
   const amount = 0.1
 
-  const withdrawalResponse = await dvf.withdraw(
+  const withdrawalResponse = await dvf.transferAndWithdraw({
+    recipientEthAddress: config.account.address.toLowerCase(),
     token,
-    amount,
-    starkPrivKey
-  )
+    amount
+  })
 
   logExampleResult(withdrawalResponse)
 
