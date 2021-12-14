@@ -202,7 +202,7 @@ you are required to approve it to interact with the smart contracts, this is not
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[PromiEvent](https://web3js.readthedocs.io/en/v1.2.11/callbacks-promises-events.html#promievent)>** 
 
 ```javascript
-const token = 'NEC'
+const token = 'ETH'
 await dvf.contract.approve(token)
 ```
 
@@ -222,7 +222,7 @@ This method is used to deposit the tokens to the smart contract and submit a sig
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;{...[PromiEvent](https://web3js.readthedocs.io/en/v1.2.11/callbacks-promises-events.html#promievent), ...[DepositResponse](https://docs.deversifi.com/docs#postV1TradingWDeposit)}>**
 
 ```javascript
-const token = 'NEC'
+const token = 'ETH'
 const amount = 100
 
 const deposit = await dvf.deposit(token, amount, tradingKey)
@@ -307,16 +307,20 @@ const response = await dvf.cancelOrder({ cid: customID })
 #### Requesting a withdrawal
 This method submits a request for a new withdrawal.
 ##### Parameters
+- `recipientEthAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Trading key
 - `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol available in `dvf.config.tokenRegistry` to be withdrawn
 - `amount` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** || **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Amount of tokens to be withdrawn
-- `starkPrivateKey` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Trading key
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[WithdrawResponse](https://docs.deversifi.com/docs#postV1TradingWWithdraw)>**
 
 ```javascript
-const token = 'NEC'
+const token = 'ETH'
 const amount = 100
-const withdrawal = await dvf.withdraw(token, amount, tradingKey)
+const withdrawal = await await dvf.transferAndWithdraw({
+  recipientEthAddress: address,
+  token,
+  amount
+})
 ```
 
 #### Withdraw on chain
@@ -327,7 +331,7 @@ This method calls the contract and withdraws the tokens to your wallet
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;{ transactionHash: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** }>**             
 
 ```javascript
-const token = 'NEC'
+const token = 'ETH'
 const txHash = await dvf.withdrawOnchain(token)
 ```
 

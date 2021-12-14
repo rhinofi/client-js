@@ -1,7 +1,9 @@
 module.exports = async (dvf, tradingKey, deFiSignature, ethAddress) => {
   ethAddress = ethAddress || dvf.get('account')
 
-  const action = 'registerUser'
+  const action = dvf.config.DVF.starkExVersion === '4'
+    ? 'registerEthAddress'
+    : 'registerUser'
 
   const args = [ethAddress, `0x${tradingKey}`, deFiSignature]
 
