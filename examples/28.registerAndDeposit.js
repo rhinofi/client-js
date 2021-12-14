@@ -26,6 +26,7 @@ const dvfConfig = {
 }
 
 ;(async () => {
+  // THIS METHOD IS DEPRECATED IN StarkEx v4
   const dvf = await DVF(web3, dvfConfig)
 
   const waitForDepositCreditedOnChain = require('./helpers/waitForDepositCreditedOnChain')
@@ -39,7 +40,7 @@ const dvfConfig = {
   }
 
   logExampleResult(depositResponse)
-  
+
 })()
   .catch(error => {
     console.error(error)
