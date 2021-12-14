@@ -57,15 +57,18 @@ module.exports = async (web3, userConfig = {}, sw) => {
   if (isObject(web3) && web3.DEFAULT) {
     dvf.web3 = web3.DEFAULT
     dvf.web3PerChain = web3
+  // If single web3 passed as parameter, assuming it is Ethereum by default
   } else {
     dvf.web3 = web3
-    dvf.web3PerChain = { DEFAULT: web3 }
+    dvf.web3PerChain = { ETHEREUM: web3 }
   }
 
-  try {
-    dvf.config.ethereumChainId = dvf.config.ethereumChainId || (await dvf.web3.eth.net.getId())
-  } catch (e) {
-    console.log('error getting chainId')
+  if (!dvf.config.skipLoad) {
+    try {
+      dvf.config.ethereumChainId = dvf.config.ethereumChainId || (await dvf.web3.eth.net.getId())
+    } catch (e) {
+      console.log('error getting chainId')
+    }
   }
 
   if (dvf.config.autoSelectAccount) {
@@ -75,7 +78,7 @@ module.exports = async (web3, userConfig = {}, sw) => {
     //   console.warn('Please specify a valid account or account index')
     // }
   }
-  else if (dvf.config.address){
+  else if (dvf.config.address) {
     dvf.set('account', dvf.config.address.toLowerCase())
   }
 
@@ -90,7 +93,9 @@ module.exports = async (web3, userConfig = {}, sw) => {
     }
   }
 
-  dvf.recommendedGasPrices = await dvf.getGasPrice()
+  if (!dvf.config.skipLoad) {
+    dvf.recommendedGasPrices = await dvf.getGasPrice()
+  }
 
   try {
     attachStarkProvider(dvf, userConfig.wallet)

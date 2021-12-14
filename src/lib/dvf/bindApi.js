@@ -69,8 +69,14 @@ module.exports = () => {
     getWithdrawalBalance: compose(
       require('../../api/contract/getWithdrawalBalance')
     ),
+    getWithdrawalBalanceEthAddress: compose(
+      require('../../api/contract/getWithdrawalBalanceEthAddress')
+    ),
     getAllWithdrawalBalances: compose(
       require('../../api/contract/getAllWithdrawalBalances')
+    ),
+    getAllWithdrawalBalancesEthAddress: compose(
+      require('../../api/contract/getAllWithdrawalBalancesEthAddress')
     ),
     withdraw: compose(require('../../api/contract/withdraw')),
     abi: {
@@ -139,6 +145,9 @@ module.exports = () => {
   dvf.createSignedTransfer = compose(
     require('./createSignedTransfer')
   )
+  dvf.createTransferAndWithdrawPayload = compose(
+    require('./createTransferAndWithdrawPayload')
+  )
   // dvf trading volume data
   dvf.get30DaysVolume = compose(require('../../api/get30DaysVolume'))
 
@@ -192,6 +201,7 @@ module.exports = () => {
   dvf.submitSellOrder = compose(require('../../api/submitSellOrder'))
   dvf.transferUsingVaultIdAndStarkKey = compose(require('../../api/transferUsingVaultIdAndStarkKey'))
   dvf.transfer = compose(require('../../api/transfer'))
+  dvf.transferAndWithdraw = compose(require('../../api/transferAndWithdraw'))
   dvf.getWithdrawal = compose(require('../../api/getWithdrawal'))
   dvf.getWithdrawals = compose(require('../../api/getWithdrawals'))
   dvf.withdraw = compose(require('../../api/withdraw'))
@@ -202,8 +212,10 @@ module.exports = () => {
   dvf.fullWithdrawalRequest = compose(require('../../api/fullWithdrawalRequest'))
   dvf.getMinMaxOrderSize = compose(require('../../api/getMinMaxOrderSize'))
   dvf.postAmmFundingOrders = compose(require('../../api/amm/postAmmFundingOrders'))
+  dvf.getAmmFundingOrders = compose(require('../../api/amm/getAmmFundingOrders'))
   dvf.getAmmFundingOrderData = compose(require('../../api/amm/getAmmFundingOrderData'))
   dvf.poolTVL = compose(require('../../api/amm/poolTVL'))
+  dvf.poolTvlHistory = compose(require('../../api/amm/poolTvlHistory'))
   dvf.poolVolume24Hours = compose(require('../../api/amm/poolVolume24Hours'))
   dvf.poolSwapFees = compose(require('../../api/amm/poolSwapFees'))
   dvf.poolAPY = compose(require('../../api/amm/poolAPY'))
@@ -211,13 +223,17 @@ module.exports = () => {
   dvf.poolStoredTokens = compose(require('../../api/amm/poolStoredTokens'))
   dvf.poolUserRewards = compose(require('../../api/amm/poolUserRewards'))
   dvf.poolUserAccruedFees = compose(require('../../api/amm/poolUserAccruedFees'))
+  dvf.poolTokensRate = compose(require('../../api/amm/poolTokensRate'))
   dvf.getRewardsLockedState = compose(require('../../api/amm/getRewardsLockedState'))
   dvf.postRewardsLockedState = compose(require('../../api/amm/postRewardsLockedState'))
+  dvf.walletFailedEvent = compose(require('../../api/walletFailedEvent'))
+  dvf.walletSuccessEvent = compose(require('../../api/walletSuccessEvent'))
 
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),
     withdraw: compose(require('../../api/ledger/withdraw')),
     transfer: compose(require('../../api/ledger/transfer')),
+    transferAndWithdraw: compose(require('../../api/ledger/transferAndWithdraw')),
     transferUsingVaultIdAndStarkKey: compose(require('../../api/ledger/transferUsingVaultIdAndStarkKey'))
   }
   dvf.estimatedNextBatchTime = compose(require('../../api/estimatedNextBatchTime'))

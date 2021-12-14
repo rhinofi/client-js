@@ -4,40 +4,71 @@ const Eth = require('@ledgerhq/hw-app-eth').default
 const DVFError = require('../dvf/DVFError')
 const createSignedOrder = require('../stark/ledger/createSignedOrder')
 const selectTransport = require('./selectTransport')
+const swJS = require('starkware_crypto')
 const getTokenAddressFromTokenInfoOrThrow = require('../dvf/token/getTokenAddressFromTokenInfoOrThrow')
+const {
+  starkTransferTxToMessageHash
+} = require('dvf-utils')
 
 const transferTransactionTypes = [
   'ConditionalTransferRequest',
   'TransferRequest'
 ]
 
+const getMessage = sw => tx => {
+  if (!(transferTransactionTypes.includes(tx.type))) {
+    throw new DVFError(`Unsupported stark transaction type: ${tx.type}`, { tx })
+  }
+  return starkTransferTxToMessageHash(sw)(tx)
+}
+
 const getTxSignature = async (dvf, tx, path) => {
   if (tx.type != null) {
     if (!(transferTransactionTypes.includes(tx.type))) {
-      throw new DVFError(`Unsupported stark transaction type: ${tx.type}`, {tx})
+      throw new DVFError(`Unsupported stark transaction type: ${tx.type}`, { tx })
     }
-
     const Transport = selectTransport(dvf.isBrowser)
     const transport = await Transport.create()
     const eth = new Eth(transport)
-    const {address} = await eth.getAddress(path)
+    const { address } = await eth.getAddress(path)
     const starkPath = dvf.stark.ledger.getPath(address)
     const tokenInfo = dvf.token.getTokenInfoByTokenId(tx.token)
     const tokenAddress = getTokenAddressFromTokenInfoOrThrow(tokenInfo, 'ETHEREUM')
     const transferQuantization = new BN(tokenInfo.quantization)
     const transferAmount = new BN(tx.amount)
+    let receiverPublicKey = tx.receiverPublicKey
+
+    // Will happen if it's an ETH address instead of public key
+    // ETH addresses a used in the context of StarkEx v4 withdrawals
+    // Ledger seems to only sign correctly if the ETH address
+    // is padded as if it was a stark public key
+    if (receiverPublicKey && receiverPublicKey.length < 66) {
+      const receiverPublicKeyWithoutPrefix = receiverPublicKey
+        .slice(2)
+        .padStart(64, '0')
+      receiverPublicKey = '0x' + receiverPublicKeyWithoutPrefix
+    }
 
     try {
       // Load token information for Ledger device
-      await dvf.token.provideContractData(eth, tokenAddress, transferQuantization)
+      const tokenData = await dvf.token.provideContractData(eth, tokenAddress, transferQuantization)
 
-      const starkSignature = await eth.starkSignTransfer_v2(
+      if (tokenData && tokenData.unsafeSign) {
+        const message = getMessage(swJS)(tx)
+        const paddedMessage = `0x${message.padEnd(64, '0').substr(-64)}`
+        return eth.starkUnsafeSign(
+          starkPath,
+          paddedMessage
+        )
+      }
+
+      return eth.starkSignTransfer_v2(
         starkPath,
         tokenAddress,
         tokenAddress ? 'erc20' : 'eth',
         transferQuantization,
         null,
-        tx.receiverPublicKey,
+        receiverPublicKey,
         tx.senderVaultId,
         tx.receiverVaultId,
         transferAmount,
@@ -46,7 +77,6 @@ const getTxSignature = async (dvf, tx, path) => {
         tx.type === 'ConditionalTransferRequest' ? tx.factRegistryAddress : null,
         tx.type === 'ConditionalTransferRequest' ? tx.fact : null
       )
-      return starkSignature
     } finally {
       await transport.close()
     }
@@ -79,5 +109,5 @@ module.exports = (dvf) => {
 
   const getWalletType = () => 'LEDGER'
 
-  return {sign, getPublicKey, getWalletType}
+  return { sign, getPublicKey, getWalletType }
 }

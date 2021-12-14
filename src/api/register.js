@@ -21,7 +21,7 @@ module.exports = async (dvf, starkPublicKey, nonce, signature, contractWalletAdd
 
   const userRegistered = await post(dvf, endpoint, nonce, signature, data)
 
-  if (userRegistered.isRegistered) {
+  if (userRegistered.isRegistered || dvf.config.DVF.starkExVersion === '4') {
     return userRegistered
   }
 
@@ -34,6 +34,12 @@ module.exports = async (dvf, starkPublicKey, nonce, signature, contractWalletAdd
         userRegistered.deFiSignature
       )
     } catch (error) {
+      if (
+        error.code === 4001 &&
+        error.message === 'MetaMask Tx Signature: User denied transaction signature.'
+      ) {
+        throw new DVFError('ERR_USER_DENIED_TX', {error})
+      }
       throw new DVFError('ERR_STARK_REGISTRATION', {error})
     }
 
