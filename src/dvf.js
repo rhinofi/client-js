@@ -74,10 +74,11 @@ module.exports = async (web3, userConfig = {}, sw) => {
   if (dvf.config.autoSelectAccount) {
     await dvf.account.select(dvf.config.account)
 
-    if (!dvf.get('account')) {
-      console.warn('Please specify a valid account or account index')
-    }
-  } else if (dvf.config.address) {
+    // if (!dvf.get('account')) {
+    //   console.warn('Please specify a valid account or account index')
+    // }
+  }
+  else if (dvf.config.address) {
     dvf.set('account', dvf.config.address.toLowerCase())
   }
 

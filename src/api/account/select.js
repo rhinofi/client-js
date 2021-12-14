@@ -9,7 +9,7 @@ module.exports = async (dvf, id) => {
 
   if (typeof id === 'number') {
     if (!accounts[id]) {
-      console.error('Error: You have no account at index:', +id)
+      // console.error('Error: You have no account at index:', +id)
     }
     // emit and store current account
     else {
