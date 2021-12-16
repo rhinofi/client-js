@@ -41,5 +41,4 @@ module.exports = async (dvf, eth, tokenContractAddress) => {
       }
     }
   }
-  return { unsafeSign: false }
 }

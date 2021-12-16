@@ -2,9 +2,8 @@ const byContractAddress = require('@ledgerhq/hw-app-eth/erc20').byContractAddres
 const Eth = require('@ledgerhq/hw-app-eth').default
 const selectTransport = require('./selectTransport')
 const generateTestNetworkTokenData = require('./generateTestNetworkTokenData')
-const DVFError = require('../dvf/DVFError')
 
-module.exports = async (dvf, transport, tokenAddress = '', transferQuantization) => {
+module.exports = async (dvf, transport, tokenAddress = '', transferQuantization, dontCloseTransport = false) => {
   let _transport = transport || null
   let createdTransport = null
   if (!transport) {
@@ -58,7 +57,7 @@ module.exports = async (dvf, transport, tokenAddress = '', transferQuantization)
     console.warn('Quantum not provided - switching to blind signing')
     return { unsafeSign: true }
   } finally {
-    if (createdTransport) {
+    if (createdTransport && !dontCloseTransport) {
       await createdTransport.close()
     }
   }

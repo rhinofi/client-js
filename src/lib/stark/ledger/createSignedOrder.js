@@ -3,7 +3,7 @@ const DVFError = require('../../dvf/DVFError')
 const BN = require('bignumber.js')
 const _ = require('lodash')
 const selectTransport = require('../../ledger/selectTransport')
-const provideTokenSignature = require('../../ledger/provideTokenSignature')
+const provideContractData = require('../../ledger/provideContractData')
 const getTokenAddressFromTokenInfoOrThrow = require('../../dvf/token/getTokenAddressFromTokenInfoOrThrow')
 const swJS = require('starkware_crypto')
 const {
@@ -32,6 +32,8 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true, st
 
   const buyTokenInfo = dvf.token.getTokenInfoOrThrow(buySymbol)
   const sellTokenInfo = dvf.token.getTokenInfoOrThrow(sellSymbol)
+  const buyQuantization = new BN(buyTokenInfo.quantization)
+  const sellQuantization = new BN(sellTokenInfo.quantization)
 
   const transport = await Transport.create()
   const eth = new Eth(transport)
@@ -47,11 +49,9 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true, st
   try {
     buyTokenAddress = getTokenAddressFromTokenInfoOrThrow(buyTokenInfo, 'ETHEREUM')
     sellTokenAddress = getTokenAddressFromTokenInfoOrThrow(sellTokenInfo, 'ETHEREUM')
-    const [buySignature, sellSignature] = await Promise.all([
-      provideTokenSignature(dvf, eth, buyTokenAddress),
-      provideTokenSignature(dvf, eth, sellTokenAddress)
-    ])
-    if (buySignature.unsafeSign || sellSignature.unsafeSign) {
+    const buySignature = await provideContractData(dvf, eth, buyTokenAddress, buyQuantization, true)
+    const sellSignature = await provideContractData(dvf, eth, sellTokenAddress, sellQuantization, true)
+    if ((buySignature && buySignature.unsafeSign) || (sellSignature && sellSignature.unsafeSign)) {
       const message = starkMessage || starkLimitOrderToMessageHash(swJS)(starkOrder)
       const paddedMessage = `0x${message.padEnd(64, '0').substr(-64)}`
       const starkSignature = await eth.starkUnsafeSign(
