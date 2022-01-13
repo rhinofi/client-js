@@ -35,10 +35,9 @@ const dvfConfig = {
 
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
-
   const token = 'ETH'
 
-  const withdrawalResponse = await dvf.withdrawOnchain(token)
+  const withdrawalResponse = await dvf.withdrawOnchain(token, dvf.config.ethAddress)
 
   logExampleResult(withdrawalResponse)
 
