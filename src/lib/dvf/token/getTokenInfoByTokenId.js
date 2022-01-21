@@ -1,5 +1,5 @@
 const DVFError = require('../DVFError')
-const _ = require('lodash')
+const _find = require('lodash/find')
 
 module.exports = (dvf, starkTokenId) => {
   const {tokenRegistry} = dvf.config
@@ -7,13 +7,13 @@ module.exports = (dvf, starkTokenId) => {
   if (!tokenRegistry) {
     throw new DVFError('NO_TOKEN_REGISTRY')
   }
-  const tokenInfo = _.find(tokenRegistry, {
+  const tokenInfo = _find(tokenRegistry, {
     starkTokenId
   })
 
   if (!tokenInfo) {
     const validTokens = Object.keys(tokenRegistry)
-    throw new DVFError('ERR_INVALID_TOKEN', {token, validTokens})
+    throw new DVFError('ERR_INVALID_TOKEN', {validTokens})
   }
 
   return tokenInfo

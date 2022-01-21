@@ -5,7 +5,7 @@
  *
  * This way we get a regular looking API on top of functional code
  */
-const _ = require('lodash')
+const _partial = require('lodash/partial')
 
 module.exports = () => {
   const dvf = {}
@@ -13,7 +13,7 @@ module.exports = () => {
   // returns a function that will call api functions prepending dvf
   // as first argument
   const compose = funk => {
-    return _.partial(funk, dvf)
+    return _partial(funk, dvf)
   }
 
   // dvf.account functions

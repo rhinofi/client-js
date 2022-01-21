@@ -1,7 +1,7 @@
 const Eth = require('@ledgerhq/hw-app-eth').default
 const DVFError = require('../../dvf/DVFError')
 const BN = require('bignumber.js')
-const _ = require('lodash')
+const _findKey = require('lodash/findKey')
 const selectTransport = require('../../ledger/selectTransport')
 const provideContractData = require('../../ledger/provideContractData')
 const getTokenAddressFromTokenInfoOrThrow = require('../../dvf/token/getTokenAddressFromTokenInfoOrThrow')
@@ -22,11 +22,11 @@ const getPublicKey = async (eth, starkPath) => {
 module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true, starkMessage = null } = {}) => {
   const Transport = selectTransport(dvf.isBrowser)
 
-  const buySymbol = _.findKey(dvf.config.tokenRegistry, {
+  const buySymbol = _findKey(dvf.config.tokenRegistry, {
     starkTokenId: starkOrder.tokenBuy
   })
 
-  const sellSymbol = _.findKey(dvf.config.tokenRegistry, {
+  const sellSymbol = _findKey(dvf.config.tokenRegistry, {
     starkTokenId: starkOrder.tokenSell
   })
 
