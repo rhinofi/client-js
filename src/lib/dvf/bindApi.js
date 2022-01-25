@@ -120,6 +120,11 @@ module.exports = () => {
     attachStarkProvider: compose(require('../../lib/wallet/attachStarkProvider'))
   }
 
+   // dvf.bitfinex functions
+   dvf.bitfinex = {
+    transfers: compose(require('../../api/bitfinex/transfers'))
+  }
+
   // dvf.sign functions
   dvf.sign = compose(require('../../api/sign/sign'))
   dvf.sign.request = compose(require('../../api/sign/request'))
