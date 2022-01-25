@@ -42,14 +42,15 @@
   "dependencies": {
     "@ledgerhq/hw-app-eth": "6.23.0",
     "@ledgerhq/hw-transport-webhid": "6.20.0",
-    "aigle": "git+https://github.com/suguru03/aigle#8739846ba9d4cfc116e1546da1181c73564cae0b",
+    "aigle": "suguru03/aigle#8739846ba9d4cfc116e1546da1181c73564cae0b",
     "aware": "^0.3.1",
     "bignumber.js": "^9.0.0",
-    "dvf-utils": "git+https://github.com/DeversiFi/dvf-utils#fd7f4a6b743d3a7d3f006f340169410d3ed13e55",
+    "dvf-utils": "DeversiFi/dvf-utils#fd7f4a6b743d3a7d3f006f340169410d3ed13e55",
     "lodash": "^4.17.20",
+    "ramda": "^0.27.1",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
-    "starkware_crypto": "git+https://github.com/DeversiFi/starkware-crypto#bf94bde1f6bbb4156ded52171cd70d3e02cd5919",
+    "starkware_crypto": "DeversiFi/starkware-crypto#bf94bde1f6bbb4156ded52171cd70d3e02cd5919",
     "web3": "1.7.0",
     "web3-utils": "^1.3.0"
   },
