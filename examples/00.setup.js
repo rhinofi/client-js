@@ -18,11 +18,12 @@ const request = require('./helpers/request')
 const saveAsJson = require('./helpers/saveAsJson')
 
 const RPC_URL = process.argv[2]
+const API_KEY = process.argv[3]
 const useTor = process.env.USE_TOR === 'true'
 const createNewAccount = process.env.CREATE_NEW_ACCOUNT === 'true'
 const useExistingAccount = process.env.USE_EXISTING_ACCOUNT === 'true'
 const waitForBalance = process.env.WAIT_FOR_BALANCE === 'true'
-const API_URL = process.env.API_URL || 'https://api.stg.deversifi.com'
+const API_URL = process.env.API_URL || 'https://rpc.dev.gateway.fm/v1/starkex/stg'
 const DATA_API_URL = process.env.DATA_API_URL || API_URL
 
 if (!RPC_URL) {
@@ -32,6 +33,13 @@ if (!RPC_URL) {
   console.error('\n  if you get an error when requesting Eth from a faucet, set USE_TOR=true env var to make requests via a TOR (using https://www.npmjs.com/package/tor-request)')
   console.error('    NOTE: tor executable needs to be on your path for this to work (it will be started/stopped automatically)')
   console.error('    tor can be installed via brew on MacOS or using your distros package manager if you are using linux')
+  process.exit(1)
+}
+if (!API_KEY) {
+  console.error('Error: API_KEY not set')
+  console.error('\nusage: ./0.setup.js API_KEY')
+  console.error('\n  you need an API_KEY key. You can use crate an API_KEY from the admin dashboard in admin.gateway.fm by creating aproject  ')
+  console.error('\n  then createing an api key.')
   process.exit(1)
 }
 
@@ -160,6 +168,7 @@ const go = async (configPath) => {
       ETH_PRIVATE_KEY: account.privateKey,
       API_URL,
       DATA_API_URL,
+      API_KEY: "Bearer "+API_KEY,
       account
     })
 

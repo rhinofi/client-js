@@ -28,7 +28,8 @@ const dvfConfig = {
     meta: {
       starkPrivateKey: starkPrivKey
     }
-  }
+  },
+  apiKey: envVars.API_KEY
   // Add more variables to override default values
 }
 
@@ -36,9 +37,10 @@ const dvfConfig = {
   const dvf = await DVF(web3, dvfConfig)
 
   const transferResponse = await dvf.transfer({
-    recipientEthAddress: '0x5317c63f870e8D2f85f0dE3c2666D1414f5a728c',
-    token: 'USDT',
-    amount: 1
+    recipientEthAddress: '0x1A546a36B4D12140285d5A632F9895dBFB629496',
+    token: 'ETH',
+    amount: 0.051,
+    type: 'tradingKey'
   })
 
   logExampleResult(transferResponse)

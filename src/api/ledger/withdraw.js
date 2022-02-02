@@ -30,8 +30,9 @@ module.exports = async (dvf, token, amount, starkWithdrawal) => {
 
   //console.log({ data })
   const url = dvf.config.api + '/v1/trading/w/withdraw'
-  
+
   return post(url, {
-    json: data
+    json: data,
+    headers: { Authorization: dvf.config}
   })
 }

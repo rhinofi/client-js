@@ -3,6 +3,8 @@ module.exports = {
   api: 'https://api.stg.deversifi.com',
   gasApi: 'https://ethgasstation.info',
 
+  apiKey: `Missing api key`,
+
   // default transaction arguments
   defaultGasLimit: 300000,
   defaultGasPrice: 50000000000,

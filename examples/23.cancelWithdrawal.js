@@ -29,7 +29,8 @@ provider.engine.stop()
 const dvfConfig = {
   api: envVars.API_URL,
   dataApi: envVars.DATA_API_URL,
-  useAuthHeader: true
+  useAuthHeader: true,
+  apiKey: envVars.API_KEY
   // Add more variables to override default values
 }
 

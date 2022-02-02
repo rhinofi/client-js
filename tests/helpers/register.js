@@ -10,7 +10,7 @@ const register = async ({RPC_URL, account}, bypassRegister = false, useTradingKe
     const provider = new HDWalletProvider(account.privateKey, rpcURL)
     const web3 = new Web3(provider)
     const dvfConfig = {
-      api: 'https://api.deversifi.dev',
+      api: 'https://rpc.dev.gateway.fm/v1/starkex/stg',
       useTradingKey
     }
     const dvf = await DVF(web3, dvfConfig)

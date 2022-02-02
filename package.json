@@ -1,5 +1,6 @@
 {
-  "name": "dvf-client-js",
+  "name": "@gateway.fm/gtw-dvf-client-js",
+  "description": "DVF client js lib with gateway.fm rpc endpoints",
   "version": "3.1.4",
   "main": "src/dvf.js",
   "contributors": [
@@ -37,10 +38,11 @@
     "ethereum",
     "trading"
   ],
-  "homepage": "https://github.com/deversifi/dvf-client-js",
+  "homepage": "https://github.com/gateway-fm/dvf-client-js",
   "license": "MIT",
   "dependencies": {
     "@ledgerhq/hw-app-eth": "5.49.0",
+    "@ledgerhq/hw-transport-node-hid": "^6.20.0",
     "@ledgerhq/hw-transport-webhid": "5.51.1",
     "aigle": "git+https://github.com/suguru03/aigle#8739846ba9d4cfc116e1546da1181c73564cae0b",
     "aware": "^0.3.1",

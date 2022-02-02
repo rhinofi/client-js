@@ -37,7 +37,8 @@ module.exports = (configFileName = 'config.json') => {
 
   const getConfigVar = getConfigVar_(config, configFilePath)
 
-  const apiUrl = getConfigVar('API_URL', 'https://api.stg.deversifi.com')
+  const apiUrl = getConfigVar('API_URL', 'https://rpc.dev.gateway.fm/v1/starkex/stg')
+  const apiKey = getConfigVar('API_KEY', 'MISSING_API_KEY')
   const ETH_PRIVATE_KEY = getConfigVar('ETH_PRIVATE_KEY')
 
   return {
@@ -45,6 +46,7 @@ module.exports = (configFileName = 'config.json') => {
     ETH_PRIVATE_KEY,
     STARK_PRIVATE_KEY: getConfigVar('STARK_PRIVATE_KEY', ETH_PRIVATE_KEY),
     API_URL: apiUrl,
+    API_KEY: apiKey,
     DATA_API_URL: getConfigVar('DATA_API_URL', apiUrl)
   }
 }

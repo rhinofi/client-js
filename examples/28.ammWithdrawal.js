@@ -36,7 +36,8 @@ const dvfConfig = {
     meta: {
       starkPrivateKey: starkPrivKey
     }
-  }
+  },
+  apiKey: envVars.API_KEY
   // Add more variables to override default values
 }
 

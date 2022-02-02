@@ -6,21 +6,20 @@ These can be sat as environment variables or in a config.json file placed in
 this directory.
 
 You can use `00.setup.js` to create the `config.json` file, however since
-the `RPC_URL` cannot be created pragmatically, you will first need to run
-your own node or use a third-party RPC endpoint. https://ethereumico.io/knowledge-base/infura-api-key-guide
+the `RPC_URL` and `API_KEY` cannot be created pragmatically, you will first need to run
+your own node or use a third-party RPC endpoint, for API_KEY please generate it in admin.gateway.fm after createing a project.
 
-NOTE: the `API KEY` mentioned in the instructions has been renamed to `PROJECT ID`.
 
-Once you obtain the `RPC_URL` you can then run:
+Once you obtain the `RPC_URL` and `API_KEY` you can then run:
 
 ```sh
-node 00.setup.js <RPC_URL>
+node 00.setup.js <RPC_URL> <API_KEY>
 ```
 
 or simply
 
 ```sh
-./00.setup.js <RPC_URL>
+./00.setup.js <RPC_URL> <API_KEY>
 ```
 
 This will:

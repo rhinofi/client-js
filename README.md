@@ -1,8 +1,8 @@
-<img src="https://avatars1.githubusercontent.com/u/56512535?s=200&v=4" align="right" />
+<img src="https://d7ivy30aees1j7w5m3ma9dzn-wpengine.netdna-ssl.com/wp-content/uploads/2021/11/logo.svg" align="right" />
 
 # Deversifi Javascript Trading API
 
-A js client library for DeversiFi - StarkWare orders
+A js client library for DeversiFi - StarkWare orders with Gateway.FM rpc endpoints
 
 **Note:** This library is for DeversiFi. A test version of the platform to use during integrations is connected to the Ropsten test network at https://app.stg.deversifi.com // https://api.stg.deversifi.com
 
@@ -43,7 +43,7 @@ A js client library for DeversiFi - StarkWare orders
 ### NPM
 
 ```bash
-  npm i dvf-client-js
+  npm i @gateway/gtw-dvf-client-js
 ```
 ### Prebuild for browser
 
@@ -67,7 +67,7 @@ Alternatively on the browser you can use the standalone build
 ```javascript
 // In case of MetaMask make sure you call ethereum.enable() before using it
 const DVF = require('dvf-client-js')
-const dvf = await DVF()
+const dvf = await DVF({apiKey: "YOUR_API_KEY_FROM_GATEWAY.FM"})
 ```
 
 #### Using a private key
@@ -112,6 +112,7 @@ For instance:
   dvf = await DVF(web3, {
     api: 'https://your-custom-api-address',
     gasStationApiKey: 'a1b2c3...
+    apiKee: 'YOUR_API_KEY_FROM_GATEWAY.FM'
   })
 ```
 
@@ -157,7 +158,7 @@ to this:
 The complete compiled configuration is accessible through `dvf.config`, for instance:
 
 ```javascript
-const dvf = await DVF()
+const dvf = await DVF({apiKey:'YOUR_API_KEY_FROM_GATEWAY.FM'})
 
 const config = dvf.config
 ```
@@ -378,7 +379,7 @@ Aside from these examples, there are complete examples in the [examples folder](
 
 You can setup a default custom gas price by setting up the 'defaultGasPrice' property
 ```javascript
-const dvf = await DVF()
+const dvf = await DVF({apiKey:'YOUR_API_KEY_FROM_GATEWAY.FM'})
 
 dvf.set('defaultGasPrice', web3.utils.toWei('2', 'gwei'))
 
