@@ -67,7 +67,7 @@ Alternatively on the browser you can use the standalone build
 ```javascript
 // In case of MetaMask make sure you call ethereum.enable() before using it
 const DVF = require('dvf-client-js')
-const dvf = await DVF({},{apiKey: "YOUR_API_KEY_FROM_GATEWAY.FM"})
+const dvf = await DVF(undefined,{apiKey: "YOUR_API_KEY_FROM_GATEWAY.FM"})
 ```
 
 #### Using a private key
@@ -158,7 +158,7 @@ to this:
 The complete compiled configuration is accessible through `dvf.config`, for instance:
 
 ```javascript
-const dvf = await DVF({},{apiKey:'YOUR_API_KEY_FROM_GATEWAY.FM'})
+const dvf = await DVF(undefined,{apiKey:'YOUR_API_KEY_FROM_GATEWAY.FM'})
 
 const config = dvf.config
 ```
@@ -379,7 +379,7 @@ Aside from these examples, there are complete examples in the [examples folder](
 
 You can setup a default custom gas price by setting up the 'defaultGasPrice' property
 ```javascript
-const dvf = await DVF({},{apiKey:'YOUR_API_KEY_FROM_GATEWAY.FM'})
+const dvf = await DVF(undefined,{apiKey:'YOUR_API_KEY_FROM_GATEWAY.FM'})
 
 dvf.set('defaultGasPrice', web3.utils.toWei('2', 'gwei'))
 
