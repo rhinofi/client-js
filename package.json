@@ -1,7 +1,7 @@
 {
   "name": "@gateway.fm/gtw-dvf-client-js",
   "description": "DVF client js lib with gateway.fm rpc endpoints",
-  "version": "3.1.4",
+  "version": "3.1.5",
   "main": "src/dvf.js",
   "contributors": [
     "Henrique Matias <hems.inlet@gmail.com>",
@@ -25,7 +25,8 @@
     "build:web:run": "browserify --debug ./src/dvf.js --standalone EFX | browser-run --port 2222",
     "test": "env-cmd -f ./env/test jest --testTimeout 10000",
     "test:watch": "env-cmd -f ./env/test jest --watch --testTimeout 10000 --verbose true",
-    "test:coverage": "env-cmd -f ./env/test jest --testTimeout 10000 --coverage"
+    "test:coverage": "env-cmd -f ./env/test jest --testTimeout 10000 --coverage",
+    "publish": "npm publish --access public"
   },
   "jest": {
     "coverageReporters": [
