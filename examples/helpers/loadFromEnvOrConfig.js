@@ -37,7 +37,7 @@ module.exports = (configFileName = 'config.json') => {
 
   const getConfigVar = getConfigVar_(config, configFilePath)
 
-  const apiUrl = getConfigVar('API_URL', 'https://rpc.dev.gateway.fm/v1/starkex/stg')
+  const apiUrl = getConfigVar('API_URL', 'https://rpc.gateway.fm/v1/starkex/stg')
   const apiKey = getConfigVar('API_KEY', 'MISSING_API_KEY')
   const ETH_PRIVATE_KEY = getConfigVar('ETH_PRIVATE_KEY')
 

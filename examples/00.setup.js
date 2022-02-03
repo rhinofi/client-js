@@ -23,7 +23,7 @@ const useTor = process.env.USE_TOR === 'true'
 const createNewAccount = process.env.CREATE_NEW_ACCOUNT === 'true'
 const useExistingAccount = process.env.USE_EXISTING_ACCOUNT === 'true'
 const waitForBalance = process.env.WAIT_FOR_BALANCE === 'true'
-const API_URL = process.env.API_URL || 'https://rpc.dev.gateway.fm/v1/starkex/stg'
+const API_URL = process.env.API_URL || 'https://rpc.gateway.fm/v1/starkex/stg'
 const DATA_API_URL = process.env.DATA_API_URL || API_URL
 
 if (!RPC_URL) {
@@ -38,7 +38,7 @@ if (!RPC_URL) {
 if (!API_KEY) {
   console.error('Error: API_KEY not set')
   console.error('\nusage: ./0.setup.js API_KEY')
-  console.error('\n  you need an API_KEY key. You can use crate an API_KEY from the admin dashboard in admin.gateway.fm by creating aproject  ')
+  console.error('\n  you need an API_KEY key. You can use crate an API_KEY from the admin dashboard in admin.gateway.fm by creating a project')
   console.error('\n  then createing an api key.')
   process.exit(1)
 }

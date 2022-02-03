@@ -6,7 +6,7 @@ module.exports = async dvf => {
 
   const url = `${dvf.config.api}/v1/trading/r/estimatedNextBatchTime?t=${t}`
   try {
-    const data = await get(url)
+    const data = await get(url, {headers: { Authorization: dvf.config.apiKey}})
     return JSON.parse(data)
   }
   catch(e) {
