@@ -33,6 +33,6 @@ module.exports = async (dvf, token, amount, starkWithdrawal) => {
 
   return post(url, {
     json: data,
-    headers: { Authorization: dvf.config}
+    headers: { Authorization: dvf.config.apiKey}
   })
 }
