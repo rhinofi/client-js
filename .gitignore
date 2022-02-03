@@ -9,3 +9,4 @@ examples/config.json
 *.sublime-workspace
 examples/config*.json
 .idea/
+./dist

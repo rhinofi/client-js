@@ -4,7 +4,7 @@
 
 A js client library for DeversiFi - StarkWare orders with Gateway.FM rpc endpoints
 
-**Note:** This library is for DeversiFi. A test version of the platform to use during integrations is connected to the Ropsten test network at https://app.stg.deversifi.com // https://api.stg.deversifi.com
+**Note:** This library is for DeversiFi. A test version of the platform to use during integrations is connected to the Ropsten test network at https://rpc.gateway.fm/v1/starkex/stg
 
 ## Contents
 
@@ -67,7 +67,7 @@ Alternatively on the browser you can use the standalone build
 ```javascript
 // In case of MetaMask make sure you call ethereum.enable() before using it
 const DVF = require('dvf-client-js')
-const dvf = await DVF({apiKey: "YOUR_API_KEY_FROM_GATEWAY.FM"})
+const dvf = await DVF({},{apiKey: "YOUR_API_KEY_FROM_GATEWAY.FM"})
 ```
 
 #### Using a private key
@@ -82,7 +82,7 @@ const rpcUrl = 'https://mainnet.infura.io/v3/9e28b...'
 const provider = new HDWalletProvider(privateKey, rpcUrl)
 const web3 = new Web3(provider)
 
-dvf = await DVF(web3)
+dvf = await DVF(web3,{apiKey: "YOUR_API_KEY_FROM_GATEWAY.FM"})
 ````
 
 View the full example: [/examples/node_sell_eth_infura.js](/examples/node_sell_eth_infura.js)
@@ -96,7 +96,7 @@ parameter `userConf` when calling the DVF function.
 
 ##### Parameters
 
-- `api` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? (default `https://api.stg.deversifi.com`) API endpoint you are connecting to Staging (ropsten): https://api.stg.deversifi.com, Production (mainnet): https://api.deversifi.com)
+- `api` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? (default `https://rpc.gateway.fm/v1/starkex/stg`) API endpoint you are connecting to Staging (ropsten): https://rpc.gateway.fm/v1/starkex/stg, Production (mainnet): https://rpc.gateway.fm/v1/starkex/prod)
 - `gasApi` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? (default `https://ethgasstation.info`)
 - `defaultGasLimit` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)**? (default `200000`)
 - `defaultGasPrice` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)**? (default `50000000000`)
@@ -110,9 +110,9 @@ For instance:
 
 ```javascript
   dvf = await DVF(web3, {
-    api: 'https://your-custom-api-address',
-    gasStationApiKey: 'a1b2c3...
-    apiKee: 'YOUR_API_KEY_FROM_GATEWAY.FM'
+    api: 'https://rpc.gateway.fm/v1/starkex/stg',
+    gasStationApiKey: 'a1b2c3...',
+    apiKey: 'YOUR_API_KEY_FROM_GATEWAY.FM'
   })
 ```
 
@@ -158,7 +158,7 @@ to this:
 The complete compiled configuration is accessible through `dvf.config`, for instance:
 
 ```javascript
-const dvf = await DVF({apiKey:'YOUR_API_KEY_FROM_GATEWAY.FM'})
+const dvf = await DVF({},{apiKey:'YOUR_API_KEY_FROM_GATEWAY.FM'})
 
 const config = dvf.config
 ```
@@ -379,7 +379,7 @@ Aside from these examples, there are complete examples in the [examples folder](
 
 You can setup a default custom gas price by setting up the 'defaultGasPrice' property
 ```javascript
-const dvf = await DVF({apiKey:'YOUR_API_KEY_FROM_GATEWAY.FM'})
+const dvf = await DVF({},{apiKey:'YOUR_API_KEY_FROM_GATEWAY.FM'})
 
 dvf.set('defaultGasPrice', web3.utils.toWei('2', 'gwei'))
 
@@ -392,6 +392,7 @@ To configure your api key with dvf client please pass this as a `userConf` param
 javascript
   dvf = await DVF(web3, {
     gasStationApiKey: 'a1b2c3...'
+    apiKey:"YOUR_API_KEY_FROM_GATEWAY.FM"
   })
 ```
 or by setting the 'gasStationApiKey' property:

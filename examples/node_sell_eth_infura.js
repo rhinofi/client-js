@@ -14,7 +14,8 @@ const web3 = new Web3(provider)
 
 const dvfConfig = {
   // Using staging API.
-  api: 'https://api.stg.deversifi.com'
+  api: 'https://rpc.gateway.fm/v1/starkex/stg',
+  apiKey: 'YOUR_API_KEY_FROM_GATEWAY.FM'
 }
 
 ;(async () => {

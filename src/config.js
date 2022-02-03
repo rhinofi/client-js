@@ -1,6 +1,6 @@
 module.exports = {
   // api: 'https://api.deversifi.com',
-  api: 'https://api.stg.deversifi.com',
+  api: 'https://rpc.gateway.fm/v1/starkex/stg',
   gasApi: 'https://ethgasstation.info',
 
   apiKey: `Missing api key`,
