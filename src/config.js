@@ -3,7 +3,7 @@ module.exports = {
   api: 'https://rpc.gateway.fm/v1/starkex/stg',
   gasApi: 'https://ethgasstation.info',
 
-  // could be obtained at admin.gateway.fm after createing a project
+  // can be obtained at admin.gateway.fm after creating a project
   apiKey: `Missing api key`,
 
   // default transaction arguments
