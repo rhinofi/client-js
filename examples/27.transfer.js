@@ -38,8 +38,8 @@ const dvfConfig = {
 
   const transferResponse = await dvf.transfer({
     recipientEthAddress: '0x1A546a36B4D12140285d5A632F9895dBFB629496',
-    token: 'ETH',
-    amount: 0.051,
+    token: 'USDT',
+    amount: 50,
     type: 'tradingKey'
   })
 

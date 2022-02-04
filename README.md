@@ -190,7 +190,7 @@ This method is used to register a stark public key that corresponds to an Ethere
 - `signature` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The signature obtained by signing the nonce with your private ethereum key.
 - `contractWalletAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Address of the deployed contract wallet (only for contract wallet integrations)
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[UserConfigResponse](https://docs.deversifi.com/docs#postV1TradingRGetuserconf)>**  
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[UserConfigResponse](https://github.com/gateway-fm/rpc-docs/blob/main/apis/starkex/trading/getuserconf.md)>**  
 
 ### Approving Tokens
 
@@ -220,7 +220,7 @@ This method is used to deposit the tokens to the smart contract and submit a sig
 - `nonce` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Nonce which is used to provide the time until which this nonce is valid. It is presented as seconds since epoch.
 - `signature` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? The signature obtained by signing the nonce with your private ethereum key.
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;{...[PromiEvent](https://web3js.readthedocs.io/en/v1.2.11/callbacks-promises-events.html#promievent), ...[DepositResponse](https://docs.deversifi.com/docs#postV1TradingWDeposit)}>**
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;{...[PromiEvent](https://web3js.readthedocs.io/en/v1.2.11/callbacks-promises-events.html#promievent), ...[DepositResponse]**
 
 ```javascript
 const token = 'ETH'
@@ -253,7 +253,7 @@ This authenticated endpoint is used to place an order.
 - `protocol` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? (default `stark`)
 
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[SubmitOrderResponse](https://docs.deversifi.com/docs#postV1TradingWSubmitorder)>**
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[SubmitOrderResponse](https://github.com/gateway-fm/rpc-docs/blob/main/apis/starkex/trading/submitorder.md)>**
 
 ```javascript
 const symbol = 'NEC:ETH'
@@ -272,7 +272,7 @@ This method allows you to get a specific order by `orderId` or `cid`.
 - `signature` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? The signature obtained by signing the nonce with your private ethereum key.
 - `cid` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? If order was placed with custom order ID (`cid`) property set, it can be canceled using same `cid`.
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[CancelOrderResponse](https://docs.deversifi.com/docs#postV1TradingWCancelorder)>**
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[CancelOrderResponse](https://github.com/gateway-fm/rpc-docs/blob/main/apis/starkex/trading/getorder.md)>**
 
 ```javascript
 const orderID = '123'
@@ -293,7 +293,7 @@ This method allows you to cancel a specific order by `orderId` or `cid`.
 - `signature` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? The signature obtained by signing the nonce with your private ethereum key.
 - `cid` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? If order was placed with custom order ID (`cid`) property set, it can be canceled using same `cid`.
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[CancelOrderResponse](https://docs.deversifi.com/docs#postV1TradingWCancelorder)>**
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[CancelOrderResponse](hhttps://github.com/gateway-fm/rpc-docs/blob/main/apis/starkex/trading/cancelorder.md)>**
 
 ```javascript
 const orderID = '123'
@@ -312,7 +312,7 @@ This method submits a request for a new withdrawal.
 - `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol available in `dvf.config.tokenRegistry` to be withdrawn
 - `amount` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** || **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Amount of tokens to be withdrawn
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[WithdrawResponse](https://docs.deversifi.com/docs#postV1TradingWWithdraw)>**
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[WithdrawResponse](https://github.com/gateway-fm/rpc-docs/blob/main/apis/starkex/trading/withdraw.md)>**
 
 ```javascript
 const token = 'ETH'

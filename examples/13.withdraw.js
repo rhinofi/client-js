@@ -43,8 +43,8 @@ const dvfConfig = {
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
-  const token = 'ETH'
-  const amount = 0.1
+  const token = 'USDT'
+  const amount = 20
 
   const withdrawalResponse = await dvf.transferAndWithdraw({
     recipientEthAddress: config.account.address.toLowerCase(),

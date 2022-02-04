@@ -55,6 +55,10 @@ const dvfConfig = {
     amount,
     price,
     starkPrivateKey: starkPrivKey,
+    /** Enable both isFillOrKill and isSlippageDisabled to make an instant token swap
+    isFillOrKill: true,
+    isSlippageDisabled : true,
+    */  
     validFor,           // Optional
     feeRate,            // Optional
     gid: '1',           // Optional
