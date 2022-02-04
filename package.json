@@ -1,7 +1,7 @@
 {
   "name": "@gateway.fm/gtw-dvf-client-js",
   "description": "DVF client js lib with gateway.fm rpc endpoints",
-  "version": "3.1.5",
+  "version": "3.1.7",
   "main": "src/dvf.js",
   "contributors": [
     "Henrique Matias <hems.inlet@gmail.com>",
