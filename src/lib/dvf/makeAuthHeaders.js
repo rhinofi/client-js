@@ -15,6 +15,5 @@ module.exports = (dvf, nonce, signature) => {
       : {}
     )
   }
-  return { Authorization: dvf.config.apiKey,
-    "GFM-StarkEx-Authorization": makeEcRecoverHeader(authData)}
+  return {"GFM-StarkEx-Authorization": makeEcRecoverHeader(authData)}
 }

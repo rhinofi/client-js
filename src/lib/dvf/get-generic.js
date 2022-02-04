@@ -3,6 +3,7 @@ const _ = require('lodash')
 
 module.exports = async (dvf, endpoint, qs = {}, headers = {}) => {
   const url = dvf.config.api + endpoint
+  headers = { ...headers, Authorization: dvf.config.apiKey }
 
   const options = {
     uri: url,
