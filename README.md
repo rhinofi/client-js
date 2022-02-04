@@ -4,7 +4,7 @@
 
 A js client library for DeversiFi - StarkWare orders with Gateway.FM rpc endpoints
 
-**Note:** This library is for DeversiFi. A test version of the platform to use during integrations is connected to the Ropsten test network at https://rpc.gateway.fm/v1/starkex/stg
+**Note:** This library is for DeversiFi with Gateway.fm rpc endpoints. A test version of the platform to use during integrations is connected to the Ropsten test network at https://rpc.gateway.fm/v1/starkex/stg
 
 ## Contents
 

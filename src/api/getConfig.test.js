@@ -119,7 +119,7 @@ describe('dvf.getConfig', () => {
     const response = await dvf.getConfig()
 
     expect(response).toMatchObject({
-      api: 'https://api.stg.deversifi.com',
+      api: 'https://rpc.gateway.fm/v1/starkex/stg',
       gasApi: 'https://ethgasstation.info',
       defaultGasLimit: 300000, // defined in `/src/config.js`
       defaultGasPrice: 50000000000,
