@@ -430,14 +430,14 @@ await dvf.cancelOrder({cid: customOrderID})
 ## Troubleshooting
 
 A list of error codes returned by the API and reasons are available [here](./src/lib/dvf/errorReasons.js#L1).
-Some more detailed explanations can also be found in the [API Documentation](https://docs.deversifi.com).
+Some more detailed explanations can also be found in the [API Documentation](https://github.com/gateway-fm/rpc-docs/tree/main/apis/starkex).
 
 If you have suggestions to improve this guide or any of the available
-documentation, please raise an issue on Github, or email [feedback@Deversifi.com](mailto:feedback@Deversifi.com).
+documentation, please raise an issue on Github, or email [support@gateway.fm](mailto:support@gateway.fm).
 
 ## Links
 
- - [API documentation](https://docs.deversifi.com)
+ - [API documentation](https://github.com/gateway-fm/rpc-docs/tree/main/apis/starkex)
 
 ## Developing
 

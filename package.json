@@ -39,7 +39,7 @@
     "ethereum",
     "trading"
   ],
-  "homepage": "https://github.com/gateway-fm/dvf-client-js",
+  "homepage": "https://github.com/gateway-fm/gtw-dvf-client-js",
   "license": "MIT",
   "dependencies": {
     "@ledgerhq/hw-app-eth": "5.49.0",

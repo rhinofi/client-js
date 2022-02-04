@@ -30,7 +30,7 @@ const dvfConfig = {
   const dvf = await DVF(web3, dvfConfig)
 
   const registrationStatusesResponse = await dvf.getRegistrationStatuses({
-    targetEthAddress: '0x08152c1265dbc218ccc8ab5c574e6bd52279b3b7'
+    targetEthAddress: '0x55BA4cB41D0C8F62aB4BB207d0bF9fA42f9FE70d'
   })
 
   logExampleResult(registrationStatusesResponse)

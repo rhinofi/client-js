@@ -31,6 +31,7 @@ module.exports = async (dvf, orderData) => {
   const { value, error } = schema.validate(orderData)
   // TODO handle error
   return post(dvf.config.api + '/v1/trading/w/submitOrder', {
+    headers: { Authorization: dvf.config.apiKey},
     json: await dvf.createMarketOrderPayload(value)
   })
 }

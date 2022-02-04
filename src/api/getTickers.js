@@ -5,6 +5,6 @@ module.exports = async (dvf, symbols) => {
     symbols = [symbols]
   }
 
-  const response = await get(`${dvf.config.api}/market-data/tickers?symbols=${symbols.join(',')}`)
+  const response = await get(`${dvf.config.api}/market-data/tickers?symbols=${symbols.join(',')}`, {headers: { Authorization: dvf.config.apiKey}})
   return JSON.parse(response)
 }

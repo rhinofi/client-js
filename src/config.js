@@ -1,8 +1,9 @@
 module.exports = {
-  // api: 'https://api.deversifi.com',
+  // api: 'https://rpc.gateway.fm/v1/starkex/stg',
   api: 'https://rpc.gateway.fm/v1/starkex/stg',
   gasApi: 'https://ethgasstation.info',
 
+  // can be obtained at admin.gateway.fm after creating a project
   apiKey: `Missing api key`,
 
   // default transaction arguments
