@@ -15,5 +15,6 @@ module.exports = (dvf, nonce, signature) => {
       : {}
     )
   }
-  return {"GFM-StarkEx-Authorization": makeEcRecoverHeader(authData)}
+
+  return { "GFM-StarkEx-Authorization": makeEcRecoverHeader(authData) }
 }

@@ -13,9 +13,10 @@ module.exports = async (dvf, nonce, signature, { headers = {}, data = {} }) => {
   }
 
   if (dvf.config.useAuthHeader || dvf.config.useTradingKey || dvf.config.useSignature) {
-    headers = { ...headers, ...makeAuthHeaders(dvf, nonce, signature) }
+    headers = { ...headers, ...makeAuthHeaders(dvf, nonce, signature), Authorization: dvf.config.apiKey }
   } else {
     data = { ...data, nonce, signature }
+    headers = { ...headers, Authorization: dvf.config.apiKey }
   }
 
   return { headers, data }
