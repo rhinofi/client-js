@@ -43,7 +43,7 @@ A js client library for DeversiFi - StarkWare orders with Gateway.FM rpc endpoin
 ### NPM
 
 ```bash
-  npm i @gateway/gtw-dvf-client-js
+  npm i @gateway.fm/gtw-dvf-client-js
 ```
 ### Prebuild for browser
 
