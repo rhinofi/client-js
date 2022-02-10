@@ -81,7 +81,7 @@ module.exports = () => {
     withdraw: compose(require('../../api/contract/withdraw')),
     abi: {
       token: require('../../api/contract/abi/token.abi'),
-      getStarkEx: () => require('../../api/contract/abi/StarkExV2.abi'),
+      getStarkEx: () => require('../../api/contract/abi/StarkExV4.abi'),
       WithdrawalBalanceReader: require('../../api/contract/abi/WithdrawalBalanceReader.abi'),
       getDVFInterface: () => require('../../api/contract/abi/DVFInterface.abi'),
       getSidechainBridgeInterface: () => require('../../api/contract/abi/BridgeDepositContract.abi')
