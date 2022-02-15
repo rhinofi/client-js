@@ -1,4 +1,4 @@
-const byContractAddress = require('@ledgerhq/hw-app-eth/erc20').byContractAddress
+const { byContractAddressAndChainId } = require('@ledgerhq/hw-app-eth/erc20')
 const Eth = require('@ledgerhq/hw-app-eth').default
 const selectTransport = require('./selectTransport')
 const generateTestNetworkTokenData = require('./generateTestNetworkTokenData')
@@ -15,7 +15,7 @@ module.exports = async (dvf, transport, tokenAddress = '', transferQuantization,
   try {
     let transferTokenAddress = tokenAddress.slice(0, 2) === '0x' ? tokenAddress.substr(2) : tokenAddress
     if (transferTokenAddress) {
-      const tokenInfo = byContractAddress(`0x${transferTokenAddress}`)
+      const tokenInfo = byContractAddressAndChainId(`0x${transferTokenAddress}`, dvf.config.ethereumChainId)
       if (tokenInfo) {
         await _transport.provideERC20TokenInformation(tokenInfo)
       } else {

@@ -4,7 +4,7 @@ const Web3 = require('web3')
 const aware = require('aware')
 const BigNumber = require('bignumber.js')
 const attachStarkProvider = require('./lib/wallet/attachStarkProvider')
-const { isObject } = require('lodash')
+const { isObject } = require('lodash/isObject')
 const swDefault = require('starkware_crypto')
 BigNumber.config({ EXPONENTIAL_AT: 1e9 })
 

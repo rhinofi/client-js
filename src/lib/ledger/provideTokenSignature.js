@@ -1,9 +1,9 @@
-const { byContractAddress } = require('@ledgerhq/hw-app-eth/erc20')
+const { byContractAddressAndChainId } = require('@ledgerhq/hw-app-eth/erc20')
 const generateTestNetworkTokenData = require('../ledger/generateTestNetworkTokenData')
 
 module.exports = async (dvf, eth, tokenContractAddress) => {
   if (tokenContractAddress) {
-    const sellTokenInfo = byContractAddress(tokenContractAddress)
+    const sellTokenInfo = byContractAddressAndChainId(tokenContractAddress, dvf.config.ethereumChainId)
     const trimmedAddress = tokenContractAddress.substr(2)
     if (sellTokenInfo) {
       await eth.provideERC20TokenInformation(sellTokenInfo)
