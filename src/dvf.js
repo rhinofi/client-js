@@ -5,6 +5,7 @@ const aware = require('aware')
 const BigNumber = require('bignumber.js')
 const attachStarkProvider = require('./lib/wallet/attachStarkProvider')
 const { isObject } = require('lodash')
+const swDefault = require('starkware_crypto')
 BigNumber.config({ EXPONENTIAL_AT: 1e9 })
 
 /**
@@ -14,7 +15,7 @@ BigNumber.config({ EXPONENTIAL_AT: 1e9 })
 module.exports = async (web3, userConfig = {}, sw) => {
   // binds all ./api methods into a fresh object, similar to creating an instance
   let dvf = bind()
-  dvf.sw = sw
+  dvf.sw = sw || swDefault
 
   // adds key-value storage and event emitting capabilities
   aware(dvf)
