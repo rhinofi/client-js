@@ -1,10 +1,9 @@
-const byContractAddress = require('@ledgerhq/hw-app-eth/erc20').byContractAddress
+const { byContractAddressAndChainId } = require('@ledgerhq/hw-app-eth/erc20')
 const Eth = require('@ledgerhq/hw-app-eth').default
 const selectTransport = require('./selectTransport')
 const generateTestNetworkTokenData = require('./generateTestNetworkTokenData')
-const DVFError = require('../dvf/DVFError')
 
-module.exports = async (dvf, transport, tokenAddress = '', transferQuantization) => {
+module.exports = async (dvf, transport, tokenAddress = '', transferQuantization, dontCloseTransport = false) => {
   let _transport = transport || null
   let createdTransport = null
   if (!transport) {
@@ -16,7 +15,7 @@ module.exports = async (dvf, transport, tokenAddress = '', transferQuantization)
   try {
     let transferTokenAddress = tokenAddress.slice(0, 2) === '0x' ? tokenAddress.substr(2) : tokenAddress
     if (transferTokenAddress) {
-      const tokenInfo = byContractAddress(`0x${transferTokenAddress}`)
+      const tokenInfo = byContractAddressAndChainId(`0x${transferTokenAddress}`, dvf.config.ethereumChainId)
       if (tokenInfo) {
         await _transport.provideERC20TokenInformation(tokenInfo)
       } else {
@@ -58,7 +57,7 @@ module.exports = async (dvf, transport, tokenAddress = '', transferQuantization)
     console.warn('Quantum not provided - switching to blind signing')
     return { unsafeSign: true }
   } finally {
-    if (createdTransport) {
+    if (createdTransport && !dontCloseTransport) {
       await createdTransport.close()
     }
   }

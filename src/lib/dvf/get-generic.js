@@ -1,5 +1,6 @@
 const { get } = require('request-promise')
-const _ = require('lodash')
+const _omitBy = require('lodash/omitBy')
+const _isNil = require('lodash/isNil')
 
 module.exports = async (dvf, endpoint, qs = {}, headers = {}) => {
   const url = dvf.config.api + endpoint
@@ -8,7 +9,7 @@ module.exports = async (dvf, endpoint, qs = {}, headers = {}) => {
     uri: url,
     headers,
     // removes null and undefined values
-    qs: _.omitBy(qs, _.isNil),
+    qs: _omitBy(qs, _isNil),
     json: true
   }
 

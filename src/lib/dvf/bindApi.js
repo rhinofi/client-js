@@ -5,7 +5,7 @@
  *
  * This way we get a regular looking API on top of functional code
  */
-const _ = require('lodash')
+const _partial = require('lodash/partial')
 
 module.exports = () => {
   const dvf = {}
@@ -13,7 +13,7 @@ module.exports = () => {
   // returns a function that will call api functions prepending dvf
   // as first argument
   const compose = funk => {
-    return _.partial(funk, dvf)
+    return _partial(funk, dvf)
   }
 
   // dvf.account functions
@@ -81,7 +81,7 @@ module.exports = () => {
     withdraw: compose(require('../../api/contract/withdraw')),
     abi: {
       token: require('../../api/contract/abi/token.abi'),
-      getStarkEx: () => require('../../api/contract/abi/StarkExV2.abi'),
+      getStarkEx: () => require('../../api/contract/abi/StarkExV4.abi'),
       WithdrawalBalanceReader: require('../../api/contract/abi/WithdrawalBalanceReader.abi'),
       getDVFInterface: () => require('../../api/contract/abi/DVFInterface.abi'),
       getSidechainBridgeInterface: () => require('../../api/contract/abi/BridgeDepositContract.abi')
@@ -118,6 +118,11 @@ module.exports = () => {
     bfxToDvfSymbol: require('../../lib/dvf/bfxToDvfSymbol'),
     prepareDepositAmount: compose(require('../util/prepareDepositAmount')),
     attachStarkProvider: compose(require('../../lib/wallet/attachStarkProvider'))
+  }
+
+   // dvf.bitfinex functions
+   dvf.bitfinex = {
+    transfers: compose(require('../../api/bitfinex/transfers'))
   }
 
   // dvf.sign functions

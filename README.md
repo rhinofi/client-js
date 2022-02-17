@@ -332,7 +332,7 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 ```javascript
 const token = 'ETH'
-const txHash = await dvf.withdrawOnchain(token)
+const txHash = await dvf.withdrawOnchain(token, recipientEthAddress)
 ```
 
 ### Authenticated data endpoints
