@@ -1,6 +1,6 @@
 {
   "name": "dvf-client-js",
-  "version": "3.1.7",
+  "version": "3.1.8",
   "main": "src/dvf.js",
   "contributors": [
     "Henrique Matias <hems.inlet@gmail.com>",
@@ -46,6 +46,7 @@
     "aware": "^0.3.1",
     "bignumber.js": "^9.0.0",
     "dvf-utils": "git+https://github.com/DeversiFi/dvf-utils#c481d7c9805c1243b0b49c1689c029bcfd8a571d",
+    "eip-712": "^1.0.0",
     "lodash": "^4.17.20",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
