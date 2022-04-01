@@ -22,7 +22,11 @@ module.exports = () => {
     tokenBalance: compose(require('../../api/account/tokenBalance')),
     select: compose(require('../../api/account/select')),
     getPermissions: compose(require('../../api/account/permissions').getPermissions),
-    setPermissions: compose(require('../../api/account/permissions').setPermissions)
+    setPermissions: compose(require('../../api/account/permissions').setPermissions),
+    getReferralId: compose(require('../../api/account/getReferralId')),
+    getRemainingSpins: compose(require('../../api/account/getRemainingSpins')),
+    getReferralRewards: compose(require('../../api/account/getReferralRewards')),
+    postReferralSpin: compose(require('../../api/account/postReferralSpin')),
   }
 
   dvf.stark = {
