@@ -31,7 +31,7 @@ const ammFundingOrderData = await dvf.getAmmFundingOrderData({
 // posting them to Deversifi API. NOTE: if the orders are pre-signed, the
 // method will post them as is.
 const ammPostFundingOrderResponse = await dvf.postAmmFundingOrder(
-  ammFundingOrderData
+  await dvf.applyFundingOrderDataSlippage(ammFundingOrderData, 0.05)
 )
 
 logExampleResult(ammPostFundingOrderResponse)

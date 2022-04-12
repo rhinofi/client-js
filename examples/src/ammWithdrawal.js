@@ -45,7 +45,7 @@ const ammWithdrawalOrderData = await dvf.getAmmFundingOrderData({
 })
 
 const ammWithdrawal = await dvf.postAmmFundingOrder(
-  ammWithdrawalOrderData
+  await dvf.applyFundingOrderDataSlippage(ammWithdrawalOrderData, 0.05)
 )
 
 logExampleResult(ammWithdrawal)
