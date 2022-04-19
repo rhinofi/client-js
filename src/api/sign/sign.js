@@ -8,8 +8,6 @@ module.exports = async (dvf, toSign, signWithStarkProvider) => {
   // metamask will take care of the 3rd parameter, "password"
   if (dvf.web3.currentProvider.isMetaMask) {
     return dvf.web3.eth.personal.sign(toSign, dvf.get('account'))
-  } else if (dvf.web3.currentProvider.connector) {
-    return dvf.web3.currentProvider.connector.signPersonalMessage([toSign, dvf.get('account')])
   } else if (signWithStarkProvider) { // Smart-wallet (Authereum) case
     return dvf.web3.eth.personal.sign(toSign, dvf.get('account'))
   } else {
