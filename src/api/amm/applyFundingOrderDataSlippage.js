@@ -13,8 +13,8 @@ const amountBuyPath = ['starkOrder', 'amountBuy']
 module.exports = (dvf, data, slippage) => {
   const validatedData = validateData(data)
 
-  if (slippage > 1) {
-    throw new Error('Slippage is a % between 0 - 1')
+  if (slippage > 1 || slippage < 0) {
+    throw new Error(`Slippage can only be 0 - 1 to represent 0 - 100%, provided: ${slippage}`)
   }
 
   // If withdrawal:
@@ -24,12 +24,10 @@ module.exports = (dvf, data, slippage) => {
   // In both cases, amountBuy for each order will be reduced
   const { orders } = validatedData
   const ordersPostSlippage = R.map(
-    (order) =>
-      R.assocPath(
-        amountBuyPath,
-        reduceBySlippage(R.path(amountBuyPath, order), slippage),
-        order
-      )
+    R.over(
+      R.lensPath(amountBuyPath),
+      reduceBySlippage(slippage)
+    )
   )(orders)
 
   const appliedData = R.assoc('orders', ordersPostSlippage)(validatedData)
@@ -38,7 +36,7 @@ module.exports = (dvf, data, slippage) => {
 }
 
 /**
- * @type { (amount: string, slippage: Number) => string }
+ * @type { (slippage: Number) => (amount: string) => string }
  */
-const reduceBySlippage = (amount, slippage) =>
+const reduceBySlippage = slippage => amount =>
   toBN(amount).times(1 - slippage).integerValue().toFixed(0)
