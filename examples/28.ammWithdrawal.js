@@ -40,12 +40,15 @@ const dvfConfig = {
 
   const token1 = 'ETH'
   const token2 = 'USDT'
-  const depositETHResponse = await dvf.deposit(token1, 0.1, starkPrivKey)
-  const depositUSDTResponse = await dvf.deposit(token2, 1000, starkPrivKey)
 
-  if (process.env.WAIT_FOR_DEPOSIT_READY === 'true') {
-    await waitForDepositCreditedOnChain(dvf, depositETHResponse)
-    await waitForDepositCreditedOnChain(dvf, depositUSDTResponse)
+  if (process.env.DEPOSIT_FIRST === 'true') {
+    const depositETHResponse = await dvf.deposit(token1, 0.1, starkPrivKey)
+    const depositUSDTResponse = await dvf.deposit(token2, 1000, starkPrivKey)
+
+    if (process.env.WAIT_FOR_DEPOSIT_READY === 'true') {
+      await waitForDepositCreditedOnChain(dvf, depositETHResponse)
+      await waitForDepositCreditedOnChain(dvf, depositUSDTResponse)
+    }
   }
 
   const pool = `${token1}${token2}`
