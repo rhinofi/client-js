@@ -10,7 +10,7 @@ const {
   starkLimitOrderToMessageHash
 } = require('dvf-utils')
 
-const getPublicKey = async (eth, transport, starkPath) => {
+const getPublicKey = async (eth, starkPath) => {
   const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')
   return {
     x: tempKey.substr(2, 64),
@@ -42,7 +42,7 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true, st
     ({ address } = await eth.getAddress(path))
     starkPath = dvf.stark.ledger.getPath(address)
     starkPublicKey = returnStarkPublicKey
-      ? await getPublicKey(eth, transport, starkPath)
+      ? await getPublicKey(eth, starkPath)
       : null
   } catch (e) {
     await transport.close()
