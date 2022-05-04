@@ -66,23 +66,28 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true, st
     throw new DVFError('LEDGER_TOKENINFO_ERR')
   }
 
-  const starkSignature = await eth.starkSignOrder_v2(
-    starkPath,
-    sellTokenAddress,
-    sellSymbol === 'ETH' ? 'eth' : 'erc20',
-    new BN(sellTokenInfo.quantization),
-    null,
-    buyTokenAddress,
-    buySymbol === 'ETH' ? 'eth' : 'erc20',
-    new BN(buyTokenInfo.quantization),
-    null,
-    starkOrder.vaultIdSell,
-    starkOrder.vaultIdBuy,
-    new BN(starkOrder.amountSell),
-    new BN(starkOrder.amountBuy),
-    starkOrder.nonce,
-    starkOrder.expirationTimestamp
-  )
-  await transport.close()
-  return { starkPublicKey, starkSignature }
+  try {
+    const starkSignature = await eth.starkSignOrder_v2(
+      starkPath,
+      sellTokenAddress,
+      sellSymbol === 'ETH' ? 'eth' : 'erc20',
+      new BN(sellTokenInfo.quantization),
+      null,
+      buyTokenAddress,
+      buySymbol === 'ETH' ? 'eth' : 'erc20',
+      new BN(buyTokenInfo.quantization),
+      null,
+      starkOrder.vaultIdSell,
+      starkOrder.vaultIdBuy,
+      new BN(starkOrder.amountSell),
+      new BN(starkOrder.amountBuy),
+      starkOrder.nonce,
+      starkOrder.expirationTimestamp
+    )
+    await transport.close()
+    return { starkPublicKey, starkSignature }
+  } catch (e) {
+    await transport.close()
+    throw e
+  }
 }
