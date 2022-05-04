@@ -11,15 +11,10 @@ const {
 } = require('dvf-utils')
 
 const getPublicKey = async (eth, transport, starkPath) => {
-  try {
-    const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')
-    return {
-      x: tempKey.substr(2, 64),
-      y: tempKey.substr(66)
-    }
-  } catch (e) {
-    await transport.close()
-    throw e
+  const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')
+  return {
+    x: tempKey.substr(2, 64),
+    y: tempKey.substr(66)
   }
 }
 
@@ -42,12 +37,17 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true, st
 
   const transport = await Transport.create()
   const eth = new Eth(transport)
-  const { address } = await eth.getAddress(path)
-  const starkPath = dvf.stark.ledger.getPath(address)
-
-  const starkPublicKey = returnStarkPublicKey
-    ? await getPublicKey(eth, transport, starkPath)
-    : null
+  let address, starkPublicKey, starkPath
+  try {
+    ({ address } = await eth.getAddress(path))
+    starkPath = dvf.stark.ledger.getPath(address)
+    starkPublicKey = returnStarkPublicKey
+      ? await getPublicKey(eth, transport, starkPath)
+      : null
+  } catch (e) {
+    await transport.close()
+    throw e
+  }
 
   let buyTokenAddress = null
   let sellTokenAddress = null
