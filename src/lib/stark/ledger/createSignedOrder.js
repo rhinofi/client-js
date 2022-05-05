@@ -44,9 +44,9 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true, st
     starkPublicKey = returnStarkPublicKey
       ? await getPublicKey(eth, starkPath)
       : null
-  } catch (e) {
+  } catch (error) {
     await transport.close()
-    throw e
+    throw error
   }
 
   let buyTokenAddress = null
@@ -66,7 +66,7 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true, st
       await transport.close()
       return { starkSignature, starkPublicKey }
     }
-  } catch (e) {
+  } catch (error) {
     await transport.close()
     throw new DVFError('LEDGER_TOKENINFO_ERR')
   }
@@ -91,8 +91,8 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true, st
     )
     await transport.close()
     return { starkPublicKey, starkSignature }
-  } catch (e) {
+  } catch (error) {
     await transport.close()
-    throw e
+    throw error
   }
 }

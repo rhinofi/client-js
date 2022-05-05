@@ -16,10 +16,10 @@ module.exports = async (dvf, path) => {
     }
     await transport.close()
     return dvf.stark.formatStarkPublicKey(starkPublicKey)
-  } catch (e) {
+  } catch (error) {
     if (transport) {
       await transport.close()
     }
-    throw e
+    throw error
   }
 }
