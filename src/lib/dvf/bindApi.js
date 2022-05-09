@@ -223,6 +223,7 @@ module.exports = () => {
   dvf.postAmmFundingOrders = compose(require('../../api/amm/postAmmFundingOrders'))
   dvf.getAmmFundingOrders = compose(require('../../api/amm/getAmmFundingOrders'))
   dvf.getAmmFundingOrderData = compose(require('../../api/amm/getAmmFundingOrderData'))
+  dvf.applyFundingOrderDataSlippage = compose(require('../../api/amm/applyFundingOrderDataSlippage'))
   dvf.poolTVL = compose(require('../../api/amm/poolTVL'))
   dvf.poolTvlHistory = compose(require('../../api/amm/poolTvlHistory'))
   dvf.poolVolume24Hours = compose(require('../../api/amm/poolVolume24Hours'))
