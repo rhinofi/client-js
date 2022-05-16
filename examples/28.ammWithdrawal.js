@@ -9,7 +9,6 @@ Check README.md for more details.
 const HDWalletProvider = require('@truffle/hdwallet-provider')
 const sw = require('starkware_crypto')
 const Web3 = require('web3')
-const { toBN } = require('dvf-utils')
 
 const DVF = require('../src/dvf')
 const envVars = require('./helpers/loadFromEnvOrConfig')(
@@ -30,13 +29,7 @@ provider.engine.stop()
 const dvfConfig = {
   api: envVars.API_URL,
   dataApi: envVars.DATA_API_URL,
-  useAuthHeader: true,
-  wallet: {
-    type: 'tradingKey',
-    meta: {
-      starkPrivateKey: starkPrivKey
-    }
-  }
+  useAuthHeader: true
   // Add more variables to override default values
 }
 
@@ -45,33 +38,55 @@ const dvfConfig = {
 
   const waitForDepositCreditedOnChain = require('./helpers/waitForDepositCreditedOnChain')
 
+  const token1 = 'ETH'
+  const token2 = 'USDT'
+
   if (process.env.DEPOSIT_FIRST === 'true') {
-    const depositETHResponse = await dvf.deposit('KON', 100, starkPrivKey)
-    const depositUSDTResponse = await dvf.deposit('DVF', 200, starkPrivKey)
-    await waitForDepositCreditedOnChain(dvf, depositETHResponse)
-    await waitForDepositCreditedOnChain(dvf, depositUSDTResponse)
+    const depositETHResponse = await dvf.deposit(token1, 0.1, starkPrivKey)
+    const depositUSDTResponse = await dvf.deposit(token2, 1000, starkPrivKey)
+
+    if (process.env.WAIT_FOR_DEPOSIT_READY === 'true') {
+      await waitForDepositCreditedOnChain(dvf, depositETHResponse)
+      await waitForDepositCreditedOnChain(dvf, depositUSDTResponse)
+    }
   }
 
-  const pool = 'KONDVF'
+  const pool = `${token1}${token2}`
 
-  const ammFundingOrderData = await dvf.getAmmFundingOrderData({
+  const ammDepositOrderData = await dvf.getAmmFundingOrderData({
     pool,
-    token: 'KON',
-    amount: 100
+    token: token1,
+    amount: 0.1
   })
 
-  const amountLp = toBN(ammFundingOrderData.orders[0].amountBuy).plus(
-    toBN(ammFundingOrderData.orders[1].amountBuy)
+  let ammDeposit = await dvf.postAmmFundingOrder(
+    ammDepositOrderData
   )
+
+  await P.retry(
+    { times: 360, interval: 1000 },
+    async () => {
+      ammDeposit = await dvf.getAmmFunding(ammDeposit._id)
+      if (ammDeposit.pending) {
+        throw new Error('funding order for amm deposit still pending')
+      }
+    }
+  )
+
+  const { BN } = Web3.utils
 
   const ammWithdrawalOrderData = await dvf.getAmmFundingOrderData({
     pool,
-    token: `LP-KONDVF-2`,
-    amount: amountLp.toString()
+    token: `LP-${pool}`,
+    // Withdraw previously deposited liquidity by returning all LP tokens.
+    amount: ammDeposit.orders.reduce(
+      (sum, order) => sum.add(new BN(order.amountBuy)),
+      new BN(0)
+    )
   })
 
-  const ammWithdrawal = await dvf.postAmmFundingOrders(
-    ammWithdrawalOrderData
+  const ammWithdrawal = await dvf.postAmmFundingOrder(
+    await dvf.applyFundingOrderDataSlippage(ammWithdrawalOrderData, 0.05)
   )
 
   logExampleResult(ammWithdrawal)

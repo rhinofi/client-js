@@ -22,7 +22,11 @@ module.exports = () => {
     tokenBalance: compose(require('../../api/account/tokenBalance')),
     select: compose(require('../../api/account/select')),
     getPermissions: compose(require('../../api/account/permissions').getPermissions),
-    setPermissions: compose(require('../../api/account/permissions').setPermissions)
+    setPermissions: compose(require('../../api/account/permissions').setPermissions),
+    getReferralId: compose(require('../../api/account/getReferralId')),
+    getRemainingSpins: compose(require('../../api/account/getRemainingSpins')),
+    getReferralRewards: compose(require('../../api/account/getReferralRewards')),
+    postReferralSpin: compose(require('../../api/account/postReferralSpin')),
   }
 
   dvf.stark = {
@@ -219,6 +223,7 @@ module.exports = () => {
   dvf.postAmmFundingOrders = compose(require('../../api/amm/postAmmFundingOrders'))
   dvf.getAmmFundingOrders = compose(require('../../api/amm/getAmmFundingOrders'))
   dvf.getAmmFundingOrderData = compose(require('../../api/amm/getAmmFundingOrderData'))
+  dvf.applyFundingOrderDataSlippage = compose(require('../../api/amm/applyFundingOrderDataSlippage'))
   dvf.poolTVL = compose(require('../../api/amm/poolTVL'))
   dvf.poolTvlHistory = compose(require('../../api/amm/poolTvlHistory'))
   dvf.poolVolume24Hours = compose(require('../../api/amm/poolVolume24Hours'))

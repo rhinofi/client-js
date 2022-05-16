@@ -1,0 +1,14 @@
+{
+    "nixpkgs": {
+        "branch": "fix-yarn2nix-for-nix-2.5-6",
+        "description": "Nix Packages collection",
+        "homepage": "",
+        "owner": "deversifi",
+        "repo": "nixpkgs",
+        "rev": "f39d74093d5afd722c39dab844a7c34eae56921f",
+        "sha256": "1npjqgbx6dr5sd1gf7y90dviggmm8y8fppw5djypjik40rwn896m",
+        "type": "tarball",
+        "url": "https://github.com/deversifi/nixpkgs/archive/f39d74093d5afd722c39dab844a7c34eae56921f.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}
