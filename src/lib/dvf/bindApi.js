@@ -244,7 +244,8 @@ module.exports = () => {
     withdraw: compose(require('../../api/ledger/withdraw')),
     transfer: compose(require('../../api/ledger/transfer')),
     transferAndWithdraw: compose(require('../../api/ledger/transferAndWithdraw')),
-    transferUsingVaultIdAndStarkKey: compose(require('../../api/ledger/transferUsingVaultIdAndStarkKey'))
+    transferUsingVaultIdAndStarkKey: compose(require('../../api/ledger/transferUsingVaultIdAndStarkKey')),
+    signEIP712Data: compose(require('../../api/ledger/signEIP712Data'))
   }
   dvf.estimatedNextBatchTime = compose(require('../../api/estimatedNextBatchTime'))
   dvf.publicUserPermissions = compose(require('../../api/getPublicPermissions'))
