@@ -12,8 +12,8 @@ module.exports = () => {
 
   // returns a function that will call api functions prepending dvf
   // as first argument
-  const compose = funk => {
-    return _partial(funk, dvf)
+  const compose = (funk, ...args) => {
+    return _partial(funk, dvf, ...args)
   }
 
   // dvf.account functions
@@ -136,6 +136,12 @@ module.exports = () => {
 
   dvf.postAuthenticated = compose(require('../../lib/dvf/post-authenticated'))
   dvf.getAuthenticated = compose(require('../../lib/dvf/get-authenticated'))
+
+  // Cancellable authenticated requests
+  dvf.request = ['get', 'post'].reduce((acc, method) => {
+    acc[method] = compose(require('../../lib/dvf/request'), method)
+    return acc
+  }, {})
 
   dvf.createOrderPayload = compose(require('../../lib/dvf/createOrderPayload'))
   dvf.createMarketOrderPayload = compose(require('../../lib/dvf/createMarketOrderPayload'))
