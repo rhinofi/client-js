@@ -11,7 +11,7 @@ module.exports = async (dvf, deFiSignature, { starkKey, tokenId, vaultId, amount
   } else if (permitParams) {
     action = 'registerAndDepositWithPermit'
   } else {
-    action = 'registerAndDeposit'
+    throw new Error('Register and deposit not supported after V4 migration')
   }
 
   const methodArgs = [starkKey, deFiSignature, tokenId, vaultId]

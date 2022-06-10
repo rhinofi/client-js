@@ -75,12 +75,10 @@ module.exports = async (dvf, token, address, nonce, signature) => {
     const balances = await dvf.contract.getAllWithdrawalBalances(starkTokenIds, starkKeyHex)
     withdrawals = balances.reduce(balanceReducer(dvf, tokenMapKeys), withdrawals)
 
-    // Feature flag for v4
-    if (dvf.config.DVF.starkExVersion === '4') {
-      const ethBalances = await dvf.contract.getAllWithdrawalBalancesEthAddress(starkTokenIds, address)
+    const ethBalances = await dvf.contract.getAllWithdrawalBalancesEthAddress(starkTokenIds, address)
 
-      withdrawals = ethBalances.reduce(balanceReducer(dvf, tokenMapKeys, { target: address }), withdrawals)
-    }
+    // V4 withdrawals
+    withdrawals = ethBalances.reduce(balanceReducer(dvf, tokenMapKeys, { target: address }), withdrawals)
 
     return withdrawals
   } catch (e) {
