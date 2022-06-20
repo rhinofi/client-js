@@ -46,7 +46,7 @@
     "aware": "^0.3.1",
     "bignumber.js": "^9.0.0",
     "eip-712": "1.0.0",
-    "dvf-utils": "git+https://github.com/DeversiFi/dvf-utils#213d789272569b547cb5fa1a27b05f94888c59a6",
+    "dvf-utils": "git+https://github.com/DeversiFi/dvf-utils#446bb3688265288eae952d6d9d6e6174ad14d7cc",
     "lodash": "^4.17.20",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",

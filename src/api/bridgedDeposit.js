@@ -28,7 +28,7 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 const endpoint = '/v1/trading/bridgedDeposits'
 const validationEndpoint = '/v1/trading/deposits-validate'
 
-module.exports = async (dvf, data, nonce, signature, txHashCb) => {
+module.exports = async (dvf, data, nonce, signature, txHashCb, overrideOnChainCall) => {
   const { chain, token, amount, web3Options, permitParams, referralId } = validateArg0(data)
 
   const tokenInfo = dvf.token.getTokenInfoOrThrow(token)
@@ -40,34 +40,40 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
   await post(dvf, validationEndpoint, nonce, signature, { token, amount: quantisedAmount })
 
   const bridgeContractAddress = dvf.getBridgeContractAddressOrThrow(chain)
-  if (!permitParams) {
-    await dvf.contract.approve(
-      token,
-      baseUnitAmount,
-      bridgeContractAddress,
-      chain
-    )
-  }
-
   const tokenAddress = getTokenAddressFromTokenInfoOrThrow(tokenInfo, chain)
 
-  // Sending the deposit transaction to the blockchain first before notifying the server
-  const tx = {
-    bridgeContractAddress,
-    tokenAddress,
-    baseUnitAmount
+  let txHashPromise
+  let onChainDepositPromise
+  if (overrideOnChainCall) {
+    [txHashPromise, onChainDepositPromise] = await overrideOnChainCall()
+  } else {
+    if (!permitParams) {
+      await dvf.contract.approve(
+        token,
+        baseUnitAmount,
+        bridgeContractAddress,
+        chain
+      )
+    }
+    // Sending the deposit transaction to the blockchain first before notifying the server
+    const tx = {
+      bridgeContractAddress,
+      tokenAddress,
+      baseUnitAmount
+    }
+    const [transactionHashPromise, transactionHashCb] = createPromiseAndCallbackFn(txHashCb)
+
+    const options = {
+      transactionHashCb,
+      chain,
+      ...web3Options
+    }
+    onChainDepositPromise = depositFromSidechainBridge(dvf, tx, options)
+    txHashPromise = transactionHashPromise
   }
-  const [transactionHashPromise, transactionHashCb] = createPromiseAndCallbackFn(txHashCb)
 
-  const options = {
-    transactionHashCb,
-    chain,
-    ...web3Options
-  }
-
-  const onChainDepositPromise = depositFromSidechainBridge(dvf, tx, options)
-
-  const transactionHash = await transactionHashPromise
+  const transactionHash = await txHashPromise
+  console.log('transactionHash', transactionHash)
 
   const payload = {
     chain,
