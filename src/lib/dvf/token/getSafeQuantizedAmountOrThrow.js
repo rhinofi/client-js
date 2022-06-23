@@ -3,6 +3,11 @@ const { Long, toQuantizedAmountBN, fromQuantizedToBaseUnitsBN } = require('dvf-u
 
 module.exports = (baseUnitAmount, tokenInfo) => {
   const quantisedAmount = toQuantizedAmountBN(tokenInfo, baseUnitAmount)
+
+  if (quantisedAmount.eq(0)) {
+    return quantisedAmount
+  }
+
   if (quantisedAmount.isLessThan(1)) {
     throw new Error(
       `Amount too small, got: ${baseUnitAmount}, allowed minumum: ` +

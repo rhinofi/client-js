@@ -20,7 +20,7 @@ module.exports = dvf => async data => {
     ...(quantisedFeeAmount
       ? {
           feeInfoUser: {
-            feeLimit: quantisedFeeAmount,
+            feeLimit: quantisedFeeAmount.toString(),
             // Same as sender vaultId
             sourceVaultId: tokenInfo.starkVaultId,
             // Same as token

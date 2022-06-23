@@ -19,7 +19,7 @@ const getValidTokenInfo = dvf => token => {
 
 const transferDataSchema = Joi.object({
   amount: Joi.amount(),
-  feeAmount: Joi.amount(),
+  feeAmount: Joi.bigNumber().min(0),
   token: Joi.string(),
   recipientPublicKey: Joi.ethAddress(),
   recipientVaultId: Joi.number().integer()
