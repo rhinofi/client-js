@@ -10,7 +10,7 @@ const getValidTokenInfo = dvf => token => {
   if (!tokenInfo.starkVaultId) {
     throw new DVFError(
       'NO_STARK_VAULT_ID_FOR_TOKEN',
-      {token, context: 'createTransferPayload'}
+      { token, context: 'createTransferPayload' }
     )
   }
 
@@ -19,12 +19,13 @@ const getValidTokenInfo = dvf => token => {
 
 const transferDataSchema = Joi.object({
   amount: Joi.amount(),
+  feeAmount: Joi.amount(),
   token: Joi.string(),
   recipientPublicKey: Joi.ethAddress(),
   recipientVaultId: Joi.number().integer()
 })
 
-const errorProps = {context: 'transferAndWithdrawPayload'}
+const errorProps = { context: 'transferAndWithdrawPayload' }
 const validateArg0 = validateWithJoi(transferDataSchema)('INVALID_METHOD_ARGUMENT')({
   ...errorProps, argIdx: 0
 })
@@ -32,6 +33,7 @@ const validateArg0 = validateWithJoi(transferDataSchema)('INVALID_METHOD_ARGUMEN
 module.exports = async (dvf, transferData, createSignedTransferTx = makeCreateSignedTransferTx(dvf)) => {
   const {
     amount,
+    feeAmount,
     token,
     recipientPublicKey,
     recipientVaultId
@@ -39,12 +41,14 @@ module.exports = async (dvf, transferData, createSignedTransferTx = makeCreateSi
 
   const tokenInfo = getValidTokenInfo(dvf)(token)
   const quantisedAmount = getSafeQuantizedAmountOrThrow(amount, tokenInfo)
+  const quantisedFeeAmount = getSafeQuantizedAmountOrThrow(feeAmount, tokenInfo)
 
   const { tx } = await createSignedTransferTx({
     recipientPublicKey,
     recipientVaultId,
     tokenInfo,
-    quantisedAmount
+    quantisedAmount,
+    quantisedFeeAmount
   })
 
   return { tx }
