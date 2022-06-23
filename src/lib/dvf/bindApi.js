@@ -26,7 +26,7 @@ module.exports = () => {
     getReferralId: compose(require('../../api/account/getReferralId')),
     getRemainingSpins: compose(require('../../api/account/getRemainingSpins')),
     getReferralRewards: compose(require('../../api/account/getReferralRewards')),
-    postReferralSpin: compose(require('../../api/account/postReferralSpin')),
+    postReferralSpin: compose(require('../../api/account/postReferralSpin'))
   }
 
   dvf.stark = {
@@ -124,8 +124,8 @@ module.exports = () => {
     attachStarkProvider: compose(require('../../lib/wallet/attachStarkProvider'))
   }
 
-   // dvf.bitfinex functions
-   dvf.bitfinex = {
+  // dvf.bitfinex functions
+  dvf.bitfinex = {
     transfers: compose(require('../../api/bitfinex/transfers'))
   }
 
