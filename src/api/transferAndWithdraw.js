@@ -9,7 +9,7 @@ const generateRandomNonceV2 = require('../lib/dvf/generateRandomNonceV2')
 const schema = Joi.object({
   token: Joi.string(),
   amount: Joi.bigNumber().greaterThan(0),
-  feeAmount: Joi.bigNumber().default(0),
+  feeAmount: Joi.bigNumber().default(0).optional(),
   recipientEthAddress: Joi.string(),
   nonce: Joi.number().integer().optional()
 })
