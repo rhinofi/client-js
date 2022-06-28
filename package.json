@@ -46,11 +46,11 @@
     "aware": "^0.3.1",
     "bignumber.js": "^9.0.0",
     "eip-712": "1.0.0",
-    "dvf-utils": "git+https://github.com/DeversiFi/dvf-utils#refs/tags/v1.0.5",
+    "dvf-utils": "git+https://github.com/DeversiFi/dvf-utils#355a6953cdc10f5b51734a71f6942b71a6fe8406",
     "lodash": "^4.17.20",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
-    "starkware_crypto": "git+https://github.com/DeversiFi/starkware-crypto#bf94bde1f6bbb4156ded52171cd70d3e02cd5919",
+    "starkware_crypto": "git+https://github.com/DeversiFi/starkware-crypto#504edca95842796908e74dad09518d092fca4e1b",
     "web3": "1.7.0",
     "web3-utils": "^1.3.0"
   },
