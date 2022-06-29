@@ -1,4 +1,4 @@
-const { Joi } = require('dvf-utils')
+const { Joi, toQuantizedAmountBN } = require('dvf-utils')
 const validateWithJoi = require('../validators/validateWithJoi')
 const DVFError = require('./DVFError')
 const makeCreateSignedTransferTx = require('./makeCreateSignedTransferTx')
@@ -41,7 +41,7 @@ module.exports = async (dvf, transferData, createSignedTransferTx = makeCreateSi
 
   const tokenInfo = getValidTokenInfo(dvf)(token)
   const quantisedAmount = getSafeQuantizedAmountOrThrow(amount, tokenInfo)
-  const quantisedFeeAmount = getSafeQuantizedAmountOrThrow(feeAmount, tokenInfo)
+  const quantisedFeeAmount = toQuantizedAmountBN(tokenInfo, feeAmount)
 
   const { tx } = await createSignedTransferTx({
     recipientPublicKey,
