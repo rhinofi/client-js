@@ -53,7 +53,11 @@ const getTxSignature = async (dvf, tx, path) => {
       // Load token information for Ledger device
       const tokenData = await dvf.token.provideContractData(eth, tokenAddress, transferQuantization)
 
-      if (tokenData && tokenData.unsafeSign) {
+      const shouldUnsafeSign = (tokenData && tokenData.unsafeSign) ||
+        // Ledger does not support StarkEx messages with fee
+        tx.feeInfoUser
+
+      if (shouldUnsafeSign) {
         const message = getMessage(swJS)(tx)
         const paddedMessage = `0x${message.padEnd(64, '0').substr(-64)}`
         return eth.starkUnsafeSign(
