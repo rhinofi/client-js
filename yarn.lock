@@ -3606,9 +3606,9 @@ duplexer@^0.1.1:
   resolved "https://registry.npmjs.org/duplexer/-/duplexer-0.1.2.tgz"
   integrity sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==
 
-"dvf-utils@git+https://github.com/DeversiFi/dvf-utils#355a6953cdc10f5b51734a71f6942b71a6fe8406":
+"dvf-utils@git+https://github.com/DeversiFi/dvf-utils#refs/tags/v1.1.0":
   version "1.1.0"
-  resolved "git+https://github.com/DeversiFi/dvf-utils#355a6953cdc10f5b51734a71f6942b71a6fe8406"
+  resolved "git+https://github.com/DeversiFi/dvf-utils#89ba286d7b496e4d31c09461e66e905cb19d130e"
   dependencies:
     axios "^0.24.0"
     bignumber.js "^9.0.0"
