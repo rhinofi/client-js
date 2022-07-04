@@ -18,7 +18,7 @@ const transferTransactionTypes = [
 const getMessage = sw => tx => {
   if (tx.type != null) {
     if (!(transferTransactionTypes.includes(tx.type))) {
-      throw new DVFError(`Unsupported stark transaction type: ${tx.type}`, {tx})
+      throw new DVFError(`Unsupported stark transaction type: ${tx.type}`, { tx })
     }
     return starkTransferTxToMessageHash(sw)(tx)
   } else {
