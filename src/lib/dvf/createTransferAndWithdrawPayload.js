@@ -41,7 +41,7 @@ module.exports = async (dvf, transferData, createSignedTransferTx = makeCreateSi
 
   const tokenInfo = getValidTokenInfo(dvf)(token)
   const quantisedAmount = getSafeQuantizedAmountOrThrow(amount, tokenInfo)
-  const quantisedFeeAmount = toQuantizedAmountBN(tokenInfo, feeAmount)
+  const quantisedFeeAmount = transferData.feeAmount ? toQuantizedAmountBN(tokenInfo, feeAmount) : undefined
 
   const { tx } = await createSignedTransferTx({
     recipientPublicKey,
