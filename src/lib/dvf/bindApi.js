@@ -129,6 +129,20 @@ module.exports = () => {
     transfers: compose(require('../../api/bitfinex/transfers'))
   }
 
+  // dvf.migrationStampede
+  dvf.migrationStampede = {
+    getMissionsConfig: compose(require('../../api/migrationStampede/getMissionsConfig')),
+    getPotValue: compose(require('../../api/migrationStampede/getPotValue')),
+    getUserMissions: compose(require('../../api/migrationStampede/getUserMissions')),
+    getUserReward: compose(require('../../api/migrationStampede/getUserReward'))
+  }
+
+  dvf.userVerification = {
+    setEmailOrPhone: compose(require('../../api/userVerification/setEmailOrPhone')),
+    verifyCode: compose(require('../../api/userVerification/verifyCode')),
+    isUserVerified: compose(require('../../api/userVerification/isUserVerified'))
+  }
+
   // dvf.sign functions
   dvf.sign = compose(require('../../api/sign/sign'))
   dvf.sign.request = compose(require('../../api/sign/request'))
