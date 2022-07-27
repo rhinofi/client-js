@@ -131,6 +131,7 @@ module.exports = () => {
 
   // dvf.migrationStampede
   dvf.migrationStampede = {
+    getStampedeConfig: compose(require('../../api/migrationStampede/getStampedeConfig')),
     getMissionsConfig: compose(require('../../api/migrationStampede/getMissionsConfig')),
     getPotValue: compose(require('../../api/migrationStampede/getPotValue')),
     getUserMissions: compose(require('../../api/migrationStampede/getUserMissions')),
