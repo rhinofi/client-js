@@ -32,7 +32,7 @@ const validateData = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
   context: 'getAmmFundingOrders'
 })
 
-module.exports = (dvf, nonce, signature, data) => {
+module.exports = (dvf, nonce, signature, data, headers) => {
   const validatedData = validateData(data)
   const endpoint = `/v1/trading/amm/fundingOrders`
   if (validatedData.ammFundingOrderId) {
@@ -43,5 +43,5 @@ module.exports = (dvf, nonce, signature, data) => {
       signature
     )
   }
-  return getAuthenticated(dvf, endpoint, nonce, signature, validatedData)
+  return getAuthenticated(dvf, endpoint, nonce, signature, validatedData, headers)
 }
