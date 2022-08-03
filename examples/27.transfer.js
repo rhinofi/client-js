@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-const HDWalletProvider = require('@truffle/hdwallet-provider')
-const Web3 = require('web3')
+const getWeb3 = require('./helpers/getWeb3')
 
 const DVF = require('../src/dvf')
 const envVars = require('./helpers/loadFromEnvOrConfig')(
@@ -15,9 +14,7 @@ const ethPrivKey = envVars.ETH_PRIVATE_KEY
 const starkPrivKey = envVars.STARK_PRIVATE_KEY
 const rpcUrl = envVars.RPC_URL
 
-const provider = new HDWalletProvider(ethPrivKey, rpcUrl)
-const web3 = new Web3(provider)
-provider.engine.stop()
+const { web3, provider } = getWeb3(ethPrivKey, rpcUrl)
 
 const dvfConfig = {
   api: envVars.API_URL,
