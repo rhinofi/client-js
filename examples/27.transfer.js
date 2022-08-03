@@ -63,7 +63,7 @@ const dvfConfig = {
 
   // Find a transfer with memo = 'some_id_2'
   const getTransferWithMemo = async (memo, current = 0) => {
-    const limit = 1
+    const limit = 50
     const { items, pagination } = await dvf.getAuthenticated(
       '/v1/trading/transfers',
       nonce,
@@ -82,6 +82,10 @@ const dvfConfig = {
 
     return getTransferWithMemo(memo, current + limit)
   }
+
+  // If you know the ID of the transfer, this is even simpler
+  // Since you can directly query for it:
+  // https://api.deversifi.dev/v1/trading/docs#/Wallet/getV1TradingTransfersTransferid
 
   logExampleResult(await getTransferWithMemo('some_id_2'))
 })()
