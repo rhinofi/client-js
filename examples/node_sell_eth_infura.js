@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-const HDWalletProvider = require('@truffle/hdwallet-provider')
-const Web3 = require('web3')
+const getWeb3 = require('./helpers/getWeb3')
 const DVF = require('../src/dvf')
 
 const privateKey = '8F085...' // Account's private key
@@ -9,8 +8,7 @@ const rpcUrl = 'https://mainnet.infura.io/v3/9e28b...'
 
 const starkPrivKey = privateKey
 
-const provider = new HDWalletProvider(privateKey, rpcUrl)
-const web3 = new Web3(provider)
+const { web3, provider } = getWeb3(privateKey, rpcUrl)
 
 const dvfConfig = {
   // Using staging API.
@@ -33,11 +31,11 @@ const dvfConfig = {
     amount,
     price,
     starkPrivateKey: starkPrivKey,
-    validFor,           // Optional
-    feeRate,            // Optional
-    gid: '1',           // Optional
-    cid: '1',           // Optional
-    partnerId: 'P1'    // Optional
+    validFor, // Optional
+    feeRate, // Optional
+    gid: '1', // Optional
+    cid: '1', // Optional
+    partnerId: 'P1' // Optional
   })
 
   console.log('submitOrder response ->', submitOrderResponse)

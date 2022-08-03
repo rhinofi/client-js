@@ -17,5 +17,5 @@ module.exports = async (dvf, nonce, signature) => {
     signature = await dvf.sign(message)
   }
 
-  return {nonce, signature}
+  return { nonce, signature }
 }
