@@ -10,7 +10,10 @@ module.exports = async () => {
   const rpcUrl = process.env.RPC_URL
   const privateKey = process.env.PRIVATE_ETH_KEY
 
-  const provider = new HDWalletProvider(privateKey, rpcUrl)
+  const provider = new HDWalletProvider({
+    privateKeys: [privateKey],
+    providerOrUrl: rpcUrl
+  })
 
   const web3 = new Web3(provider)
 
@@ -18,7 +21,7 @@ module.exports = async () => {
 
   const gasStationApiKey = process.env.ETH_GAS_STATION_KEY || ''
 
-  let config = { gasStationApiKey }
+  const config = { gasStationApiKey }
 
   // It's possible to overwrite the API address with the testnet address
   // for example like this:
