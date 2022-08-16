@@ -8124,7 +8124,7 @@ web3-shh@1.7.5:
     web3-core-subscriptions "1.7.5"
     web3-net "1.7.5"
 
-web3-utils@1.7.5, web3-utils@^1.7.5:
+web3-utils@1.7.5:
   version "1.7.5"
   resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.7.5.tgz#081a952ac6e0322e25ac97b37358a43c7372ef6a"
   integrity sha512-9AqNOziQky4wNQadEwEfHiBdOZqopIHzQQVzmvvv6fJwDSMhP+khqmAZC7YTiGjs0MboyZ8tWNivqSO1699XQw==
