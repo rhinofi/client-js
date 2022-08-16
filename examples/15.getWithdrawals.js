@@ -34,7 +34,7 @@ const dvfConfig = {
 ;(async () => {
   const dvf = await DVF(web3, dvfConfig)
 
-  const getWithdrawalsResponse = await dvf.getWithdrawals()
+  const getWithdrawalsResponse = await dvf.getWithdrawals(undefined, dvf.get('account'))
 
   logExampleResult(getWithdrawalsResponse)
 
