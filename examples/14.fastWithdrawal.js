@@ -27,22 +27,18 @@ const { web3, provider } = getWeb3(ethPrivKey, rpcUrl)
 const dvfConfig = {
   api: envVars.API_URL,
   dataApi: envVars.DATA_API_URL,
-  useAuthHeader: true
-  // Add more variables to override default values
-}
-
-;(async () => {
-  const dvf = await DVF(web3, dvfConfig)
-
-  const wallet = {
+  useAuthHeader: true,
+  wallet: {
     type: 'tradingKey',
     meta: {
       starkPrivateKey: starkPrivKey
     }
   }
-  // NOTE: this can also be done when creating DVF instance by including wallet on
-  // dvfConfig.
-  dvf.util.attachStarkProvider(wallet)
+  // Add more variables to override default values
+}
+
+;(async () => {
+  const dvf = await DVF(web3, dvfConfig)
 
   const fastWithdrawalResponse = await dvf.fastWithdrawal(
     // recipientEthAddress could be added here to send the withdrawal to address
