@@ -1,16 +1,11 @@
-const { del } = require('request-promise')
-const _omitBy = require('lodash/omitBy')
-const _isNil = require('lodash/isNil')
+const { request } = require('dvf-utils')
 
-module.exports = async (dvf, endpoint, json = {}, headers = {}) => {
+module.exports = async (dvf, endpoint, headers = {}) => {
   const url = dvf.config.api + endpoint
 
   const options = {
-    uri: url,
-    headers,
-    // removes null and undefined values
-    json: _omitBy(json, _isNil)
+    headers
   }
 
-  return del(options)
+  return request.delete(url, options)
 }
