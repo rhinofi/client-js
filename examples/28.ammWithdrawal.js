@@ -57,7 +57,7 @@ const dvfConfig = {
     amount: 0.1
   })
 
-  let ammDeposit = await dvf.postAmmFundingOrder(
+  let ammDeposit = await dvf.postAmmFundingOrders(
     ammDepositOrderData
   )
 
@@ -83,7 +83,7 @@ const dvfConfig = {
     )
   })
 
-  const ammWithdrawal = await dvf.postAmmFundingOrder(
+  const ammWithdrawal = await dvf.postAmmFundingOrders(
     await dvf.applyFundingOrderDataSlippage(ammWithdrawalOrderData, 0.05)
   )
 

@@ -35,7 +35,7 @@ const dvfConfig = {
   const dvf = await DVF(web3, dvfConfig)
 
   let withdrawalId
-  const withdrawals = await dvf.getWithdrawals()
+  const withdrawals = await dvf.getWithdrawals(undefined, dvf.get('account'))
   const nonFastWithdrawals = withdrawals.filter(w => !w.fastWithdrawalData)
 
   if (nonFastWithdrawals.length === 0) {
