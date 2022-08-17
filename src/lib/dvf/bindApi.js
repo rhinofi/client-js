@@ -150,6 +150,9 @@ module.exports = () => {
   dvf.sign.nonceSignature = compose(require('../../api/sign/nonceSignature'))
 
   dvf.postAuthenticated = compose(require('../../lib/dvf/post-authenticated'))
+
+  dvf.deleteAuthenticated = compose(require('../../lib/dvf/delete-authenticated'))
+
   dvf.getAuthenticated = compose(require('../../lib/dvf/get-authenticated'))
 
   // Cancellable authenticated requests
