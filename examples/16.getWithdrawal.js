@@ -27,7 +27,13 @@ const { web3, provider } = getWeb3(ethPrivKey, rpcUrl)
 const dvfConfig = {
   api: envVars.API_URL,
   dataApi: envVars.DATA_API_URL,
-  useAuthHeader: true
+  useAuthHeader: true,
+  wallet: {
+    type: 'tradingKey',
+    meta: {
+      starkPrivateKey: starkPrivKey
+    }
+  }
   // Add more variables to override default values
 }
 
@@ -35,19 +41,19 @@ const dvfConfig = {
   const dvf = await DVF(web3, dvfConfig)
 
   let withdrawalId
-  const withdrawals = await dvf.getWithdrawals()
+  const withdrawals = await dvf.getWithdrawals(undefined, dvf.get('account'))
 
-  if (withdrawals.length == 0) {
+  if (withdrawals.length === 0) {
     console.log('creating a new withdrawal')
 
     const token = 'ETH'
     const amount = 0.1
 
-    const withdrawalResponse = await dvf.withdraw(
+    const withdrawalResponse = await dvf.transferAndWithdraw({
+      recipientEthAddress: dvf.get('account'),
       token,
-      amount,
-      starkPrivKey
-    )
+      amount
+    })
 
     console.log('withdrawalResponse', withdrawalResponse)
     withdrawalId = withdrawalResponse._id
