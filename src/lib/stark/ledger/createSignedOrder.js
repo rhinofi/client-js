@@ -37,12 +37,17 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true, st
 
   const transport = await Transport.create()
   const eth = new Eth(transport)
-  const { address } = await eth.getAddress(path)
-  const starkPath = dvf.stark.ledger.getPath(address)
-
-  const starkPublicKey = returnStarkPublicKey
-    ? await getPublicKey(eth, starkPath)
-    : null
+  let address, starkPublicKey, starkPath
+  try {
+    ({ address } = await eth.getAddress(path))
+    starkPath = dvf.stark.ledger.getPath(address)
+    starkPublicKey = returnStarkPublicKey
+      ? await getPublicKey(eth, starkPath)
+      : null
+  } catch (error) {
+    await transport.close()
+    throw error
+  }
 
   let buyTokenAddress = null
   let sellTokenAddress = null
@@ -61,28 +66,33 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true, st
       await transport.close()
       return { starkSignature, starkPublicKey }
     }
-  } catch (e) {
+  } catch (error) {
     await transport.close()
     throw new DVFError('LEDGER_TOKENINFO_ERR')
   }
 
-  const starkSignature = await eth.starkSignOrder_v2(
-    starkPath,
-    sellTokenAddress,
-    sellSymbol === 'ETH' ? 'eth' : 'erc20',
-    new BN(sellTokenInfo.quantization),
-    null,
-    buyTokenAddress,
-    buySymbol === 'ETH' ? 'eth' : 'erc20',
-    new BN(buyTokenInfo.quantization),
-    null,
-    starkOrder.vaultIdSell,
-    starkOrder.vaultIdBuy,
-    new BN(starkOrder.amountSell),
-    new BN(starkOrder.amountBuy),
-    starkOrder.nonce,
-    starkOrder.expirationTimestamp
-  )
-  await transport.close()
-  return { starkPublicKey, starkSignature }
+  try {
+    const starkSignature = await eth.starkSignOrder_v2(
+      starkPath,
+      sellTokenAddress,
+      sellSymbol === 'ETH' ? 'eth' : 'erc20',
+      new BN(sellTokenInfo.quantization),
+      null,
+      buyTokenAddress,
+      buySymbol === 'ETH' ? 'eth' : 'erc20',
+      new BN(buyTokenInfo.quantization),
+      null,
+      starkOrder.vaultIdSell,
+      starkOrder.vaultIdBuy,
+      new BN(starkOrder.amountSell),
+      new BN(starkOrder.amountBuy),
+      starkOrder.nonce,
+      starkOrder.expirationTimestamp
+    )
+    await transport.close()
+    return { starkPublicKey, starkSignature }
+  } catch (error) {
+    await transport.close()
+    throw error
+  }
 }

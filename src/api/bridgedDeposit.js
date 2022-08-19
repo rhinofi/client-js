@@ -17,7 +17,8 @@ const schema = Joi.object({
   amount: Joi.bigNumber().greaterThan(0), // number or number string
   // useProxiedContract: Joi.boolean().optional().default(false),
   permitParams: permitParamsSchema.optional(),
-  web3Options: Joi.object().optional() // For internal use (custom gas limits, etc)
+  web3Options: Joi.object().optional(), // For internal use (custom gas limits, etc)
+  referralId: Joi.string().optional()
 })
 
 const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
@@ -28,7 +29,7 @@ const endpoint = '/v1/trading/bridgedDeposits'
 const validationEndpoint = '/v1/trading/deposits-validate'
 
 module.exports = async (dvf, data, nonce, signature, txHashCb) => {
-  const { chain, token, amount, web3Options, permitParams } = validateArg0(data)
+  const { chain, token, amount, web3Options, permitParams, referralId } = validateArg0(data)
 
   const tokenInfo = dvf.token.getTokenInfoOrThrow(token)
   const quantisedAmount = getSafeQuantizedAmountOrThrow(amount, tokenInfo)
@@ -72,7 +73,8 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
     chain,
     token,
     amount: quantisedAmount,
-    txHash: transactionHash
+    txHash: transactionHash,
+    referralId
   }
   const httpDeposit = await post(dvf, endpoint, nonce, signature, payload)
 

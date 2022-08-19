@@ -6,7 +6,8 @@ module.exports = dvf => path => async data => {
     recipientPublicKey,
     recipientVaultId,
     tokenInfo,
-    quantisedAmount
+    quantisedAmount,
+    quantisedFeeAmount
   } = data
   const starkPublicKey = await dvf.stark.ledger.getPublicKey(path)
 
@@ -17,8 +18,21 @@ module.exports = dvf => path => async data => {
     receiverVaultId: recipientVaultId,
     senderVaultId: tokenInfo.starkVaultId,
     token: tokenInfo.starkTokenId,
+    ...(quantisedFeeAmount
+      ? {
+          feeInfoUser: {
+            feeLimit: quantisedFeeAmount.toString(),
+            // Same as sender vaultId
+            sourceVaultId: tokenInfo.starkVaultId,
+            // Same as token
+            tokenId: tokenInfo.starkTokenId
+          }
+        }
+      : {}
+    ),
     type: 'TransferRequest'
   }
+
   tx = addNonceAndExpirationTimestamp(dvf.config)(tx)
   const { signature } = await createSignedTransaction(dvf)(tx)
   tx.signature = signature
