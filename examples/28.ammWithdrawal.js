@@ -63,29 +63,36 @@ const dvfConfig = {
     amount: 0.1
   })
 
-  let ammDeposit = await dvf.postAmmFundingOrders(
+  const ammDeposit = await dvf.postAmmFundingOrders(
     ammDepositOrderData
   )
+
+  const P = require('aigle')
 
   await P.retry(
     { times: 360, interval: 1000 },
     async () => {
-      ammDeposit = await dvf.getAmmFunding(ammDeposit._id)
-      if (ammDeposit.pending) {
+      const existingDeposit = await dvf.getAmmFundingOrders(
+        null,
+        null,
+        { ammFundingOrderId: ammDeposit._id }
+      )
+
+      if (existingDeposit.pending) {
         throw new Error('funding order for amm deposit still pending')
       }
     }
   )
 
-  const { BN } = Web3.utils
+  const { toBN } = require('dvf-utils')
 
   const ammWithdrawalOrderData = await dvf.getAmmFundingOrderData({
     pool,
     token: `LP-${pool}`,
     // Withdraw previously deposited liquidity by returning all LP tokens.
     amount: ammDeposit.orders.reduce(
-      (sum, order) => sum.add(new BN(order.amountBuy)),
-      new BN(0)
+      (sum, order) => sum.plus(toBN(order.amountBuy)),
+      toBN(0)
     )
   })
 
