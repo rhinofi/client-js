@@ -2665,9 +2665,9 @@ duplexer3@^0.1.4:
   resolved "https://registry.yarnpkg.com/duplexer3/-/duplexer3-0.1.5.tgz#0b5e4d7bad5de8901ea4440624c8e1d20099217e"
   integrity sha512-1A8za6ws41LQgv9HrE/66jyC5yuSjQ3L/KOpFtoBilsAK2iA2wuS5rTt1OCzIvtS2V7nVmedsUU+DGRcjBmOYA==
 
-"dvf-utils@git+https://github.com/DeversiFi/dvf-utils#refs/tags/v1.2.0":
+"dvf-utils@git+https://github.com/DeversiFi/dvf-utils#refs/tags/v1.3.0":
   version "1.2.0"
-  resolved "git+https://github.com/DeversiFi/dvf-utils#c2aea1b01bc595b52f31864e85aecc8286139652"
+  resolved "git+https://github.com/DeversiFi/dvf-utils#268fd847105e327ee6cb22701f8db871ce86ba79"
   dependencies:
     axios "^0.24.0"
     bignumber.js "^9.0.0"
