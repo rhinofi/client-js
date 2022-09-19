@@ -257,6 +257,8 @@ module.exports = () => {
   dvf.poolUserRewards = compose(require('../../api/amm/poolUserRewards'))
   dvf.poolUserAccruedFees = compose(require('../../api/amm/poolUserAccruedFees'))
   dvf.poolTokensRate = compose(require('../../api/amm/poolTokensRate'))
+  dvf.poolsData = compose(require('../../api/amm/poolsData'))
+  dvf.poolsUserData = compose(require('../../api/amm/poolsUserData'))
   dvf.getRewardsLockedState = compose(require('../../api/amm/getRewardsLockedState'))
   dvf.postRewardsLockedState = compose(require('../../api/amm/postRewardsLockedState'))
   dvf.walletFailedEvent = compose(require('../../api/walletFailedEvent'))
