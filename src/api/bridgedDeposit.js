@@ -1,5 +1,5 @@
 const FP = require('lodash/fp')
-const { Joi, fromQuantizedToBaseUnitsBN } = require('dvf-utils')
+const { Joi, toBN } = require('dvf-utils')
 
 const post = require('../lib/dvf/post-authenticated')
 
@@ -32,8 +32,11 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
   const { chain, token, amount, web3Options, permitParams, referralId } = validateArg0(data)
 
   const tokenInfo = dvf.token.getTokenInfoOrThrow(token)
+  // Quantised amount must be from base token config
   const quantisedAmount = getSafeQuantizedAmountOrThrow(amount, tokenInfo)
-  const baseUnitAmount = fromQuantizedToBaseUnitsBN(tokenInfo, quantisedAmount).toString()
+
+  // Base units should be using the execution chain
+  const baseUnitAmount = toBN(amount).shiftedBy(tokenInfo.decimals).toString()
 
   // Force the use of header (instead of payload) for authentication.
   dvf = FP.set('config.useAuthHeader', true, dvf)
