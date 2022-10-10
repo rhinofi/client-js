@@ -264,6 +264,7 @@ module.exports = () => {
   dvf.postRewardsLockedState = compose(require('../../api/amm/postRewardsLockedState'))
   dvf.walletFailedEvent = compose(require('../../api/walletFailedEvent'))
   dvf.walletSuccessEvent = compose(require('../../api/walletSuccessEvent'))
+  dvf.topPerformersTokens = compose(require('../../api/topPerformersTokens'))
 
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),
