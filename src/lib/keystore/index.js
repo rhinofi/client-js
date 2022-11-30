@@ -4,7 +4,7 @@ const FP = require('lodash/fp')
 const {
   starkTransferTxToMessageHash,
   starkLimitOrderToMessageHash
-} = require('dvf-utils')
+} = require('@rhino.fi/dvf-utils')
 
 const DVFError = require('../dvf/DVFError')
 const starkSign = require('../stark/starkSign')

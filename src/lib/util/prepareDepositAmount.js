@@ -1,4 +1,4 @@
-const { prepareAmount, BN } = require('dvf-utils')
+const { prepareAmount, BN } = require('@rhino.fi/dvf-utils')
 
 module.exports = (dvf, amount, token) => prepareAmount(
   amount,

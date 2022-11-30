@@ -1,4 +1,4 @@
-const { Joi } = require('dvf-utils')
+const { Joi } = require('@rhino.fi/dvf-utils')
 
 module.exports = Joi.object({
   permitValue: Joi.string(),

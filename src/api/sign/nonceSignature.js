@@ -1,7 +1,7 @@
 const {
   generateAuthMessageForAuthVersion,
   formatNonceForAuthVersion
-} = require('dvf-utils')
+} = require('@rhino.fi/dvf-utils')
 /**
  * if either message and signature are not provided a
  * new nonce/message and signature are created. if nonce

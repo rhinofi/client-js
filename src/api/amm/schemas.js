@@ -1,4 +1,4 @@
-const { Joi } = require('dvf-utils')
+const { Joi } = require('@rhino.fi/dvf-utils')
 
 const unsignedInt = Joi.number().integer().min(0)
 const maxTimestampHours = Math.pow(2, 22) * 1000 * 60 * 60 - 1

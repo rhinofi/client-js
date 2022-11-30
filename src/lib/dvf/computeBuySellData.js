@@ -1,4 +1,4 @@
-const { computeBuySellData } = require('dvf-utils')
+const { computeBuySellData } = require('@rhino.fi/dvf-utils')
 
 const DVFError = require('./DVFError')
 

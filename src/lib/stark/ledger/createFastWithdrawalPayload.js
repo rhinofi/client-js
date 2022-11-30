@@ -4,7 +4,7 @@ const {
   Joi,
   toBN,
   toQuantizedAmountBN
-} = require('dvf-utils')
+} = require('@rhino.fi/dvf-utils')
 const BN = require('bignumber.js')
 const swJs = require('starkware_crypto')
 const Eth = require('@ledgerhq/hw-app-eth').default

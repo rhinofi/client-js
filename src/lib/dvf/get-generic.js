@@ -1,4 +1,4 @@
-const { request } = require('dvf-utils')
+const { request } = require('@rhino.fi/dvf-utils')
 const _omitBy = require('lodash/omitBy')
 const _isNil = require('lodash/isNil')
 
