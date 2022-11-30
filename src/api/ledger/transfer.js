@@ -1,5 +1,5 @@
 const FP = require('lodash/fp')
-const { Joi } = require('dvf-utils')
+const { Joi } = require('@rhino.fi/dvf-utils')
 
 const validateWithJoi = require('../../lib/validators/validateWithJoi')
 

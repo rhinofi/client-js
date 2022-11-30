@@ -1,7 +1,7 @@
 const {
   Joi,
   toQuantizedAmountBN
-} = require('dvf-utils')
+} = require('@rhino.fi/dvf-utils')
 const validateWithJoi = require('../validators/validateWithJoi')
 const DVFError = require('./DVFError')
 const makeCreateSignedTransferTx = require('./makeCreateSignedTransferTx')

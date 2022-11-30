@@ -84,7 +84,7 @@ const dvfConfig = {
     }
   )
 
-  const { toBN } = require('dvf-utils')
+  const { toBN } = require('@rhino.fi/dvf-utils')
 
   const ammWithdrawalOrderData = await dvf.getAmmFundingOrderData({
     pool,

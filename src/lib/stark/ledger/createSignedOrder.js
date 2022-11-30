@@ -8,7 +8,7 @@ const getTokenAddressFromTokenInfoOrThrow = require('../../dvf/token/getTokenAdd
 const swJS = require('starkware_crypto')
 const {
   starkLimitOrderToMessageHash
-} = require('dvf-utils')
+} = require('@rhino.fi/dvf-utils')
 
 const getPublicKey = async (eth, starkPath) => {
   const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')

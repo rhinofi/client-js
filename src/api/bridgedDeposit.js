@@ -1,5 +1,5 @@
 const FP = require('lodash/fp')
-const { Joi, toBN } = require('dvf-utils')
+const { Joi, toBN } = require('@rhino.fi/dvf-utils')
 
 const post = require('../lib/dvf/post-authenticated')
 

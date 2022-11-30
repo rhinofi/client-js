@@ -2,7 +2,7 @@
  * Approves a token for locking
  *
  */
-const { BN, toBN } = require('dvf-utils')
+const { BN, toBN } = require('@rhino.fi/dvf-utils')
 const getTokenAddressFromTokenInfoOrThrow = require('../../lib/dvf/token/getTokenAddressFromTokenInfoOrThrow')
 
 const maxAmountBN = BN(2).pow(96).minus(1)

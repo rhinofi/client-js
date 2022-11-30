@@ -8,7 +8,7 @@ const swJS = require('starkware_crypto')
 const getTokenAddressFromTokenInfoOrThrow = require('../dvf/token/getTokenAddressFromTokenInfoOrThrow')
 const {
   starkTransferTxToMessageHash
-} = require('dvf-utils')
+} = require('@rhino.fi/dvf-utils')
 
 const transferTransactionTypes = [
   'ConditionalTransferRequest',
