@@ -3,7 +3,8 @@ let
 in
   pkgs.mkShell {
     packages = with pkgs; [
+      niv
       nodejs
-      yarn
+      yarn-berry
     ];
   }
