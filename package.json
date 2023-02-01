@@ -64,5 +64,6 @@
     "nock": "^13.0.4",
     "solc": "^0.4.24",
     "tor-request": "^3.1.0"
-  }
+  },
+  "packageManager": "yarn@3.2.1"
 }
