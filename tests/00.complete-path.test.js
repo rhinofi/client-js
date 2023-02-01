@@ -1,4 +1,4 @@
-const sw = require('starkware_crypto')
+const sw = require('@rhino.fi/starkware-crypto')
 const getTokenAddressFromTokenInfoOrThrow = require('../src/lib/dvf/token/getTokenAddressFromTokenInfoOrThrow')
 const { setup, register, deposit, withdraw, drip, testOrders, sleep } = require('./helpers')
 

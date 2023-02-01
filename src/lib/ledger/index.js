@@ -4,7 +4,7 @@ const Eth = require('@ledgerhq/hw-app-eth').default
 const DVFError = require('../dvf/DVFError')
 const createSignedOrder = require('../stark/ledger/createSignedOrder')
 const selectTransport = require('./selectTransport')
-const swJS = require('starkware_crypto')
+const swJS = require('@rhino.fi/starkware-crypto')
 const getTokenAddressFromTokenInfoOrThrow = require('../dvf/token/getTokenAddressFromTokenInfoOrThrow')
 const {
   starkTransferTxToMessageHash
