@@ -1449,6 +1449,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rhino.fi/starkware-crypto@rhinofi/starkware-crypto#504edca95842796908e74dad09518d092fca4e1b":
+  version: 0.1.4
+  resolution: "@rhino.fi/starkware-crypto@https://github.com/rhinofi/starkware-crypto.git#commit=504edca95842796908e74dad09518d092fca4e1b"
+  dependencies:
+    bn.js: ^4.4.0
+    brorand: ^1.0.1
+    elliptic: ^6.5.3
+    hash.js: ^1.0.0
+    hmac-drbg: ^1.0.0
+    inherits: ^2.0.1
+    minimalistic-assert: ^1.0.0
+    minimalistic-crypto-utils: ^1.0.0
+  checksum: 9af5dac8d8f9e601c3abd2c17b9612af1b69548e92fa6549b05e62b08149b26c62e86d3be064a02ea3c6eed8b875cd08911084b9b4d2601ae3fbb4cb6ac6623b
+  languageName: node
+  linkType: hard
+
 "@scure/base@npm:~1.1.0":
   version: 1.1.1
   resolution: "@scure/base@npm:1.1.1"
@@ -3634,6 +3650,7 @@ __metadata:
     "@ledgerhq/hw-transport-mocker": ^5.25.0
     "@ledgerhq/hw-transport-webhid": 6.20.0
     "@rhino.fi/dvf-utils": ^1.4.5
+    "@rhino.fi/starkware-crypto": "rhinofi/starkware-crypto#504edca95842796908e74dad09518d092fca4e1b"
     "@truffle/hdwallet-provider": ^2.0.13
     aigle: "suguru03/aigle#8739846ba9d4cfc116e1546da1181c73564cae0b"
     aware: ^0.3.1
@@ -3653,7 +3670,6 @@ __metadata:
     request: ^2.88.2
     request-promise: ^4.2.6
     solc: ^0.4.24
-    starkware_crypto: "rhinofi/starkware-crypto#504edca95842796908e74dad09518d092fca4e1b"
     tor-request: ^3.1.0
     web3: ^1.7.5
     web3-utils: ^1.3.0
@@ -9946,22 +9962,6 @@ __metadata:
   dependencies:
     escape-string-regexp: ^2.0.0
   checksum: 76b69da0f5b48a34a0f93c98ee2a96544d2c4ca2557f7eef5ddb961d3bdc33870b46f498a84a7c4f4ffb781df639840e7ebf6639164ed4da5e1aeb659615b9c7
-  languageName: node
-  linkType: hard
-
-"starkware_crypto@rhinofi/starkware-crypto#504edca95842796908e74dad09518d092fca4e1b":
-  version: 0.1.4
-  resolution: "starkware_crypto@https://github.com/rhinofi/starkware-crypto.git#commit=504edca95842796908e74dad09518d092fca4e1b"
-  dependencies:
-    bn.js: ^4.4.0
-    brorand: ^1.0.1
-    elliptic: ^6.5.3
-    hash.js: ^1.0.0
-    hmac-drbg: ^1.0.0
-    inherits: ^2.0.1
-    minimalistic-assert: ^1.0.0
-    minimalistic-crypto-utils: ^1.0.0
-  checksum: 6a413b3a954734470b88ea0adb3c589b14a37138fb4f02a3c53381b17905755504d73d9a7b1d21da88d4359b0dcaeccec23514c23fb7e2799c47bb536e11fd12
   languageName: node
   linkType: hard
 

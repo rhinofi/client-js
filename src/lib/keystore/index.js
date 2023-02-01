@@ -1,4 +1,4 @@
-const swJS = require('starkware_crypto')
+const swJS = require('@rhino.fi/starkware-crypto')
 const FP = require('lodash/fp')
 
 const {

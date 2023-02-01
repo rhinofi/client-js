@@ -1,4 +1,4 @@
-const sw = require('starkware_crypto')
+const sw = require('@rhino.fi/starkware-crypto')
 
 const createPrivateKey = require('./createPrivateKey')
 const DVFError = require('../dvf/DVFError')

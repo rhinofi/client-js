@@ -7,7 +7,7 @@ Examples are generated using helpers/buildExamples.js script.
 Check README.md for more details.
 */
 
-const sw = require('starkware_crypto')
+const sw = require('@rhino.fi/starkware-crypto')
 const getWeb3 = require('./helpers/getWeb3')
 
 const DVF = require('../src/dvf')
