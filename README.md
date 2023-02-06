@@ -4,7 +4,9 @@
 
 A js client library for Rhino.fi - StarkWare orders
 
-**Note:** This library is for Rhino.fi. A test version of the platform to use during integrations is connected to the Ropsten test network at https://app.stg.rhino.fi // https://api.stg.rhino.fi
+**Note:** This library is for Rhino.fi. A test version of the platform to use during integrations is connected to the Goerli test network and hosted at:
+- UI: https://app.stg.rhino.fi
+- API: https://api.stg.rhino.fi
 
 ## Contents
 
