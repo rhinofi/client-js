@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S yarn node
 
 /*
 1. Create new Ethereum wallet on the network indicated by RPC_URL

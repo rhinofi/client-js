@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S yarn node
 /* eslint-disable no-unused-vars */
 
 /*
