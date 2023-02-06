@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S yarn node
 const Web3 = require('web3')
 
 const getBalanceInEth = async (web3, account) => web3.utils.fromWei(

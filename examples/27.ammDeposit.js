@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S yarn node
 /* eslint-disable no-unused-vars */
 
 /*
@@ -60,7 +60,7 @@ const dvfConfig = {
 
   // Amm deposit consist of 2 orders, one for each of the pool tokens.
   // The tokens need to be supplied in a specific ratio. This call fetches
-  // order data from Deversifi API, given one of the tokens and desired deposit
+  // order data from Rhino.fi API, given one of the tokens and desired deposit
   // amount for that token.
   const ammFundingOrderData = await dvf.getAmmFundingOrderData({
     pool,
@@ -69,10 +69,10 @@ const dvfConfig = {
   })
 
   // ammFundingOrderData can be inspected/validate if desired, before signing
-  // the orders it contains and posting them to Deversifi API.
+  // the orders it contains and posting them to Rhino.fi API.
 
   // This call signs the orders contained in the ammFundingOrderData before
-  // posting them to Deversifi API. NOTE: if the orders are pre-signed, the
+  // posting them to Rhino.fi API. NOTE: if the orders are pre-signed, the
   // method will post them as is.
   const ammPostFundingOrderResponse = await dvf.postAmmFundingOrders(
     await dvf.applyFundingOrderDataSlippage(ammFundingOrderData, 0.05)

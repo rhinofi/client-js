@@ -1,13 +1,7 @@
 {
   "name": "dvf-client-js",
-  "version": "4.1.2",
+  "version": "4.2.0",
   "main": "src/dvf.js",
-  "contributors": [
-    "Henrique Matias <hems.inlet@gmail.com>",
-    "Will Harborne <will@deversifi.com>",
-    "Meer Ali <meer.ali@deversifi.com>",
-    "Thiago Kroger <thiago.kroger@deversifi.com>"
-  ],
   "standard": {
     "ignore": [
       "/examples",
@@ -30,9 +24,10 @@
   "keywords": [
     "deversifi",
     "ethereum",
+    "rhino.fi",
     "trading"
   ],
-  "homepage": "https://github.com/deversifi/dvf-client-js",
+  "homepage": "https://github.com/rhinofi/dvf-client-js",
   "license": "MIT",
   "dependencies": {
     "@ledgerhq/hw-app-eth": "6.23.0",
@@ -62,7 +57,7 @@
     "jest": "^26.4.2",
     "mustache": "^4.0.0",
     "nock": "^13.0.4",
-    "solc": "^0.4.24",
-    "tor-request": "^3.1.0"
-  }
+    "solc": "^0.4.24"
+  },
+  "packageManager": "yarn@3.2.1"
 }

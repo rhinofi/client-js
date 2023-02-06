@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S yarn node
 
 const getWeb3 = require('./helpers/getWeb3')
 

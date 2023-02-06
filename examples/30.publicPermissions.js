@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S yarn node
 
 const HDWalletProvider = require('@truffle/hdwallet-provider')
 const Web3 = require('web3')

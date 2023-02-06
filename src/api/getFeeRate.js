@@ -14,7 +14,7 @@ const validateArg0 = validateWithJoi(schema, { presence: 'optional' })('INVALID_
 const endpoint = '/v1/trading/r/feeRate'
 /**
  *
- * Retrieve feeRate based on deversifi feeRate rules
+ * Retrieve feeRate based on rhino.fi feeRate rules
  */
 module.exports = async (dvf, data, nonce, signature) => {
   const { feature, symbol } = validateArg0(data || {})
