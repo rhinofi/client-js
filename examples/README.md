@@ -1,3 +1,9 @@
+## Installing deps
+
+See Developing => Setup in top level [README.md](/README.md)
+
+## Running examples
+
 To run the examples, you will need to set the following config variables:
 1. `RPC_URL` : the RPC endpoint of an Ethereum node (ex: from https://infura.io)
 2. `ETH_PRIVATE_KEY` : a private key of an Ethereum wallet with some ETH in it
