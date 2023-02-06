@@ -2,12 +2,6 @@
   "name": "dvf-client-js",
   "version": "4.2.0",
   "main": "src/dvf.js",
-  "contributors": [
-    "Henrique Matias <hems.inlet@gmail.com>",
-    "Will Harborne <will@deversifi.com>",
-    "Meer Ali <meer.ali@deversifi.com>",
-    "Thiago Kroger <thiago.kroger@deversifi.com>"
-  ],
   "standard": {
     "ignore": [
       "/examples",
