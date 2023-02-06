@@ -24,9 +24,10 @@
   "keywords": [
     "deversifi",
     "ethereum",
+    "rhino.fi",
     "trading"
   ],
-  "homepage": "https://github.com/deversifi/dvf-client-js",
+  "homepage": "https://github.com/rhinofi/dvf-client-js",
   "license": "MIT",
   "dependencies": {
     "@ledgerhq/hw-app-eth": "6.23.0",

@@ -17,7 +17,7 @@ module.exports = async () => {
 
   // It's possible to overwrite the API address with the testnet address
   // for example like this:
-  // config.api = 'https://api.stg.deversifi.com'
+  // config.api = 'https://api.stg.rhino.fi'
   // config.api = 'http://localhost:7777/v1/trading'
   return DVF(web3, config)
 }

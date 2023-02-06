@@ -1,6 +1,6 @@
 module.exports = {
-  // api: 'https://api.deversifi.com',
-  api: 'https://api.stg.deversifi.com',
+  // for production use 'https://api.rhino.fi',
+  api: 'https://api.stg.rhino.fi',
   gasApi: 'https://ethgasstation.info',
 
   // default transaction arguments
