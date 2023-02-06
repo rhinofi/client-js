@@ -6,5 +6,6 @@ in
       niv
       nodejs
       yarn-berry
+      gh-md-toc
     ];
   }

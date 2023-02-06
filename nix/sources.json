@@ -1,4 +1,16 @@
 {
+    "github-markdown-toc": {
+        "branch": "master",
+        "description": "Easy TOC creation for GitHub README.md",
+        "homepage": "",
+        "owner": "ekalinin",
+        "repo": "github-markdown-toc",
+        "rev": "661b5c5111f47174e2d9092c8d76867e5a1f249d",
+        "sha256": "16xw14av8vgvdyychj38liwxj073kija6n4zvjrpz2m5vs41fa2g",
+        "type": "tarball",
+        "url": "https://github.com/ekalinin/github-markdown-toc/archive/661b5c5111f47174e2d9092c8d76867e5a1f249d.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "nixpkgs": {
         "branch": "fix-yarn2nix-for-nix-2.5-6_29769d2a1390d294469bcc6518f17931953545e1",
         "description": "Nix Packages collection",
