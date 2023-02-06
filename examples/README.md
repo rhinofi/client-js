@@ -7,7 +7,8 @@ this directory.
 
 You can use `00.setup.js` to create the `config.json` file, however since
 the `RPC_URL` cannot be created pragmatically, you will first need to run
-your own node or use a third-party RPC endpoint. https://ethereumico.io/knowledge-base/infura-api-key-guide
+your own node or use a third-party RPC endpoint provided by services such
+as https://www.infura.io or https://www.alchemy.com.
 
 NOTE: the `API KEY` mentioned in the instructions has been renamed to `PROJECT ID`.
 
@@ -24,9 +25,8 @@ or simply
 ```
 
 This will:
-1. generate a new Ethereum wallet on 
-2. pre-load it with Eth (at least 1 Eth)
-3. save both the wallets private key and passed in `RPC_URL` into
+1. generate a new Ethereum wallet on
+2. save both the wallets private key and passed in `RPC_URL` into
    `./config.json` file in this directory.
 
 NOTE:

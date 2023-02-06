@@ -37,7 +37,7 @@ module.exports = (configFileName = 'config.json') => {
 
   const getConfigVar = getConfigVar_(config, configFilePath)
 
-  const apiUrl = getConfigVar('API_URL', 'https://api.stg.deversifi.com')
+  const apiUrl = getConfigVar('API_URL', 'https://api.stg.rhino.fi')
   const ETH_PRIVATE_KEY = getConfigVar('ETH_PRIVATE_KEY')
 
   return {

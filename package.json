@@ -62,8 +62,7 @@
     "jest": "^26.4.2",
     "mustache": "^4.0.0",
     "nock": "^13.0.4",
-    "solc": "^0.4.24",
-    "tor-request": "^3.1.0"
+    "solc": "^0.4.24"
   },
   "packageManager": "yarn@3.2.1"
 }
