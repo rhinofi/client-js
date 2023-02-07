@@ -1,11 +1,14 @@
+{
+  pkgs ? import ./nix/pkgs.nix {}
+}:
 let
-  pkgs = import ./nix/pkgs.nix {};
+  shellPackage = {
+    niv,
+    nodejs,
+    yarn-berry,
+    gh-md-toc,
+  }@deps: pkgs.mkShell {
+    packages = builtins.attrValues deps;
+  };
 in
-  pkgs.mkShell {
-    packages = with pkgs; [
-      niv
-      nodejs
-      yarn-berry
-      gh-md-toc
-    ];
-  }
+  pkgs.callPackage shellPackage {}
