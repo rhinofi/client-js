@@ -1433,6 +1433,39 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rhino.fi/client-js@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@rhino.fi/client-js@workspace:."
+  dependencies:
+    "@ledgerhq/hw-app-eth": 6.23.0
+    "@ledgerhq/hw-transport-mocker": ^5.25.0
+    "@ledgerhq/hw-transport-webhid": 6.20.0
+    "@rhino.fi/dvf-utils": ^1.4.5
+    "@rhino.fi/starkware-crypto": "rhinofi/starkware-crypto#504edca95842796908e74dad09518d092fca4e1b"
+    "@truffle/hdwallet-provider": ^2.0.13
+    aigle: "suguru03/aigle#8739846ba9d4cfc116e1546da1181c73564cae0b"
+    aware: ^0.3.1
+    bignumber.js: ^9.0.0
+    eip-712: 1.0.0
+    env-cmd: ^10.1.0
+    eslint: ^7.28.0
+    eslint-config-standard: ^16.0.3
+    eslint-plugin-import: ^2.23.4
+    eslint-plugin-node: ^11.1.0
+    eslint-plugin-promise: ^5.1.0
+    jest: ^26.4.2
+    lodash: ^4.17.20
+    mustache: ^4.0.0
+    nock: ^13.0.4
+    ramda: ^0.27.1
+    request: ^2.88.2
+    request-promise: ^4.2.6
+    solc: ^0.4.24
+    web3: ^1.7.5
+    web3-utils: ^1.3.0
+  languageName: unknown
+  linkType: soft
+
 "@rhino.fi/dvf-utils@npm:^1.4.5":
   version: 1.4.5
   resolution: "@rhino.fi/dvf-utils@npm:1.4.5"
@@ -3632,39 +3665,6 @@ __metadata:
   checksum: e677cb4c48f031ca728601d6a20bf6aed4c629d69ef9643cb89c67583d673c4ec9317cc6427501f38bd8c368d3a18f173987cc02bd99d8cf8fe3d94259a22a20
   languageName: node
   linkType: hard
-
-"dvf-client-js@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "dvf-client-js@workspace:."
-  dependencies:
-    "@ledgerhq/hw-app-eth": 6.23.0
-    "@ledgerhq/hw-transport-mocker": ^5.25.0
-    "@ledgerhq/hw-transport-webhid": 6.20.0
-    "@rhino.fi/dvf-utils": ^1.4.5
-    "@rhino.fi/starkware-crypto": "rhinofi/starkware-crypto#504edca95842796908e74dad09518d092fca4e1b"
-    "@truffle/hdwallet-provider": ^2.0.13
-    aigle: "suguru03/aigle#8739846ba9d4cfc116e1546da1181c73564cae0b"
-    aware: ^0.3.1
-    bignumber.js: ^9.0.0
-    eip-712: 1.0.0
-    env-cmd: ^10.1.0
-    eslint: ^7.28.0
-    eslint-config-standard: ^16.0.3
-    eslint-plugin-import: ^2.23.4
-    eslint-plugin-node: ^11.1.0
-    eslint-plugin-promise: ^5.1.0
-    jest: ^26.4.2
-    lodash: ^4.17.20
-    mustache: ^4.0.0
-    nock: ^13.0.4
-    ramda: ^0.27.1
-    request: ^2.88.2
-    request-promise: ^4.2.6
-    solc: ^0.4.24
-    web3: ^1.7.5
-    web3-utils: ^1.3.0
-  languageName: unknown
-  linkType: soft
 
 "ecc-jsbn@npm:~0.1.1":
   version: 0.1.2
