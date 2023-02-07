@@ -1,3 +1,3 @@
-const response = await dvf.fastWithdrawalMaxAmount('ETH')
+const response = await rhinofi.fastWithdrawalMaxAmount('ETH')
 
 logExampleResult(response)

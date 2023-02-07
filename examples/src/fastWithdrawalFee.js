@@ -1,3 +1,3 @@
-const response = await dvf.fastWithdrawalFee('ETH')
+const response = await rhinofi.fastWithdrawalFee('ETH')
 
 logExampleResult(response)

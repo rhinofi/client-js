@@ -9,8 +9,8 @@ const defaultOrderProps = Object.freeze({
   price: 100000
 })
 
-module.exports = async (dvf, starkPrivateKey, orderProps = defaultOrderProps) => {
-  const orders = await dvf.getOrders(orderProps.symbol)
+module.exports = async (rhinofi, starkPrivateKey, orderProps = defaultOrderProps) => {
+  const orders = await rhinofi.getOrders(orderProps.symbol)
 
   if (orders.length > 0) {
     return orders[0]
@@ -18,12 +18,12 @@ module.exports = async (dvf, starkPrivateKey, orderProps = defaultOrderProps) =>
 
   console.log('submitting new order')
 
-  const order = await dvf.submitOrder({ ...orderProps, starkPrivateKey })
+  const order = await rhinofi.submitOrder({ ...orderProps, starkPrivateKey })
 
   console.log('waiting until order appears on the book...')
   while (true) {
     // TODD:
-    if ((await dvf.getOrder(order._id)).active === true) break
+    if ((await rhinofi.getOrder(order._id)).active === true) break
     await P.delay(1000)
     console.log('still waiting...')
   }

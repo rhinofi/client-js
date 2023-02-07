@@ -1,5 +1,5 @@
 let withdrawalId
-const withdrawals = await dvf.getWithdrawals()
+const withdrawals = await rhinofi.getWithdrawals()
 const nonFastWithdrawals = withdrawals.filter(w => !w.fastWithdrawalData)
 
 if (nonFastWithdrawals.length === 0) {
@@ -8,7 +8,7 @@ if (nonFastWithdrawals.length === 0) {
   const token = 'ETH'
   const amount = 0.1
 
-  const withdrawalResponse = await dvf.withdraw(
+  const withdrawalResponse = await rhinofi.withdraw(
     token,
     amount,
     starkPrivKey
@@ -20,6 +20,6 @@ if (nonFastWithdrawals.length === 0) {
   withdrawalId = nonFastWithdrawals[0]._id
 }
 
-const canceledWithdrawal = await dvf.cancelWithdrawal(withdrawalId)
+const canceledWithdrawal = await rhinofi.cancelWithdrawal(withdrawalId)
 
 logExampleResult(canceledWithdrawal)

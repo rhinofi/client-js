@@ -11,7 +11,7 @@ describe('dvf.airdropEligibility', () => {
     dvf = await instance()
   })
 
-  it('Returns the DVF airdrop amount eligible for this address recieved from the API....', async () => {
+  it('Returns the airdrop amount eligible for this address recieved from the API....', async () => {
     const ethAddress = '0x15A9812E214B18cF5346a2FEC9EA91A68FD9ce00'
     const token = 'DVF'
 
