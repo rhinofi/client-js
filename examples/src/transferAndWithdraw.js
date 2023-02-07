@@ -1,8 +1,10 @@
+const token = 'ETH'
+const amount = 0.1
+
 const withdrawalResponse = await rhinofi.transferAndWithdraw({
-  // ensure address is checksummed
-  recipientEthAddress: '0x65d580E2F7f430abC110d3dc22572b97b364a5Ac',
-  token: 'ETH',
-  amount: 0.01
+  recipientEthAddress: rhinofi.get('account'),
+  token,
+  amount,
 })
 
 logExampleResult(withdrawalResponse)

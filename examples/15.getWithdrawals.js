@@ -27,17 +27,26 @@ const { web3, provider } = getWeb3(ethPrivKey, rpcUrl)
 const rhinofiConfig = {
   api: envVars.API_URL,
   dataApi: envVars.DATA_API_URL,
-  useAuthHeader: true
+  useAuthHeader: true,
+  wallet: {
+    type: 'tradingKey',
+    meta: {
+      starkPrivateKey: starkPrivKey
+    }
+  }
   // Add more variables to override default values
 }
 
 ;(async () => {
   const rhinofi = await RhinofiClientFactory(web3, rhinofiConfig)
 
-  const getWithdrawalsResponse = await rhinofi.getWithdrawals(undefined, rhinofi.get('account'))
+  // Get withtrawals for all tokens
+  const token = undefined
+  // And current user
+  const userAddress = rhinofi.get('account')
+  const getWithdrawalsResponse = await rhinofi.getWithdrawals(token, userAddress)
 
   logExampleResult(getWithdrawalsResponse)
-
 })()
 .catch(error => {
   console.error(error)

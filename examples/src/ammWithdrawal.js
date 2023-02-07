@@ -21,29 +21,36 @@ const ammDepositOrderData = await rhinofi.getAmmFundingOrderData({
   amount: 0.1
 })
 
-let ammDeposit = await rhinofi.postAmmFundingOrder(
+const ammDeposit = await rhinofi.postAmmFundingOrders(
   ammDepositOrderData
 )
+
+const P = require('aigle')
 
 await P.retry(
   { times: 360, interval: 1000 },
   async () => {
-    ammDeposit = await rhinofi.getAmmFunding(ammDeposit._id)
-    if (ammDeposit.pending) {
+    const existingDeposit = await rhinofi.getAmmFundingOrders(
+      null,
+      null,
+      { ammFundingOrderId: ammDeposit._id }
+    )
+
+    if (existingDeposit.pending) {
       throw new Error('funding order for amm deposit still pending')
     }
   }
 )
 
-const { BN } = Web3.utils
+const { toBN } = require('@rhino.fi/dvf-utils')
 
 const ammWithdrawalOrderData = await rhinofi.getAmmFundingOrderData({
   pool,
   token: `LP-${pool}`,
   // Withdraw previously deposited liquidity by returning all LP tokens.
   amount: ammDeposit.orders.reduce(
-    (sum, order) => sum.add(new BN(order.amountBuy)),
-    new BN(0)
+    (sum, order) => sum.plus(toBN(order.amountBuy)),
+    toBN(0)
   )
 })
 

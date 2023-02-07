@@ -40,11 +40,13 @@ const rhinofiConfig = {
 ;(async () => {
   const rhinofi = await RhinofiClientFactory(web3, rhinofiConfig)
 
+  const token = 'ETH'
+  const amount = 0.1
+
   const withdrawalResponse = await rhinofi.transferAndWithdraw({
-    // ensure address is checksummed
-    recipientEthAddress: config.account.address.toLowerCase(),
-    token: 'ETH',
-    amount: 0.01
+    recipientEthAddress: rhinofi.get('account'),
+    token,
+    amount,
   })
 
   logExampleResult(withdrawalResponse)

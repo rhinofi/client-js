@@ -101,7 +101,6 @@ const rhinofiConfig = {
   )
 
   logExampleResult(ammWithdrawal)
-
 })()
 .catch(error => {
   console.error(error)

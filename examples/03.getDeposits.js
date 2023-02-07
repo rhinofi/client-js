@@ -27,7 +27,13 @@ const { web3, provider } = getWeb3(ethPrivKey, rpcUrl)
 const rhinofiConfig = {
   api: envVars.API_URL,
   dataApi: envVars.DATA_API_URL,
-  useAuthHeader: true
+  useAuthHeader: true,
+  wallet: {
+    type: 'tradingKey',
+    meta: {
+      starkPrivateKey: starkPrivKey
+    }
+  }
   // Add more variables to override default values
 }
 

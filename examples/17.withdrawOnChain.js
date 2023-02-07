@@ -27,18 +27,24 @@ const { web3, provider } = getWeb3(ethPrivKey, rpcUrl)
 const rhinofiConfig = {
   api: envVars.API_URL,
   dataApi: envVars.DATA_API_URL,
-  useAuthHeader: true
+  useAuthHeader: true,
+  wallet: {
+    type: 'tradingKey',
+    meta: {
+      starkPrivateKey: starkPrivKey
+    }
+  }
   // Add more variables to override default values
 }
 
 ;(async () => {
   const rhinofi = await RhinofiClientFactory(web3, rhinofiConfig)
+
   const token = 'ETH'
 
   const withdrawalResponse = await rhinofi.withdrawOnchain(token, rhinofi.config.ethAddress)
 
   logExampleResult(withdrawalResponse)
-
 })()
 .catch(error => {
   console.error(error)

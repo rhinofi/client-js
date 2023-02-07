@@ -27,7 +27,13 @@ const { web3, provider } = getWeb3(ethPrivKey, rpcUrl)
 const rhinofiConfig = {
   api: envVars.API_URL,
   dataApi: envVars.DATA_API_URL,
-  useAuthHeader: true
+  useAuthHeader: true,
+  wallet: {
+    type: 'tradingKey',
+    meta: {
+      starkPrivateKey: starkPrivKey
+    }
+  }
   // Add more variables to override default values
 }
 
@@ -38,16 +44,13 @@ const rhinofiConfig = {
   const token = 'ETH'
   const amount = 0.10
 
-  const starkWithdrawalData = await rhinofi.stark.ledger.createWithdrawalData(
-    path,
-    token,
-    amount
-  )
-
-  const withdrawResponse = await rhinofi.ledger.withdraw(
-    token,
-    amount,
-    starkWithdrawalData
+  const withdrawResponse = await rhinofi.ledger.transferAndWithdraw(
+    {
+      recipientEthAddress: getAddress(dvf),
+      token,
+      amount,
+    },
+    path
   )
 
   logExampleResult(withdrawResponse)

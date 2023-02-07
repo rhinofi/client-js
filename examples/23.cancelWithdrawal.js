@@ -27,7 +27,13 @@ const { web3, provider } = getWeb3(ethPrivKey, rpcUrl)
 const rhinofiConfig = {
   api: envVars.API_URL,
   dataApi: envVars.DATA_API_URL,
-  useAuthHeader: true
+  useAuthHeader: true,
+  wallet: {
+    type: 'tradingKey',
+    meta: {
+      starkPrivateKey: starkPrivKey
+    }
+  }
   // Add more variables to override default values
 }
 
@@ -35,7 +41,8 @@ const rhinofiConfig = {
   const rhinofi = await RhinofiClientFactory(web3, rhinofiConfig)
 
   let withdrawalId
-  const withdrawals = await rhinofi.getWithdrawals(undefined, rhinofi.get('account'))
+  const userAddress = rhinofi.get('account')
+  const withdrawals = await rhinofi.getWithdrawals(undefined, userAddress)
   const nonFastWithdrawals = withdrawals.filter(w => !w.fastWithdrawalData)
 
   if (nonFastWithdrawals.length === 0) {
@@ -44,11 +51,12 @@ const rhinofiConfig = {
     const token = 'ETH'
     const amount = 0.1
 
-    const withdrawalResponse = await rhinofi.withdraw(
+    const withdrawalResponse = await rhinofi.transferAndWithdraw({
+      recipientEthAddress: userAddress,
       token,
       amount,
-      starkPrivKey
-    )
+    })
+
 
     console.log('withdrawalResponse', withdrawalResponse)
     withdrawalId = withdrawalResponse._id

@@ -41,7 +41,9 @@ const rhinofiConfig = {
   const rhinofi = await RhinofiClientFactory(web3, rhinofiConfig)
 
   let withdrawalId
-  const withdrawals = await rhinofi.getWithdrawals(undefined, rhinofi.get('account'))
+  const token = undefined
+  const userAddress = rhinofi.get('account')
+  const withdrawals = await rhinofi.getWithdrawals(token, userAddress)
 
   if (withdrawals.length === 0) {
     console.log('creating a new withdrawal')
@@ -65,7 +67,6 @@ const rhinofiConfig = {
   const getWithdrawalResponse = await rhinofi.getWithdrawal(withdrawalId)
 
   logExampleResult(getWithdrawalResponse)
-
 })()
 .catch(error => {
   console.error(error)
