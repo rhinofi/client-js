@@ -41,7 +41,7 @@ const rhinofiConfig = {
   const rhinofi = await RhinofiClientFactory(web3, rhinofiConfig)
 
   const transferResponse = await rhinofi.transfer({
-    recipientEthAddress: '0x5472cf4f1be2aa6ad27c6f93101f7899ccadbaf7',
+    recipientEthAddress: rhinofi.config.DVF.deversifiAddress,
     token: 'USDT',
     amount: 5
   })
