@@ -1,5 +1,5 @@
 const token = 'ETH'
 
-const withdrawalResponse = await dvf.fullWithdrawalRequest(token)
+const withdrawalResponse = await rhinofi.fullWithdrawalRequest(token)
 
 logExampleResult(withdrawalResponse)

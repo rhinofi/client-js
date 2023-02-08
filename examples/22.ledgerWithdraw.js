@@ -10,7 +10,7 @@ Check README.md for more details.
 const sw = require('@rhino.fi/starkware-crypto')
 const getWeb3 = require('./helpers/getWeb3')
 
-const DVF = require('../src/dvf')
+const RhinofiClientFactory = require('../src')
 const envVars = require('./helpers/loadFromEnvOrConfig')(
   process.env.CONFIG_FILE_NAME
 )
@@ -18,36 +18,39 @@ const logExampleResult = require('./helpers/logExampleResult')(__filename)
 
 const ethPrivKey = envVars.ETH_PRIVATE_KEY
 // NOTE: you can also generate a new key using:`
-// const starkPrivKey = dvf.stark.createPrivateKey()
+// const starkPrivKey = rhinofi.stark.createPrivateKey()
 const starkPrivKey = envVars.STARK_PRIVATE_KEY
 const rpcUrl = envVars.RPC_URL
 
 const { web3, provider } = getWeb3(ethPrivKey, rpcUrl)
 
-const dvfConfig = {
+const rhinofiConfig = {
   api: envVars.API_URL,
   dataApi: envVars.DATA_API_URL,
-  useAuthHeader: true
+  useAuthHeader: true,
+  wallet: {
+    type: 'tradingKey',
+    meta: {
+      starkPrivateKey: starkPrivKey
+    }
+  }
   // Add more variables to override default values
 }
 
 ;(async () => {
-  const dvf = await DVF(web3, dvfConfig)
+  const rhinofi = await RhinofiClientFactory(web3, rhinofiConfig)
 
   const path = `44'/60'/0'/0'/0`
   const token = 'ETH'
   const amount = 0.10
 
-  const starkWithdrawalData = await dvf.stark.ledger.createWithdrawalData(
-    path,
-    token,
-    amount
-  )
-
-  const withdrawResponse = await dvf.ledger.withdraw(
-    token,
-    amount,
-    starkWithdrawalData
+  const withdrawResponse = await rhinofi.ledger.transferAndWithdraw(
+    {
+      recipientEthAddress: getAddress(dvf),
+      token,
+      amount,
+    },
+    path
   )
 
   logExampleResult(withdrawResponse)

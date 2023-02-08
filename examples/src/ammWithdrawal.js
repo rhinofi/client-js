@@ -4,51 +4,58 @@ const token1 = 'ETH'
 const token2 = 'USDT'
 
 if (process.env.DEPOSIT_FIRST === 'true') {
-  const depositETHResponse = await dvf.deposit(token1, 0.1, starkPrivKey)
-  const depositUSDTResponse = await dvf.deposit(token2, 1000, starkPrivKey)
+  const depositETHResponse = await rhinofi.deposit(token1, 0.1, starkPrivKey)
+  const depositUSDTResponse = await rhinofi.deposit(token2, 1000, starkPrivKey)
 
   if (process.env.WAIT_FOR_DEPOSIT_READY === 'true') {
-    await waitForDepositCreditedOnChain(dvf, depositETHResponse)
-    await waitForDepositCreditedOnChain(dvf, depositUSDTResponse)
+    await waitForDepositCreditedOnChain(rhinofi, depositETHResponse)
+    await waitForDepositCreditedOnChain(rhinofi, depositUSDTResponse)
   }
 }
 
 const pool = `${token1}${token2}`
 
-const ammDepositOrderData = await dvf.getAmmFundingOrderData({
+const ammDepositOrderData = await rhinofi.getAmmFundingOrderData({
   pool,
   token: token1,
   amount: 0.1
 })
 
-let ammDeposit = await dvf.postAmmFundingOrder(
+const ammDeposit = await rhinofi.postAmmFundingOrders(
   ammDepositOrderData
 )
+
+const P = require('aigle')
 
 await P.retry(
   { times: 360, interval: 1000 },
   async () => {
-    ammDeposit = await dvf.getAmmFunding(ammDeposit._id)
-    if (ammDeposit.pending) {
+    const existingDeposit = await rhinofi.getAmmFundingOrders(
+      null,
+      null,
+      { ammFundingOrderId: ammDeposit._id }
+    )
+
+    if (existingDeposit.pending) {
       throw new Error('funding order for amm deposit still pending')
     }
   }
 )
 
-const { BN } = Web3.utils
+const { toBN } = require('@rhino.fi/dvf-utils')
 
-const ammWithdrawalOrderData = await dvf.getAmmFundingOrderData({
+const ammWithdrawalOrderData = await rhinofi.getAmmFundingOrderData({
   pool,
   token: `LP-${pool}`,
   // Withdraw previously deposited liquidity by returning all LP tokens.
   amount: ammDeposit.orders.reduce(
-    (sum, order) => sum.add(new BN(order.amountBuy)),
-    new BN(0)
+    (sum, order) => sum.plus(toBN(order.amountBuy)),
+    toBN(0)
   )
 })
 
-const ammWithdrawal = await dvf.postAmmFundingOrders(
-  await dvf.applyFundingOrderDataSlippage(ammWithdrawalOrderData, 0.05)
+const ammWithdrawal = await rhinofi.postAmmFundingOrders(
+  await rhinofi.applyFundingOrderDataSlippage(ammWithdrawalOrderData, 0.05)
 )
 
 logExampleResult(ammWithdrawal)

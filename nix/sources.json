@@ -34,5 +34,17 @@
         "type": "tarball",
         "url": "https://github.com/rhinofi/yarn-berry-cjs/archive/75a5282d9606586d7c2f9e38b07f352cdeab46e3.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "rhino-core": {
+        "branch": "dev",
+        "description": "Instructions to deploy the required services for DeversiFi Exchange",
+        "homepage": "",
+        "owner": "rhinofi",
+        "repo": "rhino-core",
+        "rev": "b7c78d58697a7e8048ecc13b16fdf5a8e91edafe",
+        "sha256": "17mgv2gnsv6ix3ypab8qmpwma60wp6jbdvz39s6sycavsslp1ddj",
+        "type": "tarball",
+        "url": "https://github.com/rhinofi/rhino-core/archive/b7c78d58697a7e8048ecc13b16fdf5a8e91edafe.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }

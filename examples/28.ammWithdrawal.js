@@ -10,7 +10,7 @@ Check README.md for more details.
 const sw = require('@rhino.fi/starkware-crypto')
 const getWeb3 = require('./helpers/getWeb3')
 
-const DVF = require('../src/dvf')
+const RhinofiClientFactory = require('../src')
 const envVars = require('./helpers/loadFromEnvOrConfig')(
   process.env.CONFIG_FILE_NAME
 )
@@ -18,13 +18,13 @@ const logExampleResult = require('./helpers/logExampleResult')(__filename)
 
 const ethPrivKey = envVars.ETH_PRIVATE_KEY
 // NOTE: you can also generate a new key using:`
-// const starkPrivKey = dvf.stark.createPrivateKey()
+// const starkPrivKey = rhinofi.stark.createPrivateKey()
 const starkPrivKey = envVars.STARK_PRIVATE_KEY
 const rpcUrl = envVars.RPC_URL
 
 const { web3, provider } = getWeb3(ethPrivKey, rpcUrl)
 
-const dvfConfig = {
+const rhinofiConfig = {
   api: envVars.API_URL,
   dataApi: envVars.DATA_API_URL,
   useAuthHeader: true,
@@ -38,7 +38,7 @@ const dvfConfig = {
 }
 
 ;(async () => {
-  const dvf = await DVF(web3, dvfConfig)
+  const rhinofi = await RhinofiClientFactory(web3, rhinofiConfig)
 
   const waitForDepositCreditedOnChain = require('./helpers/waitForDepositCreditedOnChain')
 
@@ -46,24 +46,24 @@ const dvfConfig = {
   const token2 = 'USDT'
 
   if (process.env.DEPOSIT_FIRST === 'true') {
-    const depositETHResponse = await dvf.deposit(token1, 0.1, starkPrivKey)
-    const depositUSDTResponse = await dvf.deposit(token2, 1000, starkPrivKey)
+    const depositETHResponse = await rhinofi.deposit(token1, 0.1, starkPrivKey)
+    const depositUSDTResponse = await rhinofi.deposit(token2, 1000, starkPrivKey)
 
     if (process.env.WAIT_FOR_DEPOSIT_READY === 'true') {
-      await waitForDepositCreditedOnChain(dvf, depositETHResponse)
-      await waitForDepositCreditedOnChain(dvf, depositUSDTResponse)
+      await waitForDepositCreditedOnChain(rhinofi, depositETHResponse)
+      await waitForDepositCreditedOnChain(rhinofi, depositUSDTResponse)
     }
   }
 
   const pool = `${token1}${token2}`
 
-  const ammDepositOrderData = await dvf.getAmmFundingOrderData({
+  const ammDepositOrderData = await rhinofi.getAmmFundingOrderData({
     pool,
     token: token1,
     amount: 0.1
   })
 
-  const ammDeposit = await dvf.postAmmFundingOrders(
+  const ammDeposit = await rhinofi.postAmmFundingOrders(
     ammDepositOrderData
   )
 
@@ -72,7 +72,7 @@ const dvfConfig = {
   await P.retry(
     { times: 360, interval: 1000 },
     async () => {
-      const existingDeposit = await dvf.getAmmFundingOrders(
+      const existingDeposit = await rhinofi.getAmmFundingOrders(
         null,
         null,
         { ammFundingOrderId: ammDeposit._id }
@@ -86,7 +86,7 @@ const dvfConfig = {
 
   const { toBN } = require('@rhino.fi/dvf-utils')
 
-  const ammWithdrawalOrderData = await dvf.getAmmFundingOrderData({
+  const ammWithdrawalOrderData = await rhinofi.getAmmFundingOrderData({
     pool,
     token: `LP-${pool}`,
     // Withdraw previously deposited liquidity by returning all LP tokens.
@@ -96,12 +96,11 @@ const dvfConfig = {
     )
   })
 
-  const ammWithdrawal = await dvf.postAmmFundingOrders(
-    await dvf.applyFundingOrderDataSlippage(ammWithdrawalOrderData, 0.05)
+  const ammWithdrawal = await rhinofi.postAmmFundingOrders(
+    await rhinofi.applyFundingOrderDataSlippage(ammWithdrawalOrderData, 0.05)
   )
 
   logExampleResult(ammWithdrawal)
-
 })()
 .catch(error => {
   console.error(error)

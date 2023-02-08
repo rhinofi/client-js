@@ -70,8 +70,8 @@ A js client library for Rhino.fi - StarkWare orders
 
 ```javascript
 // In case of MetaMask make sure you call ethereum.enable() before using it
-const DVF = require('dvf-client-js')
-const dvf = await DVF()
+const RhinofiClientFactory = require('@rhino.fi/client-js')
+const rhinofi = await RhinofiClientFactory()
 ```
 
 #### Using a private key
@@ -86,7 +86,7 @@ const rpcUrl = 'https://mainnet.infura.io/v3/9e28b...'
 const provider = new HDWalletProvider(privateKey, rpcUrl)
 const web3 = new Web3(provider)
 
-dvf = await DVF(web3)
+rhinofi = await RhinofiClientFactory(web3)
 ```
 
 For more, see [examples](/examples) and their [README](/examples/README.md).
@@ -96,7 +96,7 @@ For more, see [examples](/examples) and their [README](/examples/README.md).
 It's possible to overwrite values on the configuration on a per instance basis.
 
 The [default configuration](./src/config.js) can be overwritten with an optional
-parameter `userConf` when calling the DVF function.
+parameter `userConf` when calling the RhinofiClientFactory function.
 
 ##### Parameters
 
@@ -113,7 +113,7 @@ parameter `userConf` when calling the DVF function.
 For instance:
 
 ```javascript
-  dvf = await DVF(web3, {
+  rhinofi = await RhinofiClientFactory(web3, {
     api: 'https://your-custom-api-address',
     gasStationApiKey: 'a1b2c3...'
   })
@@ -125,7 +125,7 @@ to this:
 
 ```json
 {
-   "DVF":{
+   "RhinofiClientFactory":{
       "defaultFeeRate":0.002,
       "deversifiAddress":"0xaf8ae6955d07776ab690e565ba6fbc79b8de3a5d",
       "starkExContractAddress":"0x5d22045DAcEAB03B158031eCB7D9d06Fad24609b",
@@ -158,12 +158,12 @@ to this:
 }
 ```
 
-The complete compiled configuration is accessible through `dvf.config`, for instance:
+The complete compiled configuration is accessible through `rhinofi.config`, for instance:
 
 ```javascript
-const dvf = await DVF()
+const rhinofi = await RhinofiClientFactory()
 
-const config = dvf.config
+const config = rhinofi.config
 ```
 
 ### API Authentication
@@ -179,7 +179,7 @@ Otherwise the message and signature need to be prepared separately.
 
 ```javascript
 const nonce = (Date.now() / 1000).toString()
-const signature = await dvf.sign(nonce)
+const signature = await rhinofi.sign(nonce)
 ```
 
 ### Registering
@@ -201,13 +201,13 @@ When depositing an ERC20 Ethereum-based token for the first time from a specific
 you are required to approve it to interact with the smart contracts, this is not required for ETH.
 
 ##### Parameters
-- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol that's available in `dvf.config.tokenRegistry`
+- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol that's available in `rhinofi.config.tokenRegistry`
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[PromiEvent](https://web3js.readthedocs.io/en/v1.2.11/callbacks-promises-events.html#promievent)>**
 
 ```javascript
 const token = 'ETH'
-await dvf.contract.approve(token)
+await rhinofi.contract.approve(token)
 ```
 
 This step does not need to be repeated again, and subsequently you are required
@@ -217,7 +217,7 @@ only to call the deposit function.
 This method is used to deposit the tokens to the smart contract and submit a signed notification of a new deposit made to the API.
 
 ##### Parameters
-- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol available in `dvf.config.tokenRegistry` to be deposited
+- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol available in `rhinofi.config.tokenRegistry` to be deposited
 - `amount` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** || **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Amount of tokens to be deposited
 - `starkPrivateKey` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Trading key
 - `nonce` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Nonce which is used to provide the time until which this nonce is valid. It is presented as seconds since epoch.
@@ -229,7 +229,7 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 const token = 'ETH'
 const amount = 100
 
-const deposit = await dvf.deposit(token, amount, tradingKey)
+const deposit = await rhinofi.deposit(token, amount, tradingKey)
 ```
 
 ### Placing an order
@@ -263,7 +263,7 @@ const symbol = 'NEC:ETH'
 const amount = -15
 const price = 0.0025
 
-const orderId = await dvf.submitOrder(symbol, amount, price)
+const orderId = await rhinofi.submitOrder(symbol, amount, price)
 ```
 
 ### Getting Orders
@@ -281,9 +281,9 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 const orderID = '123'
 const customID = 'cid-123'
 
-const order = await dvf.getOrder({ orderId: orderID })
+const order = await rhinofi.getOrder({ orderId: orderID })
 // or
-const order = await dvf.getOrder({ cid: customID })
+const order = await rhinofi.getOrder({ cid: customID })
 ```
 
 
@@ -302,9 +302,9 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 const orderID = '123'
 const customID = 'cid-123'
 
-const response = await dvf.cancelOrder({ orderId: orderID })
+const response = await rhinofi.cancelOrder({ orderId: orderID })
 // or
-const response = await dvf.cancelOrder({ cid: customID })
+const response = await rhinofi.cancelOrder({ cid: customID })
 ```
 
 ### Withdrawing tokens
@@ -312,7 +312,7 @@ const response = await dvf.cancelOrder({ cid: customID })
 This method submits a request for a new withdrawal.
 ##### Parameters
 - `recipientEthAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Trading key
-- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol available in `dvf.config.tokenRegistry` to be withdrawn
+- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol available in `rhinofi.config.tokenRegistry` to be withdrawn
 - `amount` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** || **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Amount of tokens to be withdrawn
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[WithdrawResponse](https://docs.rhino.fi/docs#postV1TradingWWithdraw)>**
@@ -320,7 +320,7 @@ Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 ```javascript
 const token = 'ETH'
 const amount = 100
-const withdrawal = await await dvf.transferAndWithdraw({
+const withdrawal = await await rhinofi.transferAndWithdraw({
   recipientEthAddress: address,
   token,
   amount
@@ -330,13 +330,13 @@ const withdrawal = await await dvf.transferAndWithdraw({
 #### Withdraw on chain
 This method calls the contract and withdraws the tokens to your wallet
 ##### Parameters
-- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol available in `dvf.config.tokenRegistry` to be withdrawn
+- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol available in `rhinofi.config.tokenRegistry` to be withdrawn
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;{ transactionHash: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** }>**
 
 ```javascript
 const token = 'ETH'
-const txHash = await dvf.withdrawOnchain(token, recipientEthAddress)
+const txHash = await rhinofi.withdrawOnchain(token, recipientEthAddress)
 ```
 
 ### Authenticated data endpoints
@@ -352,26 +352,26 @@ Note: You should reuse the `nonce` and `signature` and pass them to these method
 
 ```javascript
 // Get all open orders
-const openOrders = await dvf.getOrders()
+const openOrders = await rhinofi.getOrders()
 
 // Get all historical orders
-const historicalOrders = await dvf.getOrdersHist()
+const historicalOrders = await rhinofi.getOrdersHist()
 
 // Get specific order
 const id = "123"
-const order = await dvf.getOrder(id)
+const order = await rhinofi.getOrder(id)
 
 // Get exchange balances
-const balance = await dvf.getBalance()
+const balance = await rhinofi.getBalance()
 
 // Get deposits
-const deposits = await dvf.getDeposits()
+const deposits = await rhinofi.getDeposits()
 
 // Get withdrawals
-const withdrawals = await dvf.getWithdrawals()
+const withdrawals = await rhinofi.getWithdrawals()
 
 // Get user config
-const userConfig = await dvf.getUserConfig()
+const userConfig = await rhinofi.getUserConfig()
 ```
 
 ## More Examples
@@ -382,18 +382,18 @@ Aside from these examples, there are complete examples in the [examples folder](
 
 You can setup a default custom gas price by setting up the 'defaultGasPrice' property
 ```javascript
-const dvf = await DVF()
+const rhinofi = await RhinofiClientFactory()
 
-dvf.set('defaultGasPrice', web3.utils.toWei('2', 'gwei'))
+rhinofi.set('defaultGasPrice', web3.utils.toWei('2', 'gwei'))
 
 ```
-DVF Client calls https://ethgasstation.info API to get the current gas prices and calculate a safe gas price for Ethereum transactions. Access to the ETH Gas Station API is free, but rate limited if you are not using an API key. If a ETH Gas Station API key is not provided then a recommended gas price is used which is available in `dvf.recommendedGasPrices`.
+RhinofiClientFactory calls https://ethgasstation.info API to get the current gas prices and calculate a safe gas price for Ethereum transactions. Access to the ETH Gas Station API is free, but rate limited if you are not using an API key. If a ETH Gas Station API key is not provided then a recommended gas price is used which is available in `rhinofi.recommendedGasPrices`.
 
-To configure your api key with dvf client please pass this as a `userConf` parameter when initialising DVF:
+To configure your api key with rhinofi client please pass this as a `userConf` parameter when initialising RhinofiClientFactory:
 
 ```
 javascript
-  dvf = await DVF(web3, {
+  rhinofi = await RhinofiClientFactory(web3, {
     gasStationApiKey: 'a1b2c3...'
   })
 ```
@@ -401,7 +401,7 @@ or by setting the 'gasStationApiKey' property:
 
 ```javascript
 
-dvf.set('gasStationApiKey', 'a1b2c3...')
+rhinofi.set('gasStationApiKey', 'a1b2c3...')
 
 ```
 ### Custom order ID
@@ -414,7 +414,7 @@ const price = 3000
 
 const customOrderID = `short-` + Math.random().toString(36).substring(7)
 
-await dvf.submitOrder({
+await rhinofi.submitOrder({
   symbol,
   amount,
   price,
@@ -423,10 +423,10 @@ await dvf.submitOrder({
 
 // ...
 // Later we can use `cid` to get order
-const order = await dvf.getOrder({cid: customOrderID})
+const order = await rhinofi.getOrder({cid: customOrderID})
 
 // or cancel it
-await dvf.cancelOrder({cid: customOrderID})
+await rhinofi.cancelOrder({cid: customOrderID})
 ```
 
 ## Troubleshooting

@@ -3,7 +3,7 @@
  **/
 const getWeb3 = require('../../../../examples/helpers/getWeb3')
 
-const DVF = require('../../../dvf')
+const RhinofiClientFactory = require('../../../index')
 
 module.exports = async () => {
   const rpcUrl = process.env.RPC_URL
@@ -19,5 +19,5 @@ module.exports = async () => {
   // for example like this:
   // config.api = 'https://api.stg.rhino.fi'
   // config.api = 'http://localhost:7777/v1/trading'
-  return DVF(web3, config)
+  return RhinofiClientFactory(web3, config)
 }
