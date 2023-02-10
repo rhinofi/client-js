@@ -71,7 +71,7 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
 
   const onChainDepositPromise = depositFromSidechainBridge(dvf, tx, options)
 
-  const transactionHash = await transactionHashPromise
+  const { transactionHash, clearCallback } = await transactionHashPromise
 
   const payload = {
     chain,
@@ -83,6 +83,9 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
   const httpDeposit = await post(dvf, endpoint, nonce, signature, payload)
 
   const onChainDeposit = await onChainDepositPromise
+  if (typeof clearCallback === 'function') {
+    clearCallback()
+  }
 
   if (!onChainDeposit.status) {
     throw new DVFError('ERR_ONCHAIN_BRIDGED_DEPOSIT', {
