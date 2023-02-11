@@ -92,7 +92,7 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
     ? contractDepositFromProxiedStarkTx(dvf, tx, options)
     : contractDepositFromStarkTx(dvf, tx, options)
 
-  const transactionHash = await transactionHashPromise
+  const { transactionHash, clearCallback } = await transactionHashPromise
 
   const payload = {
     token,
@@ -104,6 +104,9 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
   const httpDeposit = await post(dvf, endpoint, nonce, signature, payload)
 
   const onChainDeposit = await onChainDepositPromise
+  if (typeof clearCallback === 'function') {
+    clearCallback()
+  }
 
   if (!onChainDeposit.status) {
     throw new DVFError('ERR_ONCHAIN_DEPOSIT', {
