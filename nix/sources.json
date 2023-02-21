@@ -23,6 +23,18 @@
         "url": "https://github.com/rhinofi/nixpkgs/archive/41b5736e8a7584ddf096a05b8b3afaf2a75e66fe.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "rhino-core": {
+        "branch": "dev",
+        "description": "Instructions to deploy the required services for DeversiFi Exchange",
+        "homepage": "",
+        "owner": "rhinofi",
+        "repo": "rhino-core",
+        "rev": "fd1464dc0964db013d3ffed11884ee813f4ea438",
+        "sha256": "1hh7p2ishzs2vifrik1x7cj7rg3vhrlyc6nppv6k65m674x6gkhi",
+        "type": "tarball",
+        "url": "https://github.com/rhinofi/rhino-core/archive/fd1464dc0964db013d3ffed11884ee813f4ea438.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "yarn-berry-cjs": {
         "branch": "master",
         "description": null,
@@ -33,18 +45,6 @@
         "sha256": "1hwxlglh02b2h6778dd24hfdhs765s6fg55lhy6ll730n75wxvyp",
         "type": "tarball",
         "url": "https://github.com/rhinofi/yarn-berry-cjs/archive/75a5282d9606586d7c2f9e38b07f352cdeab46e3.tar.gz",
-        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
-    },
-    "rhino-core": {
-        "branch": "dev",
-        "description": "Instructions to deploy the required services for DeversiFi Exchange",
-        "homepage": "",
-        "owner": "rhinofi",
-        "repo": "rhino-core",
-        "rev": "b7c78d58697a7e8048ecc13b16fdf5a8e91edafe",
-        "sha256": "17mgv2gnsv6ix3ypab8qmpwma60wp6jbdvz39s6sycavsslp1ddj",
-        "type": "tarball",
-        "url": "https://github.com/rhinofi/rhino-core/archive/b7c78d58697a7e8048ecc13b16fdf5a8e91edafe.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
