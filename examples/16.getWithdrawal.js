@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S yarn node
 /* eslint-disable no-unused-vars */
 
 /*
@@ -7,10 +7,10 @@ Examples are generated using helpers/buildExamples.js script.
 Check README.md for more details.
 */
 
-const sw = require('starkware_crypto')
+const sw = require('@rhino.fi/starkware-crypto')
 const getWeb3 = require('./helpers/getWeb3')
 
-const DVF = require('../src/dvf')
+const RhinofiClientFactory = require('../src')
 const envVars = require('./helpers/loadFromEnvOrConfig')(
   process.env.CONFIG_FILE_NAME
 )
@@ -18,13 +18,13 @@ const logExampleResult = require('./helpers/logExampleResult')(__filename)
 
 const ethPrivKey = envVars.ETH_PRIVATE_KEY
 // NOTE: you can also generate a new key using:`
-// const starkPrivKey = dvf.stark.createPrivateKey()
+// const starkPrivKey = rhinofi.stark.createPrivateKey()
 const starkPrivKey = envVars.STARK_PRIVATE_KEY
 const rpcUrl = envVars.RPC_URL
 
 const { web3, provider } = getWeb3(ethPrivKey, rpcUrl)
 
-const dvfConfig = {
+const rhinofiConfig = {
   api: envVars.API_URL,
   dataApi: envVars.DATA_API_URL,
   useAuthHeader: true,
@@ -38,10 +38,12 @@ const dvfConfig = {
 }
 
 ;(async () => {
-  const dvf = await DVF(web3, dvfConfig)
+  const rhinofi = await RhinofiClientFactory(web3, rhinofiConfig)
 
   let withdrawalId
-  const withdrawals = await dvf.getWithdrawals(undefined, dvf.get('account'))
+  const token = undefined
+  const userAddress = rhinofi.get('account')
+  const withdrawals = await rhinofi.getWithdrawals(token, userAddress)
 
   if (withdrawals.length === 0) {
     console.log('creating a new withdrawal')
@@ -49,8 +51,8 @@ const dvfConfig = {
     const token = 'ETH'
     const amount = 0.1
 
-    const withdrawalResponse = await dvf.transferAndWithdraw({
-      recipientEthAddress: dvf.get('account'),
+    const withdrawalResponse = await rhinofi.transferAndWithdraw({
+      recipientEthAddress: rhinofi.get('account'),
       token,
       amount
     })
@@ -62,10 +64,9 @@ const dvfConfig = {
     withdrawalId = withdrawals[0]._id
   }
 
-  const getWithdrawalResponse = await dvf.getWithdrawal(withdrawalId)
+  const getWithdrawalResponse = await rhinofi.getWithdrawal(withdrawalId)
 
   logExampleResult(getWithdrawalResponse)
-
 })()
 .catch(error => {
   console.error(error)

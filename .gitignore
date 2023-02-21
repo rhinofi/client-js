@@ -9,3 +9,8 @@ examples/config.json
 *.sublime-workspace
 examples/config*.json
 .idea/
+
+# yarn berry
+.yarn/*
+!.yarn/plugins
+.pnp.*

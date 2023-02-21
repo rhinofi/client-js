@@ -1,4 +1,4 @@
-const bfxTodvf = require('dvf-utils').BfxToDvfToken
+const bfxTodvf = require('@rhino.fi/dvf-utils').BfxToDvfToken
 
 // TODO: Deprecated
 module.exports = (dvf, token) => {

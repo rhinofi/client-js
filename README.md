@@ -1,56 +1,60 @@
 <img src="https://avatars1.githubusercontent.com/u/56512535?s=200&v=4" align="right" />
 
-# Deversifi Javascript Trading API
+# Rhino.fi Javascript Trading API
 
-A js client library for DeversiFi - StarkWare orders
+A js client library for Rhino.fi - StarkWare orders
 
-**Note:** This library is for DeversiFi. A test version of the platform to use during integrations is connected to the Ropsten test network at https://app.stg.deversifi.com // https://api.stg.deversifi.com
+**Note:** This library is for Rhino.fi. A test version of the platform to use during integrations is connected to the Goerli test network and hosted at:
+- UI: https://app.stg.rhino.fi
+- API: https://api.stg.rhino.fi
 
 ## Contents
 
-- [Installation](#installation)
-    - [NPM](#npm)
-    - [Prebuild for browser](#prebuild-for-browser)
-- [Setup](#setup)
-    - [Pre Requisites](#pre-requisites)
-    - [Instancing](#instancing)
-        - [Using MetaMask or a local node](#using-metamask-or-a-local-node)
-        - [Using a private key](#using-a-private-key)
-        - [Configuration](#configuration)
-- [API Authentication](#api-authentication)
-- [Registering](#registering)
-- [Approving tokens](#approving-tokens)
-- [Depositing tokens](#depositing-tokens)
-- [Placing an order](#placing-an-order)
-- [Withdrawing tokens](#withdrawing-tokens)
-    - [Requesting a withdrawal](#requesting-a-withdrawal)
-    - [Withdraw on chain](#withdraw-on-chain)
-- [Cancelling Orders](#cancelling-orders)
-- [Authenticated data endpoints](#authenticated-data-endpoints)
-- [More examples](#more-examples)
-    - [Gas Price](#gas-price)
-    - [Custom order ID](#custom-order-id)
-- [Troubleshooting](#troubleshooting)
-- [Developing](#developing)
-    - [Setup](#setup-1)
-    - [Implementing-a-new-future](#implementing-a-new-feature)
-- [Useful Links](#links)
-- [Developing](#developing)
+<!--ts-->
+* [Rhino.fi Javascript Trading API](#rhinofi-javascript-trading-api)
+   * [Contents](#contents)
+   * [Setup](#setup)
+      * [Pre Requisites](#pre-requisites)
+      * [Instatiating](#instatiating)
+         * [Using MetaMask or a local node](#using-metamask-or-a-local-node)
+         * [Using a private key](#using-a-private-key)
+         * [Configuration](#configuration)
+            * [Parameters](#parameters)
+      * [API Authentication](#api-authentication)
+            * [Parameters](#parameters-1)
+      * [Registering](#registering)
+            * [Parameters](#parameters-2)
+      * [Approving Tokens](#approving-tokens)
+            * [Parameters](#parameters-3)
+      * [Depositing tokens](#depositing-tokens)
+            * [Parameters](#parameters-4)
+      * [Placing an order](#placing-an-order)
+            * [Parameters](#parameters-5)
+      * [Getting Orders](#getting-orders)
+            * [Parameters](#parameters-6)
+      * [Cancelling Orders](#cancelling-orders)
+            * [Parameters](#parameters-7)
+      * [Withdrawing tokens](#withdrawing-tokens)
+         * [Requesting a withdrawal](#requesting-a-withdrawal)
+            * [Parameters](#parameters-8)
+         * [Withdraw on chain](#withdraw-on-chain)
+            * [Parameters](#parameters-9)
+      * [Authenticated data endpoints](#authenticated-data-endpoints)
+            * [Parameters](#parameters-10)
+   * [More Examples](#more-examples)
+      * [Gas Price](#gas-price)
+      * [Custom order ID](#custom-order-id)
+   * [Troubleshooting](#troubleshooting)
+   * [Links](#links)
+   * [Developing](#developing)
+      * [Setup](#setup-1)
+      * [Implementing a new feature and Testing](#implementing-a-new-feature-and-testing)
+   * [License](#license)
 
+<!-- Created by https://github.com/ekalinin/github-markdown-toc -->
+<!-- Added by: adrian, at: Mon  6 Feb 11:54:24 GMT 2023 -->
 
-## Installation
-
-### NPM
-
-```bash
-  npm i dvf-client-js
-```
-### Prebuild for browser
-
-Alternatively on the browser you can use the standalone build
-```html
-<script src="http://path/to/dist/dvf.js"></script>
-```
+<!--te-->
 
 ## Setup
 
@@ -60,19 +64,19 @@ Alternatively on the browser you can use the standalone build
   - A web3 provider with your account or a private key
     * Such as MetaMask, keystore file, hardware wallet or raw private key
 
-### Instancing
+### Instatiating
 
 #### Using MetaMask or a local node
 
 ```javascript
 // In case of MetaMask make sure you call ethereum.enable() before using it
-const DVF = require('dvf-client-js')
-const dvf = await DVF()
+const RhinofiClientFactory = require('@rhino.fi/client-js')
+const rhinofi = await RhinofiClientFactory()
 ```
 
 #### Using a private key
 
-````javascript
+```javascript
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const Web3 = require("Web3")
 
@@ -82,21 +86,21 @@ const rpcUrl = 'https://mainnet.infura.io/v3/9e28b...'
 const provider = new HDWalletProvider(privateKey, rpcUrl)
 const web3 = new Web3(provider)
 
-dvf = await DVF(web3)
-````
+rhinofi = await RhinofiClientFactory(web3)
+```
 
-View the full example: [/examples/node_sell_eth_infura.js](/examples/node_sell_eth_infura.js)
+For more, see [examples](/examples) and their [README](/examples/README.md).
 
 #### Configuration
 
 It's possible to overwrite values on the configuration on a per instance basis.
 
 The [default configuration](./src/config.js) can be overwritten with an optional
-parameter `userConf` when calling the DVF function.
+parameter `userConf` when calling the RhinofiClientFactory function.
 
 ##### Parameters
 
-- `api` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? (default `https://api.stg.deversifi.com`) API endpoint you are connecting to Staging (ropsten): https://api.stg.deversifi.com, Production (mainnet): https://api.deversifi.com)
+- `api` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? (default `https://api.stg.rhino.fi`) API endpoint you are connecting to Staging (ropsten): https://api.stg.rhino.fi, Production (mainnet): https://api.rhino.fi)
 - `gasApi` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? (default `https://ethgasstation.info`)
 - `defaultGasLimit` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)**? (default `200000`)
 - `defaultGasPrice` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)**? (default `50000000000`)
@@ -109,9 +113,9 @@ parameter `userConf` when calling the DVF function.
 For instance:
 
 ```javascript
-  dvf = await DVF(web3, {
+  rhinofi = await RhinofiClientFactory(web3, {
     api: 'https://your-custom-api-address',
-    gasStationApiKey: 'a1b2c3...
+    gasStationApiKey: 'a1b2c3...'
   })
 ```
 
@@ -121,7 +125,7 @@ to this:
 
 ```json
 {
-   "DVF":{
+   "RhinofiClientFactory":{
       "defaultFeeRate":0.002,
       "deversifiAddress":"0xaf8ae6955d07776ab690e565ba6fbc79b8de3a5d",
       "starkExContractAddress":"0x5d22045DAcEAB03B158031eCB7D9d06Fad24609b",
@@ -154,18 +158,18 @@ to this:
 }
 ```
 
-The complete compiled configuration is accessible through `dvf.config`, for instance:
+The complete compiled configuration is accessible through `rhinofi.config`, for instance:
 
 ```javascript
-const dvf = await DVF()
+const rhinofi = await RhinofiClientFactory()
 
-const config = dvf.config
+const config = rhinofi.config
 ```
 
 ### API Authentication
 
 Authentication to make all authenticated requests is done by signing a `nonce` using an
-Ethereum private key. Signing is handled by the Deversifi client
+Ethereum private key. Signing is handled by the Rhino.fi client
 library if the account is available and unlocked or if the web3 provider supports it.
 Otherwise the message and signature need to be prepared separately.
 
@@ -175,7 +179,7 @@ Otherwise the message and signature need to be prepared separately.
 
 ```javascript
 const nonce = (Date.now() / 1000).toString()
-const signature = await dvf.sign(nonce)
+const signature = await rhinofi.sign(nonce)
 ```
 
 ### Registering
@@ -183,13 +187,13 @@ This method is used to register a stark public key that corresponds to an Ethere
 
 
 ##### Parameters
-- `starkPublicKey` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+- `starkPublicKey` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**
     - `x` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** - First 32 bits of stark public key
 - `nonce` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Nonce which is used to provide the time until which this nonce is valid. It is presented as seconds since epoch.
 - `signature` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The signature obtained by signing the nonce with your private ethereum key.
 - `contractWalletAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Address of the deployed contract wallet (only for contract wallet integrations)
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[UserConfigResponse](https://docs.deversifi.com/docs#postV1TradingRGetuserconf)>**  
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[UserConfigResponse](https://docs.rhino.fi/docs#postV1TradingRGetuserconf)>**
 
 ### Approving Tokens
 
@@ -197,13 +201,13 @@ When depositing an ERC20 Ethereum-based token for the first time from a specific
 you are required to approve it to interact with the smart contracts, this is not required for ETH.
 
 ##### Parameters
-- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol that's available in `dvf.config.tokenRegistry`
+- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol that's available in `rhinofi.config.tokenRegistry`
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[PromiEvent](https://web3js.readthedocs.io/en/v1.2.11/callbacks-promises-events.html#promievent)>** 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[PromiEvent](https://web3js.readthedocs.io/en/v1.2.11/callbacks-promises-events.html#promievent)>**
 
 ```javascript
 const token = 'ETH'
-await dvf.contract.approve(token)
+await rhinofi.contract.approve(token)
 ```
 
 This step does not need to be repeated again, and subsequently you are required
@@ -211,21 +215,21 @@ only to call the deposit function.
 
 ### Depositing tokens
 This method is used to deposit the tokens to the smart contract and submit a signed notification of a new deposit made to the API.
-                                                                    
+
 ##### Parameters
-- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol available in `dvf.config.tokenRegistry` to be deposited
+- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol available in `rhinofi.config.tokenRegistry` to be deposited
 - `amount` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** || **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Amount of tokens to be deposited
 - `starkPrivateKey` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Trading key
 - `nonce` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Nonce which is used to provide the time until which this nonce is valid. It is presented as seconds since epoch.
 - `signature` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? The signature obtained by signing the nonce with your private ethereum key.
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;{...[PromiEvent](https://web3js.readthedocs.io/en/v1.2.11/callbacks-promises-events.html#promievent), ...[DepositResponse](https://docs.deversifi.com/docs#postV1TradingWDeposit)}>**
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;{...[PromiEvent](https://web3js.readthedocs.io/en/v1.2.11/callbacks-promises-events.html#promievent), ...[DepositResponse](https://docs.rhino.fi/docs#postV1TradingWDeposit)}>**
 
 ```javascript
 const token = 'ETH'
 const amount = 100
 
-const deposit = await dvf.deposit(token, amount, tradingKey)
+const deposit = await rhinofi.deposit(token, amount, tradingKey)
 ```
 
 ### Placing an order
@@ -240,26 +244,26 @@ This authenticated endpoint is used to place an order.
 - `signature` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? The signature obtained by signing the nonce with your private ethereum key.
 - `starkPrivateKey` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Trading key (for keystore etc.)
 - `ledgerPath` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Ledger derivation path if using ledger
-- `isPostOnly` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** Flag to indicate if the order is post-only.      
-- `isHidden` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** Flag to indicate if the order is hidden.      
+- `isPostOnly` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** Flag to indicate if the order is post-only.
+- `isHidden` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** Flag to indicate if the order is hidden.
 - `validFor` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)**? Validation time in hours
 - `feeRate` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)**? Fee rate if known
 - `cid` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Optional custom order ID that could be set when placing order and used later to retrieve order. This ID is unique per user (user A and B can each have an order with `cid = AAA`, but the same user cannot have two orders with the same `cid`). [See example](#custom-order-id)
-- `gid` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**?      
-- `partnerId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**?      
-- `ethAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**?      
+- `gid` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**?
+- `partnerId` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**?
+- `ethAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**?
 - `type` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? Order type (`EXCHANGE LIMIT`, `EXCHANGE MARKET`)
 - `protocol` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? (default `stark`)
 
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[SubmitOrderResponse](https://docs.deversifi.com/docs#postV1TradingWSubmitorder)>**
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[SubmitOrderResponse](https://docs.rhino.fi/docs#postV1TradingWSubmitorder)>**
 
 ```javascript
 const symbol = 'NEC:ETH'
 const amount = -15
 const price = 0.0025
 
-const orderId = await dvf.submitOrder(symbol, amount, price)
+const orderId = await rhinofi.submitOrder(symbol, amount, price)
 ```
 
 ### Getting Orders
@@ -271,15 +275,15 @@ This method allows you to get a specific order by `orderId` or `cid`.
 - `signature` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? The signature obtained by signing the nonce with your private ethereum key.
 - `cid` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? If order was placed with custom order ID (`cid`) property set, it can be canceled using same `cid`.
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[CancelOrderResponse](https://docs.deversifi.com/docs#postV1TradingWCancelorder)>**
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[CancelOrderResponse](https://docs.rhino.fi/docs#postV1TradingWCancelorder)>**
 
 ```javascript
 const orderID = '123'
 const customID = 'cid-123'
 
-const order = await dvf.getOrder({ orderId: orderID })
+const order = await rhinofi.getOrder({ orderId: orderID })
 // or
-const order = await dvf.getOrder({ cid: customID })
+const order = await rhinofi.getOrder({ cid: customID })
 ```
 
 
@@ -292,15 +296,15 @@ This method allows you to cancel a specific order by `orderId` or `cid`.
 - `signature` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? The signature obtained by signing the nonce with your private ethereum key.
 - `cid` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**? If order was placed with custom order ID (`cid`) property set, it can be canceled using same `cid`.
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[CancelOrderResponse](https://docs.deversifi.com/docs#postV1TradingWCancelorder)>**
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[CancelOrderResponse](https://docs.rhino.fi/docs#postV1TradingWCancelorder)>**
 
 ```javascript
 const orderID = '123'
 const customID = 'cid-123'
 
-const response = await dvf.cancelOrder({ orderId: orderID })
+const response = await rhinofi.cancelOrder({ orderId: orderID })
 // or
-const response = await dvf.cancelOrder({ cid: customID })
+const response = await rhinofi.cancelOrder({ cid: customID })
 ```
 
 ### Withdrawing tokens
@@ -308,15 +312,15 @@ const response = await dvf.cancelOrder({ cid: customID })
 This method submits a request for a new withdrawal.
 ##### Parameters
 - `recipientEthAddress` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Trading key
-- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol available in `dvf.config.tokenRegistry` to be withdrawn
+- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol available in `rhinofi.config.tokenRegistry` to be withdrawn
 - `amount` **[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** || **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Amount of tokens to be withdrawn
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[WithdrawResponse](https://docs.deversifi.com/docs#postV1TradingWWithdraw)>**
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[WithdrawResponse](https://docs.rhino.fi/docs#postV1TradingWWithdraw)>**
 
 ```javascript
 const token = 'ETH'
 const amount = 100
-const withdrawal = await await dvf.transferAndWithdraw({
+const withdrawal = await await rhinofi.transferAndWithdraw({
   recipientEthAddress: address,
   token,
   amount
@@ -326,13 +330,13 @@ const withdrawal = await await dvf.transferAndWithdraw({
 #### Withdraw on chain
 This method calls the contract and withdraws the tokens to your wallet
 ##### Parameters
-- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol available in `dvf.config.tokenRegistry` to be withdrawn
+- `token` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Token symbol available in `rhinofi.config.tokenRegistry` to be withdrawn
 
-Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;{ transactionHash: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** }>**             
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;{ transactionHash: **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** }>**
 
 ```javascript
 const token = 'ETH'
-const txHash = await dvf.withdrawOnchain(token, recipientEthAddress)
+const txHash = await rhinofi.withdrawOnchain(token, recipientEthAddress)
 ```
 
 ### Authenticated data endpoints
@@ -348,26 +352,26 @@ Note: You should reuse the `nonce` and `signature` and pass them to these method
 
 ```javascript
 // Get all open orders
-const openOrders = await dvf.getOrders()
+const openOrders = await rhinofi.getOrders()
 
 // Get all historical orders
-const historicalOrders = await dvf.getOrdersHist()
+const historicalOrders = await rhinofi.getOrdersHist()
 
-// Get specific order 
+// Get specific order
 const id = "123"
-const order = await dvf.getOrder(id)
+const order = await rhinofi.getOrder(id)
 
 // Get exchange balances
-const balance = await dvf.getBalance()
+const balance = await rhinofi.getBalance()
 
 // Get deposits
-const deposits = await dvf.getDeposits()
+const deposits = await rhinofi.getDeposits()
 
-// Get withdrawals 
-const withdrawals = await dvf.getWithdrawals()
+// Get withdrawals
+const withdrawals = await rhinofi.getWithdrawals()
 
 // Get user config
-const userConfig = await dvf.getUserConfig()
+const userConfig = await rhinofi.getUserConfig()
 ```
 
 ## More Examples
@@ -378,18 +382,18 @@ Aside from these examples, there are complete examples in the [examples folder](
 
 You can setup a default custom gas price by setting up the 'defaultGasPrice' property
 ```javascript
-const dvf = await DVF()
+const rhinofi = await RhinofiClientFactory()
 
-dvf.set('defaultGasPrice', web3.utils.toWei('2', 'gwei'))
+rhinofi.set('defaultGasPrice', web3.utils.toWei('2', 'gwei'))
 
 ```
-DVF Client calls https://ethgasstation.info API to get the current gas prices and calculate a safe gas price for Ethereum transactions. Access to the ETH Gas Station API is free, but rate limited if you are not using an API key. If a ETH Gas Station API key is not provided then a recommended gas price is used which is available in `dvf.recommendedGasPrices`.
+RhinofiClientFactory calls https://ethgasstation.info API to get the current gas prices and calculate a safe gas price for Ethereum transactions. Access to the ETH Gas Station API is free, but rate limited if you are not using an API key. If a ETH Gas Station API key is not provided then a recommended gas price is used which is available in `rhinofi.recommendedGasPrices`.
 
-To configure your api key with dvf client please pass this as a `userConf` parameter when initialising DVF:
+To configure your api key with rhinofi client please pass this as a `userConf` parameter when initialising RhinofiClientFactory:
 
 ```
 javascript
-  dvf = await DVF(web3, {
+  rhinofi = await RhinofiClientFactory(web3, {
     gasStationApiKey: 'a1b2c3...'
   })
 ```
@@ -397,7 +401,7 @@ or by setting the 'gasStationApiKey' property:
 
 ```javascript
 
-dvf.set('gasStationApiKey', 'a1b2c3...')
+rhinofi.set('gasStationApiKey', 'a1b2c3...')
 
 ```
 ### Custom order ID
@@ -410,86 +414,51 @@ const price = 3000
 
 const customOrderID = `short-` + Math.random().toString(36).substring(7)
 
-await dvf.submitOrder({
-  symbol, 
-  amount, 
+await rhinofi.submitOrder({
+  symbol,
+  amount,
   price,
   cid: customOrderID,
 })
 
 // ...
 // Later we can use `cid` to get order
-const order = await dvf.getOrder({cid: customOrderID})
+const order = await rhinofi.getOrder({cid: customOrderID})
 
 // or cancel it
-await dvf.cancelOrder({cid: customOrderID})
+await rhinofi.cancelOrder({cid: customOrderID})
 ```
 
 ## Troubleshooting
 
 A list of error codes returned by the API and reasons are available [here](./src/lib/dvf/errorReasons.js#L1).
-Some more detailed explanations can also be found in the [API Documentation](https://docs.deversifi.com).
+Some more detailed explanations can also be found in the [API Documentation](https://docs.rhino.fi).
 
 If you have suggestions to improve this guide or any of the available
-documentation, please raise an issue on Github, or email [feedback@Deversifi.com](mailto:feedback@Deversifi.com).
+documentation, please raise an issue on Github, or email [feedback@rhino.fi](mailto:feedback@rhino.fi).
 
 ## Links
 
- - [API documentation](https://docs.deversifi.com)
+ - [API documentation](https://docs.rhino.fi)
 
 ## Developing
 
 ### Setup
 
- - `git clone`
- - `npm install`
+1. [install nix](https://nixos.org/download.html)
+2. enter nix shell:
+  ```sh
+  $ nix-shell
+  ```
 
-### Implementing a new feature
+3. install js deps
+  ```
+  $ yarn
+  ```
 
-Starting by watching the test files ( you will need a node running )
+### Implementing a new feature and Testing
 
-```bash
-$ npm run test:watch
-```
-
- - Write the tests for your new features on the `./test/`
- - Add your tests to './test/index.js' file if necessary
- - Create your features on ./src/ folder
-
- * _You will need a ropsten node to do blockchain related tests_
-
-### Testing
-
-#### On node.js
-
-```bash
-$ npm run test
-```
-
-#### On a headless browser ( using browserify and mochify )
-
-```bash
-$ npm run test:web
-```
-
-#### Manually on your browser on a browser console
-
-  - Very useful in case you want to issue commands from Google Chrome
-  while using MetaMask !
-
-```bash
-$ npm run build:web:run
-```
-
-  - Open your browser on [http://localhost:2222](http://localhost:2222)
-
-### Building for browsers
-
-  - This will build the whole library as one big ugly standalone js file ( uses browserify )
-
-```bash
-$ npm run build
-```
+TODO
 
 ## License
 

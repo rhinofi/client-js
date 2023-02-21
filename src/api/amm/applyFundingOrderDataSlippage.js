@@ -1,6 +1,6 @@
 const R = require('ramda')
 const validateWithJoi = require('../../lib/validators/validateWithJoi')
-const { toBN } = require('dvf-utils')
+const { toBN } = require('@rhino.fi/dvf-utils')
 
 const { fundOrderDataSchema } = require('./schemas')
 

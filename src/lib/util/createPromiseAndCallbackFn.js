@@ -12,8 +12,14 @@ module.exports = extraCallback => {
       if (err) {
         reject(err)
       } else {
-        resolve(result)
-        extraCallback && extraCallback(result)
+        let clearCallback
+        if (extraCallback) {
+          clearCallback = extraCallback(result)
+        }
+        resolve({
+          transactionHash: result,
+          clearCallback,
+        })
       }
     }
   })

@@ -6,7 +6,7 @@ const validFor = '0'
 const feeRate = ''
 const ledgerPath= `44'/60'/0'/0'/0`
 
-const submitOrderResponse = await dvf.submitOrder({
+const submitOrderResponse = await rhinofi.submitOrder({
   symbol,
   amount,
   price,

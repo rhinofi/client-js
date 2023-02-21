@@ -1,4 +1,4 @@
-const { Joi } = require('dvf-utils')
+const { Joi } = require('@rhino.fi/dvf-utils')
 
 const post = require('../../lib/dvf/post-authenticated')
 const validateWithJoi = require('../../lib/validators/validateWithJoi')

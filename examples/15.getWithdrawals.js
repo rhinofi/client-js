@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S yarn node
 /* eslint-disable no-unused-vars */
 
 /*
@@ -7,10 +7,10 @@ Examples are generated using helpers/buildExamples.js script.
 Check README.md for more details.
 */
 
-const sw = require('starkware_crypto')
+const sw = require('@rhino.fi/starkware-crypto')
 const getWeb3 = require('./helpers/getWeb3')
 
-const DVF = require('../src/dvf')
+const RhinofiClientFactory = require('../src')
 const envVars = require('./helpers/loadFromEnvOrConfig')(
   process.env.CONFIG_FILE_NAME
 )
@@ -18,26 +18,35 @@ const logExampleResult = require('./helpers/logExampleResult')(__filename)
 
 const ethPrivKey = envVars.ETH_PRIVATE_KEY
 // NOTE: you can also generate a new key using:`
-// const starkPrivKey = dvf.stark.createPrivateKey()
+// const starkPrivKey = rhinofi.stark.createPrivateKey()
 const starkPrivKey = envVars.STARK_PRIVATE_KEY
 const rpcUrl = envVars.RPC_URL
 
 const { web3, provider } = getWeb3(ethPrivKey, rpcUrl)
 
-const dvfConfig = {
+const rhinofiConfig = {
   api: envVars.API_URL,
   dataApi: envVars.DATA_API_URL,
-  useAuthHeader: true
+  useAuthHeader: true,
+  wallet: {
+    type: 'tradingKey',
+    meta: {
+      starkPrivateKey: starkPrivKey
+    }
+  }
   // Add more variables to override default values
 }
 
 ;(async () => {
-  const dvf = await DVF(web3, dvfConfig)
+  const rhinofi = await RhinofiClientFactory(web3, rhinofiConfig)
 
-  const getWithdrawalsResponse = await dvf.getWithdrawals(undefined, dvf.get('account'))
+  // Get withtrawals for all tokens
+  const token = undefined
+  // And current user
+  const userAddress = rhinofi.get('account')
+  const getWithdrawalsResponse = await rhinofi.getWithdrawals(token, userAddress)
 
   logExampleResult(getWithdrawalsResponse)
-
 })()
 .catch(error => {
   console.error(error)

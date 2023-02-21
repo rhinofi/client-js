@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## 5.0.0 - 2023-01-07
+### Changed
+- rename from dvf-client-js to @rhino.fi/client-js
+- rename entry point from src/dvf to src/index
+- remove references to dvf from README and examples
+
+## 4.2.0 - 2023-01-06
+### Changed
+- Add new methods
+- Use yarn berry
+- Update\cleanup README.md
+- Update node deps
+- Add shell.nix etc
+
 ## 4.1.0 - 2022-06-30
 ### Changed
 - Support fee on transferAndWithdraw
@@ -31,7 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 3.1.5 - 2021-01-07
 ### Changed
-- Update `withdrawOnChain` example for StarkEx V4 
+- Update `withdrawOnChain` example for StarkEx V4
 
 ## 3.1.3 - 2021-11-15
 ### Changed

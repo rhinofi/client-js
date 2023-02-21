@@ -5,10 +5,10 @@ const _findKey = require('lodash/findKey')
 const selectTransport = require('../../ledger/selectTransport')
 const provideContractData = require('../../ledger/provideContractData')
 const getTokenAddressFromTokenInfoOrThrow = require('../../dvf/token/getTokenAddressFromTokenInfoOrThrow')
-const swJS = require('starkware_crypto')
+const swJS = require('@rhino.fi/starkware-crypto')
 const {
   starkLimitOrderToMessageHash
-} = require('dvf-utils')
+} = require('@rhino.fi/dvf-utils')
 
 const getPublicKey = async (eth, starkPath) => {
   const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')

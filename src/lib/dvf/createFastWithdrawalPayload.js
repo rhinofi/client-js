@@ -3,7 +3,7 @@ const {
   Joi,
   toBN,
   toQuantizedAmountBN
-} = require('dvf-utils')
+} = require('@rhino.fi/dvf-utils')
 
 const calculateFact = require('../stark/calculateFact')
 const validateWithJoi = require('../validators/validateWithJoi')

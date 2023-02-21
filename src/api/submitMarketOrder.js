@@ -1,5 +1,5 @@
 const { post } = require('request-promise')
-const { Joi } = require('dvf-utils')
+const { Joi } = require('@rhino.fi/dvf-utils')
 /*
 Keeping the schema visible and not in a seperate method
 for reference as required parameters can be checked by reading

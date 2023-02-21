@@ -97,6 +97,7 @@ module.exports = () => {
     provideContractData: compose(require('../ledger/provideContractData')),
     getTokenInfo: compose(require('./token/getTokenInfo')),
     getTokenInfoOrThrow: compose(require('./token/getTokenInfoOrThrow')),
+    getTokenInfoForChainOrThrow: compose(require('./token/getTokenInfoForChainOrThrow')),
     getTokenInfoByTokenId: compose(require('./token/getTokenInfoByTokenId')),
     fromBaseUnitAmount: compose(require('./token/fromBaseUnitAmount')),
     fromQuantizedAmount: compose(require('./token/fromQuantizedAmount')),
@@ -257,10 +258,13 @@ module.exports = () => {
   dvf.poolUserRewards = compose(require('../../api/amm/poolUserRewards'))
   dvf.poolUserAccruedFees = compose(require('../../api/amm/poolUserAccruedFees'))
   dvf.poolTokensRate = compose(require('../../api/amm/poolTokensRate'))
+  dvf.poolsData = compose(require('../../api/amm/poolsData'))
+  dvf.poolsUserData = compose(require('../../api/amm/poolsUserData'))
   dvf.getRewardsLockedState = compose(require('../../api/amm/getRewardsLockedState'))
   dvf.postRewardsLockedState = compose(require('../../api/amm/postRewardsLockedState'))
   dvf.walletFailedEvent = compose(require('../../api/walletFailedEvent'))
   dvf.walletSuccessEvent = compose(require('../../api/walletSuccessEvent'))
+  dvf.topPerformersTokens = compose(require('../../api/topPerformersTokens'))
 
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),

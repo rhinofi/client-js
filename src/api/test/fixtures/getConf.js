@@ -64,7 +64,7 @@ module.exports = () => {
     }
   }
 
-  nock('https://api.stg.deversifi.com')
+  nock('https://api.stg.rhino.fi')
     .post('/v1/trading/r/getConf', {})
     .reply(200, getConfResponse)
 
@@ -74,7 +74,7 @@ module.exports = () => {
     fast: 500000000
   }
 
-  nock('https://api.stg.deversifi.com')
+  nock('https://api.stg.rhino.fi')
     .post('/v1/trading/r/getGasPrice', body => {
       return true
     })
@@ -145,7 +145,7 @@ module.exports = () => {
     ethAddress: '0xf858c2f2ac6b96df8c801bce90a3124a52d1915a'
   }
 
-  nock('https://api.stg.deversifi.com')
+  nock('https://api.stg.rhino.fi')
     .post('/v1/trading/r/getUserConf', body => {
       return true
     })

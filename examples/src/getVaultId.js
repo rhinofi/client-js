@@ -1,5 +1,5 @@
 const token = 'ETH'
 
-const getVaultIdResponse = await dvf.getVaultId(token)
+const getVaultIdResponse = await rhinofi.getVaultId(token)
 
 logExampleResult(getVaultIdResponse)

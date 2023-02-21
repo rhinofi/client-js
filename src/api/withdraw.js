@@ -1,7 +1,7 @@
 const { post } = require('request-promise')
 const DVFError = require('../lib/dvf/DVFError')
 const validateAssertions = require('../lib/validators/validateAssertions')
-const { Joi } = require('dvf-utils')
+const { Joi } = require('@rhino.fi/dvf-utils')
 
 const schema = Joi.object({
   amount: Joi.amount().required(), // number or number string

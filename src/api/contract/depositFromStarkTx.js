@@ -2,7 +2,7 @@
 // implemented in terms of the other once the TODO in the latter is resolved.
 const sendToStarkExContract = require('./sendToStarkExContract')
 
-const { fromQuantizedToBaseUnitsBN } = require('dvf-utils')
+const { fromQuantizedToBaseUnitsBN } = require('@rhino.fi/dvf-utils')
 
 module.exports = (dvf, { starkKey, tokenId, vaultId, amount }, options) => {
   const ethTokenInfo = dvf.token.getTokenInfoOrThrow('ETH')

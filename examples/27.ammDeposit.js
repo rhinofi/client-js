@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S yarn node
 /* eslint-disable no-unused-vars */
 
 /*
@@ -7,10 +7,10 @@ Examples are generated using helpers/buildExamples.js script.
 Check README.md for more details.
 */
 
-const sw = require('starkware_crypto')
+const sw = require('@rhino.fi/starkware-crypto')
 const getWeb3 = require('./helpers/getWeb3')
 
-const DVF = require('../src/dvf')
+const RhinofiClientFactory = require('../src')
 const envVars = require('./helpers/loadFromEnvOrConfig')(
   process.env.CONFIG_FILE_NAME
 )
@@ -18,13 +18,13 @@ const logExampleResult = require('./helpers/logExampleResult')(__filename)
 
 const ethPrivKey = envVars.ETH_PRIVATE_KEY
 // NOTE: you can also generate a new key using:`
-// const starkPrivKey = dvf.stark.createPrivateKey()
+// const starkPrivKey = rhinofi.stark.createPrivateKey()
 const starkPrivKey = envVars.STARK_PRIVATE_KEY
 const rpcUrl = envVars.RPC_URL
 
 const { web3, provider } = getWeb3(ethPrivKey, rpcUrl)
 
-const dvfConfig = {
+const rhinofiConfig = {
   api: envVars.API_URL,
   dataApi: envVars.DATA_API_URL,
   useAuthHeader: true,
@@ -38,21 +38,21 @@ const dvfConfig = {
 }
 
 ;(async () => {
-  const dvf = await DVF(web3, dvfConfig)
+  const rhinofi = await RhinofiClientFactory(web3, rhinofiConfig)
 
-  dvf.config.useAuthHeader = true
+  rhinofi.config.useAuthHeader = true
 
   const waitForDepositCreditedOnChain = require('./helpers/waitForDepositCreditedOnChain')
 
   const token1 = 'ETH'
   const token2 = 'USDT'
   if (process.env.DEPOSIT_FIRST === 'true') {
-    const depositETHResponse = await dvf.deposit(token1, 0.1, starkPrivKey)
-    const depositUSDTResponse = await dvf.deposit(token2, 1000, starkPrivKey)
+    const depositETHResponse = await rhinofi.deposit(token1, 0.1, starkPrivKey)
+    const depositUSDTResponse = await rhinofi.deposit(token2, 1000, starkPrivKey)
 
     if (process.env.WAIT_FOR_DEPOSIT_READY === 'true') {
-      await waitForDepositCreditedOnChain(dvf, depositETHResponse)
-      await waitForDepositCreditedOnChain(dvf, depositUSDTResponse)
+      await waitForDepositCreditedOnChain(rhinofi, depositETHResponse)
+      await waitForDepositCreditedOnChain(rhinofi, depositUSDTResponse)
     }
   }
 
@@ -60,22 +60,22 @@ const dvfConfig = {
 
   // Amm deposit consist of 2 orders, one for each of the pool tokens.
   // The tokens need to be supplied in a specific ratio. This call fetches
-  // order data from Deversifi API, given one of the tokens and desired deposit
+  // order data from Rhino.fi API, given one of the tokens and desired deposit
   // amount for that token.
-  const ammFundingOrderData = await dvf.getAmmFundingOrderData({
+  const ammFundingOrderData = await rhinofi.getAmmFundingOrderData({
     pool,
     token: 'ETH',
     amount: 0.1
   })
 
   // ammFundingOrderData can be inspected/validate if desired, before signing
-  // the orders it contains and posting them to Deversifi API.
+  // the orders it contains and posting them to Rhino.fi API.
 
   // This call signs the orders contained in the ammFundingOrderData before
-  // posting them to Deversifi API. NOTE: if the orders are pre-signed, the
+  // posting them to Rhino.fi API. NOTE: if the orders are pre-signed, the
   // method will post them as is.
-  const ammPostFundingOrderResponse = await dvf.postAmmFundingOrders(
-    await dvf.applyFundingOrderDataSlippage(ammFundingOrderData, 0.05)
+  const ammPostFundingOrderResponse = await rhinofi.postAmmFundingOrders(
+    await rhinofi.applyFundingOrderDataSlippage(ammFundingOrderData, 0.05)
   )
 
   logExampleResult(ammPostFundingOrderResponse)

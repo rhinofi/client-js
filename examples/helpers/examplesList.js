@@ -29,7 +29,10 @@ module.exports = Object.freeze([
   'fastWithdrawalMaxAmount',
   'ammDeposit',
   'ammWithdrawal',
-  'transferAndWithdraw'
+  'transferAndWithdraw',
+  'publicPermissions',
+  'transfer',
+  'getRegistrationStatuses',
   // TODO
   // 'submitBuyOrder',
   // 'submitSellOrder',
