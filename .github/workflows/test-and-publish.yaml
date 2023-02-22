@@ -34,18 +34,23 @@ jobs:
 
     - name: Run deploy-step
       run: |
+        set -euo pipefail
+
+        run_nix () {
+          nix run --impure -f nix/pkgs-private.nix "${@}"
+        }
+
         if [[ ${{ github.ref }} == refs/heads/master || ${{ github.ref }} == refs/heads/dev ]]
         then
-          extra_args=""
-          if [[ ${{ github.ref }} == refs/heads/dev ]]
+          is_dev_release=true
+          if [[ ${{ github.ref }} == refs/heads/master ]]
           then
-            # On dev we pudlish with -dev appended to version
-            nix run --impure -f nix/pkgs-private.nix append-dev-to-node-package-version
-            extra_args="--tag next"
+            is_dev_release=false
           fi
+
           # NOTE: if this fails with a 403 it's most likely due to not bumping
           #   version in package.json
-          nix run --impure -f nix/pkgs-private.nix ci.deploy-step -- $extra_args
+          run_nix ci.deploy-step -- "$is_dev_release"
         else
           echo skipping
         fi
