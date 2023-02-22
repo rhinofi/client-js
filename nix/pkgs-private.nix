@@ -72,7 +72,7 @@ let
                 log_bold "publishig to npm, version: $version"
                 log
 
-                log ${npm-publish} $npm_publish_extra_args
+                ${npm-publish} $npm_publish_extra_args
                 title=$(${coreutils}/bin/cat release-info/latest-release-title)
 
                 log
@@ -81,7 +81,7 @@ let
                 log "with title: $title"
                 log
 
-                log ${lib.getExe gh-with-ci-creds} dev release create -t "$title" "$version" $gh_relase_extra_args
+                ${lib.getExe gh-with-ci-creds} dev release create -t "$title" "$version" $gh_relase_extra_args
               ''
             )
             {}
