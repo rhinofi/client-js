@@ -12,15 +12,15 @@
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs": {
-        "branch": "fix-yarn2nix-for-nix-2.5-6_29769d2a1390d294469bcc6518f17931953545e1",
+        "branch": "master",
         "description": "Nix Packages collection",
         "homepage": "",
-        "owner": "deversifi",
+        "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "41b5736e8a7584ddf096a05b8b3afaf2a75e66fe",
-        "sha256": "0jg0jvc1acw9f71v0c7yyp13c37wjz2slnb3jd1d066g5vz3b3qi",
+        "rev": "70414d340baab99231000e4af02ec812e7d0c17b",
+        "sha256": "1zirk21zl3a7ycfafra8z6rrixlqxxyiygmrai49gl1xh9ffir71",
         "type": "tarball",
-        "url": "https://github.com/deversifi/nixpkgs/archive/41b5736e8a7584ddf096a05b8b3afaf2a75e66fe.tar.gz",
+        "url": "https://github.com/nixos/nixpkgs/archive/70414d340baab99231000e4af02ec812e7d0c17b.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "rhino-core": {
