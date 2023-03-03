@@ -1397,7 +1397,7 @@ __metadata:
     "@ledgerhq/hw-transport-mocker": ^5.25.0
     "@ledgerhq/hw-transport-webhid": 6.20.0
     "@rhino.fi/dvf-utils": ^1.4.5
-    "@rhino.fi/starkware-crypto": "rhinofi/starkware-crypto#504edca95842796908e74dad09518d092fca4e1b"
+    "@rhino.fi/starkware-crypto": ^0.1.7
     "@truffle/hdwallet-provider": ^2.0.13
     aigle: "suguru03/aigle#8739846ba9d4cfc116e1546da1181c73564cae0b"
     aware: ^0.3.1
@@ -1433,9 +1433,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rhino.fi/starkware-crypto@rhinofi/starkware-crypto#504edca95842796908e74dad09518d092fca4e1b":
-  version: 0.1.4
-  resolution: "@rhino.fi/starkware-crypto@https://github.com/rhinofi/starkware-crypto.git#commit=504edca95842796908e74dad09518d092fca4e1b"
+"@rhino.fi/starkware-crypto@npm:^0.1.7":
+  version: 0.1.7
+  resolution: "@rhino.fi/starkware-crypto@npm:0.1.7"
   dependencies:
     bn.js: ^4.4.0
     brorand: ^1.0.1
@@ -1445,7 +1445,7 @@ __metadata:
     inherits: ^2.0.1
     minimalistic-assert: ^1.0.0
     minimalistic-crypto-utils: ^1.0.0
-  checksum: 9af5dac8d8f9e601c3abd2c17b9612af1b69548e92fa6549b05e62b08149b26c62e86d3be064a02ea3c6eed8b875cd08911084b9b4d2601ae3fbb4cb6ac6623b
+  checksum: 5671d75df05f61998460e264ebde790dd854b2b80d187cc02291a7b80a5f85ab4412e3ade9da26abd2ceae4bd0600579cdc6a4598b422f2cd15b422f226936d0
   languageName: node
   linkType: hard
 
