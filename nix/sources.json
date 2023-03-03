@@ -12,15 +12,15 @@
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs": {
-        "branch": "fix-yarn2nix-for-nix-2.5-6_29769d2a1390d294469bcc6518f17931953545e1",
+        "branch": "master",
         "description": "Nix Packages collection",
         "homepage": "",
-        "owner": "deversifi",
+        "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "41b5736e8a7584ddf096a05b8b3afaf2a75e66fe",
-        "sha256": "0jg0jvc1acw9f71v0c7yyp13c37wjz2slnb3jd1d066g5vz3b3qi",
+        "rev": "70414d340baab99231000e4af02ec812e7d0c17b",
+        "sha256": "1zirk21zl3a7ycfafra8z6rrixlqxxyiygmrai49gl1xh9ffir71",
         "type": "tarball",
-        "url": "https://github.com/deversifi/nixpkgs/archive/41b5736e8a7584ddf096a05b8b3afaf2a75e66fe.tar.gz",
+        "url": "https://github.com/nixos/nixpkgs/archive/70414d340baab99231000e4af02ec812e7d0c17b.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "rhino-core": {
@@ -29,22 +29,22 @@
         "homepage": "",
         "owner": "rhinofi",
         "repo": "rhino-core",
-        "rev": "6c6b09a02a9983e99987ead1e8db2203806bfc3c",
-        "sha256": "1z8wbc4qw03ccksn04lh0bxcmnk2h0x69wqz84pnwn8ql1dy154g",
+        "rev": "104a3209ea21bb1ee3d4a0de0a201a34635b6629",
+        "sha256": "1hff0p8d428cipcbfr444a4kk9cz9rx4lkmvlxaxhz2lm0mpwrn1",
         "type": "tarball",
-        "url": "https://github.com/rhinofi/rhino-core/archive/6c6b09a02a9983e99987ead1e8db2203806bfc3c.tar.gz",
+        "url": "https://github.com/rhinofi/rhino-core/archive/104a3209ea21bb1ee3d4a0de0a201a34635b6629.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
-    "yarn-berry-cjs": {
-        "branch": "master",
+    "yarn-berry-cjs-rhinofi": {
+        "branch": "rhinofi-fork-3.4.1",
         "description": null,
         "homepage": "",
         "owner": "rhinofi",
         "repo": "yarn-berry-cjs",
-        "rev": "75a5282d9606586d7c2f9e38b07f352cdeab46e3",
-        "sha256": "1hwxlglh02b2h6778dd24hfdhs765s6fg55lhy6ll730n75wxvyp",
+        "rev": "4d14f0f36378091fcff3a4c4c8de4d5b7c3ca9e0",
+        "sha256": "106a4hsfln2hdw17vlgjb40bnx6y9iqib8awlbjlkivxya039wzd",
         "type": "tarball",
-        "url": "https://github.com/rhinofi/yarn-berry-cjs/archive/75a5282d9606586d7c2f9e38b07f352cdeab46e3.tar.gz",
+        "url": "https://github.com/rhinofi/yarn-berry-cjs/archive/4d14f0f36378091fcff3a4c4c8de4d5b7c3ca9e0.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
