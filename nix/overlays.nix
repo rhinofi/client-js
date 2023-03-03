@@ -1,7 +1,7 @@
 { sources ? import ./sources.nix }:
 [
   (self: super: {
-    yarn-berry-source = sources.yarn-berry-cjs;
+    yarn-berry-source = sources.yarn-berry-cjs-rhinofi;
     yarn-berry = super.callPackage (import ./packages/yarn-berry.nix) {};
   })
   (self: super: {
