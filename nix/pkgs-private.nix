@@ -72,7 +72,7 @@ let
                 log_bold "publishig to npm, version: $version"
                 log
 
-                ${npm-publish} $npm_publish_extra_args
+                ${lib.getExe npm-publish} $npm_publish_extra_args
                 title=$(${coreutils}/bin/cat release-info/latest-release-title)
 
                 log
