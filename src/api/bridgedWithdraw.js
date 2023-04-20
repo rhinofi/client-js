@@ -19,12 +19,12 @@ const schema = Joi.object({
 })
 
 const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
-  context: `bridgedWithdrawal`
+  context: 'bridgedWithdrawal'
 })
 
 const endpoint = '/v1/trading/bridgedWithdrawals'
 
-module.exports = async (dvf, data, authNonce, signature) => {
+module.exports = async (dvf, data, authNonce, signature, additionalPayload = {}) => {
   const { chain, token, amount, nonce } = validateArg0(data)
 
   const tokenInfo = dvf.token.getTokenInfoOrThrow(token)
@@ -43,13 +43,14 @@ module.exports = async (dvf, data, authNonce, signature) => {
     recipientVaultId: vaultId
   })
 
-  const payload = {
+  // Additional params do not override intended
+  const payload = FP.defaults(additionalPayload, {
     chain,
     token,
     amount: quantisedAmount,
     tx,
     nonce: nonce || generateRandomNonceV2()
-  }
+  })
 
   // Force the use of header (instead of payload) for authentication.
   dvf = FP.set('config.useAuthHeader', true, dvf)
