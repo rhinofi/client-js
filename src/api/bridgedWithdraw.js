@@ -15,7 +15,9 @@ const schema = Joi.object({
   nonce: Joi.number().integer()
     .min(0)
     // Will be auto-generated if not provided.
-    .optional()
+    .optional(),
+  // Temporary - to be removed after bridge withdrawal fees update (CHAIN-586)
+  isFeeUsd: Joi.boolean().optional()
 })
 
 const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
@@ -24,8 +26,8 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 
 const endpoint = '/v1/trading/bridgedWithdrawals'
 
-module.exports = async (dvf, data, authNonce, signature, additionalPayload = {}) => {
-  const { chain, token, amount, nonce } = validateArg0(data)
+module.exports = async (dvf, data, authNonce, signature) => {
+  const { chain, token, amount, nonce, isFeeUsd } = validateArg0(data)
 
   const tokenInfo = dvf.token.getTokenInfoOrThrow(token)
   // To make it fail if token is not supported
@@ -43,14 +45,14 @@ module.exports = async (dvf, data, authNonce, signature, additionalPayload = {})
     recipientVaultId: vaultId
   })
 
-  // Additional params do not override intended
-  const payload = FP.defaults(additionalPayload, {
+  const payload = {
     chain,
     token,
     amount: quantisedAmount,
     tx,
-    nonce: nonce || generateRandomNonceV2()
-  })
+    nonce: nonce || generateRandomNonceV2(),
+    ...(isFeeUsd ? { isFeeUsd: true } : {})
+  }
 
   // Force the use of header (instead of payload) for authentication.
   dvf = FP.set('config.useAuthHeader', true, dvf)
