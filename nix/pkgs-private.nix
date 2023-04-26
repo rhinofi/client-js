@@ -35,7 +35,57 @@ let
             )
             {}
           ;
-          deploy-step = self.npm-publish;
+          deploy-step = self.callPackage
+            ({
+              append-dev-to-node-package-version,
+              bash-logging-helpers,
+              coreutils,
+              gh-with-ci-creds,
+              jq,
+              lib,
+              nodejs,
+              npm-publish,
+              utils,
+              name ? "deploy-step"
+            }: utils.writeBashBin
+              "deploy-step"
+              ''
+                set -ueo pipefail
+                source ${bash-logging-helpers.defaultBinPath}
+
+                is_dev_release=''${1:-true}
+                gh_relase_extra_args=
+                npm_publish_extra_args=
+                log "is_dev_release: $is_dev_release"
+
+                if [[ $is_dev_release == true ]]; then
+                  ${lib.getExe append-dev-to-node-package-version}
+
+                  gh_relase_extra_args=--prerelease
+                  npm_publish_extra_args="--tag next"
+                fi
+
+                version=$(${lib.getExe jq} -r .version package.json)
+
+                log
+                log_separator
+                log_bold "publishig to npm, version: $version"
+                log
+
+                ${lib.getExe npm-publish} $npm_publish_extra_args
+                title=$(${coreutils}/bin/cat release-info/latest-release-title)
+
+                log
+                log_separator
+                log_bold "creating a GitHub release"
+                log "with title: $title"
+                log
+
+                ${lib.getExe gh-with-ci-creds} dev release create -t "$title" "$version" $gh_relase_extra_args
+              ''
+            )
+            {}
+          ;
         };
       })
       # TODO: format all code and resolve linter errors before enabling this

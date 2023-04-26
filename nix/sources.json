@@ -12,27 +12,15 @@
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs": {
-        "branch": "fix-yarn2nix-for-nix-2.5-6_29769d2a1390d294469bcc6518f17931953545e1",
+        "branch": "master",
         "description": "Nix Packages collection",
         "homepage": "",
-        "owner": "rhinofi",
+        "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "41b5736e8a7584ddf096a05b8b3afaf2a75e66fe",
-        "sha256": "0jg0jvc1acw9f71v0c7yyp13c37wjz2slnb3jd1d066g5vz3b3qi",
+        "rev": "8e3fad82be64c06fbfb9fd43993aec9ef4623936",
+        "sha256": "0x4yzsrrzq2q1ah77yydjg35niirx7yxvpzdryfnw0cr5bkszd3d",
         "type": "tarball",
-        "url": "https://github.com/rhinofi/nixpkgs/archive/41b5736e8a7584ddf096a05b8b3afaf2a75e66fe.tar.gz",
-        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
-    },
-    "yarn-berry-cjs": {
-        "branch": "master",
-        "description": null,
-        "homepage": "",
-        "owner": "rhinofi",
-        "repo": "yarn-berry-cjs",
-        "rev": "75a5282d9606586d7c2f9e38b07f352cdeab46e3",
-        "sha256": "1hwxlglh02b2h6778dd24hfdhs765s6fg55lhy6ll730n75wxvyp",
-        "type": "tarball",
-        "url": "https://github.com/rhinofi/yarn-berry-cjs/archive/75a5282d9606586d7c2f9e38b07f352cdeab46e3.tar.gz",
+        "url": "https://github.com/nixos/nixpkgs/archive/8e3fad82be64c06fbfb9fd43993aec9ef4623936.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "rhino-core": {
@@ -41,10 +29,22 @@
         "homepage": "",
         "owner": "rhinofi",
         "repo": "rhino-core",
-        "rev": "b7c78d58697a7e8048ecc13b16fdf5a8e91edafe",
-        "sha256": "17mgv2gnsv6ix3ypab8qmpwma60wp6jbdvz39s6sycavsslp1ddj",
+        "rev": "c2183a731421203e076c7dba37d339fa15e70b1d",
+        "sha256": "0ygx4q7pna7qr8d8wx42ynk7ygz3cpz8zjd7hz1nz3wx39d4ps9h",
         "type": "tarball",
-        "url": "https://github.com/rhinofi/rhino-core/archive/b7c78d58697a7e8048ecc13b16fdf5a8e91edafe.tar.gz",
+        "url": "https://github.com/rhinofi/rhino-core/archive/c2183a731421203e076c7dba37d339fa15e70b1d.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "yarn-berry-cjs-rhinofi": {
+        "branch": "rhinofi-fork-3.4.1",
+        "description": null,
+        "homepage": "",
+        "owner": "rhinofi",
+        "repo": "yarn-berry-cjs",
+        "rev": "4d14f0f36378091fcff3a4c4c8de4d5b7c3ca9e0",
+        "sha256": "106a4hsfln2hdw17vlgjb40bnx6y9iqib8awlbjlkivxya039wzd",
+        "type": "tarball",
+        "url": "https://github.com/rhinofi/yarn-berry-cjs/archive/4d14f0f36378091fcff3a4c4c8de4d5b7c3ca9e0.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
