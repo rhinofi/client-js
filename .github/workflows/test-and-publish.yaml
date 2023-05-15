@@ -15,19 +15,26 @@ jobs:
 
     - id: auth
       name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v0
+      uses: google-github-actions/auth@v1.1.1
       with:
         workload_identity_provider: projects/1000420590118/locations/global/workloadIdentityPools/github-workflows/providers/github-workflows
         service_account: github-workflows@dvf-deversifi-dev.iam.gserviceaccount.com
 
-    - uses: cachix/install-nix-action@v19
+    - uses: cachix/install-nix-action@v20
       with:
         nix_path: nixpkgs=channel:nixos-unstable
         extra_nix_config: |
           experimental-features = nix-command
 
+    - id: secrets
+      uses: google-github-actions/get-secretmanager-secrets@v1.0.1
+      with:
+        secrets: github_token:dvf-shared/GITHUB_TOKEN_ALL_REPOS_READ
+
     - name: Bootstrap nix config
-      run: echo ${{ secrets.CI_GITHUB_TOKEN }} | ./nix/netrc-create.sh
+      env:
+        GITHUB_TOKEN: '${{ steps.secrets.outputs.github_token }}'
+      run: ./nix/netrc-create.sh
 
     - name: Run pr-step
       run: nix run --impure -f nix/pkgs-private.nix ci.pr-step
