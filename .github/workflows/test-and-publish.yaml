@@ -26,8 +26,15 @@ jobs:
         extra_nix_config: |
           experimental-features = nix-command
 
+    - id: secrets
+      uses: google-github-actions/get-secretmanager-secrets@v1
+      with:
+        secrets: github_token:dvf-shared/GITHUB_TOKEN_ALL_REPOS_READ
+
     - name: Bootstrap nix config
-      run: echo ${{ secrets.CI_GITHUB_TOKEN }} | ./nix/netrc-create.sh
+      env:
+        GITHUB_TOKEN: '${{ steps.secrets.outputs.github_token }}'
+      run: ./nix/netrc-create.sh
 
     - name: Run pr-step
       run: nix run --impure -f nix/pkgs-private.nix ci.pr-step
