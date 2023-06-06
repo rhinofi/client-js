@@ -103,16 +103,9 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
 
   const httpDeposit = await post(dvf, endpoint, nonce, signature, payload)
 
-  const onChainDeposit = await onChainDepositPromise
+  await onChainDepositPromise
   if (typeof clearCallback === 'function') {
     clearCallback()
-  }
-
-  if (!onChainDeposit.status) {
-    throw new DVFError('ERR_ONCHAIN_DEPOSIT', {
-      httpDeposit,
-      onChainDeposit
-    })
   }
 
   return { ...httpDeposit, transactionHash }
