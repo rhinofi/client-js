@@ -1,6 +1,6 @@
 {
   "name": "@rhino.fi/client-js",
-  "version": "5.1.1",
+  "version": "5.1.2",
   "main": "src/index.js",
   "files": [
     "src",
@@ -10,7 +10,8 @@
   "scripts": {
     "test": "env-cmd -f ./env/test jest --testTimeout 10000",
     "test:watch": "env-cmd -f ./env/test jest --watch --testTimeout 10000 --verbose true",
-    "test:coverage": "env-cmd -f ./env/test jest --testTimeout 10000 --coverage"
+    "test:coverage": "env-cmd -f ./env/test jest --testTimeout 10000 --coverage",
+    "link-rhino-portal": "rm -rf ../rhino-portal/node_modules/@rhino.fi/client-js && rm -rf ../rhino-portal/node_modules/.cache && cp -r . ../rhino-portal/node_modules/@rhino.fi/client-js"
   },
   "jest": {
     "coverageReporters": [
