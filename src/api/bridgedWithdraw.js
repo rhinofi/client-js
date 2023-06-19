@@ -15,9 +15,7 @@ const schema = Joi.object({
   nonce: Joi.number().integer()
     .min(0)
     // Will be auto-generated if not provided.
-    .optional(),
-  // Temporary - to be removed after bridge withdrawal fees update (CHAIN-586)
-  isFeeUsd: Joi.boolean().optional()
+    .optional()
 })
 
 const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
@@ -27,7 +25,7 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 const endpoint = '/v1/trading/bridgedWithdrawals'
 
 module.exports = async (dvf, data, authNonce, signature) => {
-  const { chain, token, amount, nonce, isFeeUsd } = validateArg0(data)
+  const { chain, token, amount, nonce } = validateArg0(data)
 
   const tokenInfo = dvf.token.getTokenInfoOrThrow(token)
   // To make it fail if token is not supported
@@ -50,8 +48,7 @@ module.exports = async (dvf, data, authNonce, signature) => {
     token,
     amount: quantisedAmount,
     tx,
-    nonce: nonce || generateRandomNonceV2(),
-    ...(isFeeUsd ? { isFeeUsd: true } : {})
+    nonce: nonce || generateRandomNonceV2()
   }
 
   // Force the use of header (instead of payload) for authentication.
