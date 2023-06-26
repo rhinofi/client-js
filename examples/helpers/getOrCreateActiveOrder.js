@@ -1,4 +1,4 @@
-const P = require('aigle')
+const P = require('@rhino.fi/aigle')
 
 const defaultOrderProps = Object.freeze({
   cid: 'mycid-' + Math.random().toString(36).substring(7),

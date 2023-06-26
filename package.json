@@ -30,9 +30,9 @@
   "dependencies": {
     "@ledgerhq/hw-app-eth": "6.23.0",
     "@ledgerhq/hw-transport-webhid": "6.20.0",
+    "@rhino.fi/aigle": "^1.15.0-alpha.3",
     "@rhino.fi/dvf-utils": "^1.4.5",
     "@rhino.fi/starkware-crypto": "^0.1.7",
-    "aigle": "suguru03/aigle#8739846ba9d4cfc116e1546da1181c73564cae0b",
     "aware": "^0.3.1",
     "bignumber.js": "^9.0.0",
     "eip-712": "1.0.0",

@@ -1389,6 +1389,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rhino.fi/aigle@npm:^1.15.0-alpha.3":
+  version: 1.15.0-alpha.3
+  resolution: "@rhino.fi/aigle@npm:1.15.0-alpha.3"
+  dependencies:
+    aigle-core: ^1.0.0
+  checksum: 347ddf9d6718dfe0621082519b5aa98c60a3a15ed9afa648e911b686014964dc547305b6a63ceab053952fdfb90fa13347612282d88ee1efe2319bdc46cd149f
+  languageName: node
+  linkType: hard
+
 "@rhino.fi/client-js@workspace:.":
   version: 0.0.0-use.local
   resolution: "@rhino.fi/client-js@workspace:."
@@ -1396,10 +1405,10 @@ __metadata:
     "@ledgerhq/hw-app-eth": 6.23.0
     "@ledgerhq/hw-transport-mocker": ^5.25.0
     "@ledgerhq/hw-transport-webhid": 6.20.0
+    "@rhino.fi/aigle": ^1.15.0-alpha.3
     "@rhino.fi/dvf-utils": ^1.4.5
     "@rhino.fi/starkware-crypto": ^0.1.7
     "@truffle/hdwallet-provider": ^2.0.13
-    aigle: "suguru03/aigle#8739846ba9d4cfc116e1546da1181c73564cae0b"
     aware: ^0.3.1
     bignumber.js: ^9.0.0
     eip-712: 1.0.0
@@ -1895,15 +1904,6 @@ __metadata:
   version: 1.0.0
   resolution: "aigle-core@npm:1.0.0"
   checksum: 785dc637fe1194b511f246a1d56a44202f6d5d6836b0cff7267cd2019c771d2682e99729a82c74b68aa9904b72713953aaf772b52dde005c75706d618ca052d4
-  languageName: node
-  linkType: hard
-
-"aigle@suguru03/aigle#8739846ba9d4cfc116e1546da1181c73564cae0b":
-  version: 1.15.0-alpha.0
-  resolution: "aigle@https://github.com/suguru03/aigle.git#commit=8739846ba9d4cfc116e1546da1181c73564cae0b"
-  dependencies:
-    aigle-core: ^1.0.0
-  checksum: 35c493511d9697428da7b7ce57d9069f8c562b5857777cb00824c2bb62f7c373e58293f6b44a94de65c47ee05bd87664bbfc6fa2a652751f75d9089ce1053cc0
   languageName: node
   linkType: hard
 

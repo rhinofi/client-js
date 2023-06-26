@@ -1,6 +1,6 @@
 #!/usr/bin/env -S yarn node
 
-const P = require('aigle')
+const P = require('@rhino.fi/aigle')
 
 const request = require('./request')
 

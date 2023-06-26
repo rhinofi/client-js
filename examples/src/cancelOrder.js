@@ -1,4 +1,4 @@
-const P = require('aigle')
+const P = require('@rhino.fi/aigle')
 let order
 const orders = await rhinofi.getOrders()
 

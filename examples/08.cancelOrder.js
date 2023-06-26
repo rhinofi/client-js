@@ -40,7 +40,7 @@ const rhinofiConfig = {
 ;(async () => {
   const rhinofi = await RhinofiClientFactory(web3, rhinofiConfig)
 
-  const P = require('aigle')
+  const P = require('@rhino.fi/aigle')
   let order
   const orders = await rhinofi.getOrders()
 

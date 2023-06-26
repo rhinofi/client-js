@@ -1,4 +1,4 @@
-const P = require('aigle')
+const P = require('@rhino.fi/aigle')
 
 module.exports = async (rhinofi, deposit) => {
   console.log('waiting for deposit to be credited on chain...')
