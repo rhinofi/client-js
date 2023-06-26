@@ -1,6 +1,6 @@
 {
   "name": "@rhino.fi/client-js",
-  "version": "5.1.5",
+  "version": "5.1.6",
   "main": "src/index.js",
   "files": [
     "src",
