@@ -1,4 +1,4 @@
-const P = require('aigle')
+const P = require('@rhino.fi/aigle')
 const createSignedTransaction = require('../dvf/createSignedTransaction')
 
 module.exports = dvf => async data => ({

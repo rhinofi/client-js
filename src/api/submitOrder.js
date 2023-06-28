@@ -1,7 +1,7 @@
 const { post } = require('request-promise')
 const DVFError = require('../lib/dvf/DVFError')
 const { Joi } = require('@rhino.fi/dvf-utils')
-const P = require('aigle')
+const P = require('@rhino.fi/aigle')
 const FP = require('lodash/fp')
 
 /*
