@@ -24,15 +24,15 @@
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "rhino-core": {
-        "branch": "dev",
+        "branch": "DEVOPS-60/move-update-rhino-core-and-nixpkgs-refs-on-other-repos-job-to-gh-runner",
         "description": "Instructions to deploy the required services for DeversiFi Exchange",
         "homepage": "",
         "owner": "rhinofi",
         "repo": "rhino-core",
-        "rev": "6a90d64124823ad22c416e22db16a941c0b1f13c",
-        "sha256": "0xkx1nih6xzhy7kwggrma6s2y9h3qdxjny4lzmvzyy470z458dvd",
+        "rev": "29008411214d3abecb8105fb6a44f5b9f33d0e54",
+        "sha256": "04vz2wfhz2z21zzrwj41j3xblwbgz6ckm1sn4bb7s7brddk1g5az",
         "type": "tarball",
-        "url": "https://github.com/rhinofi/rhino-core/archive/6a90d64124823ad22c416e22db16a941c0b1f13c.tar.gz",
+        "url": "https://github.com/rhinofi/rhino-core/archive/29008411214d3abecb8105fb6a44f5b9f33d0e54.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "yarn-berry-cjs-rhinofi": {
