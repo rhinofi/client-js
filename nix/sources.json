@@ -29,10 +29,10 @@
         "homepage": "",
         "owner": "rhinofi",
         "repo": "rhino-core",
-        "rev": "6a90d64124823ad22c416e22db16a941c0b1f13c",
-        "sha256": "0xkx1nih6xzhy7kwggrma6s2y9h3qdxjny4lzmvzyy470z458dvd",
+        "rev": "e6ae71cba93a75fb60638da4bc416c9ebec948f1",
+        "sha256": "1zx7gypxhbkl5wmg0b7ri9141y16njin17rx7zx6gvczjlzf8464",
         "type": "tarball",
-        "url": "https://github.com/rhinofi/rhino-core/archive/6a90d64124823ad22c416e22db16a941c0b1f13c.tar.gz",
+        "url": "https://github.com/rhinofi/rhino-core/archive/e6ae71cba93a75fb60638da4bc416c9ebec948f1.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "yarn-berry-cjs-rhinofi": {
