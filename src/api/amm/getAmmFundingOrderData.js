@@ -1,4 +1,4 @@
-const { Joi } = require('dvf-utils')
+const { Joi } = require('@rhino.fi/dvf-utils')
 
 const get = require('../../lib/dvf/get-authenticated')
 const validateWithJoi = require('../../lib/validators/validateWithJoi')
@@ -19,6 +19,6 @@ module.exports = (dvf, data, nonce, signature) => {
   // convert `amount` to string, since it's passed as a query string parameter, and bigNumber vars aren't converted
   const validatedData = validateData(data)
   const requestData = { ...validatedData, amount: validatedData.amount.toString() }
-  
+
   return get(dvf, endpoint, nonce, signature, requestData)
 }

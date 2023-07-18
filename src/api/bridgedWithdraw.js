@@ -1,5 +1,5 @@
 const FP = require('lodash/fp')
-const { Joi } = require('dvf-utils')
+const { Joi } = require('@rhino.fi/dvf-utils')
 
 const post = require('../lib/dvf/post-authenticated')
 
@@ -16,7 +16,7 @@ const schema = Joi.object({
 })
 
 const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
-  context: `bridgedWithdrawal`
+  context: 'bridgedWithdrawal'
 })
 
 const endpoint = '/v1/trading/bridgedWithdrawals'

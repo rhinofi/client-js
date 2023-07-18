@@ -1,14 +1,14 @@
 const Eth = require('@ledgerhq/hw-app-eth').default
 const DVFError = require('../../dvf/DVFError')
 const BN = require('bignumber.js')
-const _ = require('lodash')
+const _findKey = require('lodash/findKey')
 const selectTransport = require('../../ledger/selectTransport')
 const provideContractData = require('../../ledger/provideContractData')
 const getTokenAddressFromTokenInfoOrThrow = require('../../dvf/token/getTokenAddressFromTokenInfoOrThrow')
-const swJS = require('starkware_crypto')
+const swJS = require('@rhino.fi/starkware-crypto')
 const {
   starkLimitOrderToMessageHash
-} = require('dvf-utils')
+} = require('@rhino.fi/dvf-utils')
 
 const getPublicKey = async (eth, starkPath) => {
   const tempKey = (await eth.starkGetPublicKey(starkPath)).toString('hex')
@@ -22,11 +22,11 @@ const getPublicKey = async (eth, starkPath) => {
 module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true, starkMessage = null } = {}) => {
   const Transport = selectTransport(dvf.isBrowser)
 
-  const buySymbol = _.findKey(dvf.config.tokenRegistry, {
+  const buySymbol = _findKey(dvf.config.tokenRegistry, {
     starkTokenId: starkOrder.tokenBuy
   })
 
-  const sellSymbol = _.findKey(dvf.config.tokenRegistry, {
+  const sellSymbol = _findKey(dvf.config.tokenRegistry, {
     starkTokenId: starkOrder.tokenSell
   })
 
@@ -37,12 +37,17 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true, st
 
   const transport = await Transport.create()
   const eth = new Eth(transport)
-  const { address } = await eth.getAddress(path)
-  const starkPath = dvf.stark.ledger.getPath(address)
-
-  const starkPublicKey = returnStarkPublicKey
-    ? await getPublicKey(eth, starkPath)
-    : null
+  let address, starkPublicKey, starkPath
+  try {
+    ({ address } = await eth.getAddress(path))
+    starkPath = dvf.stark.ledger.getPath(address)
+    starkPublicKey = returnStarkPublicKey
+      ? await getPublicKey(eth, starkPath)
+      : null
+  } catch (error) {
+    await transport.close()
+    throw error
+  }
 
   let buyTokenAddress = null
   let sellTokenAddress = null
@@ -61,28 +66,33 @@ module.exports = async (dvf, path, starkOrder, { returnStarkPublicKey = true, st
       await transport.close()
       return { starkSignature, starkPublicKey }
     }
-  } catch (e) {
+  } catch (error) {
     await transport.close()
     throw new DVFError('LEDGER_TOKENINFO_ERR')
   }
 
-  const starkSignature = await eth.starkSignOrder_v2(
-    starkPath,
-    sellTokenAddress,
-    sellSymbol === 'ETH' ? 'eth' : 'erc20',
-    new BN(sellTokenInfo.quantization),
-    null,
-    buyTokenAddress,
-    buySymbol === 'ETH' ? 'eth' : 'erc20',
-    new BN(buyTokenInfo.quantization),
-    null,
-    starkOrder.vaultIdSell,
-    starkOrder.vaultIdBuy,
-    new BN(starkOrder.amountSell),
-    new BN(starkOrder.amountBuy),
-    starkOrder.nonce,
-    starkOrder.expirationTimestamp
-  )
-  await transport.close()
-  return { starkPublicKey, starkSignature }
+  try {
+    const starkSignature = await eth.starkSignOrder_v2(
+      starkPath,
+      sellTokenAddress,
+      sellSymbol === 'ETH' ? 'eth' : 'erc20',
+      new BN(sellTokenInfo.quantization),
+      null,
+      buyTokenAddress,
+      buySymbol === 'ETH' ? 'eth' : 'erc20',
+      new BN(buyTokenInfo.quantization),
+      null,
+      starkOrder.vaultIdSell,
+      starkOrder.vaultIdBuy,
+      new BN(starkOrder.amountSell),
+      new BN(starkOrder.amountBuy),
+      starkOrder.nonce,
+      starkOrder.expirationTimestamp
+    )
+    await transport.close()
+    return { starkPublicKey, starkSignature }
+  } catch (error) {
+    await transport.close()
+    throw error
+  }
 }

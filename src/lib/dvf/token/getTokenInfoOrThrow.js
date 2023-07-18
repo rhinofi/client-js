@@ -8,10 +8,11 @@ module.exports = (dvf, token) => {
   }
 
   const tokenInfo = tokenRegistry[token]
+
   if (!tokenInfo) {
     const validTokens = Object.keys(tokenRegistry)
     throw new DVFError('ERR_INVALID_TOKEN', { token, validTokens })
   }
 
-  return {token, ...tokenInfo}
+  return { token, ...tokenInfo }
 }

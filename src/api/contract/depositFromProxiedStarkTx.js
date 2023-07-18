@@ -2,7 +2,7 @@
 // implemented in terms of the other once the TODO in the latter is resolved.
 const sendToDVFInterface = require('./sendToDVFInterface')
 
-const { fromQuantizedToBaseUnitsBN } = require('dvf-utils')
+const { fromQuantizedToBaseUnitsBN } = require('@rhino.fi/dvf-utils')
 const permitParamsToArgs = require('../../lib/util/permitParamsToArgs')
 
 module.exports = (dvf, { starkKey, tokenId, vaultId, amount, tokenAddress, quantum, permitParams = null }, options) => {

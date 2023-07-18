@@ -1,18 +1,20 @@
 module.exports = async (dvf, tradingKey, deFiSignature, ethAddress) => {
-  ethAddress = ethAddress || dvf.get('account')
+  throw new Error('Direct Registration to StarkExv4 is not supported via this function')
 
-  const action = dvf.config.DVF.starkExVersion === '4'
-    ? 'registerEthAddress'
-    : 'registerUser'
+  // Signature generation for StarkExv4 to be implemented and
+  // Tested. The previous logic used exchange's signature
+  // to register users
 
-  const args = [ethAddress, `0x${tradingKey}`, deFiSignature]
+  // ethAddress = ethAddress || dvf.get('account')
 
-  await dvf.eth.send(
-    dvf.contract.abi.getStarkEx(),
-    dvf.config.DVF.starkExContractAddress,
-    action,
-    args
-  )
+  // const args = [ethAddress, `0x${tradingKey}`, deFiSignature]
 
-  return true
+  // await dvf.eth.send(
+  //   dvf.contract.abi.getStarkEx(),
+  //   dvf.config.DVF.starkExContractAddress,
+  //   'registerEthAddress',
+  //   args
+  // )
+
+  // return true
 }

@@ -1,5 +1,5 @@
 const FP = require('lodash/fp')
-const { Joi, fromQuantizedToBaseUnitsBN } = require('dvf-utils')
+const { Joi, fromQuantizedToBaseUnitsBN } = require('@rhino.fi/dvf-utils')
 
 const post = require('../lib/dvf/post-authenticated')
 
@@ -18,7 +18,8 @@ const schema = Joi.object({
   amount: Joi.bigNumber().greaterThan(0), // number or number string
   useProxiedContract: Joi.boolean().optional().default(false),
   permitParams: permitParamsSchema.optional(),
-  web3Options: Joi.object().optional() // For internal use (custom gas limits, etc)
+  web3Options: Joi.object().optional(), // For internal use (custom gas limits, etc)
+  referralId: Joi.string().optional()
 })
 
 const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
@@ -29,7 +30,7 @@ const endpoint = '/v1/trading/deposits'
 const validationEndpoint = '/v1/trading/deposits-validate'
 
 module.exports = async (dvf, data, nonce, signature, txHashCb, onChainOnly) => {
-  const { token, amount, useProxiedContract, web3Options, permitParams } = validateArg0(data)
+  const { token, amount, useProxiedContract, web3Options, permitParams, referralId } = validateArg0(data)
 
   const starkKey = dvf.config.starkKeyHex
 
@@ -39,7 +40,18 @@ module.exports = async (dvf, data, nonce, signature, txHashCb, onChainOnly) => {
 
   // Force the use of header (instead of payload) for authentication.
   dvf = FP.set('config.useAuthHeader', true, dvf)
-  await post(dvf, validationEndpoint, nonce, signature, { token, amount: quantisedAmount })
+
+  const validationResult = await post(dvf, validationEndpoint, nonce, signature, { token, amount: quantisedAmount })
+
+  if (validationResult.vaultId !== vaultId) {
+    throw new Error(`MISMATCHING_VAULTID expected: ${vaultId}, got: ${validationResult.vaultId}`)
+  }
+
+  // This will match dvf.config.starkKeyHex as they are both
+  // read from our db
+  if (validationResult.starkKey !== starkKey) {
+    throw new Error(`MISMATCHING_STARKKEY expected: ${starkKey}, got: ${validationResult.starkKey}`)
+  }
 
   if (!permitParams) {
     await dvf.contract.approve(
@@ -80,7 +92,7 @@ module.exports = async (dvf, data, nonce, signature, txHashCb, onChainOnly) => {
     ? contractDepositFromProxiedStarkTx(dvf, tx, options)
     : contractDepositFromStarkTx(dvf, tx, options)
 
-  const transactionHash = await transactionHashPromise
+  const { transactionHash, clearCallback } = await transactionHashPromise
 
   if (onChainOnly) {
     await onChainDepositPromise
@@ -90,17 +102,15 @@ module.exports = async (dvf, data, nonce, signature, txHashCb, onChainOnly) => {
   const payload = {
     token,
     amount: quantisedAmount,
-    txHash: transactionHash
+    txHash: transactionHash,
+    referralId
   }
+
   const httpDeposit = await post(dvf, endpoint, nonce, signature, payload)
 
-  const onChainDeposit = await onChainDepositPromise
-
-  if (!onChainDeposit.status) {
-    throw new DVFError('ERR_ONCHAIN_DEPOSIT', {
-      httpDeposit,
-      onChainDeposit
-    })
+  await onChainDepositPromise
+  if (typeof clearCallback === 'function') {
+    clearCallback()
   }
 
   return { ...httpDeposit, transactionHash }

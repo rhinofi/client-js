@@ -1,28 +1,23 @@
 /**
  * Creats a client instance for testing
  **/
-const HDWalletProvider = require('@truffle/hdwallet-provider')
-const Web3 = require('web3')
+const getWeb3 = require('../../../../examples/helpers/getWeb3')
 
-const DVF = require('../../../dvf')
+const RhinofiClientFactory = require('../../../index')
 
 module.exports = async () => {
   const rpcUrl = process.env.RPC_URL
   const privateKey = process.env.PRIVATE_ETH_KEY
 
-  const provider = new HDWalletProvider(privateKey, rpcUrl)
-
-  const web3 = new Web3(provider)
-
-  provider.engine.stop()
+  const { web3 } = getWeb3(privateKey, rpcUrl)
 
   const gasStationApiKey = process.env.ETH_GAS_STATION_KEY || ''
 
-  let config = { gasStationApiKey }
+  const config = { gasStationApiKey }
 
   // It's possible to overwrite the API address with the testnet address
   // for example like this:
-  // config.api = 'https://api.stg.deversifi.com'
+  // config.api = 'https://api.stg.rhino.fi'
   // config.api = 'http://localhost:7777/v1/trading'
-  return DVF(web3, config)
+  return RhinofiClientFactory(web3, config)
 }

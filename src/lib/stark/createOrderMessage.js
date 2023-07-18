@@ -1,4 +1,4 @@
-const sw = require('starkware_crypto')
+const sw = require('@rhino.fi/starkware-crypto')
 const DVFError = require('../dvf/DVFError')
 
 module.exports = (dvf, starkOrder) => {

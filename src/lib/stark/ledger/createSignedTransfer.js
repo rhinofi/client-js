@@ -11,7 +11,7 @@ module.exports = async (
   destinationVault,
   receiverPublicKey
 ) => {
-
+  // TODO support transfer with fees
   // Will happen if it's an ETH address instead of public key
   // ETH addresses a used in the context of StarkEx v4 withdrawals
   // Ledger seems to only sign correctly if the ETH address
@@ -23,7 +23,7 @@ module.exports = async (
     receiverPublicKey = '0x' + receiverPublicKeyWithoutPrefix
   }
   const Transport = selectTransport(dvf.isBrowser)
-  const {token, tokenAddress, quantization} = tokenInfo
+  const { token, tokenAddress, quantization } = tokenInfo
   const nonce = dvf.util.generateRandomNonce()
   const transferQuantization = new BN(quantization)
   const amountTransfer = new BN(quantizedAmount)
@@ -31,10 +31,10 @@ module.exports = async (
   const expireTime =
     Math.floor(Date.now() / (1000 * 3600)) +
     parseInt(dvf.config.defaultStarkExpiry)
-  let starkPublicKey = await dvf.stark.ledger.getPublicKey(path)
+  const starkPublicKey = await dvf.stark.ledger.getPublicKey(path)
   const transport = await Transport.create()
   const eth = new Eth(transport)
-  const {address} = await eth.getAddress(path)
+  const { address } = await eth.getAddress(path)
   const starkPath = dvf.stark.ledger.getPath(address)
 
   try {
@@ -54,7 +54,7 @@ module.exports = async (
       null,
       null
     )
-    return {starkPublicKey, nonce, expireTime, starkSignature}
+    return { starkPublicKey, nonce, expireTime, starkSignature }
   } finally {
     await transport.close()
   }

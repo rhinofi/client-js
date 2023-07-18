@@ -1,4 +1,4 @@
-const sw = require('starkware_crypto')
+const sw = require('@rhino.fi/starkware-crypto')
 
 module.exports = (dvf, ...args) => {
   const message = (dvf.sw || sw).getTransferMsgHash(

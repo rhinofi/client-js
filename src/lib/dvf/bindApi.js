@@ -5,15 +5,15 @@
  *
  * This way we get a regular looking API on top of functional code
  */
-const _ = require('lodash')
+const _partial = require('lodash/partial')
 
 module.exports = () => {
   const dvf = {}
 
   // returns a function that will call api functions prepending dvf
   // as first argument
-  const compose = funk => {
-    return _.partial(funk, dvf)
+  const compose = (funk, ...args) => {
+    return _partial(funk, dvf, ...args)
   }
 
   // dvf.account functions
@@ -22,7 +22,11 @@ module.exports = () => {
     tokenBalance: compose(require('../../api/account/tokenBalance')),
     select: compose(require('../../api/account/select')),
     getPermissions: compose(require('../../api/account/permissions').getPermissions),
-    setPermissions: compose(require('../../api/account/permissions').setPermissions)
+    setPermissions: compose(require('../../api/account/permissions').setPermissions),
+    getReferralId: compose(require('../../api/account/getReferralId')),
+    getRemainingSpins: compose(require('../../api/account/getRemainingSpins')),
+    getReferralRewards: compose(require('../../api/account/getReferralRewards')),
+    postReferralSpin: compose(require('../../api/account/postReferralSpin'))
   }
 
   dvf.stark = {
@@ -81,7 +85,7 @@ module.exports = () => {
     withdraw: compose(require('../../api/contract/withdraw')),
     abi: {
       token: require('../../api/contract/abi/token.abi'),
-      getStarkEx: () => require('../../api/contract/abi/StarkExV2.abi'),
+      getStarkEx: () => require('../../api/contract/abi/StarkExV4.abi'),
       WithdrawalBalanceReader: require('../../api/contract/abi/WithdrawalBalanceReader.abi'),
       getDVFInterface: () => require('../../api/contract/abi/DVFInterface.abi'),
       getSidechainBridgeInterface: () => require('../../api/contract/abi/BridgeDepositContract.abi')
@@ -93,6 +97,7 @@ module.exports = () => {
     provideContractData: compose(require('../ledger/provideContractData')),
     getTokenInfo: compose(require('./token/getTokenInfo')),
     getTokenInfoOrThrow: compose(require('./token/getTokenInfoOrThrow')),
+    getTokenInfoForChainOrThrow: compose(require('./token/getTokenInfoForChainOrThrow')),
     getTokenInfoByTokenId: compose(require('./token/getTokenInfoByTokenId')),
     fromBaseUnitAmount: compose(require('./token/fromBaseUnitAmount')),
     fromQuantizedAmount: compose(require('./token/fromQuantizedAmount')),
@@ -120,13 +125,42 @@ module.exports = () => {
     attachStarkProvider: compose(require('../../lib/wallet/attachStarkProvider'))
   }
 
+  // dvf.bitfinex functions
+  dvf.bitfinex = {
+    transfers: compose(require('../../api/bitfinex/transfers'))
+  }
+
+  // dvf.migrationStampede
+  dvf.migrationStampede = {
+    getStampedeConfig: compose(require('../../api/migrationStampede/getStampedeConfig')),
+    getMissionsConfig: compose(require('../../api/migrationStampede/getMissionsConfig')),
+    getPotValue: compose(require('../../api/migrationStampede/getPotValue')),
+    getUserMissions: compose(require('../../api/migrationStampede/getUserMissions')),
+    getUserReward: compose(require('../../api/migrationStampede/getUserReward'))
+  }
+
+  dvf.userVerification = {
+    setEmailOrPhone: compose(require('../../api/userVerification/setEmailOrPhone')),
+    verifyCode: compose(require('../../api/userVerification/verifyCode')),
+    isUserVerified: compose(require('../../api/userVerification/isUserVerified'))
+  }
+
   // dvf.sign functions
   dvf.sign = compose(require('../../api/sign/sign'))
   dvf.sign.request = compose(require('../../api/sign/request'))
   dvf.sign.nonceSignature = compose(require('../../api/sign/nonceSignature'))
 
   dvf.postAuthenticated = compose(require('../../lib/dvf/post-authenticated'))
+
+  dvf.deleteAuthenticated = compose(require('../../lib/dvf/delete-authenticated'))
+
   dvf.getAuthenticated = compose(require('../../lib/dvf/get-authenticated'))
+
+  // Cancellable authenticated requests
+  dvf.request = ['get', 'post'].reduce((acc, method) => {
+    acc[method] = compose(require('../../lib/dvf/request'), method)
+    return acc
+  }, {})
 
   dvf.createOrderPayload = compose(require('../../lib/dvf/createOrderPayload'))
   dvf.createMarketOrderPayload = compose(require('../../lib/dvf/createMarketOrderPayload'))
@@ -181,6 +215,7 @@ module.exports = () => {
   dvf.fastWithdrawal = compose(require('../../api/fastWithdrawal'))
   dvf.fastWithdrawalFee = compose(require('../../api/fastWithdrawalFee'))
   dvf.fastWithdrawalMaxAmount = compose(require('../../api/fastWithdrawalMaxAmount'))
+  dvf.getWithdrawalQuote = compose(require('../../api/getWithdrawalQuote'))
   dvf.getDeposits = compose(require('../../api/getDeposits'))
   dvf.getBalance = compose(require('../../api/getBalance'))
   dvf.getBalanceUsd = compose(require('../../api/getBalanceUsd'))
@@ -197,7 +232,6 @@ module.exports = () => {
   dvf.getVaultIdFromServer = compose(require('../../api/getVaultIdFromServer'))
   dvf.getVaultIdAndStarkKey = compose(require('../../api/getVaultIdAndStarkKey'))
   dvf.register = compose(require('../../api/register'))
-  dvf.registerAndDeposit = compose(require('../../api/registerAndDeposit'))
   dvf.submitBuyOrder = compose(require('../../api/submitBuyOrder'))
   dvf.submitOrder = compose(require('../../api/submitOrder'))
   dvf.submitMarketOrder = compose(require('../../api/submitMarketOrder'))
@@ -217,6 +251,7 @@ module.exports = () => {
   dvf.postAmmFundingOrders = compose(require('../../api/amm/postAmmFundingOrders'))
   dvf.getAmmFundingOrders = compose(require('../../api/amm/getAmmFundingOrders'))
   dvf.getAmmFundingOrderData = compose(require('../../api/amm/getAmmFundingOrderData'))
+  dvf.applyFundingOrderDataSlippage = compose(require('../../api/amm/applyFundingOrderDataSlippage'))
   dvf.poolTVL = compose(require('../../api/amm/poolTVL'))
   dvf.poolTvlHistory = compose(require('../../api/amm/poolTvlHistory'))
   dvf.poolVolume24Hours = compose(require('../../api/amm/poolVolume24Hours'))
@@ -227,17 +262,21 @@ module.exports = () => {
   dvf.poolUserRewards = compose(require('../../api/amm/poolUserRewards'))
   dvf.poolUserAccruedFees = compose(require('../../api/amm/poolUserAccruedFees'))
   dvf.poolTokensRate = compose(require('../../api/amm/poolTokensRate'))
+  dvf.poolsData = compose(require('../../api/amm/poolsData'))
+  dvf.poolsUserData = compose(require('../../api/amm/poolsUserData'))
   dvf.getRewardsLockedState = compose(require('../../api/amm/getRewardsLockedState'))
   dvf.postRewardsLockedState = compose(require('../../api/amm/postRewardsLockedState'))
   dvf.walletFailedEvent = compose(require('../../api/walletFailedEvent'))
   dvf.walletSuccessEvent = compose(require('../../api/walletSuccessEvent'))
+  dvf.topPerformersTokens = compose(require('../../api/topPerformersTokens'))
 
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),
     withdraw: compose(require('../../api/ledger/withdraw')),
     transfer: compose(require('../../api/ledger/transfer')),
     transferAndWithdraw: compose(require('../../api/ledger/transferAndWithdraw')),
-    transferUsingVaultIdAndStarkKey: compose(require('../../api/ledger/transferUsingVaultIdAndStarkKey'))
+    transferUsingVaultIdAndStarkKey: compose(require('../../api/ledger/transferUsingVaultIdAndStarkKey')),
+    signEIP712Data: compose(require('../../api/ledger/signEIP712Data'))
   }
   dvf.estimatedNextBatchTime = compose(require('../../api/estimatedNextBatchTime'))
   dvf.publicUserPermissions = compose(require('../../api/getPublicPermissions'))

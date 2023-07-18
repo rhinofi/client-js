@@ -7,11 +7,11 @@ const validFor = '0'
 const feeRate = ''
 
 // Gets the price from the order book api and cuts 5% to make sure the order will be settled
-const tickersData = await dvf.getTickers('ETH:USDT');
+const tickersData = await rhinofi.getTickers('ETH:USDT');
 const orderBookPrice = getPriceFromOrderBook(tickersData);
 const price = orderBookPrice - orderBookPrice * 0.05;
 
-const submitOrderResponse = await dvf.submitOrder({
+const submitOrderResponse = await rhinofi.submitOrder({
   symbol,
   amount,
   price,

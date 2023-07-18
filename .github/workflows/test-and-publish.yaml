@@ -1,0 +1,63 @@
+name: CI with NIX
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write # This is required for requesting the JWT used by GCP auth step
+      contents: read  # This is required for actions/checkout
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - id: auth
+      name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v1.1.1
+      with:
+        workload_identity_provider: projects/1000420590118/locations/global/workloadIdentityPools/github-workflows/providers/github-workflows
+        service_account: github-workflows@dvf-deversifi-dev.iam.gserviceaccount.com
+
+    - uses: cachix/install-nix-action@v20
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
+        extra_nix_config: |
+          experimental-features = nix-command
+
+    - id: secrets
+      uses: google-github-actions/get-secretmanager-secrets@v1.0.1
+      with:
+        secrets: github_token:dvf-shared/GITHUB_TOKEN_ALL_REPOS_READ
+
+    - name: Bootstrap nix config
+      env:
+        GITHUB_TOKEN: '${{ steps.secrets.outputs.github_token }}'
+      run: ./nix/netrc-create.sh
+
+    - name: Run pr-step
+      run: nix run --impure -f nix/pkgs-private.nix ci.pr-step
+
+    - name: Run deploy-step
+      run: |
+        set -euo pipefail
+
+        run_nix () {
+          nix run --impure -f nix/pkgs-private.nix "${@}"
+        }
+
+        if [[ ${{ github.ref }} == refs/heads/master || ${{ github.ref }} == refs/heads/dev ]]
+        then
+          is_dev_release=true
+          if [[ ${{ github.ref }} == refs/heads/master ]]
+          then
+            is_dev_release=false
+          fi
+
+          # NOTE: if this fails with a 403 it's most likely due to not bumping
+          #   version in package.json
+          run_nix ci.deploy-step -- "$is_dev_release"
+        else
+          echo skipping
+        fi

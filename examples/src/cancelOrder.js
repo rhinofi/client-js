@@ -1,6 +1,6 @@
-const P = require('aigle')
+const P = require('@rhino.fi/aigle')
 let order
-const orders = await dvf.getOrders()
+const orders = await rhinofi.getOrders()
 
 console.log('orders', orders)
 
@@ -14,7 +14,7 @@ if (orders.length == 0) {
   const validFor = '0'
   const feeRate = ''
 
-  order = await dvf.submitOrder({
+  order = await rhinofi.submitOrder({
     symbol,
     amount,
     price,
@@ -30,7 +30,7 @@ if (orders.length == 0) {
 
   while (true) {
     console.log('checking if order appears on the book...')
-    if ((await dvf.getOrders()).find(o => o._id === order._id)) break
+    if ((await rhinofi.getOrders()).find(o => o._id === order._id)) break
     await P.delay(1000)
   }
 }
@@ -40,8 +40,8 @@ else {
 
 console.log('cancelling orderId', order._id)
 
-const response = await dvf.cancelOrder(order._id)
+const response = await rhinofi.cancelOrder(order._id)
 // Alternative with cid :
-// const response = await dvf.cancelOrder({ cid: order.cid })
+// const response = await rhinofi.cancelOrder({ cid: order.cid })
 
 logExampleResult(response)

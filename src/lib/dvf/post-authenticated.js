@@ -1,5 +1,3 @@
-const _ = require('lodash')
-
 const addAuthHeadersOrData = require('./addAuthHeadersOrData')
 const postGeneric = require('./post-generic')
 

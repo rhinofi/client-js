@@ -1,8 +1,9 @@
 
-const { Long, toQuantizedAmountBN, fromQuantizedToBaseUnitsBN } = require('dvf-utils')
+const { Long, toQuantizedAmountBN, fromQuantizedToBaseUnitsBN } = require('@rhino.fi/dvf-utils')
 
 module.exports = (baseUnitAmount, tokenInfo) => {
   const quantisedAmount = toQuantizedAmountBN(tokenInfo, baseUnitAmount)
+
   if (quantisedAmount.isLessThan(1)) {
     throw new Error(
       `Amount too small, got: ${baseUnitAmount}, allowed minumum: ` +

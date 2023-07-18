@@ -1,5 +1,5 @@
 const DVFError = require('../../lib/dvf/DVFError')
-const sw = require('starkware_crypto')
+const sw = require('@rhino.fi/starkware-crypto')
 
 const sigKeysToString = sig => ({
   r: sig.r.toString(16),

@@ -4,11 +4,11 @@ const Eth = require('@ledgerhq/hw-app-eth').default
 const DVFError = require('../dvf/DVFError')
 const createSignedOrder = require('../stark/ledger/createSignedOrder')
 const selectTransport = require('./selectTransport')
-const swJS = require('starkware_crypto')
+const swJS = require('@rhino.fi/starkware-crypto')
 const getTokenAddressFromTokenInfoOrThrow = require('../dvf/token/getTokenAddressFromTokenInfoOrThrow')
 const {
   starkTransferTxToMessageHash
-} = require('dvf-utils')
+} = require('@rhino.fi/dvf-utils')
 
 const transferTransactionTypes = [
   'ConditionalTransferRequest',
@@ -27,33 +27,37 @@ const getTxSignature = async (dvf, tx, path) => {
     if (!(transferTransactionTypes.includes(tx.type))) {
       throw new DVFError(`Unsupported stark transaction type: ${tx.type}`, { tx })
     }
-    const Transport = selectTransport(dvf.isBrowser)
-    const transport = await Transport.create()
-    const eth = new Eth(transport)
-    const { address } = await eth.getAddress(path)
-    const starkPath = dvf.stark.ledger.getPath(address)
-    const tokenInfo = dvf.token.getTokenInfoByTokenId(tx.token)
-    const tokenAddress = getTokenAddressFromTokenInfoOrThrow(tokenInfo, 'ETHEREUM')
-    const transferQuantization = new BN(tokenInfo.quantization)
-    const transferAmount = new BN(tx.amount)
-    let receiverPublicKey = tx.receiverPublicKey
-
-    // Will happen if it's an ETH address instead of public key
-    // ETH addresses a used in the context of StarkEx v4 withdrawals
-    // Ledger seems to only sign correctly if the ETH address
-    // is padded as if it was a stark public key
-    if (receiverPublicKey && receiverPublicKey.length < 66) {
-      const receiverPublicKeyWithoutPrefix = receiverPublicKey
-        .slice(2)
-        .padStart(64, '0')
-      receiverPublicKey = '0x' + receiverPublicKeyWithoutPrefix
-    }
-
+    let transport
     try {
+      const Transport = selectTransport(dvf.isBrowser)
+      transport = await Transport.create()
+      const eth = new Eth(transport)
+      const { address } = await eth.getAddress(path)
+      const starkPath = dvf.stark.ledger.getPath(address)
+      const tokenInfo = dvf.token.getTokenInfoByTokenId(tx.token)
+      const tokenAddress = getTokenAddressFromTokenInfoOrThrow(tokenInfo, 'ETHEREUM')
+      const transferQuantization = new BN(tokenInfo.quantization)
+      const transferAmount = new BN(tx.amount)
+      let receiverPublicKey = tx.receiverPublicKey
+
+      // Will happen if it's an ETH address instead of public key
+      // ETH addresses a used in the context of StarkEx v4 withdrawals
+      // Ledger seems to only sign correctly if the ETH address
+      // is padded as if it was a stark public key
+      if (receiverPublicKey && receiverPublicKey.length < 66) {
+        const receiverPublicKeyWithoutPrefix = receiverPublicKey
+          .slice(2)
+          .padStart(64, '0')
+        receiverPublicKey = '0x' + receiverPublicKeyWithoutPrefix
+      }
       // Load token information for Ledger device
       const tokenData = await dvf.token.provideContractData(eth, tokenAddress, transferQuantization)
 
-      if (tokenData && tokenData.unsafeSign) {
+      const shouldUnsafeSign = (tokenData && tokenData.unsafeSign) ||
+        // Ledger does not support StarkEx messages with fee
+        tx.feeInfoUser
+
+      if (shouldUnsafeSign) {
         const message = getMessage(swJS)(tx)
         const paddedMessage = `0x${message.padEnd(64, '0').substr(-64)}`
         return eth.starkUnsafeSign(

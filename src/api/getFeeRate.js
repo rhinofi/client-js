@@ -1,4 +1,4 @@
-const { Joi } = require('dvf-utils')
+const { Joi } = require('@rhino.fi/dvf-utils')
 const get = require('../lib/dvf/get-authenticated')
 const validateWithJoi = require('../lib/validators/validateWithJoi')
 
@@ -14,7 +14,7 @@ const validateArg0 = validateWithJoi(schema, { presence: 'optional' })('INVALID_
 const endpoint = '/v1/trading/r/feeRate'
 /**
  *
- * Retrieve feeRate based on deversifi feeRate rules
+ * Retrieve feeRate based on rhino.fi feeRate rules
  */
 module.exports = async (dvf, data, nonce, signature) => {
   const { feature, symbol } = validateArg0(data || {})

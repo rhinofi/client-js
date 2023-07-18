@@ -1,0 +1,50 @@
+{
+    "github-markdown-toc": {
+        "branch": "master",
+        "description": "Easy TOC creation for GitHub README.md",
+        "homepage": "",
+        "owner": "ekalinin",
+        "repo": "github-markdown-toc",
+        "rev": "661b5c5111f47174e2d9092c8d76867e5a1f249d",
+        "sha256": "16xw14av8vgvdyychj38liwxj073kija6n4zvjrpz2m5vs41fa2g",
+        "type": "tarball",
+        "url": "https://github.com/ekalinin/github-markdown-toc/archive/661b5c5111f47174e2d9092c8d76867e5a1f249d.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs": {
+        "branch": "master",
+        "description": "Nix Packages collection",
+        "homepage": "",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "8e3fad82be64c06fbfb9fd43993aec9ef4623936",
+        "sha256": "0x4yzsrrzq2q1ah77yydjg35niirx7yxvpzdryfnw0cr5bkszd3d",
+        "type": "tarball",
+        "url": "https://github.com/nixos/nixpkgs/archive/8e3fad82be64c06fbfb9fd43993aec9ef4623936.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "rhino-core": {
+        "branch": "dev",
+        "description": "Instructions to deploy the required services for DeversiFi Exchange",
+        "homepage": "",
+        "owner": "rhinofi",
+        "repo": "rhino-core",
+        "rev": "8424a851d2bd6913bbf111859e2aeda2a8924c7a",
+        "sha256": "1zvk99gfa5lfzvkyzjxlpp05abfvvyixzwhhshr3nc5gjq8yiiwb",
+        "type": "tarball",
+        "url": "https://github.com/rhinofi/rhino-core/archive/8424a851d2bd6913bbf111859e2aeda2a8924c7a.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "yarn-berry-cjs-rhinofi": {
+        "branch": "rhinofi-fork-3.4.1",
+        "description": null,
+        "homepage": "",
+        "owner": "rhinofi",
+        "repo": "yarn-berry-cjs",
+        "rev": "4d14f0f36378091fcff3a4c4c8de4d5b7c3ca9e0",
+        "sha256": "106a4hsfln2hdw17vlgjb40bnx6y9iqib8awlbjlkivxya039wzd",
+        "type": "tarball",
+        "url": "https://github.com/rhinofi/yarn-berry-cjs/archive/4d14f0f36378091fcff3a4c4c8de4d5b7c3ca9e0.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}

@@ -66,7 +66,7 @@ module.exports = () => {
     fast: 500000000
   }
 
-  nock('https://api.stg.deversifi.com')
+  nock('https://api.stg.rhino.fi')
     .get('/v1/trading/r/getGasPrice')
     .reply(200, mockGasResponse)
 }

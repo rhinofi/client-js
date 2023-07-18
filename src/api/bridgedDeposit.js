@@ -1,5 +1,5 @@
 const FP = require('lodash/fp')
-const { Joi, fromQuantizedToBaseUnitsBN } = require('dvf-utils')
+const { Joi, toBN } = require('@rhino.fi/dvf-utils')
 
 const post = require('../lib/dvf/post-authenticated')
 
@@ -17,7 +17,8 @@ const schema = Joi.object({
   amount: Joi.bigNumber().greaterThan(0), // number or number string
   // useProxiedContract: Joi.boolean().optional().default(false),
   permitParams: permitParamsSchema.optional(),
-  web3Options: Joi.object().optional() // For internal use (custom gas limits, etc)
+  web3Options: Joi.object().optional(), // For internal use (custom gas limits, etc)
+  referralId: Joi.string().optional()
 })
 
 const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
@@ -28,11 +29,15 @@ const endpoint = '/v1/trading/bridgedDeposits'
 const validationEndpoint = '/v1/trading/deposits-validate'
 
 module.exports = async (dvf, data, nonce, signature, txHashCb, onlyOnChain) => {
-  const { chain, token, amount, web3Options, permitParams } = validateArg0(data)
+  const { chain, token, amount, web3Options, permitParams, referralId } = validateArg0(data)
 
   const tokenInfo = dvf.token.getTokenInfoOrThrow(token)
+  // Quantised amount must be from base token config
   const quantisedAmount = getSafeQuantizedAmountOrThrow(amount, tokenInfo)
-  const baseUnitAmount = fromQuantizedToBaseUnitsBN(tokenInfo, quantisedAmount).toString()
+
+  // Base units should be using the execution chain
+  const tokenChainInfo = dvf.token.getTokenInfoForChainOrThrow(token, chain)
+  const baseUnitAmount = toBN(amount).shiftedBy(tokenChainInfo.decimals).toString()
 
   // Force the use of header (instead of payload) for authentication.
   dvf = FP.set('config.useAuthHeader', true, dvf)
@@ -66,7 +71,7 @@ module.exports = async (dvf, data, nonce, signature, txHashCb, onlyOnChain) => {
 
   const onChainDepositPromise = depositFromSidechainBridge(dvf, tx, options)
 
-  const transactionHash = await transactionHashPromise
+  const { transactionHash, clearCallback } = await transactionHashPromise
 
   if (onlyOnChain) {
     await onChainDepositPromise
@@ -77,17 +82,14 @@ module.exports = async (dvf, data, nonce, signature, txHashCb, onlyOnChain) => {
     chain,
     token,
     amount: quantisedAmount,
-    txHash: transactionHash
+    txHash: transactionHash,
+    referralId
   }
   const httpDeposit = await post(dvf, endpoint, nonce, signature, payload)
 
-  const onChainDeposit = await onChainDepositPromise
-
-  if (!onChainDeposit.status) {
-    throw new DVFError('ERR_ONCHAIN_BRIDGED_DEPOSIT', {
-      httpDeposit,
-      onChainDeposit
-    })
+  await onChainDepositPromise
+  if (typeof clearCallback === 'function') {
+    clearCallback()
   }
 
   return { ...httpDeposit, transactionHash }

@@ -1,5 +1,5 @@
 const FP = require('lodash/fp')
-const { Joi, toBN, prepareAmount } = require('dvf-utils')
+const { Joi, toBN, prepareAmount } = require('@rhino.fi/dvf-utils')
 
 /*
 repeating the schema here as this method can be called on its own

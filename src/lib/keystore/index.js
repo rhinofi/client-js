@@ -1,10 +1,10 @@
-const swJS = require('starkware_crypto')
+const swJS = require('@rhino.fi/starkware-crypto')
 const FP = require('lodash/fp')
 
 const {
   starkTransferTxToMessageHash,
   starkLimitOrderToMessageHash
-} = require('dvf-utils')
+} = require('@rhino.fi/dvf-utils')
 
 const DVFError = require('../dvf/DVFError')
 const starkSign = require('../stark/starkSign')
@@ -18,7 +18,7 @@ const transferTransactionTypes = [
 const getMessage = sw => tx => {
   if (tx.type != null) {
     if (!(transferTransactionTypes.includes(tx.type))) {
-      throw new DVFError(`Unsupported stark transaction type: ${tx.type}`, {tx})
+      throw new DVFError(`Unsupported stark transaction type: ${tx.type}`, { tx })
     }
     return starkTransferTxToMessageHash(sw)(tx)
   } else {
