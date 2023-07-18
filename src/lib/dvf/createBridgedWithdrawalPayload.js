@@ -1,8 +1,8 @@
-const generateRandomNonceV2 = require('../lib/dvf/generateRandomNonceV2')
+const generateRandomNonceV2 = require('./generateRandomNonceV2')
 const { Joi } = require('dvf-utils')
-const validateWithJoi = require('../lib/validators/validateWithJoi')
-const getSafeQuantizedAmountOrThrow = require('../lib/dvf/token/getSafeQuantizedAmountOrThrow')
-const getTokenAddressFromTokenInfoOrThrow = require('../lib/dvf/token/getTokenAddressFromTokenInfoOrThrow')
+const validateWithJoi = require('../validators/validateWithJoi')
+const getSafeQuantizedAmountOrThrow = require('./token/getSafeQuantizedAmountOrThrow')
+const getTokenAddressFromTokenInfoOrThrow = require('./token/getTokenAddressFromTokenInfoOrThrow')
 
 const schema = Joi.object({
   chain: Joi.string(),
