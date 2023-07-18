@@ -1,5 +1,5 @@
 const generateRandomNonceV2 = require('./generateRandomNonceV2')
-const { Joi } = require('dvf-utils')
+const { Joi } = require('@rhino.fi/dvf-utils')
 const validateWithJoi = require('../validators/validateWithJoi')
 const getSafeQuantizedAmountOrThrow = require('./token/getSafeQuantizedAmountOrThrow')
 const getTokenAddressFromTokenInfoOrThrow = require('./token/getTokenAddressFromTokenInfoOrThrow')
