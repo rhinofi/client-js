@@ -173,6 +173,9 @@ module.exports = () => {
   dvf.createFastWithdrawalPayload = compose(
     require('./createFastWithdrawalPayload')
   )
+  dvf.createBridgedWithdrawalPayload = compose(
+    require('./createBridgedWithdrawalPayload')
+  )
   dvf.createTransferPayload = compose(
     require('./createTransferPayload')
   )

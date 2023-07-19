@@ -28,7 +28,7 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 const endpoint = '/v1/trading/bridgedDeposits'
 const validationEndpoint = '/v1/trading/deposits-validate'
 
-module.exports = async (dvf, data, nonce, signature, txHashCb) => {
+module.exports = async (dvf, data, nonce, signature, txHashCb, onlyOnChain) => {
   const { chain, token, amount, web3Options, permitParams, referralId } = validateArg0(data)
 
   const tokenInfo = dvf.token.getTokenInfoOrThrow(token)
@@ -72,6 +72,11 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
   const onChainDepositPromise = depositFromSidechainBridge(dvf, tx, options)
 
   const { transactionHash, clearCallback } = await transactionHashPromise
+
+  if (onlyOnChain) {
+    await onChainDepositPromise
+    return { transactionHash }
+  }
 
   const payload = {
     chain,
