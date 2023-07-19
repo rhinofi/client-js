@@ -81,7 +81,7 @@ let
                 log "with title: $title"
                 log
 
-                ${lib.getExe gh-with-ci-creds} dev release create -t "$title" "$version" $gh_relase_extra_args
+                ${lib.getExe gh-with-ci-creds} release create -t "$title" "$version" $gh_relase_extra_args
               ''
             )
             {}
