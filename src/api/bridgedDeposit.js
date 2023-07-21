@@ -37,7 +37,7 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
 
   // Base units should be using the execution chain
   const tokenChainInfo = dvf.token.getTokenInfoForChainOrThrow(token, chain)
-  const baseUnitAmount = toBN(amount).shiftedBy(tokenChainInfo.decimals).toString()
+  const baseUnitAmount = dvf.token.toBaseUnitAmount(token, amount, tokenChainInfo)
 
   // Force the use of header (instead of payload) for authentication.
   dvf = FP.set('config.useAuthHeader', true, dvf)
