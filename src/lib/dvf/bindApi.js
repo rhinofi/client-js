@@ -12,6 +12,9 @@ module.exports = () => {
 
   // returns a function that will call api functions prepending dvf
   // as first argument
+  /**
+   * @type {<T extends Function>(fn: T) => (...args: ParametersExceptFirst<T>) => ReturnType<T>}
+   */
   const compose = (funk, ...args) => {
     return _partial(funk, dvf, ...args)
   }
@@ -30,6 +33,8 @@ module.exports = () => {
   }
 
   dvf.stark = {
+    signRegistration: compose(require('../stark/signRegistration')),
+    createRegistrationMessage: compose(require('../stark/createRegistrationMessage')),
     createOrder: compose(require('../stark/createOrder')),
     createMarketOrder: compose(require('../stark/createMarketOrder')),
     createOrderMessage: compose(require('../stark/createOrderMessage')),
