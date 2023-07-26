@@ -35,6 +35,7 @@ module.exports = () => {
   dvf.stark = {
     signRegistration: compose(require('../stark/signRegistration')),
     createRegistrationMessage: compose(require('../stark/createRegistrationMessage')),
+    l1RegistrationCallData: compose(require('../stark/l1RegistrationCallData')),
     createOrder: compose(require('../stark/createOrder')),
     createMarketOrder: compose(require('../stark/createMarketOrder')),
     createOrderMessage: compose(require('../stark/createOrderMessage')),

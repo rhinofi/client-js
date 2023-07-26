@@ -6,7 +6,7 @@ const pad = (rec) => rec.padStart(64, 0)
 /**
  * @type {(dvf: ReturnType<import('../dvf/bindApi')>,
  * tradingKey: string,
- * ethAddress: string) => string}
+ * ethAddress: string) => Promise<string>}
  */
 module.exports = async (dvf, tradingKey, ethAddress) => {
   const starkware = dvf.sw || sw
@@ -30,7 +30,13 @@ module.exports = async (dvf, tradingKey, ethAddress) => {
 
     const { r, s } = starkware.sign(starkKeyPair, message)
 
-    const final = `0x${pad(r.toString(16))}${pad(s.toString(16))}${pad(publicKey.y)}`
+    const components = [
+      r.toString(16),
+      s.toString(16),
+      publicKey.y
+    ].map(pad)
+
+    const final = `0x${components.join('')}`
 
     return final
   } catch (error) {

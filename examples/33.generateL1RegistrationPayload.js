@@ -42,28 +42,21 @@ const rhinofiConfig = {
   const rhinofi = await RhinofiClientFactory(web3, rhinofiConfig)
   const { starkKeyHex, ethAddress } = await rhinofi.getUserConfig()
 
-  console.log('Addresses', ethAddress, starkKeyHex)
-
-  const final = await rhinofi.stark.signRegistration(
+  const l1RegistrationSignature = await rhinofi.stark.signRegistration(
     starkPrivKey,
     ethAddress
   )
 
-  const starkExContract = new web3.eth.Contract(
-    rhinofi.contract.abi.getStarkEx(),
-    rhinofi.config.DVF.starkExContractAddress,
-  )
-
-  const callData = starkExContract.methods.registerEthAddress(
-    ethAddress,
+  const callData = rhinofi.stark.l1RegistrationCallData(
     starkKeyHex,
-    final
-  ).encodeABI()
+    ethAddress,
+    l1RegistrationSignature
+  )
 
   logExampleResult({
     ethAddress,
     starkKeyHex,
-    sig: final,
+    sig: l1RegistrationSignature,
     callData
   })
 })()
