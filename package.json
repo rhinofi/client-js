@@ -28,8 +28,8 @@
   "homepage": "https://github.com/rhinofi/client-js",
   "license": "MIT",
   "dependencies": {
-    "@ledgerhq/hw-app-eth": "6.23.0",
-    "@ledgerhq/hw-transport-webhid": "6.20.0",
+    "@ledgerhq/hw-app-eth": "6.28.1",
+    "@ledgerhq/hw-transport-webhid": "6.27.1",
     "@rhino.fi/aigle": "^1.15.0-alpha.3",
     "@rhino.fi/dvf-utils": "^1.4.5",
     "@rhino.fi/starkware-crypto": "^0.1.7",
