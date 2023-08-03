@@ -4,13 +4,12 @@
  * nonce: string,
  * signature: string) => string}
  */
-module.exports = async (dvf, tradingKey, nonce, signature) => {
+module.exports = async (dvf, nonce, signature) => {
   const url = '/v1/trading/storeStarkL1Registration'
 
   const { ethAddress } = await dvf.getUserConfig()
 
   const l1RegistrationSignature = await dvf.stark.signRegistration(
-    tradingKey,
     ethAddress
   )
 
