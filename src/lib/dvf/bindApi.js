@@ -275,6 +275,7 @@ module.exports = () => {
   dvf.walletFailedEvent = compose(require('../../api/walletFailedEvent'))
   dvf.walletSuccessEvent = compose(require('../../api/walletSuccessEvent'))
   dvf.topPerformersTokens = compose(require('../../api/topPerformersTokens'))
+  dvf.storeStarkL1Registration = compose(require('../../api/storeStarkL1Registration'))
 
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),
