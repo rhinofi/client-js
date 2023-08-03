@@ -43,11 +43,10 @@ const rhinofiConfig = {
   const { starkKeyHex, ethAddress } = await rhinofi.getUserConfig()
 
   const l1RegistrationSignature = await rhinofi.stark.signRegistration(
-    starkPrivKey,
     ethAddress
   )
 
-  const callData = rhinofi.stark.l1RegistrationCallData(
+  const callData = await rhinofi.stark.l1RegistrationCallData(
     starkKeyHex,
     ethAddress,
     l1RegistrationSignature

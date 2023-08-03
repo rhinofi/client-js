@@ -51,7 +51,10 @@ module.exports = sw => starkPrivateKey => {
   const sign = async tx => {
     const starkKeyPair = await getKeyPair()
 
-    const starkMessage = getMessage(sw)(tx)
+    const starkMessage = typeof tx === 'string'
+      ? tx
+      : getMessage(sw)(tx)
+
     const signature = FP.mapValues(
       x => '0x' + x,
       starkSign({ sw }, starkKeyPair, starkMessage)

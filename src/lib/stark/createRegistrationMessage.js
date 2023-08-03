@@ -12,13 +12,12 @@ const EC_ORDER = utils.BN('36185027886661312136973227830950701055267437517160874
  * ethAddress: string) => utils.BN}
  */
 module.exports = (dvf, starkHex, ethAddress) => {
-  const starkware = dvf.sw || sw
   if (!ethAddress) {
     throw new Error('ethAddress is required')
   }
 
   if (!starkHex) {
-    throw new Error('ethAddress is required')
+    throw new Error('starkKeyHex is required')
   }
 
   /*
