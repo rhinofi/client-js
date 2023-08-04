@@ -7,6 +7,12 @@
  */
 const _partial = require('lodash/partial')
 
+/**
+ * Extracts the tail parameters from a function type, excluding the first parameter.
+ * @template F - The function type from which to extract parameters.
+ * @typedef {F extends (head: any, ...tail: infer R) => any ? R : never} ParametersExceptFirst
+ */
+
 module.exports = () => {
   const dvf = {}
 
