@@ -9,7 +9,6 @@ Check README.md for more details.
 
 const sw = require('@rhino.fi/starkware-crypto')
 const getWeb3 = require('./helpers/getWeb3')
-const { utils } = require('web3')
 
 const RhinofiClientFactory = require('../src')
 const envVars = require('./helpers/loadFromEnvOrConfig')(
@@ -40,6 +39,7 @@ const rhinofiConfig = {
 
 ;(async () => {
   const rhinofi = await RhinofiClientFactory(web3, rhinofiConfig)
+
   const { starkKeyHex, ethAddress } = await rhinofi.getUserConfig()
 
   const l1RegistrationSignature = await rhinofi.stark.signRegistration(

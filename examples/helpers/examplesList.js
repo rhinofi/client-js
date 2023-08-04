@@ -33,6 +33,7 @@ module.exports = Object.freeze([
   'publicPermissions',
   'transfer',
   'getRegistrationStatuses',
+  'generateL1RegistrationPayload',
   // TODO
   // 'submitBuyOrder',
   // 'submitSellOrder',
