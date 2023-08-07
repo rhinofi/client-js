@@ -7,11 +7,20 @@
  */
 const _partial = require('lodash/partial')
 
+/**
+ * Extracts the tail parameters from a function type, excluding the first parameter.
+ * @template F - The function type from which to extract parameters.
+ * @typedef {F extends (head: any, ...tail: infer R) => any ? R : never} ParametersExceptFirst
+ */
+
 module.exports = () => {
   const dvf = {}
 
   // returns a function that will call api functions prepending dvf
   // as first argument
+  /**
+   * @type {<T extends Function>(fn: T) => (...args: ParametersExceptFirst<T>) => ReturnType<T>}
+   */
   const compose = (funk, ...args) => {
     return _partial(funk, dvf, ...args)
   }
@@ -30,6 +39,9 @@ module.exports = () => {
   }
 
   dvf.stark = {
+    signRegistration: compose(require('../stark/signRegistration')),
+    createRegistrationMessage: compose(require('../stark/createRegistrationMessage')),
+    l1RegistrationCallData: compose(require('../stark/l1RegistrationCallData')),
     createOrder: compose(require('../stark/createOrder')),
     createMarketOrder: compose(require('../stark/createMarketOrder')),
     createOrderMessage: compose(require('../stark/createOrderMessage')),
@@ -269,6 +281,7 @@ module.exports = () => {
   dvf.walletFailedEvent = compose(require('../../api/walletFailedEvent'))
   dvf.walletSuccessEvent = compose(require('../../api/walletSuccessEvent'))
   dvf.topPerformersTokens = compose(require('../../api/topPerformersTokens'))
+  dvf.storeStarkL1Registration = compose(require('../../api/storeStarkL1Registration'))
 
   dvf.ledger = {
     deposit: compose(require('../../api/ledger/deposit')),

@@ -22,15 +22,36 @@ const getMessage = sw => tx => {
   return starkTransferTxToMessageHash(sw)(tx)
 }
 
+const withTransport = (dvf) => async (fn) => {
+  const Transport = selectTransport(dvf.isBrowser)
+  const transport = await Transport.create()
+  try {
+    return await fn(transport)
+  } finally {
+    await transport.close()
+  }
+}
+
 const getTxSignature = async (dvf, tx, path) => {
+  // Generic stark message Signing
+  if (typeof tx === 'string') {
+    return withTransport(dvf)(async (transport) => {
+      const eth = new Eth(transport)
+      const { address } = await eth.getAddress(path)
+      const starkPath = dvf.stark.ledger.getPath(address)
+      const paddedMessage = `0x${tx.padEnd(64, '0').substr(-64)}`
+      return eth.starkUnsafeSign(
+        starkPath,
+        paddedMessage
+      )
+    })
+  }
+
   if (tx.type != null) {
     if (!(transferTransactionTypes.includes(tx.type))) {
       throw new DVFError(`Unsupported stark transaction type: ${tx.type}`, { tx })
     }
-    let transport
-    try {
-      const Transport = selectTransport(dvf.isBrowser)
-      transport = await Transport.create()
+    return withTransport(dvf)(async (transport) => {
       const eth = new Eth(transport)
       const { address } = await eth.getAddress(path)
       const starkPath = dvf.stark.ledger.getPath(address)
@@ -81,9 +102,7 @@ const getTxSignature = async (dvf, tx, path) => {
         tx.type === 'ConditionalTransferRequest' ? tx.factRegistryAddress : null,
         tx.type === 'ConditionalTransferRequest' ? tx.fact : null
       )
-    } finally {
-      await transport.close()
-    }
+    })
   } else {
     const { starkSignature } = await createSignedOrder(
       dvf, path, tx, { returnStarkPublicKey: false }

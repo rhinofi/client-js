@@ -5,7 +5,7 @@ const getWeb3 = require('../../../../examples/helpers/getWeb3')
 
 const RhinofiClientFactory = require('../../../index')
 
-module.exports = async () => {
+module.exports = async (configOverride = {}) => {
   const rpcUrl = process.env.RPC_URL
   const privateKey = process.env.PRIVATE_ETH_KEY
 
@@ -13,7 +13,7 @@ module.exports = async () => {
 
   const gasStationApiKey = process.env.ETH_GAS_STATION_KEY || ''
 
-  const config = { gasStationApiKey }
+  const config = { gasStationApiKey, ...configOverride }
 
   // It's possible to overwrite the API address with the testnet address
   // for example like this:
