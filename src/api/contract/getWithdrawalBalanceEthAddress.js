@@ -17,7 +17,7 @@ module.exports = async (dvf, token, address) => {
   const args = [address, starkTokenId]
 
   try {
-    return (withdrawalBalance = await dvf.eth.call(
+    return (await dvf.eth.call(
       dvf.contract.abi.getStarkEx(),
       dvf.config.DVF.starkExContractAddress,
       'getWithdrawalBalance',
