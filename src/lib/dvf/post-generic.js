@@ -1,4 +1,4 @@
-const { post } = require('request-promise')
+const { request } = require('@rhino.fi/dvf-utils')
 const _omitBy = require('lodash/omitBy')
 const _isNil = require('lodash/isNil')
 
@@ -12,5 +12,5 @@ module.exports = async (dvf, endpoint, json = {}, headers = {}) => {
     json: _omitBy(json, _isNil)
   }
 
-  return post(options)
+  return request.post(options)
 }

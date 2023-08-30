@@ -1,4 +1,4 @@
-const {post} = require('request-promise')
+const { request } = require('@rhino.fi/dvf-utils')
 const validateAssertions = require('../../lib/validators/validateAssertions')
 
 module.exports = async (dvf, token, amount, path, nonce, signature) => {
@@ -19,7 +19,7 @@ module.exports = async (dvf, token, amount, path, nonce, signature) => {
 
   const url = dvf.config.api + '/v1/trading/w/deposit'
 
-  const deposit = await post(url, {json: data})
+  const deposit = await request.post(url, {json: data})
   const ctDeposit = await dvf.contract.deposit(tempVaultId, token, amount, `0x${starkDeposit.starkPublicKey.x}`)
 
   return {...deposit, ...ctDeposit}
