@@ -34,6 +34,7 @@ module.exports = Object.freeze([
   'transfer',
   'getRegistrationStatuses',
   'generateL1RegistrationPayload',
+  'estimatedNextBatchTime',
   // TODO
   // 'submitBuyOrder',
   // 'submitSellOrder',
