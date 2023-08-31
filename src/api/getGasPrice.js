@@ -4,8 +4,7 @@ module.exports = async (dvf) => {
   const defaultGasPrice = dvf.config.defaultGasPrice
   const oldGasPrice = { fast: defaultGasPrice * 1.2, average: defaultGasPrice * 0.9, cheap: defaultGasPrice * 0.8 }
 
-  const endpoint = '/v1/trading/r/getGasPrice'
-  const url = dvf.config.api + endpoint
+  const url = '/v1/trading/r/getGasPrice'
 
   try {
     const newGasPrice = await get(dvf, url, { json: true })

@@ -28,8 +28,7 @@ module.exports = async (dvf, token, amount, starkWithdrawal) => {
     expireTime
   }
 
-  //console.log({ data })
-  const url = dvf.config.api + '/v1/trading/w/withdraw'
+  const url = '/v1/trading/w/withdraw'
   
   return post(dvf, url, {
     json: data

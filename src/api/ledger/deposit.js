@@ -17,7 +17,7 @@ module.exports = async (dvf, token, amount, path, nonce, signature) => {
     starkPublicKey: starkDeposit.starkPublicKey
   }
 
-  const url = dvf.config.api + '/v1/trading/w/deposit'
+  const url = '/v1/trading/w/deposit'
 
   const deposit = await post(dvf, url, {json: data})
   const ctDeposit = await dvf.contract.deposit(tempVaultId, token, amount, `0x${starkDeposit.starkPublicKey.x}`)

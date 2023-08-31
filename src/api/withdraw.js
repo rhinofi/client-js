@@ -43,7 +43,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
 
   const starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
 
-  const url = dvf.config.api + '/v1/trading/w/withdraw'
+  const url = '/v1/trading/w/withdraw'
 
   const data = {
     token,

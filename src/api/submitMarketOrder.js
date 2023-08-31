@@ -30,7 +30,7 @@ const schema = Joi.object({
 module.exports = async (dvf, orderData) => {
   const { value, error } = schema.validate(orderData)
   // TODO handle error
-  return post(dvf, dvf.config.api + '/v1/trading/w/submitOrder', {
+  return post(dvf, '/v1/trading/w/submitOrder', {
     json: await dvf.createMarketOrderPayload(value)
   })
 }
