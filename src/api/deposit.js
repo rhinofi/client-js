@@ -1,4 +1,5 @@
-const { post } = require('request-promise')
+const post = require('../lib/dvf/post-generic')
+
 const DVFError = require('../lib/dvf/DVFError')
 const validateAssertions = require('../lib/validators/validateAssertions')
 
@@ -36,7 +37,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey, nonce, signature) =
 
   const starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
 
-  const url = dvf.config.api + '/v1/trading/w/deposit'
+  const url = '/v1/trading/w/deposit'
 
   const data = {
     token,
@@ -51,7 +52,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey, nonce, signature) =
 
   await dvf.contract.approve(token, dvf.token.toBaseUnitAmount(token, amount), dvf.config.DVF.starkExContractAddress, 'ETHEREUM')
 
-  const depositResponse = await post(url, { json: data })
+  const depositResponse = await post(dvf, url, data)
 
   const { status, transactionHash } = await dvf.contract.deposit(
     tempVaultId,

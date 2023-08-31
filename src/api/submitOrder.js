@@ -1,4 +1,4 @@
-const { post } = require('request-promise')
+const post = require('../lib/dvf/post-generic')
 const DVFError = require('../lib/dvf/DVFError')
 const { Joi } = require('@rhino.fi/dvf-utils')
 const P = require('@rhino.fi/aigle')
@@ -67,5 +67,5 @@ module.exports = async (dvf, orderData) => {
       : dvf.createOrderPayload(value)
   )
 
-  return post(dvf.config.api + '/v1/trading/w/submitOrder', { json })
+  return post(dvf, '/v1/trading/w/submitOrder', json)
 }

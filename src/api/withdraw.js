@@ -1,4 +1,4 @@
-const { post } = require('request-promise')
+const post = require('../lib/dvf/post-generic')
 const DVFError = require('../lib/dvf/DVFError')
 const validateAssertions = require('../lib/validators/validateAssertions')
 const { Joi } = require('@rhino.fi/dvf-utils')
@@ -43,7 +43,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
 
   const starkSignature = dvf.stark.sign(starkKeyPair, starkMessage)
 
-  const url = dvf.config.api + '/v1/trading/w/withdraw'
+  const url = '/v1/trading/w/withdraw'
 
   const data = {
     token,
@@ -55,5 +55,5 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     expireTime
   }
   //console.log({ data })
-  return post(url, { json: data })
+  return post(dvf, url, data)
 }

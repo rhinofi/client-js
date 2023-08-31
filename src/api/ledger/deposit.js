@@ -1,4 +1,4 @@
-const {post} = require('request-promise')
+const post = require('../../lib/dvf/post-generic')
 const validateAssertions = require('../../lib/validators/validateAssertions')
 
 module.exports = async (dvf, token, amount, path, nonce, signature) => {
@@ -17,9 +17,9 @@ module.exports = async (dvf, token, amount, path, nonce, signature) => {
     starkPublicKey: starkDeposit.starkPublicKey
   }
 
-  const url = dvf.config.api + '/v1/trading/w/deposit'
+  const url = '/v1/trading/w/deposit'
 
-  const deposit = await post(url, {json: data})
+  const deposit = await post(dvf, url, data)
   const ctDeposit = await dvf.contract.deposit(tempVaultId, token, amount, `0x${starkDeposit.starkPublicKey.x}`)
 
   return {...deposit, ...ctDeposit}
