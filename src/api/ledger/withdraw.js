@@ -1,4 +1,4 @@
-const { request } = require('@rhino.fi/dvf-utils')
+const post = require('../../lib/dvf/post-generic')
 const validateAssertions = require('../../lib/validators/validateAssertions')
 
 module.exports = async (dvf, token, amount, starkWithdrawal) => {
@@ -31,7 +31,7 @@ module.exports = async (dvf, token, amount, starkWithdrawal) => {
   //console.log({ data })
   const url = dvf.config.api + '/v1/trading/w/withdraw'
   
-  return request.post(url, {
+  return post(dvf, url, {
     json: data
   })
 }

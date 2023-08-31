@@ -1,4 +1,4 @@
-const { request } = require('@rhino.fi/dvf-utils')
+const get = require('../lib/dvf/get-generic')
 
 module.exports = async (dvf) => {
   const defaultGasPrice = dvf.config.defaultGasPrice
@@ -8,7 +8,7 @@ module.exports = async (dvf) => {
   const url = dvf.config.api + endpoint
 
   try {
-    const newGasPrice = await request.get(url, { json: true })
+    const newGasPrice = await get(dvf, url, { json: true })
     dvf.config.defaultGasPrice = newGasPrice.fast || dvf.config.defaultGasPrice
     return newGasPrice ||  oldGasPrice
   }

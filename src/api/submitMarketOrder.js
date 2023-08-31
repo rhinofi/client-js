@@ -1,4 +1,4 @@
-const { request } = require('@rhino.fi/dvf-utils')
+const post = require('../lib/dvf/post-generic')
 const { Joi } = require('@rhino.fi/dvf-utils')
 /*
 Keeping the schema visible and not in a seperate method
@@ -30,7 +30,7 @@ const schema = Joi.object({
 module.exports = async (dvf, orderData) => {
   const { value, error } = schema.validate(orderData)
   // TODO handle error
-  return request.post(dvf.config.api + '/v1/trading/w/submitOrder', {
+  return post(dvf, dvf.config.api + '/v1/trading/w/submitOrder', {
     json: await dvf.createMarketOrderPayload(value)
   })
 }

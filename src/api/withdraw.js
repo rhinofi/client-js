@@ -1,4 +1,4 @@
-const { request } = require('@rhino.fi/dvf-utils')
+const post = require('../lib/dvf/post-generic')
 const DVFError = require('../lib/dvf/DVFError')
 const validateAssertions = require('../lib/validators/validateAssertions')
 const { Joi } = require('@rhino.fi/dvf-utils')
@@ -55,5 +55,5 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     expireTime
   }
   //console.log({ data })
-  return request.post(url, { json: data })
+  return post(dvf, url, { json: data })
 }

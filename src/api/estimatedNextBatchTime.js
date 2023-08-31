@@ -1,4 +1,4 @@
-const { request } = require('@rhino.fi/dvf-utils')
+const get = require('../lib/dvf/get-generic')
 
 module.exports = async dvf => {
   // avoid browser cache with timestamp as querystring
@@ -6,7 +6,7 @@ module.exports = async dvf => {
 
   const url = `${dvf.config.api}/v1/trading/r/estimatedNextBatchTime?t=${t}`
   try {
-    const data = await request.get(url)
+    const data = await get(dvf, url)
     return JSON.parse(data)
   }
   catch(e) {

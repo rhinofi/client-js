@@ -1,7 +1,7 @@
-const { request } = require('@rhino.fi/dvf-utils')
+const get = require('../lib/dvf/get-generic')
 
 // TODO: Deprecated (CHAIN-719)
 module.exports = async (dvf, token) => {
   const url = dvf.config.api + '/v1/trading/r/fastWithdrawalFee'
-  return request.get(url, { json: true, qs: { token } })
+  return get(dvf, url, { json: true, qs: { token } })
 }
