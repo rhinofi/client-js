@@ -30,7 +30,5 @@ module.exports = async (dvf, token, amount, starkWithdrawal) => {
 
   const url = '/v1/trading/w/withdraw'
   
-  return post(dvf, url, {
-    json: data
-  })
+  return post(dvf, url, data)
 }

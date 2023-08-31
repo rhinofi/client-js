@@ -52,7 +52,7 @@ module.exports = async (dvf, token, amount, starkPrivateKey, nonce, signature) =
 
   await dvf.contract.approve(token, dvf.token.toBaseUnitAmount(token, amount), dvf.config.DVF.starkExContractAddress, 'ETHEREUM')
 
-  const depositResponse = await post(dvf, url, { json: data })
+  const depositResponse = await post(dvf, url, data)
 
   const { status, transactionHash } = await dvf.contract.deposit(
     tempVaultId,

@@ -55,5 +55,5 @@ module.exports = async (dvf, token, amount, starkPrivateKey) => {
     expireTime
   }
   //console.log({ data })
-  return post(dvf, url, { json: data })
+  return post(dvf, url, data)
 }

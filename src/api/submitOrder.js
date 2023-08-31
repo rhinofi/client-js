@@ -67,5 +67,5 @@ module.exports = async (dvf, orderData) => {
       : dvf.createOrderPayload(value)
   )
 
-  return post(dvf, '/v1/trading/w/submitOrder', { json })
+  return post(dvf, '/v1/trading/w/submitOrder', json)
 }
