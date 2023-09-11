@@ -11,7 +11,8 @@ const schema = Joi.object({
   nonce: Joi.number().integer()
     .min(0)
     // Will be auto-generated if not provided.
-    .optional()
+    .optional(),
+  recipientEthAddress: Joi.string().optional()
 })
 
 const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
@@ -19,7 +20,7 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 })
 
 module.exports = async (dvf, data, authNonce, signature) => {
-  const { token, chain, amount, nonce } = validateArg0(data)
+  const { token, chain, amount, nonce, recipientEthAddress } = validateArg0(data)
 
   const tokenInfo = dvf.token.getTokenInfoOrThrow(token)
   // To make it fail if token is not supported
@@ -42,6 +43,7 @@ module.exports = async (dvf, data, authNonce, signature) => {
     chain,
     token,
     amount: quantisedAmount,
+    recipientEthAddress,
     tx,
     nonce: nonce || generateRandomNonceV2()
   }
