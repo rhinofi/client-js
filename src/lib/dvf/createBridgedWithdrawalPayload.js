@@ -43,8 +43,8 @@ module.exports = async (dvf, data, authNonce, signature) => {
     chain,
     token,
     amount: quantisedAmount,
-    recipientEthAddress,
     tx,
-    nonce: nonce || generateRandomNonceV2()
+    nonce: nonce || generateRandomNonceV2(),
+    ...(recipientEthAddress && { recipientEthAddress }), // optional parameter
   }
 }

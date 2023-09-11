@@ -25,7 +25,7 @@ const endpoint = '/v1/trading/bridgedWithdrawals'
 module.exports = async (dvf, data, authNonce, signature) => {
   const { chain, token, amount, nonce, recipientEthAddress } = validateArg0(data)
 
-  const payload = await dvf.createBridgedWithdrawalPayload({ chain, token, amount, nonce, recipientEthAddress }, authNonce, signature)
+  const payload = await dvf.createBridgedWithdrawalPayload({ chain, token, amount, nonce, ...(recipientEthAddress && {recipientEthAddress}) }, authNonce, signature)
 
   // Force the use of header (instead of payload) for authentication.
   dvf = FP.set('config.useAuthHeader', true, dvf)
