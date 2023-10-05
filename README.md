@@ -1,3 +1,6 @@
+# NOTE: This open-source client will be deprecated in December 2023. If you use this client to interact with rhino.fi for any reason please join our Discord and let us know so that we can continue to ensure you are supported https://discord.com/invite/V93Bxn7hAY or email support@rhino.fi 
+
+
 <img src="https://avatars1.githubusercontent.com/u/56512535?s=200&v=4" align="right" />
 
 # Rhino.fi Javascript Trading API
