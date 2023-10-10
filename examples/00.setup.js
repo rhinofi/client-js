@@ -8,7 +8,7 @@
 const fs = require('fs')
 const readline = require('readline')
 const Web3 = require('web3')
-const P = require('aigle')
+const P = require('@rhino.fi/aigle')
 const saveAsJson = require('./helpers/saveAsJson')
 
 const RPC_URL = process.argv[2]

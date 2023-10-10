@@ -67,7 +67,7 @@ const rhinofiConfig = {
     ammDepositOrderData
   )
 
-  const P = require('aigle')
+  const P = require('@rhino.fi/aigle')
 
   await P.retry(
     { times: 360, interval: 1000 },

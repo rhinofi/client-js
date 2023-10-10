@@ -1,4 +1,4 @@
-const { post } = require('request-promise')
+const post = require('../../lib/dvf/post-generic')
 const validateAssertions = require('../../lib/validators/validateAssertions')
 
 module.exports = async (dvf, token, amount, starkWithdrawal) => {
@@ -28,10 +28,7 @@ module.exports = async (dvf, token, amount, starkWithdrawal) => {
     expireTime
   }
 
-  //console.log({ data })
-  const url = dvf.config.api + '/v1/trading/w/withdraw'
+  const url = '/v1/trading/w/withdraw'
   
-  return post(url, {
-    json: data
-  })
+  return post(dvf, url, data)
 }

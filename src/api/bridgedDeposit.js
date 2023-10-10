@@ -28,7 +28,7 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 const endpoint = '/v1/trading/bridgedDeposits'
 const validationEndpoint = '/v1/trading/deposits-validate'
 
-module.exports = async (dvf, data, nonce, signature, txHashCb) => {
+module.exports = async (dvf, data, nonce, signature, txHashCb, onlyOnChain) => {
   const { chain, token, amount, web3Options, permitParams, referralId } = validateArg0(data)
 
   const tokenInfo = dvf.token.getTokenInfoOrThrow(token)
@@ -37,7 +37,7 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
 
   // Base units should be using the execution chain
   const tokenChainInfo = dvf.token.getTokenInfoForChainOrThrow(token, chain)
-  const baseUnitAmount = toBN(amount).shiftedBy(tokenChainInfo.decimals).toString()
+  const baseUnitAmount = dvf.token.toBaseUnitAmount(token, amount, tokenChainInfo)
 
   // Force the use of header (instead of payload) for authentication.
   dvf = FP.set('config.useAuthHeader', true, dvf)
@@ -73,6 +73,11 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
 
   const { transactionHash, clearCallback } = await transactionHashPromise
 
+  if (onlyOnChain) {
+    await onChainDepositPromise
+    return { transactionHash }
+  }
+
   const payload = {
     chain,
     token,
@@ -82,16 +87,9 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
   }
   const httpDeposit = await post(dvf, endpoint, nonce, signature, payload)
 
-  const onChainDeposit = await onChainDepositPromise
+  await onChainDepositPromise
   if (typeof clearCallback === 'function') {
     clearCallback()
-  }
-
-  if (!onChainDeposit.status) {
-    throw new DVFError('ERR_ONCHAIN_BRIDGED_DEPOSIT', {
-      httpDeposit,
-      onChainDeposit
-    })
   }
 
   return { ...httpDeposit, transactionHash }

@@ -1,14 +1,13 @@
-const { get } = require('request-promise')
+const get = require('../lib/dvf/get-generic')
 
 module.exports = async (dvf) => {
   const defaultGasPrice = dvf.config.defaultGasPrice
   const oldGasPrice = { fast: defaultGasPrice * 1.2, average: defaultGasPrice * 0.9, cheap: defaultGasPrice * 0.8 }
 
-  const endpoint = '/v1/trading/r/getGasPrice'
-  const url = dvf.config.api + endpoint
+  const url = '/v1/trading/r/getGasPrice'
 
   try {
-    const newGasPrice = await get(url, { json: true })
+    const newGasPrice = await get(dvf, url)
     dvf.config.defaultGasPrice = newGasPrice.fast || dvf.config.defaultGasPrice
     return newGasPrice ||  oldGasPrice
   }

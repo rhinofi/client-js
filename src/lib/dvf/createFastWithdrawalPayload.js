@@ -32,9 +32,15 @@ const getValidTokenInfo = dvf => token => {
   return tokenInfo
 }
 
-const getFeeQuantised = async (dvf, token) => dvf
-  .fastWithdrawalFee(token)
-  .then(res => toBN(res.feeQuantised))
+const getFeeQuantised = (dvf) => async (token, amount, recipient) => dvf
+  .getWithdrawalQuote({
+    token,
+    amount,
+    chain: 'ETHEREUM',
+    type: 'FAST',
+    recipient
+  })
+  .then(res => toBN(res.fee))
 
 const schema = Joi.object({
   amount: Joi.amount(),
@@ -64,17 +70,17 @@ module.exports = async (dvf, withdrawalData) => {
 
   const tokenInfo = getValidTokenInfo(dvf)(token)
 
+  const quantisedAmount = toQuantizedAmountBN(tokenInfo, amount)
+  const baseUnitsAmount = fromQuantizedToBaseUnitsBN(tokenInfo)(quantisedAmount)
   const feeQuantised = await (
     transactionFee
       ? toQuantizedAmountBN(tokenInfo, transactionFee)
-      : getFeeQuantised(dvf, token)
+      : getFeeQuantised(dvf)(token, quantisedAmount.toString(), recipientEthAddress)
   )
 
   const tokenContractAddress = token === 'ETH'
     ? address0
     : tokenInfo.tokenAddressPerChain.ETHEREUM
-  const quantisedAmount = toQuantizedAmountBN(tokenInfo, amount)
-  const baseUnitsAmount = fromQuantizedToBaseUnitsBN(tokenInfo)(quantisedAmount)
 
   const nonce = dvf.util.generateRandomNonce()
 

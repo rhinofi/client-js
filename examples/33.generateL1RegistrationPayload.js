@@ -40,11 +40,24 @@ const rhinofiConfig = {
 ;(async () => {
   const rhinofi = await RhinofiClientFactory(web3, rhinofiConfig)
 
-  // NOTE: fastWithdrawalFee method as been deprecated
-  const response = await rhinofi.fastWithdrawalFee('ETH')
+  const { starkKeyHex, ethAddress } = await rhinofi.getUserConfig()
 
-  logExampleResult(response)
+  const l1RegistrationSignature = await rhinofi.stark.signRegistration(
+    ethAddress
+  )
 
+  const callData = await rhinofi.stark.l1RegistrationCallData(
+    starkKeyHex,
+    ethAddress,
+    l1RegistrationSignature
+  )
+
+  logExampleResult({
+    ethAddress,
+    starkKeyHex,
+    sig: l1RegistrationSignature,
+    callData
+  })
 })()
 .catch(error => {
   console.error(error)

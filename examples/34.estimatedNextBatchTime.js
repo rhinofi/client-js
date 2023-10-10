@@ -40,10 +40,9 @@ const rhinofiConfig = {
 ;(async () => {
   const rhinofi = await RhinofiClientFactory(web3, rhinofiConfig)
 
-  // NOTE: fastWithdrawalFee method as been deprecated
-  const response = await rhinofi.fastWithdrawalFee('ETH')
+  const estimatedNextBatchTimeResponse = await rhinofi.estimatedNextBatchTime()
 
-  logExampleResult(response)
+  logExampleResult(estimatedNextBatchTimeResponse)
 
 })()
 .catch(error => {

@@ -8,10 +8,10 @@ module.exports = async (dvf, token, address) => {
     address = dvf.config.starkKeyHex
   }
 
-  const { status, transactionHash } = await dvf.contract.withdraw(token, address)
-
-  if (!status) {
+  try {
+    const withdrawal = await dvf.contract.withdraw(token, address)
+    return { transactionHash: withdrawal.transactionHash }
+  } catch (error) {
     throw new DVFError('ERR_ONCHAIN_WITHDRAW')
   }
-  return { transactionHash }
 }

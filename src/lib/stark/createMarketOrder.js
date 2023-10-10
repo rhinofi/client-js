@@ -1,4 +1,4 @@
-const P = require('aigle')
+const P = require('@rhino.fi/aigle')
 const { preparePriceBN, prepareAmountBN, splitSymbol, toBN } = require('@rhino.fi/dvf-utils')
 const DVFError = require('../dvf/DVFError')
 const computeBuySellData = require('../dvf/computeBuySellData')

@@ -29,7 +29,7 @@ const validateArg0 = validateWithJoi(schema)('INVALID_METHOD_ARGUMENT')({
 const endpoint = '/v1/trading/deposits'
 const validationEndpoint = '/v1/trading/deposits-validate'
 
-module.exports = async (dvf, data, nonce, signature, txHashCb) => {
+module.exports = async (dvf, data, nonce, signature, txHashCb, onChainOnly) => {
   const { token, amount, useProxiedContract, web3Options, permitParams, referralId } = validateArg0(data)
 
   const starkKey = dvf.config.starkKeyHex
@@ -94,6 +94,11 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
 
   const { transactionHash, clearCallback } = await transactionHashPromise
 
+  if (onChainOnly) {
+    await onChainDepositPromise
+    return { transactionHash }
+  }
+
   const payload = {
     token,
     amount: quantisedAmount,
@@ -103,16 +108,9 @@ module.exports = async (dvf, data, nonce, signature, txHashCb) => {
 
   const httpDeposit = await post(dvf, endpoint, nonce, signature, payload)
 
-  const onChainDeposit = await onChainDepositPromise
+  await onChainDepositPromise
   if (typeof clearCallback === 'function') {
     clearCallback()
-  }
-
-  if (!onChainDeposit.status) {
-    throw new DVFError('ERR_ONCHAIN_DEPOSIT', {
-      httpDeposit,
-      onChainDeposit
-    })
   }
 
   return { ...httpDeposit, transactionHash }

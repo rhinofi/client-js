@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 set -ueo pipefail
 
-github_token=''${GITHUB_TOKEN-}
+github_token=${GITHUB_TOKEN-}
 
 if [[ -z $github_token ]]; then
-  read -s github_token
+  while read -r github_token; do
+    break
+  done
 fi
 
 github_user=${1:-dvf-ci}
